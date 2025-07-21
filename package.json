@@ -1,0 +1,69 @@
+{
+  "name": "poe2-quest-tracker",
+  "version": "1.0.0",
+  "description": "Path of Exile 2 Quest Tracker Overlay",
+  "main": "dist/main/main/main.js",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:renderer\" \"npm run dev:main\"",
+    "dev:renderer": "vite",
+    "dev:main": "tsc --watch",
+    "build": "npm run build:renderer && npm run build:main",
+    "build:renderer": "vite build",
+    "build:main": "tsc",
+    "electron": "electron .",
+    "electron:prod": "cross-env NODE_ENV=production electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "clean": "rimraf dist"
+  },
+  "keywords": [
+    "path-of-exile",
+    "quest-tracker",
+    "overlay",
+    "electron"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^24.0.15",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "@typescript-eslint/eslint-plugin": "^8.38.0",
+    "@typescript-eslint/parser": "^8.38.0",
+    "@vitejs/plugin-react": "^4.7.0",
+    "concurrently": "^9.2.0",
+    "cross-env": "^7.0.3",
+    "electron": "^37.2.3",
+    "electron-builder": "^26.0.12",
+    "eslint": "^9.31.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.20",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.8.3",
+    "vite": "^7.0.5"
+  },
+  "dependencies": {
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "build": {
+    "appId": "com.juddisjudd.poe2questtracker",
+    "productName": "POE2 Quest Tracker",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "node_modules/**/*",
+      "assets/**/*"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "assets/icon.ico"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "assets/icon.png"
+    }
+  }
+}

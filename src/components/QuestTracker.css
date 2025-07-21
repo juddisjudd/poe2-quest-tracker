@@ -1,0 +1,403 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cinzel+Decorative:wght@700&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Cinzel', serif;
+  background: transparent;
+  color: #d4af37;
+  user-select: none;
+}
+
+.quest-tracker {
+  width: 100%;
+  min-height: 100vh;
+  background: linear-gradient(
+    135deg,
+    rgba(20, 15, 10, 0.95) 0%,
+    rgba(35, 25, 15, 0.92) 50%,
+    rgba(25, 18, 12, 0.95) 100%
+  );
+  border: 2px solid #8b6914;
+  border-radius: 8px;
+  box-shadow: 
+    0 0 20px rgba(212, 175, 55, 0.3),
+    inset 0 1px 3px rgba(212, 175, 55, 0.2);
+  backdrop-filter: blur(5px);
+  overflow: hidden;
+  min-width: 500px; /* Increased minimum width for longer quest names */
+}
+
+.quest-tracker.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+}
+
+.loading-text {
+  font-size: 16px;
+  color: #d4af37;
+  text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+}
+
+/* Header Styles */
+.header {
+  background: linear-gradient(
+    135deg,
+    rgba(139, 105, 20, 0.6) 0%,
+    rgba(184, 134, 11, 0.3) 100%
+  );
+  border-bottom: 1px solid #8b6914;
+  backdrop-filter: blur(10px);
+}
+
+.title-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  cursor: move;
+  -webkit-app-region: drag;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.title-text {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 16px;
+  font-weight: 700;
+  text-shadow: 0 0 8px rgba(212, 175, 55, 0.6);
+}
+
+.hotkey-hint {
+  font-size: 12px;
+  color: #a0a0a0;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 2px 6px;
+  border-radius: 3px;
+  border: 1px solid #555;
+}
+
+.window-controls {
+  display: flex;
+  gap: 4px;
+  -webkit-app-region: no-drag;
+}
+
+.control-btn {
+  width: 24px;
+  height: 24px;
+  border: 1px solid #8b6914;
+  background: rgba(212, 175, 55, 0.1);
+  color: #d4af37;
+  border-radius: 3px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.control-btn:hover {
+  background: rgba(212, 175, 55, 0.2);
+  box-shadow: 0 0 5px rgba(212, 175, 55, 0.3);
+}
+
+.close-btn:hover {
+  background: rgba(220, 20, 20, 0.3);
+  color: #ff6b6b;
+}
+
+.settings-panel {
+  padding: 12px;
+  border-top: 1px solid #8b6914;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.setting-item {
+  margin-bottom: 8px;
+}
+
+.setting-item label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.setting-item input[type="range"] {
+  flex: 1;
+  margin-left: 8px;
+}
+
+/* Act Panel Styles */
+.acts-container {
+  padding: 8px;
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #8b6914 transparent;
+}
+
+.acts-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.acts-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.acts-container::-webkit-scrollbar-thumb {
+  background: #8b6914;
+  border-radius: 3px;
+}
+
+.act-panel {
+  margin-bottom: 8px;
+  border: 1px solid #8b6914;
+  border-radius: 6px;
+  background: linear-gradient(
+    135deg,
+    rgba(212, 175, 55, 0.05) 0%,
+    rgba(139, 105, 20, 0.08) 100%
+  );
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.act-panel:hover {
+  border-color: #d4af37;
+  box-shadow: 0 0 8px rgba(212, 175, 55, 0.2);
+}
+
+.act-header {
+  padding: 12px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(
+    90deg,
+    rgba(139, 105, 20, 0.15) 0%,
+    rgba(212, 175, 55, 0.08) 100%
+  );
+  border-bottom: 1px solid rgba(139, 105, 20, 0.4);
+  transition: all 0.2s ease;
+}
+
+.act-header:hover {
+  background: linear-gradient(
+    90deg,
+    rgba(139, 105, 20, 0.25) 0%,
+    rgba(212, 175, 55, 0.12) 100%
+  );
+}
+
+.act-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.expand-icon {
+  font-size: 10px;
+  transition: transform 0.3s ease;
+  color: #d4af37;
+}
+
+.expand-icon.expanded {
+  transform: rotate(90deg);
+}
+
+.act-name {
+  font-size: 13px;
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+  color: #f4e4b8; /* Softer, warmer gold */
+}
+
+/* Special styling for cruel acts */
+.act-panel[data-temporary="true"] .act-name {
+  color: #e6a85c; /* Warmer orange-bronze */
+}
+
+.act-progress {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.progress-text {
+  font-size: 12px;
+  color: #d4c4a0; /* Softer progress text */
+  min-width: 30px;
+  text-align: right;
+}
+
+.progress-bar {
+  width: 60px;
+  height: 6px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid #a0905a;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    #a0905a 0%,
+    #d4c4a0 50%,
+    #f4e4b8 100%
+  );
+  transition: width 0.3s ease;
+  box-shadow: 0 0 4px rgba(212, 196, 160, 0.4);
+}
+
+/* Quest List Styles */
+.quests-list {
+  padding: 8px;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.quest-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px;
+  margin-bottom: 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: rgba(212, 175, 55, 0.02);
+  border: 1px solid rgba(139, 105, 20, 0.2);
+}
+
+.quest-item:hover {
+  background: rgba(212, 175, 55, 0.08);
+  border-color: rgba(139, 105, 20, 0.4);
+  transform: translateX(2px);
+}
+
+.quest-item.completed {
+  background: rgba(139, 105, 20, 0.15);
+  border-color: rgba(212, 175, 55, 0.4);
+}
+
+.quest-item.completed .quest-name {
+  text-decoration: line-through;
+  color: #9b8b6b; /* Muted brownish for completed quests */
+}
+
+.quest-item.completed .quest-description {
+  color: #8a7a5a; /* Even more muted for completed rewards */
+}
+
+.quest-item.optional {
+  border-left: 3px solid #6a5acd;
+}
+
+.quest-checkbox {
+  margin-top: 2px;
+}
+
+.checkbox {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #a0905a;
+  border-radius: 3px;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.checkbox.checked {
+  background: linear-gradient(135deg, #a0905a, #d4c4a0);
+  border-color: #d4c4a0;
+  box-shadow: 0 0 6px rgba(212, 196, 160, 0.5);
+}
+
+.checkmark {
+  color: #1a1a1a;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.quest-content {
+  flex: 1;
+}
+
+.quest-name {
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: #e8d5a3; /* Softer cream color for quest names */
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+  margin-bottom: 2px;
+}
+
+.quest-description {
+  font-size: 10px;
+  color: #c2a878; /* Muted tan for rewards - easier on eyes */
+  line-height: 1.3;
+  opacity: 0.95;
+  font-style: italic;
+  border-left: 2px solid rgba(194, 168, 120, 0.4);
+  padding-left: 6px;
+  margin-top: 2px;
+}
+
+.optional-badge {
+  font-size: 10px;
+  color: #9370db;
+  background: rgba(106, 90, 205, 0.2);
+  padding: 2px 6px;
+  border-radius: 8px;
+  border: 1px solid rgba(106, 90, 205, 0.4);
+  white-space: nowrap;
+  align-self: flex-start;
+  margin-top: 1px;
+}
+
+/* Animations */
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 5px rgba(212, 175, 55, 0.3); }
+  50% { box-shadow: 0 0 20px rgba(212, 175, 55, 0.6); }
+}
+
+.quest-item.completed {
+  animation: glow 2s ease-in-out;
+}
+
+/* Responsive adjustments */
+@media (max-width: 400px) {
+  .quest-tracker {
+    font-size: 12px;
+  }
+  
+  .act-name {
+    font-size: 12px;
+  }
+  
+  .quest-name {
+    font-size: 11px;
+  }
+  
+  .quest-description {
+    font-size: 10px;
+  }
+}
