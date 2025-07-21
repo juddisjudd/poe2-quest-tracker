@@ -2,9 +2,9 @@
   "name": "poe2-quest-tracker",
   "version": "1.0.0",
   "description": "Path of Exile 2 Quest Tracker Overlay",
-  "main": "dist/main/main/main.js",
+  "main": "dist/main/main.js",
   "scripts": {
-    "dev": "concurrently \"npm run dev:renderer\" \"npm run dev:main\"",
+    "dev": "cross-env NODE_ENV=development concurrently \"npm run dev:renderer\" \"npm run dev:main\"",
     "dev:renderer": "vite",
     "dev:main": "tsc --watch",
     "build": "npm run build:renderer && npm run build:main",
@@ -53,9 +53,15 @@
       "output": "release"
     },
     "files": [
-      "dist/**/*",
-      "node_modules/**/*",
-      "assets/**/*"
+      {
+        "from": "dist",
+        "to": "dist"
+      },
+      {
+        "from": "assets",
+        "to": "assets"
+      },
+      "package.json"
     ],
     "win": {
       "target": "nsis",
