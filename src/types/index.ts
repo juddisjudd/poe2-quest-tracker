@@ -30,6 +30,9 @@ declare global {
       toggleAlwaysOnTop: (shouldStay: boolean) => Promise<void>;
       saveQuestData: (data: TrackerData) => Promise<void>;
       loadQuestData: () => Promise<TrackerData | null>;
+      onUpdateAvailable: (callback: () => void) => () => void;
+      onUpdateDownloaded: (callback: () => void) => () => void;
+      restartApp: () => void;
     };
   }
 }

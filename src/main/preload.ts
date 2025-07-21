@@ -8,6 +8,18 @@ const electronAPI = {
     ipcRenderer.invoke("toggle-always-on-top", shouldStay),
   saveQuestData: (data: any) => ipcRenderer.invoke("save-quest-data", data),
   loadQuestData: () => ipcRenderer.invoke("load-quest-data"),
+
+  onUpdateAvailable: (callback: () => void) => {
+    ipcRenderer.on("update-available", callback);
+    return () => ipcRenderer.removeListener("update-available", callback);
+  },
+  onUpdateDownloaded: (callback: () => void) => {
+    ipcRenderer.on("update-downloaded", callback);
+    return () => ipcRenderer.removeListener("update-downloaded", callback);
+  },
+  restartApp: () => {
+    ipcRenderer.send("restart-app");
+  },
 };
 
 contextBridge.exposeInMainWorld("electronAPI", electronAPI);

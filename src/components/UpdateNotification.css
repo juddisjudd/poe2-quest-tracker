@@ -1,0 +1,36 @@
+.update-notification {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #1a1a1a;
+  color: #d4af37;
+  padding: 12px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #8b6914;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.update-message {
+  margin: 0;
+  font-size: 14px;
+}
+
+.update-restart-btn {
+  background-color: #d4af37;
+  color: #1a1a1a;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: 'Cinzel', serif;
+  font-weight: 600;
+  transition: background-color 0.2s;
+}
+
+.update-restart-btn:hover {
+  background-color: #f4e4b8;
+}

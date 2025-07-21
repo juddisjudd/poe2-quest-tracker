@@ -7,9 +7,15 @@ import {
   Tray,
   Menu,
 } from "electron";
+import { autoUpdater } from "electron-updater";
 import * as path from "path";
 import { format as formatUrl } from "url";
 import { isDev } from "./utils";
+import log from "electron-log";
+
+log.transports.file.level = "info";
+
+autoUpdater.logger = log;
 
 let mainWindow: BrowserWindow | null = null;
 let tray: Tray | null = null;
@@ -51,6 +57,7 @@ const createWindow = (): void => {
       slashes: true,
     });
     mainWindow.loadURL(url);
+    autoUpdater.checkForUpdatesAndNotify();
   }
 
   mainWindow.setIgnoreMouseEvents(false);
@@ -141,11 +148,21 @@ ipcMain.handle("close-window", () => mainWindow?.close());
 ipcMain.handle("toggle-always-on-top", (_, shouldStay: boolean) => {
   mainWindow?.setAlwaysOnTop(shouldStay);
 });
-
 ipcMain.handle("save-quest-data", (_, data: any) => {
   console.log("Saving quest data:", data);
 });
-
 ipcMain.handle("load-quest-data", () => {
   return null;
+});
+
+autoUpdater.on("update-available", () => {
+  mainWindow?.webContents.send("update-available");
+});
+
+autoUpdater.on("update-downloaded", () => {
+  mainWindow?.webContents.send("update-downloaded");
+});
+
+ipcMain.on("restart-app", () => {
+  autoUpdater.quitAndInstall();
 });
