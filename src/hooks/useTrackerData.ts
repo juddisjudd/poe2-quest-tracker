@@ -14,10 +14,14 @@ export const useTrackerData = () => {
   const [data, setData] = useState<TrackerData>(initialData);
   const [loading, setLoading] = useState(true);
 
+  // Check if the Electron API is available
+  const isElectron = !!window.electronAPI;
+
   useEffect(() => {
     const loadData = async () => {
       try {
-        if (window.electronAPI) {
+        // Only try to load data from Electron if the API exists
+        if (isElectron) {
           const savedData = await window.electronAPI.loadQuestData();
           if (savedData) {
             setData(savedData);
@@ -29,20 +33,23 @@ export const useTrackerData = () => {
         setLoading(false);
       }
     };
-
     loadData();
-  }, []);
+  }, [isElectron]); // Rerun if the environment changes (though it won't)
 
-  const saveData = useCallback(async (newData: TrackerData) => {
-    try {
-      if (window.electronAPI) {
-        await window.electronAPI.saveQuestData(newData);
+  const saveData = useCallback(
+    async (newData: TrackerData) => {
+      try {
+        // Only try to save data in Electron
+        if (isElectron) {
+          await window.electronAPI.saveQuestData(newData);
+        }
+        setData(newData);
+      } catch (error) {
+        console.error("Failed to save quest data:", error);
       }
-      setData(newData);
-    } catch (error) {
-      console.error("Failed to save quest data:", error);
-    }
-  }, []);
+    },
+    [isElectron] // Depend on the Electron environment status
+  );
 
   const toggleQuest = useCallback(
     (actId: string, questId: string) => {

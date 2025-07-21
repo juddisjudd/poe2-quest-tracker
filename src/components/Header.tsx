@@ -12,14 +12,17 @@ export const Header: React.FC<HeaderProps> = ({
 }) => {
   const [showSettings, setShowSettings] = useState(false);
 
+  // Check if the Electron API is available before using it
+  const isElectron = !!window.electronAPI;
+
   const handleMinimize = async () => {
-    if (window.electronAPI) {
+    if (isElectron) {
       await window.electronAPI.minimizeWindow();
     }
   };
 
   const handleClose = async () => {
-    if (window.electronAPI) {
+    if (isElectron) {
       await window.electronAPI.closeWindow();
     }
   };
@@ -27,7 +30,7 @@ export const Header: React.FC<HeaderProps> = ({
   const handleAlwaysOnTopToggle = async () => {
     const newValue = !settings.alwaysOnTop;
     onSettingsChange({ alwaysOnTop: newValue });
-    if (window.electronAPI) {
+    if (isElectron) {
       await window.electronAPI.toggleAlwaysOnTop(newValue);
     }
   };
@@ -37,47 +40,54 @@ export const Header: React.FC<HeaderProps> = ({
       <div className="title-bar">
         <div className="title">
           <span className="title-text">Quest Tracker</span>
-          <span className="hotkey-hint">F9</span>
+          {/* Only show the hotkey hint in Electron */}
+          {isElectron && <span className="hotkey-hint">F9</span>}
         </div>
-        <div className="window-controls">
-          <button
-            className="control-btn settings-btn"
-            onClick={() => setShowSettings(!showSettings)}
-            title="Settings"
-          >
-            ⚙
-          </button>
-          <button
-            className="control-btn minimize-btn"
-            onClick={handleMinimize}
-            title="Minimize"
-          >
-            −
-          </button>
-          <button
-            className="control-btn close-btn"
-            onClick={handleClose}
-            title="Close"
-          >
-            ×
-          </button>
-        </div>
+        {/* Only show window controls in Electron */}
+        {isElectron && (
+          <div className="window-controls">
+            <button
+              className="control-btn settings-btn"
+              onClick={() => setShowSettings(!showSettings)}
+              title="Settings"
+            >
+              ⚙
+            </button>
+            <button
+              className="control-btn minimize-btn"
+              onClick={handleMinimize}
+              title="Minimize"
+            >
+              −
+            </button>
+            <button
+              className="control-btn close-btn"
+              onClick={handleClose}
+              title="Close"
+            >
+              ×
+            </button>
+          </div>
+        )}
       </div>
-
       {showSettings && (
         <div className="settings-panel">
+          {/* Only show the "Always on Top" setting in Electron */}
+          {isElectron && (
+            <div className="setting-item">
+              <label>
+                <input
+                  type="checkbox"
+                  checked={settings.alwaysOnTop}
+                  onChange={handleAlwaysOnTopToggle}
+                />{" "}
+                Always on Top
+              </label>
+            </div>
+          )}
           <div className="setting-item">
             <label>
-              <input
-                type="checkbox"
-                checked={settings.alwaysOnTop}
-                onChange={handleAlwaysOnTopToggle}
-              />
-              Always on Top
-            </label>
-          </div>
-          <div className="setting-item">
-            <label>
+              {" "}
               Opacity: {Math.round(settings.opacity * 100)}%
               <input
                 type="range"
