@@ -33,6 +33,7 @@ export const QuestTracker: React.FC = () => {
           <ActPanel
             key={act.id}
             act={act}
+            showOptional={data.settings.showOptional !== false}
             onToggleQuest={(questId) => toggleQuest(act.id, questId)}
             onToggleAct={() => toggleAct(act.id)}
           />

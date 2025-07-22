@@ -12,6 +12,7 @@ export const Header: React.FC<HeaderProps> = ({
 }) => {
   const [showSettings, setShowSettings] = useState(false);
   const [appVersion, setAppVersion] = useState<string>("");
+  const [updateChecking, setUpdateChecking] = useState(false);
   const isElectron = !!window.electronAPI;
 
   useEffect(() => {
@@ -41,6 +42,19 @@ export const Header: React.FC<HeaderProps> = ({
     }
   };
 
+  const handleCheckForUpdates = async () => {
+    if (isElectron && !updateChecking) {
+      setUpdateChecking(true);
+      try {
+        await window.electronAPI.checkForUpdates();
+        setTimeout(() => setUpdateChecking(false), 2000);
+      } catch (error) {
+        console.error("Failed to check for updates:", error);
+        setUpdateChecking(false);
+      }
+    }
+  };
+
   return (
     <div className="header">
       <div className="title-bar">
@@ -52,7 +66,23 @@ export const Header: React.FC<HeaderProps> = ({
         {isElectron && (
           <div className="window-controls">
             {/* Show version if available */}
-            {appVersion && <span className="app-version">v{appVersion}</span>}
+            {appVersion && (
+              <span
+                className="app-version"
+                onClick={handleCheckForUpdates}
+                style={{
+                  cursor: updateChecking ? "wait" : "pointer",
+                  opacity: updateChecking ? 0.6 : 1,
+                }}
+                title={
+                  updateChecking
+                    ? "Checking for updates..."
+                    : "Click to check for updates"
+                }
+              >
+                v{appVersion} {updateChecking && "🔄"}
+              </span>
+            )}
             <button
               className="control-btn settings-btn"
               onClick={() => setShowSettings(!showSettings)}
@@ -140,6 +170,22 @@ export const Header: React.FC<HeaderProps> = ({
                 </span>
               </div>
             </div>
+
+            <div className="setting-item">
+              <div className="setting-label">SHOW OPTIONAL</div>
+              <div className="setting-control">
+                <label className="setting-checkbox">
+                  <input
+                    type="checkbox"
+                    checked={settings.showOptional !== false}
+                    onChange={(e) =>
+                      onSettingsChange({ showOptional: e.target.checked })
+                    }
+                  />
+                  Show Optional Quests
+                </label>
+              </div>
+            </div>
           </div>
 
           {isElectron && (
@@ -151,6 +197,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <br />
                 • Use Borderless Windowed mode in PoE2 for best experience
                 <br />• Adjust opacity for visibility while gaming
+                <br />• Click version number to check for updates
               </div>
             </div>
           )}

@@ -15,10 +15,14 @@ import { isDev } from "./utils";
 import log from "electron-log";
 
 log.transports.file.level = "info";
+log.transports.console.level = "info";
 autoUpdater.logger = log;
 
 let mainWindow: BrowserWindow | null = null;
 let tray: Tray | null = null;
+
+autoUpdater.autoDownload = true;
+autoUpdater.autoInstallOnAppQuit = true;
 
 const getDataPath = () => {
   const userDataPath = app.getPath("userData");
@@ -50,6 +54,7 @@ const createWindow = (): void => {
   });
 
   const isDevelopment = isDev();
+
   if (isDevelopment) {
     mainWindow.loadURL("http://localhost:3000");
     mainWindow.webContents.openDevTools({ mode: "detach" });
@@ -61,13 +66,24 @@ const createWindow = (): void => {
       slashes: true,
     });
     mainWindow.loadURL(url);
-    autoUpdater.checkForUpdatesAndNotify();
+
+    setTimeout(() => {
+      log.info("Checking for updates...");
+      autoUpdater.checkForUpdatesAndNotify();
+    }, 3000);
   }
 
   mainWindow.on("ready-to-show", () => {
     mainWindow?.show();
     mainWindow?.focus();
   });
+
+  if (!isDevelopment) {
+    setInterval(() => {
+      log.info("Periodic update check...");
+      autoUpdater.checkForUpdatesAndNotify();
+    }, 30 * 60 * 1000);
+  }
 };
 
 const createTray = (): void => {
@@ -76,6 +92,11 @@ const createTray = (): void => {
 
   const contextMenu = Menu.buildFromTemplate([
     { label: "Show/Hide Tracker (F9)", click: toggleVisibility },
+    { type: "separator" },
+    {
+      label: "Check for Updates",
+      click: () => autoUpdater.checkForUpdatesAndNotify(),
+    },
     { type: "separator" },
     { label: "Exit", click: () => app.quit() },
   ]);
@@ -140,18 +161,18 @@ app.on("will-quit", () => {
 });
 
 ipcMain.handle("get-app-version", () => app.getVersion());
-
 ipcMain.handle("minimize-window", () => mainWindow?.minimize());
-
 ipcMain.handle("close-window", () => mainWindow?.close());
 
 ipcMain.handle("save-quest-data", async (_, data: any) => {
   try {
     const dataPath = getDataPath();
     const dataDir = path.dirname(dataPath);
+
     if (!fs.existsSync(dataDir)) {
       fs.mkdirSync(dataDir, { recursive: true });
     }
+
     fs.writeFileSync(dataPath, JSON.stringify(data, null, 2), "utf8");
     console.log("Quest data saved successfully to:", dataPath);
     return { success: true };
@@ -164,10 +185,12 @@ ipcMain.handle("save-quest-data", async (_, data: any) => {
 ipcMain.handle("load-quest-data", async () => {
   try {
     const dataPath = getDataPath();
+
     if (!fs.existsSync(dataPath)) {
       console.log("No saved quest data found");
       return null;
     }
+
     const rawData = fs.readFileSync(dataPath, "utf8");
     const data = JSON.parse(rawData);
     console.log("Quest data loaded successfully from:", dataPath);
@@ -178,12 +201,46 @@ ipcMain.handle("load-quest-data", async () => {
   }
 });
 
-autoUpdater.on("update-available", () => {
+autoUpdater.on("checking-for-update", () => {
+  log.info("Checking for update...");
+});
+
+autoUpdater.on("update-available", (info) => {
+  log.info("Update available:", info);
   mainWindow?.webContents.send("update-available");
 });
 
-autoUpdater.on("update-downloaded", () => {
+autoUpdater.on("update-not-available", (info) => {
+  log.info("Update not available:", info);
+});
+
+autoUpdater.on("error", (err) => {
+  log.error("Error in auto-updater:", err);
+});
+
+autoUpdater.on("download-progress", (progressObj) => {
+  let log_message = "Download speed: " + progressObj.bytesPerSecond;
+  log_message = log_message + " - Downloaded " + progressObj.percent + "%";
+  log_message =
+    log_message +
+    " (" +
+    progressObj.transferred +
+    "/" +
+    progressObj.total +
+    ")";
+  log.info(log_message);
+});
+
+autoUpdater.on("update-downloaded", (info) => {
+  log.info("Update downloaded:", info);
   mainWindow?.webContents.send("update-downloaded");
+});
+
+ipcMain.handle("check-for-updates", () => {
+  if (!isDev()) {
+    log.info("Manual update check triggered");
+    autoUpdater.checkForUpdatesAndNotify();
+  }
 });
 
 ipcMain.on("restart-app", () => {

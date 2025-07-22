@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { TrackerData } from "../types";
+import { TrackerData, Act, QuestStep } from "../types";
 import { defaultQuestData } from "../data/questData";
 
 const initialData: TrackerData = {
@@ -9,7 +9,47 @@ const initialData: TrackerData = {
     opacity: 0.9,
     fontSize: 1.0,
     theme: "amoled",
+    showOptional: true,
   },
+};
+
+const mergeQuestData = (
+  savedData: TrackerData,
+  newQuestData: Act[]
+): TrackerData => {
+  const mergedActs = newQuestData.map((newAct) => {
+    const savedAct = savedData.acts.find((act) => act.id === newAct.id);
+
+    if (!savedAct) {
+      return newAct;
+    }
+
+    const mergedQuests = newAct.quests.map((newQuest) => {
+      const savedQuest = savedAct.quests.find(
+        (quest) => quest.id === newQuest.id
+      );
+
+      if (savedQuest) {
+        return {
+          ...newQuest,
+          completed: savedQuest.completed,
+        };
+      }
+
+      return newQuest;
+    });
+
+    return {
+      ...newAct,
+      quests: mergedQuests,
+      expanded: savedAct.expanded,
+    };
+  });
+
+  return {
+    ...savedData,
+    acts: mergedActs,
+  };
 };
 
 export const useTrackerData = () => {
@@ -40,12 +80,14 @@ export const useTrackerData = () => {
         }
 
         if (savedData) {
+          const mergedData = mergeQuestData(savedData, defaultQuestData);
           const updatedData: TrackerData = {
-            ...savedData,
+            ...mergedData,
             settings: {
               ...savedData.settings,
               fontSize: savedData.settings.fontSize || 1.0,
               theme: savedData.settings.theme || "amoled",
+              showOptional: savedData.settings.showOptional !== false,
             },
           };
           setData(updatedData);
