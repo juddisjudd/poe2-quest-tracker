@@ -1,6 +1,6 @@
 {
   "name": "poe2-quest-tracker",
-  "version": "1.0.1",
+  "version": "1.5.0",
   "description": "Path of Exile 2 Quest Tracker Overlay",
   "main": "dist/main/main.js",
   "scripts": {

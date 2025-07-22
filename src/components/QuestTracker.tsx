@@ -5,6 +5,8 @@ import { Header } from "./Header";
 import { UpdateNotification } from "./UpdateNotification";
 import "./QuestTracker.css";
 import "./UpdateNotification.css";
+import "../themes/amoled-crimson.css";
+import "../themes/amoled-yellow.css";
 
 export const QuestTracker: React.FC = () => {
   const { data, loading, toggleQuest, toggleAct, updateSettings } =
@@ -22,6 +24,8 @@ export const QuestTracker: React.FC = () => {
     <div
       className="quest-tracker"
       style={{ opacity: data.settings.opacity }}
+      data-font-scale={data.settings.fontSize || 1.0}
+      data-theme={(data.settings as any).theme || "amoled"}
     >
       <Header settings={data.settings} onSettingsChange={updateSettings} />
       <div className="acts-container">
@@ -34,7 +38,6 @@ export const QuestTracker: React.FC = () => {
           />
         ))}
       </div>
-      {/* Add the update notification component here */}
       <UpdateNotification />
     </div>
   );

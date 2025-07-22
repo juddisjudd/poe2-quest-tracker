@@ -7,6 +7,8 @@ const initialData: TrackerData = {
   settings: {
     alwaysOnTop: true,
     opacity: 0.9,
+    fontSize: 1.0,
+    theme: "amoled",
   },
 };
 
@@ -14,18 +16,39 @@ export const useTrackerData = () => {
   const [data, setData] = useState<TrackerData>(initialData);
   const [loading, setLoading] = useState(true);
 
-  // Check if the Electron API is available
   const isElectron = !!window.electronAPI;
 
   useEffect(() => {
     const loadData = async () => {
       try {
-        // Only try to load data from Electron if the API exists
+        let savedData: TrackerData | null = null;
+
         if (isElectron) {
-          const savedData = await window.electronAPI.loadQuestData();
-          if (savedData) {
-            setData(savedData);
+          savedData = await window.electronAPI.loadQuestData();
+        } else {
+          const localStorageData = localStorage.getItem(
+            "poe2-quest-tracker-data"
+          );
+          if (localStorageData) {
+            try {
+              savedData = JSON.parse(localStorageData) as TrackerData;
+            } catch (parseError) {
+              console.error("Failed to parse localStorage data:", parseError);
+              savedData = null;
+            }
           }
+        }
+
+        if (savedData) {
+          const updatedData: TrackerData = {
+            ...savedData,
+            settings: {
+              ...savedData.settings,
+              fontSize: savedData.settings.fontSize || 1.0,
+              theme: savedData.settings.theme || "amoled",
+            },
+          };
+          setData(updatedData);
         }
       } catch (error) {
         console.error("Failed to load quest data:", error);
@@ -33,22 +56,38 @@ export const useTrackerData = () => {
         setLoading(false);
       }
     };
+
     loadData();
-  }, [isElectron]); // Rerun if the environment changes (though it won't)
+  }, [isElectron]);
 
   const saveData = useCallback(
     async (newData: TrackerData) => {
       try {
-        // Only try to save data in Electron
         if (isElectron) {
           await window.electronAPI.saveQuestData(newData);
+        } else {
+          localStorage.setItem(
+            "poe2-quest-tracker-data",
+            JSON.stringify(newData)
+          );
         }
         setData(newData);
       } catch (error) {
         console.error("Failed to save quest data:", error);
+        if (isElectron) {
+          try {
+            localStorage.setItem(
+              "poe2-quest-tracker-data",
+              JSON.stringify(newData)
+            );
+            console.log("Saved to localStorage as backup");
+          } catch (localError) {
+            console.error("localStorage backup also failed:", localError);
+          }
+        }
       }
     },
-    [isElectron] // Depend on the Electron environment status
+    [isElectron]
   );
 
   const toggleQuest = useCallback(
@@ -90,7 +129,10 @@ export const useTrackerData = () => {
     (settings: Partial<TrackerData["settings"]>) => {
       const newData = {
         ...data,
-        settings: { ...data.settings, ...settings },
+        settings: {
+          ...data.settings,
+          ...settings,
+        },
       };
       saveData(newData);
     },

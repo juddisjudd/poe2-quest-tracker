@@ -1,0 +1,244 @@
+/* AMOLED Yellow Theme */
+.quest-tracker[data-theme="amoled-yellow"] {
+  background: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.95) 0%,
+    rgba(0, 0, 0, 0.92) 50%,
+    rgba(0, 0, 0, 0.95) 100%
+  );
+  box-shadow: 0 0 20px rgba(255, 170, 0, 0.3);
+  color: #ffffff;
+}
+
+.quest-tracker[data-theme="amoled-yellow"] .header {
+  background: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.6) 0%,
+    rgba(0, 0, 0, 0.3) 100%
+  );
+}
+
+.quest-tracker[data-theme="amoled-yellow"] .title-text {
+  color: #ffaa00;
+  text-shadow: 0 0 8px rgba(255, 170, 0, 0.6);
+}
+
+.quest-tracker[data-theme="amoled-yellow"] .hotkey-hint {
+  color: #d0d0d0;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid #666;
+}
+
+.quest-tracker[data-theme="amoled-yellow"] .app-version {
+  color: #a0a0a0;
+}
+
+.quest-tracker[data-theme="amoled-yellow"] .control-btn {
+  background: rgba(255, 170, 0, 0.1);
+  color: #ffaa00;
+}
+
+.quest-tracker[data-theme="amoled-yellow"] .control-btn:hover {
+  background: rgba(255, 170, 0, 0.2);
+  color: #ffcc44;
+}
+
+.quest-tracker[data-theme="amoled-yellow"] .settings-panel {
+  background: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.3) 0%,
+    rgba(0, 0, 0, 0.4) 100%
+  );
+}
+
+.quest-tracker[data-theme="amoled-yellow"] .setting-label {
+  color: #ffaa00;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+  font-weight: 700;
+  font-size: 0.7rem;
+  letter-spacing: 0.5px;
+}
+
+.quest-tracker[data-theme="amoled-yellow"] .setting-value {
+  color: #d0d0d0;
+}
+
+.quest-tracker[data-theme="amoled-yellow"] .theme-selector {
+  background: rgba(255, 170, 0, 0.1);
+  color: #ffaa00;
+  font-weight: 600;
+}
+
+.quest-tracker[data-theme="amoled-yellow"] .theme-selector:focus,
+.quest-tracker[data-theme="amoled-yellow"] .theme-selector:hover {
+  background: rgba(255, 170, 0, 0.15);
+}
+
+.quest-tracker[data-theme="amoled-yellow"] .theme-selector option {
+  background: rgba(0, 0, 0, 0.95);
+  color: #ffaa00;
+}
+
+.quest-tracker[data-theme="amoled-yellow"] .setting-control input[type='range'] {
+  background: rgba(255, 170, 0, 0.1);
+}
+
+.quest-tracker[data-theme="amoled-yellow"] .setting-control input[type='range']::-webkit-slider-thumb {
+  background: #ffaa00;
+}
+
+.quest-tracker[data-theme="amoled-yellow"] .setting-control input[type='range']::-moz-range-thumb {
+  background: #ffaa00;
+}
+
+.quest-tracker[data-theme="amoled-yellow"] .setting-checkbox input[type='checkbox'] {
+  accent-color: #ffaa00;
+}
+
+.quest-tracker[data-theme="amoled-yellow"] .setting-checkbox {
+  color: #ffffff;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: 0.5px;
+}
+
+.quest-tracker[data-theme="amoled-yellow"] .act-panel {
+  background: rgba(255, 170, 0, 0.05);
+}
+
+.quest-tracker[data-theme="amoled-yellow"] .act-panel:hover {
+  background: rgba(255, 170, 0, 0.08);
+}
+
+.quest-tracker[data-theme="amoled-yellow"] .act-header {
+  background: rgba(255, 170, 0, 0.02);
+}
+
+.quest-tracker[data-theme="amoled-yellow"] .act-header:hover {
+  background: rgba(255, 170, 0, 0.05);
+}
+
+.quest-tracker[data-theme="amoled-yellow"] .expand-icon {
+  color: #ffffff;
+}
+
+.quest-tracker[data-theme="amoled-yellow"] .act-name {
+  color: #ffffff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.quest-tracker[data-theme="amoled-yellow"] .act-panel[data-temporary='true'] .act-name {
+  color: #ffb347;
+}
+
+.quest-tracker[data-theme="amoled-yellow"] .progress-text {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.quest-tracker[data-theme="amoled-yellow"] .progress-bar {
+  background: rgba(255, 170, 0, 0.1);
+}
+
+.quest-tracker[data-theme="amoled-yellow"] .progress-fill {
+  background: #ffaa00;
+}
+
+.quest-tracker[data-theme="amoled-yellow"] .act-panel.act-complete {
+  background: rgba(74, 159, 74, 0.05);
+}
+
+.quest-tracker[data-theme="amoled-yellow"] .act-panel.act-complete:hover {
+  background: rgba(74, 159, 74, 0.08);
+}
+
+.quest-tracker[data-theme="amoled-yellow"] .act-panel.act-complete .act-header {
+  background: rgba(74, 159, 74, 0.02);
+}
+
+.quest-tracker[data-theme="amoled-yellow"] .act-panel.act-complete .act-header:hover {
+  background: rgba(74, 159, 74, 0.05);
+}
+
+.quest-tracker[data-theme="amoled-yellow"] .act-panel.act-complete .progress-bar {
+  background: rgba(74, 159, 74, 0.1);
+}
+
+.quest-tracker[data-theme="amoled-yellow"] .act-panel.act-complete .progress-fill {
+  background: linear-gradient(90deg, #4a9f4a 0%, #6cb85c 100%);
+}
+
+.quest-tracker[data-theme="amoled-yellow"] .act-panel.act-complete .act-name {
+  color: #b3e8b3;
+  text-shadow: 0 0 6px rgba(106, 184, 106, 0.6);
+}
+
+.quest-tracker[data-theme="amoled-yellow"] .quest-item {
+  background: rgba(255, 170, 0, 0.02);
+}
+
+.quest-tracker[data-theme="amoled-yellow"] .quest-item:hover {
+  background: rgba(255, 170, 0, 0.05);
+}
+
+.quest-tracker[data-theme="amoled-yellow"] .quest-item.completed {
+  background: rgba(255, 170, 0, 0.08);
+}
+
+.quest-tracker[data-theme="amoled-yellow"] .quest-item.completed .quest-name {
+  color: #a0a0a0;
+}
+
+.quest-tracker[data-theme="amoled-yellow"] .quest-item.completed .quest-description {
+  color: #808080;
+}
+
+.quest-tracker[data-theme="amoled-yellow"] .quest-item.optional {
+  border-left: 3px solid #8a70cd;
+}
+
+.quest-tracker[data-theme="amoled-yellow"] .checkbox {
+  background: rgba(255, 170, 0, 0.1);
+}
+
+.quest-tracker[data-theme="amoled-yellow"] .checkbox.checked {
+  background: #ffaa00;
+}
+
+.quest-tracker[data-theme="amoled-yellow"] .quest-name {
+  color: #ffffff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.quest-tracker[data-theme="amoled-yellow"] .quest-description {
+  color: #c0c0c0;
+  background: rgba(255, 170, 0, 0.05);
+}
+
+.quest-tracker[data-theme="amoled-yellow"] .optional-badge {
+  color: #b370db;
+  background: rgba(179, 112, 219, 0.2);
+}
+
+.quest-tracker[data-theme="amoled-yellow"] .loading-text {
+  color: #ffaa00;
+  text-shadow: 0 0 10px rgba(255, 170, 0, 0.6);
+}
+
+/* Update Notification - AMOLED Yellow Theme */
+.quest-tracker[data-theme="amoled-yellow"] .update-notification {
+  background-color: #1a1a1a;
+  color: #ffaa00;
+}
+
+.quest-tracker[data-theme="amoled-yellow"] .update-restart-btn {
+  background-color: #ffaa00;
+  color: #1a1a1a;
+}
+
+.quest-tracker[data-theme="amoled-yellow"] .update-restart-btn:hover {
+  background-color: #ffcc44;
+}

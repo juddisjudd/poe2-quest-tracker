@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { TrackerData } from "../types";
 
 interface HeaderProps {
@@ -11,9 +11,24 @@ export const Header: React.FC<HeaderProps> = ({
   onSettingsChange,
 }) => {
   const [showSettings, setShowSettings] = useState(false);
+  const [appVersion, setAppVersion] = useState<string>("");
 
-  // Check if the Electron API is available before using it
   const isElectron = !!window.electronAPI;
+
+  useEffect(() => {
+    const loadVersion = async () => {
+      if (isElectron) {
+        try {
+          const version = await window.electronAPI.getAppVersion();
+          setAppVersion(version);
+        } catch (error) {
+          console.error("Failed to get app version:", error);
+        }
+      }
+    };
+
+    loadVersion();
+  }, [isElectron]);
 
   const handleMinimize = async () => {
     if (isElectron) {
@@ -40,12 +55,12 @@ export const Header: React.FC<HeaderProps> = ({
       <div className="title-bar">
         <div className="title">
           <span className="title-text">Quest Tracker</span>
-          {/* Only show the hotkey hint in Electron */}
-          {isElectron && <span className="hotkey-hint">F9</span>}
         </div>
         {/* Only show window controls in Electron */}
         {isElectron && (
           <div className="window-controls">
+            {/* Show version if available */}
+            {appVersion && <span className="app-version">v{appVersion}</span>}
             <button
               className="control-btn settings-btn"
               onClick={() => setShowSettings(!showSettings)}
@@ -70,36 +85,86 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
         )}
       </div>
+
       {showSettings && (
         <div className="settings-panel">
-          {/* Only show the "Always on Top" setting in Electron */}
-          {isElectron && (
+          <div className="settings-grid">
             <div className="setting-item">
-              <label>
-                <input
-                  type="checkbox"
-                  checked={settings.alwaysOnTop}
-                  onChange={handleAlwaysOnTopToggle}
-                />{" "}
-                Always on Top
-              </label>
+              <div className="setting-label">THEME</div>
+              <div className="setting-control">
+                <select
+                  value={(settings as any).theme || "amoled"}
+                  onChange={(e) =>
+                    onSettingsChange({
+                      theme: e.target.value as
+                        | "amoled"
+                        | "amoled-crimson"
+                        | "amoled-yellow",
+                    })
+                  }
+                  className="theme-selector"
+                >
+                  <option value="amoled">AMOLED</option>
+                  <option value="amoled-crimson">AMOLED CRIMSON</option>
+                  <option value="amoled-yellow">AMOLED YELLOW</option>
+                </select>
+              </div>
             </div>
-          )}
-          <div className="setting-item">
-            <label>
-              {" "}
-              Opacity: {Math.round(settings.opacity * 100)}%
-              <input
-                type="range"
-                min="0.3"
-                max="1"
-                step="0.1"
-                value={settings.opacity}
-                onChange={(e) =>
-                  onSettingsChange({ opacity: parseFloat(e.target.value) })
-                }
-              />
-            </label>
+
+            {/* Only show the "Always on Top" setting in Electron */}
+            {isElectron && (
+              <div className="setting-item">
+                <div className="setting-label">WINDOW BEHAVIOR</div>
+                <div className="setting-control">
+                  <label className="setting-checkbox">
+                    <input
+                      type="checkbox"
+                      checked={settings.alwaysOnTop}
+                      onChange={handleAlwaysOnTopToggle}
+                    />
+                    ALWAYS ON TOP
+                  </label>
+                </div>
+              </div>
+            )}
+
+            <div className="setting-item">
+              <div className="setting-label">OPACITY</div>
+              <div className="setting-control">
+                <input
+                  type="range"
+                  min="0.3"
+                  max="1"
+                  step="0.1"
+                  value={settings.opacity}
+                  onChange={(e) =>
+                    onSettingsChange({ opacity: parseFloat(e.target.value) })
+                  }
+                />
+                <span className="setting-value">
+                  {Math.round(settings.opacity * 100)}%
+                </span>
+              </div>
+            </div>
+
+            <div className="setting-item">
+              <div className="setting-label">FONT SIZE</div>
+              <div className="setting-control">
+                <input
+                  type="range"
+                  min="0.8"
+                  max="1.2"
+                  step="0.1"
+                  value={settings.fontSize || 1.0}
+                  onChange={(e) =>
+                    onSettingsChange({ fontSize: parseFloat(e.target.value) })
+                  }
+                />
+                <span className="setting-value">
+                  {Math.round((settings.fontSize || 1.0) * 100)}%
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       )}

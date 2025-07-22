@@ -18,6 +18,8 @@ export interface TrackerData {
   settings: {
     alwaysOnTop: boolean;
     opacity: number;
+    fontSize?: number;
+    theme?: "amoled" | "amoled-crimson" | "amoled-yellow";
   };
 }
 

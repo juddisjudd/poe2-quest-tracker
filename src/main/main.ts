@@ -9,21 +9,25 @@ import {
 } from "electron";
 import { autoUpdater } from "electron-updater";
 import * as path from "path";
+import * as fs from "fs";
 import { format as formatUrl } from "url";
 import { isDev } from "./utils";
 import log from "electron-log";
 
 log.transports.file.level = "info";
-
 autoUpdater.logger = log;
 
 let mainWindow: BrowserWindow | null = null;
 let tray: Tray | null = null;
 
+const getDataPath = () => {
+  const userDataPath = app.getPath("userData");
+  return path.join(userDataPath, "quest-data.json");
+};
+
 const createWindow = (): void => {
   const primaryDisplay = screen.getPrimaryDisplay();
   const { width } = primaryDisplay.workAreaSize;
-
   const iconPath = path.join(__dirname, "../../assets/icon.png");
 
   mainWindow = new BrowserWindow({
@@ -46,6 +50,7 @@ const createWindow = (): void => {
   });
 
   const isDevelopment = isDev();
+
   if (isDevelopment) {
     mainWindow.loadURL("http://localhost:3000");
     mainWindow.webContents.openDevTools({ mode: "detach" });
@@ -105,6 +110,7 @@ const toggleVisibility = (): void => {
   if (!mainWindow) {
     return;
   }
+
   if (mainWindow.isVisible() && !mainWindow.isMinimized()) {
     mainWindow.hide();
   } else {
@@ -118,7 +124,6 @@ app.whenReady().then(() => {
   createTray();
 
   const registered = globalShortcut.register("F9", toggleVisibility);
-
   if (!registered) {
     console.log("Failed to register F9 global shortcut");
   } else {
@@ -143,16 +148,52 @@ app.on("will-quit", () => {
 });
 
 ipcMain.handle("get-app-version", () => app.getVersion());
+
 ipcMain.handle("minimize-window", () => mainWindow?.minimize());
+
 ipcMain.handle("close-window", () => mainWindow?.close());
+
 ipcMain.handle("toggle-always-on-top", (_, shouldStay: boolean) => {
   mainWindow?.setAlwaysOnTop(shouldStay);
 });
-ipcMain.handle("save-quest-data", (_, data: any) => {
-  console.log("Saving quest data:", data);
+
+ipcMain.handle("save-quest-data", async (_, data: any) => {
+  try {
+    const dataPath = getDataPath();
+    const dataDir = path.dirname(dataPath);
+
+    if (!fs.existsSync(dataDir)) {
+      fs.mkdirSync(dataDir, { recursive: true });
+    }
+
+    fs.writeFileSync(dataPath, JSON.stringify(data, null, 2), "utf8");
+    console.log("Quest data saved successfully to:", dataPath);
+
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to save quest data:", error);
+    throw error;
+  }
 });
-ipcMain.handle("load-quest-data", () => {
-  return null;
+
+ipcMain.handle("load-quest-data", async () => {
+  try {
+    const dataPath = getDataPath();
+
+    if (!fs.existsSync(dataPath)) {
+      console.log("No saved quest data found");
+      return null;
+    }
+
+    const rawData = fs.readFileSync(dataPath, "utf8");
+    const data = JSON.parse(rawData);
+
+    console.log("Quest data loaded successfully from:", dataPath);
+    return data;
+  } catch (error) {
+    console.error("Failed to load quest data:", error);
+    return null;
+  }
 });
 
 autoUpdater.on("update-available", () => {
