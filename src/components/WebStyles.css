@@ -1,17 +1,32 @@
 /* Web-specific styles that override overlay styles when not in Electron */
+
+/* Ensure body and html allow scrolling in web mode */
+body:has(.quest-tracker.web-mode) {
+  overflow-y: auto !important;
+  height: auto !important;
+}
+
+html:has(.quest-tracker.web-mode) {
+  overflow-y: auto !important;
+  height: auto !important;
+}
+
 .quest-tracker.web-mode {
   /* Remove overlay-specific properties */
   background: #1a1a1a !important;
   box-shadow: none !important;
   backdrop-filter: none !important;
   
-  /* Center the tracker and make it responsive */
-  max-width: 800px;
-  margin: 0 auto;
+  /* Full width layout */
+  max-width: none !important;
+  margin: 0 !important;
   min-height: 100vh;
-  height: auto;
-  width: 100%;
+  height: auto !important;
+  width: 100% !important;
   border-radius: 0;
+  
+  /* Remove any height constraints that prevent scrolling */
+  overflow: visible !important;
   
   /* Add some padding for better web spacing */
   padding: 0;
@@ -48,14 +63,23 @@
 
 .quest-tracker.web-mode .acts-container {
   padding: 20px;
-  max-height: none;
-  overflow-y: visible;
+  max-height: none !important;
+  overflow-y: visible !important;
+  overflow-x: hidden;
+  height: auto !important;
+  
+  /* Keep acts in vertical order, but use full width */
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: none;
 }
 
 .quest-tracker.web-mode .act-panel {
-  margin-bottom: 16px;
+  margin-bottom: 0;
   background: rgba(255, 255, 255, 0.05) !important;
   border: 1px solid rgba(255, 255, 255, 0.1);
+  width: 100%;
 }
 
 .quest-tracker.web-mode .settings-panel {
@@ -64,8 +88,9 @@
 }
 
 .quest-tracker.web-mode .settings-grid {
-  max-width: 600px;
-  margin: 0 auto;
+  max-width: none;
+  margin: 0;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 }
 
 /* Add a web-specific header banner */
@@ -97,6 +122,7 @@
   
   .quest-tracker.web-mode .acts-container {
     padding: 12px;
+    gap: 12px;
   }
   
   .quest-tracker.web-mode .title-text {
@@ -107,6 +133,7 @@
 @media (max-width: 480px) {
   .quest-tracker.web-mode .acts-container {
     padding: 8px;
+    gap: 8px;
   }
   
   .quest-tracker.web-mode .settings-grid {
