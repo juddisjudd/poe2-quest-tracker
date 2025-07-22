@@ -50,7 +50,6 @@ const createWindow = (): void => {
   });
 
   const isDevelopment = isDev();
-
   if (isDevelopment) {
     mainWindow.loadURL("http://localhost:3000");
     mainWindow.webContents.openDevTools({ mode: "detach" });
@@ -65,16 +64,6 @@ const createWindow = (): void => {
     autoUpdater.checkForUpdatesAndNotify();
   }
 
-  mainWindow.setIgnoreMouseEvents(false);
-
-  mainWindow.on("blur", () => {
-    mainWindow?.setIgnoreMouseEvents(true, { forward: true });
-  });
-
-  mainWindow.on("focus", () => {
-    mainWindow?.setIgnoreMouseEvents(false);
-  });
-
   mainWindow.on("ready-to-show", () => {
     mainWindow?.show();
     mainWindow?.focus();
@@ -87,16 +76,6 @@ const createTray = (): void => {
 
   const contextMenu = Menu.buildFromTemplate([
     { label: "Show/Hide Tracker (F9)", click: toggleVisibility },
-    {
-      label: "Always on Top",
-      type: "checkbox",
-      checked: true,
-      click: async (menuItem) => {
-        if (mainWindow) {
-          mainWindow.setAlwaysOnTop(menuItem.checked);
-        }
-      },
-    },
     { type: "separator" },
     { label: "Exit", click: () => app.quit() },
   ]);
@@ -119,23 +98,36 @@ const toggleVisibility = (): void => {
   }
 };
 
-app.whenReady().then(() => {
-  createWindow();
-  createTray();
+const gotTheLock = app.requestSingleInstanceLock();
 
-  const registered = globalShortcut.register("F9", toggleVisibility);
-  if (!registered) {
-    console.log("Failed to register F9 global shortcut");
-  } else {
-    console.log("F9 global shortcut registered successfully");
-  }
-
-  app.on("activate", () => {
-    if (BrowserWindow.getAllWindows().length === 0) {
-      createWindow();
+if (!gotTheLock) {
+  app.quit();
+} else {
+  app.on("second-instance", () => {
+    if (mainWindow) {
+      if (mainWindow.isMinimized()) mainWindow.restore();
+      mainWindow.focus();
     }
   });
-});
+
+  app.whenReady().then(() => {
+    createWindow();
+    createTray();
+
+    const registered = globalShortcut.register("F9", toggleVisibility);
+    if (!registered) {
+      console.log("Failed to register F9 global shortcut");
+    } else {
+      console.log("F9 global shortcut registered successfully");
+    }
+
+    app.on("activate", () => {
+      if (BrowserWindow.getAllWindows().length === 0) {
+        createWindow();
+      }
+    });
+  });
+}
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
@@ -153,22 +145,15 @@ ipcMain.handle("minimize-window", () => mainWindow?.minimize());
 
 ipcMain.handle("close-window", () => mainWindow?.close());
 
-ipcMain.handle("toggle-always-on-top", (_, shouldStay: boolean) => {
-  mainWindow?.setAlwaysOnTop(shouldStay);
-});
-
 ipcMain.handle("save-quest-data", async (_, data: any) => {
   try {
     const dataPath = getDataPath();
     const dataDir = path.dirname(dataPath);
-
     if (!fs.existsSync(dataDir)) {
       fs.mkdirSync(dataDir, { recursive: true });
     }
-
     fs.writeFileSync(dataPath, JSON.stringify(data, null, 2), "utf8");
     console.log("Quest data saved successfully to:", dataPath);
-
     return { success: true };
   } catch (error) {
     console.error("Failed to save quest data:", error);
@@ -179,15 +164,12 @@ ipcMain.handle("save-quest-data", async (_, data: any) => {
 ipcMain.handle("load-quest-data", async () => {
   try {
     const dataPath = getDataPath();
-
     if (!fs.existsSync(dataPath)) {
       console.log("No saved quest data found");
       return null;
     }
-
     const rawData = fs.readFileSync(dataPath, "utf8");
     const data = JSON.parse(rawData);
-
     console.log("Quest data loaded successfully from:", dataPath);
     return data;
   } catch (error) {

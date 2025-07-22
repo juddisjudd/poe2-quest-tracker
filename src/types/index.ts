@@ -29,7 +29,6 @@ declare global {
       getAppVersion: () => Promise<string>;
       minimizeWindow: () => Promise<void>;
       closeWindow: () => Promise<void>;
-      toggleAlwaysOnTop: (shouldStay: boolean) => Promise<void>;
       saveQuestData: (data: TrackerData) => Promise<void>;
       loadQuestData: () => Promise<TrackerData | null>;
       onUpdateAvailable: (callback: () => void) => () => void;

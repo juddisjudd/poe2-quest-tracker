@@ -1,228 +1,32 @@
 /* AMOLED Crimson Theme */
 .quest-tracker[data-theme="amoled-crimson"] {
-  background: linear-gradient(
-    135deg,
-    rgba(0, 0, 0, 0.95) 0%,
-    rgba(0, 0, 0, 0.92) 50%,
-    rgba(0, 0, 0, 0.95) 100%
-  );
-  box-shadow: 0 0 20px rgba(255, 68, 68, 0.3);
-  color: #ffffff;
+  --primary-color: #ff4444;
+  --accent-color: #ff4444;
+  --bg-overlay-1: rgba(255, 68, 68, 0.02);
+  --bg-overlay-2: rgba(255, 68, 68, 0.05);
+  --bg-overlay-3: rgba(255, 68, 68, 0.08);
+  --bg-overlay-4: rgba(255, 68, 68, 0.1);
+  --shadow-primary: 0 0 20px rgba(255, 68, 68, 0.3);
+  --optional-border: #cd5a70;
 }
 
-.quest-tracker[data-theme="amoled-crimson"] .header {
-  background: linear-gradient(
-    135deg,
-    rgba(0, 0, 0, 0.6) 0%,
-    rgba(0, 0, 0, 0.3) 100%
-  );
-}
-
+/* Title text glow effect for crimson theme */
 .quest-tracker[data-theme="amoled-crimson"] .title-text {
-  color: #ff4444;
   text-shadow: 0 0 8px rgba(255, 68, 68, 0.6);
 }
 
-.quest-tracker[data-theme="amoled-crimson"] .app-version {
-  color: #a0a0a0;
-}
-
-.quest-tracker[data-theme="amoled-crimson"] .control-btn {
-  background: rgba(255, 68, 68, 0.1);
-  color: #ff4444;
-}
-
-.quest-tracker[data-theme="amoled-crimson"] .control-btn:hover {
-  background: rgba(255, 68, 68, 0.2);
-  color: #ff6666;
-}
-
-.quest-tracker[data-theme="amoled-crimson"] .settings-panel {
-  background: linear-gradient(
-    135deg,
-    rgba(0, 0, 0, 0.3) 0%,
-    rgba(0, 0, 0, 0.4) 100%
-  );
-}
-
-.quest-tracker[data-theme="amoled-crimson"] .setting-label {
-  color: #ff4444;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
-  font-weight: 700;
-  font-size: 0.7rem;
-  letter-spacing: 0.5px;
-}
-
-.quest-tracker[data-theme="amoled-crimson"] .setting-value {
-  color: #d0d0d0;
-}
-
-.quest-tracker[data-theme="amoled-crimson"] .theme-selector {
-  background: rgba(255, 68, 68, 0.1);
-  color: #ff4444;
-  font-weight: 600;
-}
-
-.quest-tracker[data-theme="amoled-crimson"] .theme-selector:focus,
-.quest-tracker[data-theme="amoled-crimson"] .theme-selector:hover {
-  background: rgba(255, 68, 68, 0.15);
-}
-
-.quest-tracker[data-theme="amoled-crimson"] .theme-selector option {
-  background: rgba(0, 0, 0, 0.95);
-  color: #ff4444;
-}
-
-.quest-tracker[data-theme="amoled-crimson"] .setting-control input[type='range'] {
-  background: rgba(255, 68, 68, 0.1);
-}
-
-.quest-tracker[data-theme="amoled-crimson"] .setting-control input[type='range']::-webkit-slider-thumb {
-  background: #ff4444;
-}
-
-.quest-tracker[data-theme="amoled-crimson"] .setting-control input[type='range']::-moz-range-thumb {
-  background: #ff4444;
-}
-
-.quest-tracker[data-theme="amoled-crimson"] .setting-checkbox input[type='checkbox'] {
-  accent-color: #ff4444;
-}
-
-.quest-tracker[data-theme="amoled-crimson"] .setting-checkbox {
-  color: #ffffff;
-  font-weight: 600;
-  text-transform: uppercase;
-  font-size: 0.7rem;
-  letter-spacing: 0.5px;
-}
-
-.quest-tracker[data-theme="amoled-crimson"] .act-panel {
-  background: rgba(255, 68, 68, 0.05);
-}
-
-.quest-tracker[data-theme="amoled-crimson"] .act-panel:hover {
-  background: rgba(255, 68, 68, 0.08);
-}
-
-.quest-tracker[data-theme="amoled-crimson"] .act-header {
-  background: rgba(255, 68, 68, 0.02);
-}
-
-.quest-tracker[data-theme="amoled-crimson"] .act-header:hover {
-  background: rgba(255, 68, 68, 0.05);
-}
-
-.quest-tracker[data-theme="amoled-crimson"] .expand-icon {
-  color: #ffffff;
-}
-
-.quest-tracker[data-theme="amoled-crimson"] .act-name {
-  color: #ffffff;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
-  font-weight: 600;
-  text-transform: uppercase;
-}
-
-.quest-tracker[data-theme="amoled-crimson"] .act-panel[data-temporary='true'] .act-name {
-  color: #ffb347;
-}
-
-.quest-tracker[data-theme="amoled-crimson"] .progress-text {
-  color: #ffffff;
-  font-weight: 600;
-}
-
-.quest-tracker[data-theme="amoled-crimson"] .progress-bar {
-  background: rgba(255, 68, 68, 0.1);
-}
-
-.quest-tracker[data-theme="amoled-crimson"] .progress-fill {
-  background: #ff4444;
-}
-
-.quest-tracker[data-theme="amoled-crimson"] .act-panel.act-complete {
-  background: rgba(74, 159, 74, 0.05);
-}
-
-.quest-tracker[data-theme="amoled-crimson"] .act-panel.act-complete:hover {
-  background: rgba(74, 159, 74, 0.08);
-}
-
-.quest-tracker[data-theme="amoled-crimson"] .act-panel.act-complete .act-header {
-  background: rgba(74, 159, 74, 0.02);
-}
-
-.quest-tracker[data-theme="amoled-crimson"] .act-panel.act-complete .act-header:hover {
-  background: rgba(74, 159, 74, 0.05);
-}
-
-.quest-tracker[data-theme="amoled-crimson"] .act-panel.act-complete .progress-bar {
-  background: rgba(74, 159, 74, 0.1);
-}
-
-.quest-tracker[data-theme="amoled-crimson"] .act-panel.act-complete .progress-fill {
-  background: linear-gradient(90deg, #4a9f4a 0%, #6cb85c 100%);
-}
-
-.quest-tracker[data-theme="amoled-crimson"] .act-panel.act-complete .act-name {
-  color: #b3e8b3;
-  text-shadow: 0 0 6px rgba(106, 184, 106, 0.6);
-}
-
-.quest-tracker[data-theme="amoled-crimson"] .quest-item {
-  background: rgba(255, 68, 68, 0.02);
-}
-
-.quest-tracker[data-theme="amoled-crimson"] .quest-item:hover {
-  background: rgba(255, 68, 68, 0.05);
-}
-
-.quest-tracker[data-theme="amoled-crimson"] .quest-item.completed {
-  background: rgba(255, 68, 68, 0.08);
-}
-
-.quest-tracker[data-theme="amoled-crimson"] .quest-item.completed .quest-name {
-  color: #a0a0a0;
-}
-
-.quest-tracker[data-theme="amoled-crimson"] .quest-item.completed .quest-description {
-  color: #808080;
-}
-
-.quest-tracker[data-theme="amoled-crimson"] .quest-item.optional {
-  border-left: 3px solid #cd5a70;
-}
-
-.quest-tracker[data-theme="amoled-crimson"] .checkbox {
-  background: rgba(255, 68, 68, 0.1);
-}
-
-.quest-tracker[data-theme="amoled-crimson"] .checkbox.checked {
-  background: #ff4444;
-}
-
-.quest-tracker[data-theme="amoled-crimson"] .quest-name {
-  color: #ffffff;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
-}
-
-.quest-tracker[data-theme="amoled-crimson"] .quest-description {
-  color: #c0c0c0;
-  background: rgba(255, 68, 68, 0.05);
-}
-
+/* Optional badge color override */
 .quest-tracker[data-theme="amoled-crimson"] .optional-badge {
   color: #db70b3;
   background: rgba(219, 112, 179, 0.2);
 }
 
+/* Loading text glow effect */
 .quest-tracker[data-theme="amoled-crimson"] .loading-text {
-  color: #ff4444;
   text-shadow: 0 0 10px rgba(255, 68, 68, 0.6);
 }
 
-/* Update Notification - AMOLED Crimson Theme */
+/* Update notification styling */
 .quest-tracker[data-theme="amoled-crimson"] .update-notification {
   background-color: #1a1a1a;
   color: #ff4444;

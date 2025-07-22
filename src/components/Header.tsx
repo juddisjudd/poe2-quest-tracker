@@ -12,7 +12,6 @@ export const Header: React.FC<HeaderProps> = ({
 }) => {
   const [showSettings, setShowSettings] = useState(false);
   const [appVersion, setAppVersion] = useState<string>("");
-
   const isElectron = !!window.electronAPI;
 
   useEffect(() => {
@@ -42,20 +41,13 @@ export const Header: React.FC<HeaderProps> = ({
     }
   };
 
-  const handleAlwaysOnTopToggle = async () => {
-    const newValue = !settings.alwaysOnTop;
-    onSettingsChange({ alwaysOnTop: newValue });
-    if (isElectron) {
-      await window.electronAPI.toggleAlwaysOnTop(newValue);
-    }
-  };
-
   return (
     <div className="header">
       <div className="title-bar">
         <div className="title">
           <span className="title-text">Quest Tracker</span>
         </div>
+
         {/* Only show window controls in Electron */}
         {isElectron && (
           <div className="window-controls">
@@ -111,23 +103,6 @@ export const Header: React.FC<HeaderProps> = ({
               </div>
             </div>
 
-            {/* Only show the "Always on Top" setting in Electron */}
-            {isElectron && (
-              <div className="setting-item">
-                <div className="setting-label">WINDOW BEHAVIOR</div>
-                <div className="setting-control">
-                  <label className="setting-checkbox">
-                    <input
-                      type="checkbox"
-                      checked={settings.alwaysOnTop}
-                      onChange={handleAlwaysOnTopToggle}
-                    />
-                    ALWAYS ON TOP
-                  </label>
-                </div>
-              </div>
-            )}
-
             <div className="setting-item">
               <div className="setting-label">OPACITY</div>
               <div className="setting-control">
@@ -166,6 +141,19 @@ export const Header: React.FC<HeaderProps> = ({
               </div>
             </div>
           </div>
+
+          {isElectron && (
+            <div className="overlay-help">
+              <div className="help-text">
+                <strong>Usage:</strong>
+                <br />
+                • Press F9 to show/hide the quest tracker
+                <br />
+                • Use Borderless Windowed mode in PoE2 for best experience
+                <br />• Adjust opacity for visibility while gaming
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>

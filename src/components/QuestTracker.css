@@ -1,3 +1,28 @@
+/* CSS Custom Properties for Base Styling */
+:root {
+  --font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  --border-radius-sm: 3px;
+  --border-radius-md: 6px;
+  --border-radius-lg: 8px;
+  --transition-fast: 0.2s ease;
+  --transition-medium: 0.3s ease;
+  
+  /* Default AMOLED Theme Variables */
+  --primary-color: #ffffff;
+  --accent-color: #ffffff;
+  --bg-primary: linear-gradient(135deg, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.92) 50%, rgba(0, 0, 0, 0.95) 100%);
+  --bg-header: linear-gradient(135deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 100%);
+  --bg-settings: linear-gradient(135deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.4) 100%);
+  --bg-overlay-1: rgba(255, 255, 255, 0.02);
+  --bg-overlay-2: rgba(255, 255, 255, 0.05);
+  --bg-overlay-3: rgba(255, 255, 255, 0.08);
+  --bg-overlay-4: rgba(255, 255, 255, 0.1);
+  --shadow-primary: 0 0 20px rgba(128, 128, 128, 0.3);
+  --text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+  --optional-border: #8a70cd;
+}
+
+/* Base Styles */
 * {
   box-sizing: border-box;
 }
@@ -5,31 +30,26 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  font-family: var(--font-family);
   background: transparent;
-  color: #ffffff;
+  color: var(--primary-color);
   user-select: none;
 }
 
+/* Main Container */
 .quest-tracker {
   width: 100%;
   height: 100vh;
   display: flex;
   flex-direction: column;
-  border-radius: 8px;
+  border-radius: var(--border-radius-lg);
   backdrop-filter: blur(5px);
   overflow: hidden;
   min-width: 500px;
   font-size: 1rem;
-  /* Default AMOLED styling */
-  background: linear-gradient(
-    135deg,
-    rgba(0, 0, 0, 0.95) 0%,
-    rgba(0, 0, 0, 0.92) 50%,
-    rgba(0, 0, 0, 0.95) 100%
-  );
-  color: #ffffff;
-  box-shadow: 0 0 20px rgba(128, 128, 128, 0.3);
+  background: var(--bg-primary);
+  color: var(--primary-color);
+  box-shadow: var(--shadow-primary);
 }
 
 .quest-tracker.loading {
@@ -39,19 +59,19 @@ body {
   min-height: 200px;
 }
 
-.loading-text {
-  font-size: 1rem;
-}
+/* Typography Utilities */
+.text-xs { font-size: 0.6875rem; }
+.text-sm { font-size: 0.75rem; }
+.text-base { font-size: 1rem; }
+.font-medium { font-weight: 600; }
+.font-bold { font-weight: 700; }
+.uppercase { text-transform: uppercase; }
 
 /* Header Styles */
 .header {
   backdrop-filter: blur(10px);
   flex-shrink: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(0, 0, 0, 0.6) 0%,
-    rgba(0, 0, 0, 0.3) 100%
-  );
+  background: var(--bg-header);
 }
 
 .title-bar {
@@ -70,19 +90,11 @@ body {
 }
 
 .title-text {
-  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  font-family: var(--font-family);
   font-size: 1rem;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--primary-color);
   text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
-}
-
-.hotkey-hint {
-  font-size: 0.75rem;
-  background: rgba(0, 0, 0, 0.4);
-  padding: 2px 6px;
-  border-radius: 3px;
-  border: 1px solid #666;
 }
 
 .window-controls {
@@ -104,15 +116,15 @@ body {
 .control-btn {
   width: 24px;
   height: 24px;
-  background: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
-  border-radius: 3px;
+  background: var(--bg-overlay-4);
+  color: var(--primary-color);
+  border-radius: var(--border-radius-sm);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 0.875rem;
-  transition: all 0.2s;
+  transition: all var(--transition-fast);
   border: none;
 }
 
@@ -125,19 +137,16 @@ body {
   color: #ff6b6b;
 }
 
+/* Settings Panel */
 .settings-panel {
   padding: 16px;
   backdrop-filter: blur(5px);
-  background: linear-gradient(
-    135deg,
-    rgba(0, 0, 0, 0.3) 0%,
-    rgba(0, 0, 0, 0.4) 100%
-  );
+  background: var(--bg-settings);
 }
 
 .settings-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 16px;
 }
 
@@ -150,9 +159,9 @@ body {
 .setting-label {
   font-size: 0.7rem;
   font-weight: 700;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+  text-shadow: var(--text-shadow);
   margin-bottom: 4px;
-  color: #ffffff;
+  color: var(--accent-color);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -166,27 +175,19 @@ body {
 .setting-control input[type='range'] {
   flex: 1;
   height: 6px;
-  border-radius: 3px;
-  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--border-radius-sm);
+  background: var(--bg-overlay-4);
   outline: none;
   border: none;
 }
 
-.setting-control input[type='range']::-webkit-slider-thumb {
+.setting-control input[type='range']::-webkit-slider-thumb,
+.setting-control input[type='range']::-moz-range-thumb {
   appearance: none;
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  background: #ffffff;
-  cursor: pointer;
-  border: none;
-}
-
-.setting-control input[type='range']::-moz-range-thumb {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background: #ffffff;
+  background: var(--accent-color);
   cursor: pointer;
   border: none;
 }
@@ -203,7 +204,7 @@ body {
   align-items: center;
   gap: 8px;
   cursor: pointer;
-  color: #ffffff;
+  color: var(--primary-color);
   font-weight: 600;
   text-transform: uppercase;
   font-size: 0.7rem;
@@ -213,35 +214,32 @@ body {
 .setting-checkbox input[type='checkbox'] {
   width: 16px;
   height: 16px;
-  accent-color: #ffffff;
+  accent-color: var(--accent-color);
 }
 
 .theme-selector {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--bg-overlay-4);
   border: none;
   border-radius: 4px;
-  color: #ffffff;
+  color: var(--primary-color);
   padding: 6px 10px;
-  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  font-family: var(--font-family);
   font-size: 0.75rem;
   cursor: pointer;
   flex: 1;
   font-weight: 600;
-  transition: all 0.2s;
+  transition: all var(--transition-fast);
+  outline: none; /* Remove default focus outline */
 }
 
-.theme-selector:focus {
-  outline: none;
-  background: rgba(255, 255, 255, 0.15);
-}
-
+.theme-selector:focus,
 .theme-selector:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background: var(--bg-overlay-3);
 }
 
 .theme-selector option {
   background: rgba(0, 0, 0, 0.95);
-  color: #ffffff;
+  color: var(--primary-color);
 }
 
 /* Acts Container */
@@ -249,26 +247,33 @@ body {
   flex: 1;
   padding: 8px;
   overflow-y: auto;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
-/* Hide scrollbar for Chrome, Safari and Opera */
 .acts-container::-webkit-scrollbar {
   display: none;
 }
 
-/* Base Act Panel Styles - Default AMOLED */
+/* Act Panel Styles */
 .act-panel {
   margin-bottom: 8px;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--border-radius-md);
+  background: var(--bg-overlay-2);
   overflow: hidden;
-  transition: all 0.3s ease;
+  transition: all var(--transition-medium);
 }
 
 .act-panel:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--bg-overlay-3);
+}
+
+.act-panel.act-complete {
+  background: rgba(74, 159, 74, 0.05);
+}
+
+.act-panel.act-complete:hover {
+  background: rgba(74, 159, 74, 0.08);
 }
 
 .act-header {
@@ -277,12 +282,20 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: rgba(255, 255, 255, 0.02);
-  transition: all 0.2s ease;
+  background: var(--bg-overlay-1);
+  transition: all var(--transition-fast);
 }
 
 .act-header:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--bg-overlay-2);
+}
+
+.act-panel.act-complete .act-header {
+  background: rgba(74, 159, 74, 0.02);
+}
+
+.act-panel.act-complete .act-header:hover {
+  background: rgba(74, 159, 74, 0.05);
 }
 
 .act-title {
@@ -293,8 +306,8 @@ body {
 
 .expand-icon {
   font-size: 0.625rem;
-  transition: transform 0.3s ease;
-  color: #ffffff;
+  transition: transform var(--transition-medium);
+  color: var(--primary-color);
 }
 
 .expand-icon.expanded {
@@ -304,9 +317,18 @@ body {
 .act-name {
   font-size: 0.8125rem;
   font-weight: 600;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
-  color: #ffffff;
+  text-shadow: var(--text-shadow);
+  color: var(--primary-color);
   text-transform: uppercase;
+}
+
+.act-panel.act-complete .act-name {
+  color: #b3e8b3;
+  text-shadow: 0 0 6px rgba(106, 184, 106, 0.6);
+}
+
+.act-panel[data-temporary='true'] .act-name {
+  color: #ffb347;
 }
 
 .act-progress {
@@ -317,7 +339,7 @@ body {
 
 .progress-text {
   font-size: 0.75rem;
-  color: #ffffff;
+  color: var(--primary-color);
   min-width: 30px;
   text-align: right;
   font-weight: 600;
@@ -326,18 +348,26 @@ body {
 .progress-bar {
   width: 60px;
   height: 6px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 3px;
+  background: var(--bg-overlay-4);
+  border-radius: var(--border-radius-sm);
   overflow: hidden;
 }
 
 .progress-fill {
   height: 100%;
-  background: #ffffff;
-  transition: width 0.3s ease;
+  background: var(--accent-color);
+  transition: width var(--transition-medium);
 }
 
-/* Base Quest Styles - Default AMOLED */
+.act-panel.act-complete .progress-bar {
+  background: rgba(74, 159, 74, 0.1);
+}
+
+.act-panel.act-complete .progress-fill {
+  background: linear-gradient(90deg, #4a9f4a 0%, #6cb85c 100%);
+}
+
+/* Quest Styles */
 .quests-list {
   padding: 8px;
   background: rgba(0, 0, 0, 0.1);
@@ -351,17 +381,17 @@ body {
   margin-bottom: 6px;
   border-radius: 4px;
   cursor: pointer;
-  transition: all 0.2s ease;
-  background: rgba(255, 255, 255, 0.02);
+  transition: all var(--transition-fast);
+  background: var(--bg-overlay-1);
 }
 
 .quest-item:hover {
   transform: translateX(2px);
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--bg-overlay-2);
 }
 
 .quest-item.completed {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--bg-overlay-3);
 }
 
 .quest-item.completed .quest-name {
@@ -374,7 +404,7 @@ body {
 }
 
 .quest-item.optional {
-  border-left: 3px solid #8a70cd;
+  border-left: 3px solid var(--optional-border);
 }
 
 .quest-checkbox {
@@ -385,17 +415,17 @@ body {
 .checkbox {
   width: 18px;
   height: 18px;
-  border-radius: 3px;
-  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--border-radius-sm);
+  background: var(--bg-overlay-4);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
+  transition: all var(--transition-fast);
   border: none;
 }
 
 .checkbox.checked {
-  background: #ffffff;
+  background: var(--accent-color);
 }
 
 .checkmark {
@@ -412,8 +442,8 @@ body {
   font-size: 0.75rem;
   font-weight: 600;
   line-height: 1.4;
-  color: #ffffff;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+  color: var(--primary-color);
+  text-shadow: var(--text-shadow);
   margin-bottom: 4px;
 }
 
@@ -423,11 +453,10 @@ body {
   line-height: 1.4;
   opacity: 0.95;
   font-style: italic;
-  padding-left: 8px;
   margin-top: 4px;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--bg-overlay-2);
   padding: 4px 8px;
-  border-radius: 3px;
+  border-radius: var(--border-radius-sm);
   font-weight: 500;
 }
 
@@ -442,168 +471,73 @@ body {
   margin-top: 1px;
 }
 
+/* Help Section */
+.overlay-help {
+  grid-column: 1 / -1;
+  margin-top: 16px;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: var(--border-radius-md);
+  border-left: 3px solid var(--accent-color);
+}
+
+.help-text {
+  font-size: 0.7rem;
+  line-height: 1.4;
+  color: #d0d0d0;
+}
+
+.help-text strong {
+  color: var(--accent-color);
+  font-weight: 600;
+}
+
 .loading-text {
   font-size: 1rem;
-  color: #ffffff;
+  color: var(--primary-color);
   text-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
 }
 
-/* Font size scaling */
-.quest-tracker[data-font-scale="0.8"] {
-  font-size: 0.8rem;
+/* Font Size Scaling System */
+.quest-tracker[data-font-scale="0.8"] { font-size: 0.8rem; }
+.quest-tracker[data-font-scale="0.9"] { font-size: 0.9rem; }
+.quest-tracker[data-font-scale="1.0"] { font-size: 1rem; }
+.quest-tracker[data-font-scale="1.1"] { font-size: 1.1rem; }
+.quest-tracker[data-font-scale="1.2"] { font-size: 1.2rem; }
+
+/* Proportional scaling for specific elements */
+.quest-tracker[data-font-scale="0.8"] .title-text { font-size: 0.8rem; }
+.quest-tracker[data-font-scale="0.8"] .act-name { font-size: 0.65rem; }
+.quest-tracker[data-font-scale="0.8"] .quest-name { font-size: 0.6rem; }
+.quest-tracker[data-font-scale="0.8"] .quest-description { font-size: 0.55rem; }
+
+.quest-tracker[data-font-scale="0.9"] .title-text { font-size: 0.9rem; }
+.quest-tracker[data-font-scale="0.9"] .act-name { font-size: 0.73rem; }
+.quest-tracker[data-font-scale="0.9"] .quest-name { font-size: 0.675rem; }
+.quest-tracker[data-font-scale="0.9"] .quest-description { font-size: 0.62rem; }
+
+.quest-tracker[data-font-scale="1.1"] .title-text { font-size: 1.1rem; }
+.quest-tracker[data-font-scale="1.1"] .act-name { font-size: 0.89rem; }
+.quest-tracker[data-font-scale="1.1"] .quest-name { font-size: 0.825rem; }
+.quest-tracker[data-font-scale="1.1"] .quest-description { font-size: 0.756rem; }
+
+.quest-tracker[data-font-scale="1.2"] .title-text { font-size: 1.2rem; }
+.quest-tracker[data-font-scale="1.2"] .act-name { font-size: 0.975rem; }
+.quest-tracker[data-font-scale="1.2"] .quest-name { font-size: 0.9rem; }
+.quest-tracker[data-font-scale="1.2"] .quest-description { font-size: 0.825rem; }
+
+/* Responsive Design */
+@media (max-width: 1920px) {
+  .quest-tracker { max-width: 520px; }
 }
 
-.quest-tracker[data-font-scale="0.8"] .title-text {
-  font-size: 0.8rem;
-}
-
-.quest-tracker[data-font-scale="0.8"] .hotkey-hint {
-  font-size: 0.6rem;
-}
-
-.quest-tracker[data-font-scale="0.8"] .setting-label,
-.quest-tracker[data-font-scale="0.8"] .setting-value {
-  font-size: 0.6rem;
-}
-
-.quest-tracker[data-font-scale="0.8"] .act-name {
-  font-size: 0.65rem;
-}
-
-.quest-tracker[data-font-scale="0.8"] .progress-text {
-  font-size: 0.6rem;
-}
-
-.quest-tracker[data-font-scale="0.8"] .quest-name {
-  font-size: 0.6rem;
-}
-
-.quest-tracker[data-font-scale="0.8"] .quest-description {
-  font-size: 0.55rem;
-}
-
-.quest-tracker[data-font-scale="0.8"] .optional-badge {
-  font-size: 0.5rem;
-}
-
-.quest-tracker[data-font-scale="0.9"] {
-  font-size: 0.9rem;
-}
-
-.quest-tracker[data-font-scale="0.9"] .title-text {
-  font-size: 0.9rem;
-}
-
-.quest-tracker[data-font-scale="0.9"] .hotkey-hint {
-  font-size: 0.675rem;
-}
-
-.quest-tracker[data-font-scale="0.9"] .setting-label,
-.quest-tracker[data-font-scale="0.9"] .setting-value {
-  font-size: 0.675rem;
-}
-
-.quest-tracker[data-font-scale="0.9"] .act-name {
-  font-size: 0.73rem;
-}
-
-.quest-tracker[data-font-scale="0.9"] .progress-text {
-  font-size: 0.675rem;
-}
-
-.quest-tracker[data-font-scale="0.9"] .quest-name {
-  font-size: 0.675rem;
-}
-
-.quest-tracker[data-font-scale="0.9"] .quest-description {
-  font-size: 0.62rem;
-}
-
-.quest-tracker[data-font-scale="0.9"] .optional-badge {
-  font-size: 0.5625rem;
-}
-
-.quest-tracker[data-font-scale="1.0"] {
-  font-size: 1rem;
-}
-
-.quest-tracker[data-font-scale="1.1"] {
-  font-size: 1.1rem;
-}
-
-.quest-tracker[data-font-scale="1.1"] .title-text {
-  font-size: 1.1rem;
-}
-
-.quest-tracker[data-font-scale="1.1"] .hotkey-hint {
-  font-size: 0.825rem;
-}
-
-.quest-tracker[data-font-scale="1.1"] .setting-label,
-.quest-tracker[data-font-scale="1.1"] .setting-value {
-  font-size: 0.825rem;
-}
-
-.quest-tracker[data-font-scale="1.1"] .act-name {
-  font-size: 0.89rem;
-}
-
-.quest-tracker[data-font-scale="1.1"] .progress-text {
-  font-size: 0.825rem;
-}
-
-.quest-tracker[data-font-scale="1.1"] .quest-name {
-  font-size: 0.825rem;
-}
-
-.quest-tracker[data-font-scale="1.1"] .quest-description {
-  font-size: 0.756rem;
-}
-
-.quest-tracker[data-font-scale="1.1"] .optional-badge {
-  font-size: 0.6875rem;
-}
-
-.quest-tracker[data-font-scale="1.2"] {
-  font-size: 1.2rem;
-}
-
-.quest-tracker[data-font-scale="1.2"] .title-text {
-  font-size: 1.2rem;
-}
-
-.quest-tracker[data-font-scale="1.2"] .hotkey-hint {
-  font-size: 0.9rem;
-}
-
-.quest-tracker[data-font-scale="1.2"] .setting-label,
-.quest-tracker[data-font-scale="1.2"] .setting-value {
-  font-size: 0.9rem;
-}
-
-.quest-tracker[data-font-scale="1.2"] .act-name {
-  font-size: 0.975rem;
-}
-
-.quest-tracker[data-font-scale="1.2"] .progress-text {
-  font-size: 0.9rem;
-}
-
-.quest-tracker[data-font-scale="1.2"] .quest-name {
-  font-size: 0.9rem;
-}
-
-.quest-tracker[data-font-scale="1.2"] .quest-description {
-  font-size: 0.825rem;
-}
-
-.quest-tracker[data-font-scale="1.2"] .optional-badge {
-  font-size: 0.75rem;
-}
-
-/* Responsive adjustments */
-@media (max-width: 400px) {
-  .quest-tracker {
+@media (max-width: 1366px) {
+  .quest-tracker { 
+    max-width: 480px;
     font-size: 0.9rem;
   }
+}
+
+@media (max-width: 400px) {
+  .quest-tracker { font-size: 0.9rem; }
 }

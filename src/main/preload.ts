@@ -4,11 +4,8 @@ const electronAPI = {
   getAppVersion: () => ipcRenderer.invoke("get-app-version"),
   minimizeWindow: () => ipcRenderer.invoke("minimize-window"),
   closeWindow: () => ipcRenderer.invoke("close-window"),
-  toggleAlwaysOnTop: (shouldStay: boolean) =>
-    ipcRenderer.invoke("toggle-always-on-top", shouldStay),
   saveQuestData: (data: any) => ipcRenderer.invoke("save-quest-data", data),
   loadQuestData: () => ipcRenderer.invoke("load-quest-data"),
-
   onUpdateAvailable: (callback: () => void) => {
     ipcRenderer.on("update-available", callback);
     return () => ipcRenderer.removeListener("update-available", callback);
