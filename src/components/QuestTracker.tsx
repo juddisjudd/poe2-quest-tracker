@@ -5,6 +5,7 @@ import { Header } from "./Header";
 import { UpdateNotification } from "./UpdateNotification";
 import "./QuestTracker.css";
 import "./UpdateNotification.css";
+import "./WebStyles.css";
 import "../themes/amoled-crimson.css";
 import "../themes/amoled-yellow.css";
 
@@ -12,9 +13,11 @@ export const QuestTracker: React.FC = () => {
   const { data, loading, toggleQuest, toggleAct, updateSettings } =
     useTrackerData();
 
+  const isElectron = !!window.electronAPI;
+
   if (loading) {
     return (
-      <div className="quest-tracker loading">
+      <div className={`quest-tracker loading ${!isElectron ? "web-mode" : ""}`}>
         <div className="loading-text">Loading...</div>
       </div>
     );
@@ -22,8 +25,8 @@ export const QuestTracker: React.FC = () => {
 
   return (
     <div
-      className="quest-tracker"
-      style={{ opacity: data.settings.opacity }}
+      className={`quest-tracker ${!isElectron ? "web-mode" : ""}`}
+      style={{ opacity: isElectron ? data.settings.opacity : 1 }}
       data-font-scale={data.settings.fontSize || 1.0}
       data-theme={(data.settings as any).theme || "amoled"}
     >
@@ -39,7 +42,7 @@ export const QuestTracker: React.FC = () => {
           />
         ))}
       </div>
-      <UpdateNotification />
+      {isElectron && <UpdateNotification />}
     </div>
   );
 };

@@ -1,0 +1,115 @@
+/* Web-specific styles that override overlay styles when not in Electron */
+.quest-tracker.web-mode {
+  /* Remove overlay-specific properties */
+  background: #1a1a1a !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  
+  /* Center the tracker and make it responsive */
+  max-width: 800px;
+  margin: 0 auto;
+  min-height: 100vh;
+  height: auto;
+  width: 100%;
+  border-radius: 0;
+  
+  /* Add some padding for better web spacing */
+  padding: 0;
+}
+
+.quest-tracker.web-mode .header {
+  /* Remove drag region and make header more web-friendly */
+  background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%) !important;
+  border-bottom: 1px solid #333;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.quest-tracker.web-mode .title-bar {
+  -webkit-app-region: none !important;
+  cursor: default !important;
+  padding: 16px 20px;
+  justify-content: center;
+}
+
+.quest-tracker.web-mode .title {
+  justify-content: center;
+}
+
+.quest-tracker.web-mode .title-text {
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+.quest-tracker.web-mode .window-controls {
+  display: none !important;
+}
+
+.quest-tracker.web-mode .acts-container {
+  padding: 20px;
+  max-height: none;
+  overflow-y: visible;
+}
+
+.quest-tracker.web-mode .act-panel {
+  margin-bottom: 16px;
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.quest-tracker.web-mode .settings-panel {
+  background: rgba(0, 0, 0, 0.8) !important;
+  border-top: 1px solid #333;
+}
+
+.quest-tracker.web-mode .settings-grid {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Add a web-specific header banner */
+.quest-tracker.web-mode::before {
+  content: '';
+  display: block;
+  background: linear-gradient(45deg, #d4af37, #8b6914);
+  height: 4px;
+  width: 100%;
+}
+
+.quest-tracker.web-mode .header::after {
+  content: 'Web Version - For the desktop overlay app, visit GitHub releases';
+  display: block;
+  text-align: center;
+  font-size: 0.75rem;
+  color: #888;
+  padding: 8px;
+  border-bottom: 1px solid #333;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+  .quest-tracker.web-mode {
+    max-width: 100%;
+    margin: 0;
+  }
+  
+  .quest-tracker.web-mode .acts-container {
+    padding: 12px;
+  }
+  
+  .quest-tracker.web-mode .title-text {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .quest-tracker.web-mode .acts-container {
+    padding: 8px;
+  }
+  
+  .quest-tracker.web-mode .settings-grid {
+    grid-template-columns: 1fr;
+  }
+}
