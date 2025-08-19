@@ -21,6 +21,7 @@ export interface TrackerData {
     fontSize?: number;
     theme?: "amoled" | "amoled-crimson" | "amoled-yellow";
     showOptional?: boolean;
+    hotkey?: string;
   };
 }
 
@@ -33,6 +34,8 @@ declare global {
       saveQuestData: (data: TrackerData) => Promise<void>;
       loadQuestData: () => Promise<TrackerData | null>;
       checkForUpdates: () => Promise<void>;
+      updateHotkey: (hotkey: string) => Promise<void>;
+      openExternal: (url: string) => Promise<void>;
       onUpdateAvailable: (callback: () => void) => () => void;
       onUpdateDownloaded: (callback: () => void) => () => void;
       restartApp: () => void;

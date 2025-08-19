@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { TrackerData, Act, QuestStep } from "../types";
+import { TrackerData, Act } from "../types";
 import { defaultQuestData } from "../data/questData";
 
 const initialData: TrackerData = {
@@ -10,6 +10,7 @@ const initialData: TrackerData = {
     fontSize: 1.0,
     theme: "amoled",
     showOptional: true,
+    hotkey: "F9",
   },
 };
 
@@ -19,7 +20,6 @@ const mergeQuestData = (
 ): TrackerData => {
   const mergedActs = newQuestData.map((newAct) => {
     const savedAct = savedData.acts.find((act) => act.id === newAct.id);
-
     if (!savedAct) {
       return newAct;
     }
@@ -28,14 +28,12 @@ const mergeQuestData = (
       const savedQuest = savedAct.quests.find(
         (quest) => quest.id === newQuest.id
       );
-
       if (savedQuest) {
         return {
           ...newQuest,
           completed: savedQuest.completed,
         };
       }
-
       return newQuest;
     });
 
@@ -55,7 +53,6 @@ const mergeQuestData = (
 export const useTrackerData = () => {
   const [data, setData] = useState<TrackerData>(initialData);
   const [loading, setLoading] = useState(true);
-
   const isElectron = !!window.electronAPI;
 
   useEffect(() => {
@@ -88,6 +85,7 @@ export const useTrackerData = () => {
               fontSize: savedData.settings.fontSize || 1.0,
               theme: savedData.settings.theme || "amoled",
               showOptional: savedData.settings.showOptional !== false,
+              hotkey: savedData.settings.hotkey || "F9",
             },
           };
           setData(updatedData);

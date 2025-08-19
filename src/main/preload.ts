@@ -7,6 +7,8 @@ const electronAPI = {
   saveQuestData: (data: any) => ipcRenderer.invoke("save-quest-data", data),
   loadQuestData: () => ipcRenderer.invoke("load-quest-data"),
   checkForUpdates: () => ipcRenderer.invoke("check-for-updates"),
+  updateHotkey: (hotkey: string) => ipcRenderer.invoke("update-hotkey", hotkey),
+  openExternal: (url: string) => ipcRenderer.invoke("open-external", url),
   onUpdateAvailable: (callback: () => void) => {
     ipcRenderer.on("update-available", callback);
     return () => ipcRenderer.removeListener("update-available", callback);

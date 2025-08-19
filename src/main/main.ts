@@ -6,6 +6,7 @@ import {
   screen,
   Tray,
   Menu,
+  shell,
 } from "electron";
 import { autoUpdater } from "electron-updater";
 import * as path from "path";
@@ -20,6 +21,7 @@ autoUpdater.logger = log;
 
 let mainWindow: BrowserWindow | null = null;
 let tray: Tray | null = null;
+let currentHotkey = "F9";
 
 autoUpdater.autoDownload = true;
 autoUpdater.autoInstallOnAppQuit = true;
@@ -27,6 +29,25 @@ autoUpdater.autoInstallOnAppQuit = true;
 const getDataPath = () => {
   const userDataPath = app.getPath("userData");
   return path.join(userDataPath, "quest-data.json");
+};
+
+const registerHotkey = (hotkey: string): boolean => {
+  globalShortcut.unregisterAll();
+
+  try {
+    const registered = globalShortcut.register(hotkey, toggleVisibility);
+    if (registered) {
+      currentHotkey = hotkey;
+      console.log(`${hotkey} global shortcut registered successfully`);
+      return true;
+    } else {
+      console.log(`Failed to register ${hotkey} global shortcut`);
+      return false;
+    }
+  } catch (error) {
+    console.error(`Error registering hotkey ${hotkey}:`, error);
+    return false;
+  }
 };
 
 const createWindow = (): void => {
@@ -44,12 +65,16 @@ const createWindow = (): void => {
     alwaysOnTop: true,
     skipTaskbar: false,
     resizable: true,
-    show: true,
+    show: false,
     icon: iconPath,
+    titleBarStyle: "hidden",
+    hasShadow: false,
+    thickFrame: false,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
       preload: path.join(__dirname, "preload.js"),
+      backgroundThrottling: false,
     },
   });
 
@@ -78,6 +103,36 @@ const createWindow = (): void => {
     mainWindow?.focus();
   });
 
+  mainWindow.on("focus", () => {
+    if (mainWindow && !mainWindow.isDestroyed()) {
+      const [width, height] = mainWindow.getSize();
+      mainWindow.setIgnoreMouseEvents(true);
+      mainWindow.setSize(width, height - 1);
+
+      setTimeout(() => {
+        if (mainWindow && !mainWindow.isDestroyed()) {
+          mainWindow.setSize(width, height);
+          mainWindow.setIgnoreMouseEvents(false);
+        }
+      }, 5);
+    }
+  });
+
+  mainWindow.on("blur", () => {
+    if (mainWindow && !mainWindow.isDestroyed()) {
+      const [width, height] = mainWindow.getSize();
+      mainWindow.setIgnoreMouseEvents(true);
+      mainWindow.setSize(width, height - 1);
+
+      setTimeout(() => {
+        if (mainWindow && !mainWindow.isDestroyed()) {
+          mainWindow.setSize(width, height);
+          mainWindow.setIgnoreMouseEvents(false);
+        }
+      }, 5);
+    }
+  });
+
   if (!isDevelopment) {
     setInterval(() => {
       log.info("Periodic update check...");
@@ -91,7 +146,10 @@ const createTray = (): void => {
   tray = new Tray(iconPath);
 
   const contextMenu = Menu.buildFromTemplate([
-    { label: "Show/Hide Tracker (F9)", click: toggleVisibility },
+    {
+      label: `Show/Hide Tracker (${currentHotkey})`,
+      click: toggleVisibility,
+    },
     { type: "separator" },
     {
       label: "Check for Updates",
@@ -101,9 +159,30 @@ const createTray = (): void => {
     { label: "Exit", click: () => app.quit() },
   ]);
 
-  tray.setToolTip("POE2 Quest Tracker - Press F9 to toggle");
+  tray.setToolTip(`POE2 Quest Tracker - Press ${currentHotkey} to toggle`);
   tray.setContextMenu(contextMenu);
   tray.on("click", toggleVisibility);
+};
+
+const updateTrayMenu = (): void => {
+  if (!tray) return;
+
+  const contextMenu = Menu.buildFromTemplate([
+    {
+      label: `Show/Hide Tracker (${currentHotkey})`,
+      click: toggleVisibility,
+    },
+    { type: "separator" },
+    {
+      label: "Check for Updates",
+      click: () => autoUpdater.checkForUpdatesAndNotify(),
+    },
+    { type: "separator" },
+    { label: "Exit", click: () => app.quit() },
+  ]);
+
+  tray.setToolTip(`POE2 Quest Tracker - Press ${currentHotkey} to toggle`);
+  tray.setContextMenu(contextMenu);
 };
 
 const toggleVisibility = (): void => {
@@ -135,12 +214,24 @@ if (!gotTheLock) {
     createWindow();
     createTray();
 
-    const registered = globalShortcut.register("F9", toggleVisibility);
-    if (!registered) {
-      console.log("Failed to register F9 global shortcut");
-    } else {
-      console.log("F9 global shortcut registered successfully");
-    }
+    const loadSavedHotkey = async () => {
+      try {
+        const dataPath = getDataPath();
+        if (fs.existsSync(dataPath)) {
+          const rawData = fs.readFileSync(dataPath, "utf8");
+          const data = JSON.parse(rawData);
+          const savedHotkey = data?.settings?.hotkey || "F9";
+          registerHotkey(savedHotkey);
+        } else {
+          registerHotkey("F9");
+        }
+      } catch (error) {
+        console.error("Failed to load saved hotkey:", error);
+        registerHotkey("F9");
+      }
+    };
+
+    loadSavedHotkey();
 
     app.on("activate", () => {
       if (BrowserWindow.getAllWindows().length === 0) {
@@ -185,7 +276,6 @@ ipcMain.handle("save-quest-data", async (_, data: any) => {
 ipcMain.handle("load-quest-data", async () => {
   try {
     const dataPath = getDataPath();
-
     if (!fs.existsSync(dataPath)) {
       console.log("No saved quest data found");
       return null;
@@ -198,6 +288,31 @@ ipcMain.handle("load-quest-data", async () => {
   } catch (error) {
     console.error("Failed to load quest data:", error);
     return null;
+  }
+});
+
+ipcMain.handle("update-hotkey", async (_, newHotkey: string) => {
+  try {
+    const success = registerHotkey(newHotkey);
+    if (success) {
+      updateTrayMenu();
+      return { success: true };
+    } else {
+      throw new Error(`Failed to register hotkey: ${newHotkey}`);
+    }
+  } catch (error) {
+    console.error("Failed to update hotkey:", error);
+    throw error;
+  }
+});
+
+ipcMain.handle("open-external", async (_, url: string) => {
+  try {
+    await shell.openExternal(url);
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to open external URL:", error);
+    throw error;
   }
 });
 
