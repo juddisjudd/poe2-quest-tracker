@@ -85,6 +85,12 @@ html:has(.quest-tracker.web-mode) {
 .quest-tracker.web-mode .settings-panel {
   background: rgba(0, 0, 0, 0.8) !important;
   border-top: 1px solid #333;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
 }
 
 .quest-tracker.web-mode .settings-grid {
@@ -92,6 +98,27 @@ html:has(.quest-tracker.web-mode) {
   margin: 0;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 }
+
+/* Font scaling for web mode - detailed responsive font sizing */
+.quest-tracker.web-mode[data-font-scale="0.8"] .title-text { font-size: 1.2rem; }
+.quest-tracker.web-mode[data-font-scale="0.8"] .act-name { font-size: 0.65rem; }
+.quest-tracker.web-mode[data-font-scale="0.8"] .quest-name { font-size: 0.6rem; }
+.quest-tracker.web-mode[data-font-scale="0.8"] .quest-description { font-size: 0.55rem; }
+
+.quest-tracker.web-mode[data-font-scale="0.9"] .title-text { font-size: 1.35rem; }
+.quest-tracker.web-mode[data-font-scale="0.9"] .act-name { font-size: 0.73rem; }
+.quest-tracker.web-mode[data-font-scale="0.9"] .quest-name { font-size: 0.675rem; }
+.quest-tracker.web-mode[data-font-scale="0.9"] .quest-description { font-size: 0.62rem; }
+
+.quest-tracker.web-mode[data-font-scale="1.1"] .title-text { font-size: 1.65rem; }
+.quest-tracker.web-mode[data-font-scale="1.1"] .act-name { font-size: 0.89rem; }
+.quest-tracker.web-mode[data-font-scale="1.1"] .quest-name { font-size: 0.825rem; }
+.quest-tracker.web-mode[data-font-scale="1.1"] .quest-description { font-size: 0.756rem; }
+
+.quest-tracker.web-mode[data-font-scale="1.2"] .title-text { font-size: 1.8rem; }
+.quest-tracker.web-mode[data-font-scale="1.2"] .act-name { font-size: 0.975rem; }
+.quest-tracker.web-mode[data-font-scale="1.2"] .quest-name { font-size: 0.9rem; }
+.quest-tracker.web-mode[data-font-scale="1.2"] .quest-description { font-size: 0.825rem; }
 
 /* Add a web-specific header banner */
 .quest-tracker.web-mode::before {
@@ -119,14 +146,31 @@ html:has(.quest-tracker.web-mode) {
     max-width: 100%;
     margin: 0;
   }
-  
+
   .quest-tracker.web-mode .acts-container {
     padding: 12px;
     gap: 12px;
   }
-  
+
   .quest-tracker.web-mode .title-text {
     font-size: 1.25rem;
+  }
+
+  .quest-tracker.web-mode .title-bar {
+    flex-direction: column;
+    gap: 12px;
+    padding: 12px 16px;
+  }
+
+  .quest-tracker.web-mode .window-controls {
+    order: -1;
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .quest-tracker.web-mode .title {
+    order: 1;
+    justify-content: center;
   }
 }
 
@@ -135,7 +179,7 @@ html:has(.quest-tracker.web-mode) {
     padding: 8px;
     gap: 8px;
   }
-  
+
   .quest-tracker.web-mode .settings-grid {
     grid-template-columns: 1fr;
   }

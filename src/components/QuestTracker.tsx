@@ -10,9 +10,16 @@ import "../themes/amoled-crimson.css";
 import "../themes/amoled-yellow.css";
 
 export const QuestTracker: React.FC = () => {
-  const { data, loading, toggleQuest, toggleAct, updateSettings } =
-    useTrackerData();
+  const {
+    data,
+    loading,
+    toggleQuest,
+    toggleAct,
+    updateSettings,
+    resetAllQuests,
+  } = useTrackerData();
   const [settingsOpen, setSettingsOpen] = useState(false);
+
   const isElectron = !!window.electronAPI;
 
   if (loading) {
@@ -36,6 +43,7 @@ export const QuestTracker: React.FC = () => {
         settings={data.settings}
         onSettingsChange={updateSettings}
         onSettingsToggle={setSettingsOpen}
+        onResetQuests={resetAllQuests}
       />
       <div className="acts-container">
         {data.acts.map((act) => (

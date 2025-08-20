@@ -24,18 +24,16 @@ export const ActPanel: React.FC<ActPanelProps> = ({
   const progressPercentage =
     totalQuests > 0 ? (completedQuests / totalQuests) * 100 : 0;
 
-  const isTemporaryCruel = act.name.includes("Cruel");
-
   const isActComplete = completedQuests === totalQuests && totalQuests > 0;
 
   const panelClasses = `
-    act-panel
-    ${act.expanded ? "expanded" : "collapsed"}
-    ${isActComplete ? "act-complete" : ""}
+    act-panel ${act.expanded ? "expanded" : "collapsed"} ${
+    isActComplete ? "act-complete" : ""
+  }
   `;
 
   return (
-    <div className={panelClasses.trim()} data-temporary={isTemporaryCruel}>
+    <div className={panelClasses.trim()}>
       <div className="act-header" onClick={onToggleAct}>
         <div className="act-title">
           <span className={`expand-icon ${act.expanded ? "expanded" : ""}`}>
@@ -55,7 +53,6 @@ export const ActPanel: React.FC<ActPanelProps> = ({
           </div>
         </div>
       </div>
-
       {act.expanded && (
         <div className="quests-list">
           {visibleQuests.map((quest) => (

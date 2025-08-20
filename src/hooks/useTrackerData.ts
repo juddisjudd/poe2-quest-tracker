@@ -44,15 +44,25 @@ const mergeQuestData = (
     };
   });
 
+  // Filter out any deprecated Cruel mode acts from saved data
+  const filteredMergedActs = mergedActs.filter((act) => {
+    // Remove old cruel acts that are no longer in the new quest data
+    return (
+      !act.id.includes("-cruel") ||
+      newQuestData.some((newAct) => newAct.id === act.id)
+    );
+  });
+
   return {
     ...savedData,
-    acts: mergedActs,
+    acts: filteredMergedActs,
   };
 };
 
 export const useTrackerData = () => {
   const [data, setData] = useState<TrackerData>(initialData);
   const [loading, setLoading] = useState(true);
+
   const isElectron = !!window.electronAPI;
 
   useEffect(() => {
@@ -179,11 +189,26 @@ export const useTrackerData = () => {
     [data, saveData]
   );
 
+  const resetAllQuests = useCallback(() => {
+    const newData = {
+      ...data,
+      acts: data.acts.map((act) => ({
+        ...act,
+        quests: act.quests.map((quest) => ({
+          ...quest,
+          completed: false,
+        })),
+      })),
+    };
+    saveData(newData);
+  }, [data, saveData]);
+
   return {
     data,
     loading,
     toggleQuest,
     toggleAct,
     updateSettings,
+    resetAllQuests,
   };
 };

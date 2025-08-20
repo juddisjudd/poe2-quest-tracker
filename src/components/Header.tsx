@@ -5,16 +5,20 @@ interface HeaderProps {
   settings: TrackerData["settings"];
   onSettingsChange: (settings: Partial<TrackerData["settings"]>) => void;
   onSettingsToggle: (isOpen: boolean) => void;
+  onResetQuests: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
   settings,
   onSettingsChange,
   onSettingsToggle,
+  onResetQuests,
 }) => {
   const [showSettings, setShowSettings] = useState(false);
   const [appVersion, setAppVersion] = useState<string>("");
   const [updateChecking, setUpdateChecking] = useState(false);
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
+
   const isElectron = !!window.electronAPI;
 
   useEffect(() => {
@@ -81,6 +85,11 @@ export const Header: React.FC<HeaderProps> = ({
     }
   };
 
+  const handleResetQuests = () => {
+    onResetQuests();
+    setShowResetConfirm(false);
+  };
+
   const availableHotkeys = [
     "F9",
     "F8",
@@ -127,11 +136,11 @@ export const Header: React.FC<HeaderProps> = ({
                     : "Click to check for updates"
                 }
               >
-                v{appVersion} {updateChecking && "🔄"}
+                v{appVersion}
+                {updateChecking && "🔄"}
               </span>
             )}
           </div>
-
           <div className="window-controls">
             {/* Support and Settings buttons for ALL versions */}
             <button
@@ -141,7 +150,6 @@ export const Header: React.FC<HeaderProps> = ({
             >
               ☕
             </button>
-
             <button
               className="control-btn settings-btn"
               onClick={() => setShowSettings(!showSettings)}
@@ -149,7 +157,6 @@ export const Header: React.FC<HeaderProps> = ({
             >
               ⚙
             </button>
-
             {/* Electron-only window controls */}
             {isElectron && (
               <>
@@ -185,91 +192,116 @@ export const Header: React.FC<HeaderProps> = ({
             ×
           </button>
         </div>
-
         <div className="settings-content">
+          {/* Only show help section in Electron - moved to top */}
+          {isElectron && (
+            <div className="overlay-help">
+              <div className="help-text">
+                <strong>Usage:</strong>
+                <br />• Press {(settings as any).hotkey || "F9"} to show/hide
+                the quest tracker
+                <br />
+                • Use Borderless Windowed mode in PoE2 for best experience
+                <br />
+                • Adjust opacity for visibility while gaming
+                <br />• Click version number to check for updates
+              </div>
+            </div>
+          )}
+
           <div className="settings-grid">
-            <div className="setting-item">
-              <div className="setting-label">THEME</div>
-              <div className="setting-control">
-                <select
-                  value={(settings as any).theme || "amoled"}
-                  onChange={(e) =>
-                    onSettingsChange({
-                      theme: e.target.value as
-                        | "amoled"
-                        | "amoled-crimson"
-                        | "amoled-yellow",
-                    })
-                  }
-                  className="theme-selector"
-                >
-                  <option value="amoled">AMOLED</option>
-                  <option value="amoled-crimson">AMOLED CRIMSON</option>
-                  <option value="amoled-yellow">AMOLED YELLOW</option>
-                </select>
-              </div>
-            </div>
-
-            {/* Only show opacity in Electron */}
-            {isElectron && (
-              <div className="setting-item">
-                <div className="setting-label">OPACITY</div>
-                <div className="setting-control">
-                  <input
-                    type="range"
-                    min="0.3"
-                    max="1"
-                    step="0.1"
-                    value={settings.opacity}
-                    onChange={(e) =>
-                      onSettingsChange({ opacity: parseFloat(e.target.value) })
-                    }
-                  />
-                  <span className="setting-value">
-                    {Math.round(settings.opacity * 100)}%
-                  </span>
-                </div>
-              </div>
-            )}
-
-            <div className="setting-item">
-              <div className="setting-label">FONT SIZE</div>
-              <div className="setting-control">
-                <input
-                  type="range"
-                  min="0.8"
-                  max="1.2"
-                  step="0.1"
-                  value={settings.fontSize || 1.0}
-                  onChange={(e) =>
-                    onSettingsChange({ fontSize: parseFloat(e.target.value) })
-                  }
-                />
-                <span className="setting-value">
-                  {Math.round((settings.fontSize || 1.0) * 100)}%
-                </span>
-              </div>
-            </div>
-
-            {/* Only show hotkey in Electron */}
-            {isElectron && (
-              <div className="setting-item">
-                <div className="setting-label">HOTKEY</div>
+            {/* Theme and Hotkey side by side */}
+            <div className="setting-row">
+              <div className="setting-item setting-half">
+                <div className="setting-label">THEME</div>
                 <div className="setting-control">
                   <select
-                    value={(settings as any).hotkey || "F9"}
-                    onChange={(e) => handleHotkeyChange(e.target.value)}
-                    className="hotkey-selector"
+                    value={(settings as any).theme || "amoled"}
+                    onChange={(e) =>
+                      onSettingsChange({
+                        theme: e.target.value as
+                          | "amoled"
+                          | "amoled-crimson"
+                          | "amoled-yellow",
+                      })
+                    }
+                    className="theme-selector"
                   >
-                    {availableHotkeys.map((hotkey) => (
-                      <option key={hotkey} value={hotkey}>
-                        {hotkey}
-                      </option>
-                    ))}
+                    <option value="amoled">AMOLED</option>
+                    <option value="amoled-crimson">AMOLED CRIMSON</option>
+                    <option value="amoled-yellow">AMOLED YELLOW</option>
                   </select>
                 </div>
               </div>
-            )}
+
+              {/* Only show hotkey in Electron */}
+              {isElectron && (
+                <div className="setting-item setting-half">
+                  <div className="setting-label">HOTKEY</div>
+                  <div className="setting-control">
+                    <select
+                      value={(settings as any).hotkey || "F9"}
+                      onChange={(e) => handleHotkeyChange(e.target.value)}
+                      className="hotkey-selector"
+                    >
+                      {availableHotkeys.map((hotkey) => (
+                        <option key={hotkey} value={hotkey}>
+                          {hotkey}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Opacity and Font Size side by side */}
+            <div className="setting-row">
+              {/* Only show opacity in Electron */}
+              {isElectron && (
+                <div className="setting-item setting-half">
+                  <div className="setting-label">OPACITY</div>
+                  <div className="setting-control">
+                    <input
+                      type="range"
+                      min="0.3"
+                      max="1"
+                      step="0.1"
+                      value={settings.opacity}
+                      onChange={(e) =>
+                        onSettingsChange({
+                          opacity: parseFloat(e.target.value),
+                        })
+                      }
+                    />
+                    <span className="setting-value">
+                      {Math.round(settings.opacity * 100)}%
+                    </span>
+                  </div>
+                </div>
+              )}
+
+              <div
+                className={`setting-item ${isElectron ? "setting-half" : ""}`}
+              >
+                <div className="setting-label">FONT SIZE</div>
+                <div className="setting-control">
+                  <input
+                    type="range"
+                    min="0.8"
+                    max="1.2"
+                    step="0.1"
+                    value={settings.fontSize || 1.0}
+                    onChange={(e) =>
+                      onSettingsChange({ fontSize: parseFloat(e.target.value) })
+                    }
+                  />
+                  <span className="setting-value">
+                    {Math.round((settings.fontSize || 1.0) * 100)}%
+                  </span>
+                </div>
+              </div>
+            </div>
 
             {/* Show Optional Quests - Available in both versions */}
             <div className="setting-item">
@@ -287,22 +319,42 @@ export const Header: React.FC<HeaderProps> = ({
                 </label>
               </div>
             </div>
-          </div>
 
-          {/* Only show help section in Electron */}
-          {isElectron && (
-            <div className="overlay-help">
-              <div className="help-text">
-                <strong>Usage:</strong>
-                <br />• Press {(settings as any).hotkey || "F9"} to show/hide
-                the quest tracker
-                <br />
-                • Use Borderless Windowed mode in PoE2 for best experience
-                <br />• Adjust opacity for visibility while gaming
-                <br />• Click version number to check for updates
+            {/* Reset Quests Section */}
+            <div className="setting-item">
+              <div className="setting-label">RESET PROGRESS</div>
+              <div className="setting-control">
+                {!showResetConfirm ? (
+                  <button
+                    className="reset-button"
+                    onClick={() => setShowResetConfirm(true)}
+                  >
+                    Reset All Quests
+                  </button>
+                ) : (
+                  <div className="reset-confirm">
+                    <div className="reset-confirm-text">
+                      Are you sure? This will uncheck all quests.
+                    </div>
+                    <div className="reset-confirm-buttons">
+                      <button
+                        className="reset-confirm-btn reset-yes"
+                        onClick={handleResetQuests}
+                      >
+                        Yes, Reset
+                      </button>
+                      <button
+                        className="reset-confirm-btn reset-no"
+                        onClick={() => setShowResetConfirm(false)}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
-          )}
+          </div>
 
           <div className="support-section">
             <button className="support-button" onClick={handleSupportClick}>

@@ -1,16 +1,24 @@
 :root {
-  --font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  --font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
   --border-radius-sm: 3px;
   --border-radius-md: 6px;
   --border-radius-lg: 8px;
   --transition-fast: 0.2s ease;
   --transition-medium: 0.3s ease;
-  
   --primary-color: #ffffff;
   --accent-color: #ffffff;
-  --bg-primary: linear-gradient(135deg, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.92) 50%, rgba(0, 0, 0, 0.95) 100%);
-  --bg-header: linear-gradient(135deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 100%);
-  --bg-settings: linear-gradient(135deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.4) 100%);
+  --bg-primary: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.95) 0%,
+    rgba(0, 0, 0, 0.92) 50%,
+    rgba(0, 0, 0, 0.95) 100%
+  );
+  --bg-header: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.6) 0%,
+    rgba(0, 0, 0, 0.3) 100%
+  );
   --bg-overlay-1: rgba(255, 255, 255, 0.02);
   --bg-overlay-2: rgba(255, 255, 255, 0.05);
   --bg-overlay-3: rgba(255, 255, 255, 0.08);
@@ -32,6 +40,7 @@ body {
   user-select: none;
 }
 
+/* Base Quest Tracker */
 .quest-tracker {
   width: 100%;
   height: 100vh;
@@ -54,24 +63,20 @@ body {
   min-height: 200px;
 }
 
-.quest-tracker *:focus {
-  outline: none !important;
-  border-color: transparent !important;
-}
-
+.quest-tracker *:focus,
 .quest-tracker:focus,
 .quest-tracker:focus-within {
   outline: none !important;
   border: none !important;
 }
 
-.text-xs { font-size: 0.6875rem; }
-.text-sm { font-size: 0.75rem; }
-.text-base { font-size: 1rem; }
-.font-medium { font-weight: 600; }
-.font-bold { font-weight: 700; }
-.uppercase { text-transform: uppercase; }
+.loading-text {
+  font-size: 1rem;
+  color: var(--primary-color);
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+}
 
+/* Header Components */
 .header {
   backdrop-filter: blur(10px);
   flex-shrink: 0;
@@ -125,11 +130,6 @@ body {
   -webkit-app-region: no-drag;
 }
 
-.app-version-inline:focus {
-  outline: none !important;
-  border: none !important;
-}
-
 .app-version-inline:hover {
   opacity: 1;
   background: rgba(0, 0, 0, 0.3);
@@ -141,26 +141,6 @@ body {
   gap: 4px;
   align-items: center;
   -webkit-app-region: no-drag;
-}
-
-.window-controls .app-version {
-  display: none;
-}
-
-.app-version {
-  font-size: 0.6875rem;
-  background: rgba(0, 0, 0, 0.2);
-  padding: 2px 6px;
-  margin-right: 4px;
-  font-weight: 400;
-  cursor: default;
-  border: none !important;
-  outline: none !important;
-}
-
-.app-version:focus {
-  outline: none !important;
-  border: none !important;
 }
 
 .control-btn {
@@ -183,11 +163,6 @@ body {
   background: rgba(255, 255, 255, 0.2);
 }
 
-.control-btn:focus {
-  outline: none !important;
-  border: none !important;
-}
-
 .close-btn:hover {
   background: rgba(220, 20, 20, 0.3);
   color: #ff6b6b;
@@ -203,11 +178,7 @@ body {
   color: #5fb3a3;
 }
 
-.control-btn.support-btn,
-.control-btn.settings-btn {
-  display: flex !important;
-}
-
+/* Settings Panel */
 .settings-panel {
   position: absolute;
   top: 0;
@@ -299,7 +270,7 @@ body {
   gap: 8px;
 }
 
-.setting-control input[type='range'] {
+.setting-control input[type="range"] {
   flex: 1;
   height: 6px;
   border-radius: var(--border-radius-sm);
@@ -308,8 +279,8 @@ body {
   border: none;
 }
 
-.setting-control input[type='range']::-webkit-slider-thumb,
-.setting-control input[type='range']::-moz-range-thumb {
+.setting-control input[type="range"]::-webkit-slider-thumb,
+.setting-control input[type="range"]::-moz-range-thumb {
   appearance: none;
   width: 16px;
   height: 16px;
@@ -338,7 +309,7 @@ body {
   letter-spacing: 0.5px;
 }
 
-.setting-checkbox input[type='checkbox'] {
+.setting-checkbox input[type="checkbox"] {
   width: 16px;
   height: 16px;
   accent-color: var(--accent-color);
@@ -373,8 +344,20 @@ body {
   color: var(--primary-color);
 }
 
+/* Settings Layout - Side by side arrangement */
+.setting-row {
+  display: flex;
+  gap: 16px;
+  width: 100%;
+}
+
+.setting-half {
+  flex: 1;
+}
+
+/* Move overlay-help to top and adjust spacing */
 .overlay-help {
-  margin-top: 20px;
+  margin: 0 0 24px 0;
   padding: 16px;
   background: rgba(0, 0, 0, 0.3);
   border-radius: var(--border-radius-md);
@@ -442,6 +425,7 @@ body {
   font-style: italic;
 }
 
+/* Acts Container */
 .acts-container {
   flex: 1;
   padding: 8px 12px;
@@ -454,6 +438,7 @@ body {
   display: none;
 }
 
+/* Act Panel */
 .act-panel {
   margin-bottom: 8px;
   border-radius: var(--border-radius-md);
@@ -525,10 +510,6 @@ body {
   text-shadow: 0 0 6px rgba(106, 184, 106, 0.6);
 }
 
-.act-panel[data-temporary='true'] .act-name {
-  color: #ffb347;
-}
-
 .act-progress {
   display: flex;
   align-items: center;
@@ -567,6 +548,7 @@ body {
   background: linear-gradient(90deg, #4a9f4a 0%, #6cb85c 100%);
 }
 
+/* Quest Items */
 .quests-list {
   padding: 8px;
   background: rgba(0, 0, 0, 0.1);
@@ -670,120 +652,194 @@ body {
   margin-top: 1px;
 }
 
-.loading-text {
-  font-size: 1rem;
-  color: var(--primary-color);
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+/* Reset Button Styles */
+.reset-button {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: var(--border-radius-md);
+  font-family: var(--font-family);
+  font-weight: 600;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 8px rgba(231, 76, 60, 0.3);
+  width: 100%;
 }
 
+.reset-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
+  background: linear-gradient(135deg, #ff5a4a, #e74c3c);
+}
+
+.reset-confirm {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.reset-confirm-text {
+  font-size: 0.7rem;
+  color: #ff6b6b;
+  text-align: center;
+  font-weight: 600;
+  background: rgba(231, 76, 60, 0.1);
+  padding: 8px 12px;
+  border-radius: var(--border-radius-sm);
+  border: 1px solid rgba(231, 76, 60, 0.3);
+}
+
+.reset-confirm-buttons {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+
+.reset-confirm-btn {
+  flex: 1;
+  padding: 8px 16px;
+  border: none;
+  border-radius: var(--border-radius-sm);
+  font-family: var(--font-family);
+  font-weight: 600;
+  font-size: 0.7rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.reset-yes {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  color: white;
+  box-shadow: 0 2px 6px rgba(231, 76, 60, 0.3);
+}
+
+.reset-yes:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(231, 76, 60, 0.4);
+  background: linear-gradient(135deg, #ff5a4a, #e74c3c);
+}
+
+.reset-no {
+  background: var(--bg-overlay-4);
+  color: var(--primary-color);
+  border: 1px solid var(--bg-overlay-3);
+}
+
+.reset-no:hover {
+  background: var(--bg-overlay-3);
+  transform: translateY(-1px);
+}
+
+/* Font Scaling - Comprehensive */
 .quest-tracker[data-font-scale="0.8"] { font-size: 0.8rem; }
 .quest-tracker[data-font-scale="0.9"] { font-size: 0.9rem; }
 .quest-tracker[data-font-scale="1.0"] { font-size: 1rem; }
 .quest-tracker[data-font-scale="1.1"] { font-size: 1.1rem; }
 .quest-tracker[data-font-scale="1.2"] { font-size: 1.2rem; }
 
+/* Title text scaling */
 .quest-tracker[data-font-scale="0.8"] .title-text { font-size: 0.8rem; }
-.quest-tracker[data-font-scale="0.8"] .act-name { font-size: 0.65rem; }
-.quest-tracker[data-font-scale="0.8"] .quest-name { font-size: 0.6rem; }
-.quest-tracker[data-font-scale="0.8"] .quest-description { font-size: 0.55rem; }
-
 .quest-tracker[data-font-scale="0.9"] .title-text { font-size: 0.9rem; }
-.quest-tracker[data-font-scale="0.9"] .act-name { font-size: 0.73rem; }
-.quest-tracker[data-font-scale="0.9"] .quest-name { font-size: 0.675rem; }
-.quest-tracker[data-font-scale="0.9"] .quest-description { font-size: 0.62rem; }
-
+.quest-tracker[data-font-scale="1.0"] .title-text { font-size: 1rem; }
 .quest-tracker[data-font-scale="1.1"] .title-text { font-size: 1.1rem; }
-.quest-tracker[data-font-scale="1.1"] .act-name { font-size: 0.89rem; }
-.quest-tracker[data-font-scale="1.1"] .quest-name { font-size: 0.825rem; }
-.quest-tracker[data-font-scale="1.1"] .quest-description { font-size: 0.756rem; }
-
 .quest-tracker[data-font-scale="1.2"] .title-text { font-size: 1.2rem; }
+
+/* Act name scaling */
+.quest-tracker[data-font-scale="0.8"] .act-name { font-size: 0.65rem; }
+.quest-tracker[data-font-scale="0.9"] .act-name { font-size: 0.73rem; }
+.quest-tracker[data-font-scale="1.0"] .act-name { font-size: 0.8125rem; }
+.quest-tracker[data-font-scale="1.1"] .act-name { font-size: 0.89rem; }
 .quest-tracker[data-font-scale="1.2"] .act-name { font-size: 0.975rem; }
+
+/* Quest name scaling */
+.quest-tracker[data-font-scale="0.8"] .quest-name { font-size: 0.6rem; }
+.quest-tracker[data-font-scale="0.9"] .quest-name { font-size: 0.675rem; }
+.quest-tracker[data-font-scale="1.0"] .quest-name { font-size: 0.75rem; }
+.quest-tracker[data-font-scale="1.1"] .quest-name { font-size: 0.825rem; }
 .quest-tracker[data-font-scale="1.2"] .quest-name { font-size: 0.9rem; }
+
+/* Quest description scaling */
+.quest-tracker[data-font-scale="0.8"] .quest-description { font-size: 0.55rem; }
+.quest-tracker[data-font-scale="0.9"] .quest-description { font-size: 0.62rem; }
+.quest-tracker[data-font-scale="1.0"] .quest-description { font-size: 0.6875rem; }
+.quest-tracker[data-font-scale="1.1"] .quest-description { font-size: 0.756rem; }
 .quest-tracker[data-font-scale="1.2"] .quest-description { font-size: 0.825rem; }
 
-.quest-tracker.web-mode .settings-panel {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: var(--bg-primary);
-  z-index: 1000;
-  display: none;
-  flex-direction: column;
-}
+/* Progress text scaling */
+.quest-tracker[data-font-scale="0.8"] .progress-text { font-size: 0.6rem; }
+.quest-tracker[data-font-scale="0.9"] .progress-text { font-size: 0.675rem; }
+.quest-tracker[data-font-scale="1.0"] .progress-text { font-size: 0.75rem; }
+.quest-tracker[data-font-scale="1.1"] .progress-text { font-size: 0.825rem; }
+.quest-tracker[data-font-scale="1.2"] .progress-text { font-size: 0.9rem; }
 
-.quest-tracker.web-mode .settings-panel.open {
-  display: flex;
-}
+/* Settings scaling */
+.quest-tracker[data-font-scale="0.8"] .setting-label { font-size: 0.56rem; }
+.quest-tracker[data-font-scale="0.9"] .setting-label { font-size: 0.63rem; }
+.quest-tracker[data-font-scale="1.0"] .setting-label { font-size: 0.7rem; }
+.quest-tracker[data-font-scale="1.1"] .setting-label { font-size: 0.77rem; }
+.quest-tracker[data-font-scale="1.2"] .setting-label { font-size: 0.84rem; }
 
-.quest-tracker.web-mode .title-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px 20px;
-  cursor: default !important;
-  -webkit-app-region: none !important;
-}
+.quest-tracker[data-font-scale="0.8"] .theme-selector,
+.quest-tracker[data-font-scale="0.8"] .hotkey-selector { font-size: 0.6rem; }
+.quest-tracker[data-font-scale="0.9"] .theme-selector,
+.quest-tracker[data-font-scale="0.9"] .hotkey-selector { font-size: 0.675rem; }
+.quest-tracker[data-font-scale="1.0"] .theme-selector,
+.quest-tracker[data-font-scale="1.0"] .hotkey-selector { font-size: 0.75rem; }
+.quest-tracker[data-font-scale="1.1"] .theme-selector,
+.quest-tracker[data-font-scale="1.1"] .hotkey-selector { font-size: 0.825rem; }
+.quest-tracker[data-font-scale="1.2"] .theme-selector,
+.quest-tracker[data-font-scale="1.2"] .hotkey-selector { font-size: 0.9rem; }
 
-.quest-tracker.web-mode .title {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex: 1;
-}
+/* Settings text scaling */
+.quest-tracker[data-font-scale="0.8"] .setting-checkbox { font-size: 0.56rem; }
+.quest-tracker[data-font-scale="0.9"] .setting-checkbox { font-size: 0.63rem; }
+.quest-tracker[data-font-scale="1.0"] .setting-checkbox { font-size: 0.7rem; }
+.quest-tracker[data-font-scale="1.1"] .setting-checkbox { font-size: 0.77rem; }
+.quest-tracker[data-font-scale="1.2"] .setting-checkbox { font-size: 0.84rem; }
 
-.quest-tracker.web-mode .title-text {
-  font-size: 1.5rem;
-  font-weight: 800;
-}
+.quest-tracker[data-font-scale="0.8"] .setting-value { font-size: 0.6rem; }
+.quest-tracker[data-font-scale="0.9"] .setting-value { font-size: 0.675rem; }
+.quest-tracker[data-font-scale="1.0"] .setting-value { font-size: 0.75rem; }
+.quest-tracker[data-font-scale="1.1"] .setting-value { font-size: 0.825rem; }
+.quest-tracker[data-font-scale="1.2"] .setting-value { font-size: 0.9rem; }
 
-.quest-tracker.web-mode .window-controls {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  -webkit-app-region: none !important;
-}
+/* Optional badge scaling */
+.quest-tracker[data-font-scale="0.8"] .optional-badge { font-size: 0.5rem; }
+.quest-tracker[data-font-scale="0.9"] .optional-badge { font-size: 0.5625rem; }
+.quest-tracker[data-font-scale="1.0"] .optional-badge { font-size: 0.625rem; }
+.quest-tracker[data-font-scale="1.1"] .optional-badge { font-size: 0.6875rem; }
+.quest-tracker[data-font-scale="1.2"] .optional-badge { font-size: 0.75rem; }
 
-.quest-tracker.web-mode .settings-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  width: 100%;
-  max-width: 600px;
-  margin: 0 auto;
-}
-
+/* Responsive Design */
 @media (max-width: 400px) {
-  .quest-tracker { 
-    font-size: 0.85rem; 
+  .quest-tracker {
+    font-size: 0.85rem;
   }
-  
+
   .act-header {
     padding: 10px 12px;
   }
-  
+
   .quest-item {
     padding: 8px 12px;
   }
 }
 
-@media (max-width: 768px) {
-  .quest-tracker.web-mode .title-bar {
+/* Responsive adjustments for mobile */
+@media (max-width: 480px) {
+  .setting-row {
     flex-direction: column;
     gap: 12px;
-    padding: 12px 16px;
   }
   
-  .quest-tracker.web-mode .window-controls {
-    order: -1;
-    width: 100%;
-    justify-content: flex-end;
-  }
-  
-  .quest-tracker.web-mode .title {
-    order: 1;
-    justify-content: center;
+  .setting-half {
+    flex: none;
   }
 }
