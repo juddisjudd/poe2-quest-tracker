@@ -296,6 +296,31 @@ ipcMain.handle("update-hotkey", async (_, newHotkey: string) => {
     const success = registerHotkey(newHotkey);
     if (success) {
       updateTrayMenu();
+      
+      // Update the saved data file with the new hotkey
+      try {
+        const dataPath = getDataPath();
+        let data: any = {};
+        
+        if (fs.existsSync(dataPath)) {
+          const rawData = fs.readFileSync(dataPath, "utf8");
+          data = JSON.parse(rawData);
+        }
+        
+        // Ensure settings object exists and update hotkey
+        if (!data.settings) {
+          data.settings = {};
+        }
+        data.settings.hotkey = newHotkey;
+        
+        // Write the updated data back to file
+        fs.writeFileSync(dataPath, JSON.stringify(data, null, 2), "utf8");
+        console.log(`Hotkey updated to ${newHotkey} and saved to data file`);
+      } catch (saveError) {
+        console.error("Failed to save hotkey to data file:", saveError);
+        // Don't throw here - the hotkey registration succeeded, just the persistence failed
+      }
+      
       return { success: true };
     } else {
       throw new Error(`Failed to register hotkey: ${newHotkey}`);

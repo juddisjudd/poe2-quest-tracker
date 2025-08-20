@@ -1,9 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
-import { TrackerData, Act } from "../types";
+import { TrackerData, Act, GemProgression } from "../types";
 import { defaultQuestData } from "../data/questData";
 
 const initialData: TrackerData = {
   acts: defaultQuestData,
+  gemProgression: {
+    socketGroups: [],
+  },
   settings: {
     alwaysOnTop: true,
     opacity: 0.9,
@@ -11,6 +14,7 @@ const initialData: TrackerData = {
     theme: "amoled",
     showOptional: true,
     hotkey: "F9",
+    showGemPanel: false,
   },
 };
 
@@ -47,10 +51,7 @@ const mergeQuestData = (
   // Filter out any deprecated Cruel mode acts from saved data
   const filteredMergedActs = mergedActs.filter((act) => {
     // Remove old cruel acts that are no longer in the new quest data
-    return (
-      !act.id.includes("-cruel") ||
-      newQuestData.some((newAct) => newAct.id === act.id)
-    );
+    return !act.id.includes("-cruel") || newQuestData.some(newAct => newAct.id === act.id);
   });
 
   return {
@@ -203,6 +204,37 @@ export const useTrackerData = () => {
     saveData(newData);
   }, [data, saveData]);
 
+  const importGemProgression = useCallback((gemProgression: GemProgression) => {
+    const newData = {
+      ...data,
+      gemProgression,
+    };
+    saveData(newData);
+  }, [data, saveData]);
+
+  const toggleGem = useCallback((gemId: string) => {
+    if (!data.gemProgression) return;
+
+    const newSocketGroups = data.gemProgression.socketGroups.map((group) => ({
+      ...group,
+      mainGem: group.mainGem.id === gemId 
+        ? { ...group.mainGem, acquired: !group.mainGem.acquired }
+        : group.mainGem,
+      supportGems: group.supportGems.map((gem) =>
+        gem.id === gemId ? { ...gem, acquired: !gem.acquired } : gem
+      ),
+    }));
+
+    const newData = {
+      ...data,
+      gemProgression: {
+        ...data.gemProgression,
+        socketGroups: newSocketGroups,
+      },
+    };
+    saveData(newData);
+  }, [data, saveData]);
+
   return {
     data,
     loading,
@@ -210,5 +242,7 @@ export const useTrackerData = () => {
     toggleAct,
     updateSettings,
     resetAllQuests,
+    importGemProgression,
+    toggleGem,
   };
 };

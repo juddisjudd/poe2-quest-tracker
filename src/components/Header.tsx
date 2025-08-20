@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { TrackerData } from "../types";
+import { parsePathOfBuildingCode, generateSampleGemProgression } from "../utils/pobParser";
 
 interface HeaderProps {
   settings: TrackerData["settings"];
   onSettingsChange: (settings: Partial<TrackerData["settings"]>) => void;
   onSettingsToggle: (isOpen: boolean) => void;
   onResetQuests: () => void;
+  onImportGems: (gemProgression: any) => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -13,11 +15,15 @@ export const Header: React.FC<HeaderProps> = ({
   onSettingsChange,
   onSettingsToggle,
   onResetQuests,
+  onImportGems,
 }) => {
   const [showSettings, setShowSettings] = useState(false);
   const [appVersion, setAppVersion] = useState<string>("");
   const [updateChecking, setUpdateChecking] = useState(false);
   const [showResetConfirm, setShowResetConfirm] = useState(false);
+  const [pobCode, setPobCode] = useState("");
+  const [pobImporting, setPobImporting] = useState(false);
+  const [pobError, setPobError] = useState("");
 
   const isElectron = !!window.electronAPI;
 
@@ -85,9 +91,42 @@ export const Header: React.FC<HeaderProps> = ({
     }
   };
 
+  const handleImportPoBCode = async () => {
+    if (!pobCode.trim()) {
+      setPobError("Please enter a Path of Building code");
+      return;
+    }
+
+    setPobImporting(true);
+    setPobError("");
+
+    try {
+      const gemProgression = await parsePathOfBuildingCode(pobCode);
+      onImportGems(gemProgression);
+      setPobCode("");
+      setPobError("");
+      // Show success message briefly
+      setTimeout(() => {
+        setPobError("Import successful!");
+        setTimeout(() => setPobError(""), 2000);
+      }, 100);
+    } catch (error) {
+      setPobError(error instanceof Error ? error.message : "Import failed");
+    } finally {
+      setPobImporting(false);
+    }
+  };
+
   const handleResetQuests = () => {
     onResetQuests();
     setShowResetConfirm(false);
+  };
+
+  const handleLoadSample = () => {
+    const sampleProgression = generateSampleGemProgression();
+    onImportGems(sampleProgression);
+    setPobError("Sample gems loaded!");
+    setTimeout(() => setPobError(""), 2000);
   };
 
   const availableHotkeys = [
@@ -197,13 +236,9 @@ export const Header: React.FC<HeaderProps> = ({
           {isElectron && (
             <div className="overlay-help">
               <div className="help-text">
-                <strong>Usage:</strong>
-                <br />• Press {(settings as any).hotkey || "F9"} to show/hide
-                the quest tracker
+                <strong>Important:</strong>
                 <br />
                 • Use Borderless Windowed mode in PoE2 for best experience
-                <br />
-                • Adjust opacity for visibility while gaming
                 <br />• Click version number to check for updates
               </div>
             </div>
@@ -237,7 +272,7 @@ export const Header: React.FC<HeaderProps> = ({
               {/* Only show hotkey in Electron */}
               {isElectron && (
                 <div className="setting-item setting-half">
-                  <div className="setting-label">HOTKEY</div>
+                  <div className="setting-label">SHOW/HIDE HOTKEY</div>
                   <div className="setting-control">
                     <select
                       value={(settings as any).hotkey || "F9"}
@@ -269,9 +304,7 @@ export const Header: React.FC<HeaderProps> = ({
                       step="0.1"
                       value={settings.opacity}
                       onChange={(e) =>
-                        onSettingsChange({
-                          opacity: parseFloat(e.target.value),
-                        })
+                        onSettingsChange({ opacity: parseFloat(e.target.value) })
                       }
                     />
                     <span className="setting-value">
@@ -281,9 +314,7 @@ export const Header: React.FC<HeaderProps> = ({
                 </div>
               )}
 
-              <div
-                className={`setting-item ${isElectron ? "setting-half" : ""}`}
-              >
+              <div className={`setting-item ${isElectron ? 'setting-half' : ''}`}>
                 <div className="setting-label">FONT SIZE</div>
                 <div className="setting-control">
                   <input
@@ -303,55 +334,92 @@ export const Header: React.FC<HeaderProps> = ({
               </div>
             </div>
 
-            {/* Show Optional Quests - Available in both versions */}
-            <div className="setting-item">
-              <div className="setting-label">SHOW OPTIONAL</div>
-              <div className="setting-control">
-                <label className="setting-checkbox">
-                  <input
-                    type="checkbox"
-                    checked={settings.showOptional !== false}
-                    onChange={(e) =>
-                      onSettingsChange({ showOptional: e.target.checked })
-                    }
-                  />
-                  Show Optional Quests
-                </label>
+            {/* Show Optional and Reset side by side */}
+            <div className="setting-row">
+              <div className="setting-item setting-half">
+                <div className="setting-label">SHOW OPTIONAL</div>
+                <div className="setting-control">
+                  <label className="setting-checkbox">
+                    <input
+                      type="checkbox"
+                      checked={settings.showOptional !== false}
+                      onChange={(e) =>
+                        onSettingsChange({ showOptional: e.target.checked })
+                      }
+                    />
+                    Show Optional Quests
+                  </label>
+                </div>
+              </div>
+
+              <div className="setting-item setting-half">
+                <div className="setting-label">RESET PROGRESS</div>
+                <div className="setting-control">
+                  {!showResetConfirm ? (
+                    <button
+                      className="reset-button compact"
+                      onClick={() => setShowResetConfirm(true)}
+                    >
+                      Reset All
+                    </button>
+                  ) : (
+                    <div className="reset-confirm compact">
+                      <div className="reset-confirm-text">
+                        Reset all quests?
+                      </div>
+                      <div className="reset-confirm-buttons">
+                        <button
+                          className="reset-confirm-btn reset-yes"
+                          onClick={handleResetQuests}
+                        >
+                          Yes
+                        </button>
+                        <button
+                          className="reset-confirm-btn reset-no"
+                          onClick={() => setShowResetConfirm(false)}
+                        >
+                          No
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
 
-            {/* Reset Quests Section */}
+            {/* Path of Building Import */}
             <div className="setting-item">
-              <div className="setting-label">RESET PROGRESS</div>
+              <div className="setting-label">IMPORT GEMS</div>
               <div className="setting-control">
-                {!showResetConfirm ? (
-                  <button
-                    className="reset-button"
-                    onClick={() => setShowResetConfirm(true)}
-                  >
-                    Reset All Quests
-                  </button>
-                ) : (
-                  <div className="reset-confirm">
-                    <div className="reset-confirm-text">
-                      Are you sure? This will uncheck all quests.
-                    </div>
-                    <div className="reset-confirm-buttons">
-                      <button
-                        className="reset-confirm-btn reset-yes"
-                        onClick={handleResetQuests}
-                      >
-                        Yes, Reset
-                      </button>
-                      <button
-                        className="reset-confirm-btn reset-no"
-                        onClick={() => setShowResetConfirm(false)}
-                      >
-                        Cancel
-                      </button>
-                    </div>
+                <div className="pob-import-section">
+                  <textarea
+                    className="pob-input"
+                    placeholder="Paste your Path of Building code here..."
+                    value={pobCode}
+                    onChange={(e) => setPobCode(e.target.value)}
+                    rows={3}
+                  />
+                  <div className="pob-buttons">
+                    <button
+                      className="pob-import-btn"
+                      onClick={handleImportPoBCode}
+                      disabled={pobImporting}
+                    >
+                      {pobImporting ? "Importing..." : "Import PoB"}
+                    </button>
+                    <button
+                      className="pob-sample-btn"
+                      onClick={handleLoadSample}
+                    >
+                      Load Sample
+                    </button>
                   </div>
-                )}
+                  {pobError && (
+                    <div className={`pob-message ${pobError.includes('successful') ? 'success' : 'error'}`}>
+                      {pobError}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>

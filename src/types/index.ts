@@ -13,8 +13,29 @@ export interface Act {
   quests: QuestStep[];
 }
 
+export interface GemSlot {
+  id: string;
+  name: string;
+  type: 'skill' | 'support' | 'spirit';
+  acquired: boolean;
+  socketGroup?: number;
+}
+
+export interface GemSocketGroup {
+  id: string;
+  mainGem: GemSlot;
+  supportGems: GemSlot[];
+  maxSockets: number;
+}
+
+export interface GemProgression {
+  socketGroups: GemSocketGroup[];
+  lastImported?: string;
+}
+
 export interface TrackerData {
   acts: Act[];
+  gemProgression?: GemProgression;
   settings: {
     alwaysOnTop: boolean;
     opacity: number;
@@ -22,6 +43,7 @@ export interface TrackerData {
     theme?: "amoled" | "amoled-crimson" | "amoled-yellow";
     showOptional?: boolean;
     hotkey?: string;
+    showGemPanel?: boolean;
   };
 }
 
