@@ -2,6 +2,11 @@ import React from "react";
 import { GemProgression, GemSlot } from "../types";
 import "./GemProgressionPanel.css";
 
+// Import gem images
+import UncutSkillGem from "/assets/global/UncutSkillGem.webp";
+import UncutSkillGemBuff from "/assets/global/UncutSkillGemBuff.webp";
+import UncutSupportGem from "/assets/global/UncutSupportGem.webp";
+
 interface GemProgressionPanelProps {
   gemProgression: GemProgression;
   isVisible: boolean;
@@ -17,9 +22,20 @@ export const GemProgressionPanel: React.FC<GemProgressionPanelProps> = ({
   onToggleGem,
   onTogglePanel,
 }) => {
+  const getGemIcon = (gem: GemSlot) => {
+    if (gem.type === 'support') {
+      return UncutSupportGem;
+    } else if (gem.type === 'spirit') {
+      return UncutSkillGemBuff;
+    } else {
+      return UncutSkillGem;
+    }
+  };
+
   const renderGemSlot = (gem: GemSlot, isMainGem: boolean = false) => {
+    const statClass = gem.statRequirement ? `stat-${gem.statRequirement}` : 'stat-none';
     const slotClasses = `
-      gem-slot ${gem.type} ${gem.acquired ? "acquired" : ""} ${
+      gem-slot ${gem.type} ${statClass} ${gem.acquired ? "acquired" : ""} ${
       isMainGem ? "main-gem" : "support-gem"
     }
     `;
@@ -29,12 +45,16 @@ export const GemProgressionPanel: React.FC<GemProgressionPanelProps> = ({
         key={gem.id}
         className={slotClasses.trim()}
         onClick={() => onToggleGem(gem.id)}
-        title={gem.name}
+        title={`${gem.name}${gem.statRequirement ? ` (${gem.statRequirement.toUpperCase()})` : ''}`}
       >
         <div className="gem-slot-inner">
           {gem.acquired && <div className="gem-acquired-indicator" />}
           <div className="gem-icon">
-            {isMainGem ? "⚡" : "◦"}
+            <img 
+              src={getGemIcon(gem)} 
+              alt={`${gem.type} gem`}
+              className="gem-icon-image"
+            />
           </div>
         </div>
         <div className="gem-name-tooltip">{gem.name}</div>
@@ -61,7 +81,14 @@ export const GemProgressionPanel: React.FC<GemProgressionPanelProps> = ({
           {Array.from({ length: emptySlots }, (_, index) => (
             <div key={`empty-${groupIndex}-${index}`} className="gem-slot empty">
               <div className="gem-slot-inner">
-                <div className="gem-icon">○</div>
+                <div className="gem-icon">
+                  <img 
+                    src={UncutSupportGem} 
+                    alt="empty gem slot"
+                    className="gem-icon-image"
+                    style={{ opacity: 0.3 }}
+                  />
+                </div>
               </div>
             </div>
           ))}

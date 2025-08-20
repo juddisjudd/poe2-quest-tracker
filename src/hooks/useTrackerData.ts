@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { TrackerData, Act, GemProgression } from "../types";
 import { defaultQuestData } from "../data/questData";
+import { migrateGemProgression } from "../utils/pobParser";
 
 const initialData: TrackerData = {
   acts: defaultQuestData,
@@ -98,6 +99,10 @@ export const useTrackerData = () => {
               showOptional: savedData.settings.showOptional !== false,
               hotkey: savedData.settings.hotkey || "F9",
             },
+            // Migrate gem progression to add stat requirements if missing
+            gemProgression: savedData.gemProgression 
+              ? migrateGemProgression(savedData.gemProgression)
+              : undefined,
           };
           setData(updatedData);
         }
@@ -207,7 +212,7 @@ export const useTrackerData = () => {
   const importGemProgression = useCallback((gemProgression: GemProgression) => {
     const newData = {
       ...data,
-      gemProgression,
+      gemProgression: migrateGemProgression(gemProgression),
     };
     saveData(newData);
   }, [data, saveData]);

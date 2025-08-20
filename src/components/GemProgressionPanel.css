@@ -250,6 +250,28 @@
   border: 3px solid var(--bg-overlay-3);
 }
 
+/* Stat-based gem slot colors */
+.gem-slot.stat-str {
+  background: linear-gradient(135deg, rgba(255, 100, 100, 0.4), var(--bg-overlay-4));
+  border-color: rgba(255, 100, 100, 0.7);
+}
+
+.gem-slot.stat-dex {
+  background: linear-gradient(135deg, rgba(100, 255, 100, 0.4), var(--bg-overlay-4));
+  border-color: rgba(100, 255, 100, 0.7);
+}
+
+.gem-slot.stat-int {
+  background: linear-gradient(135deg, rgba(100, 150, 255, 0.4), var(--bg-overlay-4));
+  border-color: rgba(100, 150, 255, 0.7);
+}
+
+.gem-slot.stat-none {
+  background: linear-gradient(135deg, rgba(200, 200, 200, 0.3), var(--bg-overlay-4));
+  border-color: rgba(200, 200, 200, 0.5);
+}
+
+/* Legacy type-based colors (fallback) */
 .gem-slot.skill {
   background: linear-gradient(135deg, rgba(255, 100, 100, 0.3), var(--bg-overlay-4));
   border-color: rgba(255, 100, 100, 0.5);
@@ -295,10 +317,27 @@
   font-size: 1.3rem;
   color: var(--primary-color);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gem-icon-image {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8));
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
 }
 
 .gem-slot.main-gem .gem-icon {
   font-size: 1.6rem;
+}
+
+.gem-slot.main-gem .gem-icon-image {
+  width: 42px;
+  height: 42px;
 }
 
 .gem-name-tooltip {
@@ -340,7 +379,44 @@
   z-index: 10;
 }
 
-/* Gem type specific acquired states */
+/* Stat-based acquired states */
+.gem-slot.stat-str.acquired {
+  border-color: #ff6b6b;
+  box-shadow: 0 0 15px rgba(255, 107, 107, 0.5);
+}
+
+.gem-slot.stat-str.acquired .gem-acquired-indicator {
+  background: #ff6b6b;
+}
+
+.gem-slot.stat-dex.acquired {
+  border-color: #6bff6b;
+  box-shadow: 0 0 15px rgba(107, 255, 107, 0.5);
+}
+
+.gem-slot.stat-dex.acquired .gem-acquired-indicator {
+  background: #6bff6b;
+}
+
+.gem-slot.stat-int.acquired {
+  border-color: #6bb6ff;
+  box-shadow: 0 0 15px rgba(107, 182, 255, 0.5);
+}
+
+.gem-slot.stat-int.acquired .gem-acquired-indicator {
+  background: #6bb6ff;
+}
+
+.gem-slot.stat-none.acquired {
+  border-color: #cccccc;
+  box-shadow: 0 0 15px rgba(204, 204, 204, 0.5);
+}
+
+.gem-slot.stat-none.acquired .gem-acquired-indicator {
+  background: #cccccc;
+}
+
+/* Legacy gem type specific acquired states (fallback) */
 .gem-slot.skill.acquired {
   border-color: #ff6b6b;
   box-shadow: 0 0 12px rgba(255, 107, 107, 0.3);
@@ -433,5 +509,15 @@
   .gem-slot.main-gem {
     width: 48px;
     height: 48px;
+  }
+  
+  .gem-icon-image {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .gem-slot.main-gem .gem-icon-image {
+    width: 36px;
+    height: 36px;
   }
 }

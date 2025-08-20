@@ -19,6 +19,7 @@ export interface GemSlot {
   type: 'skill' | 'support' | 'spirit';
   acquired: boolean;
   socketGroup?: number;
+  statRequirement?: 'str' | 'dex' | 'int' | null; // Strength=red, Dexterity=green, Intelligence=blue, null=white
 }
 
 export interface GemSocketGroup {

@@ -1,5 +1,66 @@
 import { GemProgression, GemSocketGroup, GemSlot } from "../types";
 
+// Function to determine stat requirement based on gem name
+function getStatRequirement(gemName: string): 'str' | 'dex' | 'int' | null {
+  const name = gemName.toLowerCase();
+  
+  // Strength-based gems (red) - typically melee, fire, physical
+  const strGems = [
+    'slam', 'strike', 'cleave', 'sweep', 'smash', 'bash', 'crush', 'pound',
+    'fire', 'burn', 'ignite', 'blaze', 'inferno', 'flame', 'volcanic', 'molten',
+    'melee', 'physical', 'weapon', 'sword', 'axe', 'mace', 'club', 'hammer',
+    'anger', 'hatred', 'determination', 'vitality', 'purity of fire',
+    'ground slam', 'heavy strike', 'molten strike', 'infernal blow', 'dominating blow',
+    'earthquake', 'sunder', 'tectonic slam', 'consecrated path', 'ice crash',
+    'flicker strike', 'cyclone', 'leap slam', 'shield charge', 'vigilant strike'
+  ];
+  
+  // Dexterity-based gems (green) - typically ranged, cold, chaos, evasion
+  const dexGems = [
+    'bow', 'arrow', 'shot', 'rain', 'barrage', 'split', 'pierce', 'projectile',
+    'cold', 'ice', 'frost', 'freeze', 'chill', 'glacial', 'arctic', 'winter',
+    'poison', 'chaos', 'venom', 'toxic', 'caustic', 'contagion', 'blight',
+    'grace', 'haste', 'herald of ice', 'herald of agony', 'purity of ice',
+    'lightning arrow', 'ice shot', 'burning arrow', 'explosive shot', 'shrapnel shot',
+    'tornado shot', 'blast rain', 'caustic arrow', 'toxic rain', 'scourge arrow',
+    'flicker strike', 'whirling blades', 'dash', 'blink arrow', 'mirror arrow'
+  ];
+  
+  // Intelligence-based gems (blue) - typically spells, lightning, minions
+  const intGems = [
+    'spell', 'cast', 'magic', 'arcane', 'mystic', 'enchant', 'hex', 'curse',
+    'lightning', 'shock', 'spark', 'arc', 'bolt', 'storm', 'thunder', 'tempest',
+    'minion', 'summon', 'raise', 'animate', 'skeleton', 'zombie', 'golem', 'spectre',
+    'clarity', 'discipline', 'herald of thunder', 'purity of lightning', 'wrath',
+    'fireball', 'frostbolt', 'lightning bolt', 'arc', 'spark', 'shock nova',
+    'ice nova', 'cold snap', 'frost bomb', 'glacial cascade', 'freezing pulse',
+    'flame surge', 'incinerate', 'scorching ray', 'righteous fire', 'detonate dead',
+    'raise zombie', 'raise spectre', 'summon skeletons', 'animate guardian', 'golem'
+  ];
+  
+  // Check for matches
+  for (const strGem of strGems) {
+    if (name.includes(strGem)) {
+      return 'str';
+    }
+  }
+  
+  for (const dexGem of dexGems) {
+    if (name.includes(dexGem)) {
+      return 'dex';
+    }
+  }
+  
+  for (const intGem of intGems) {
+    if (name.includes(intGem)) {
+      return 'int';
+    }
+  }
+  
+  // Default to null (white) if no match found
+  return null;
+}
+
 // Simple base64url decode function
 function base64UrlDecode(str: string): string {
   // Convert base64url to base64
@@ -87,6 +148,7 @@ function parseGemsFromXML(xmlString: string): GemProgression {
               mainGemName.toLowerCase().includes('herald') || 
               mainGemName.toLowerCase().includes('banner') ? 'spirit' : 'skill',
         acquired: false,
+        statRequirement: getStatRequirement(mainGemName),
       };
 
       // Rest are support gems
@@ -102,6 +164,7 @@ function parseGemsFromXML(xmlString: string): GemProgression {
           name: supportGemName,
           type: 'support',
           acquired: false,
+          statRequirement: getStatRequirement(supportGemName),
         });
       }
 
@@ -156,6 +219,7 @@ export function generateSampleGemProgression(): GemProgression {
           name: 'Lightning Bolt',
           type: 'skill',
           acquired: false,
+          statRequirement: 'int', // Intelligence (blue)
         },
         supportGems: [
           {
@@ -163,12 +227,14 @@ export function generateSampleGemProgression(): GemProgression {
             name: 'Added Lightning Damage',
             type: 'support',
             acquired: false,
+            statRequirement: 'int', // Intelligence (blue)
           },
           {
             id: 'support-1-2',
             name: 'Spell Echo',
             type: 'support',
             acquired: false,
+            statRequirement: 'int', // Intelligence (blue)
           },
         ],
         maxSockets: 6,
@@ -177,21 +243,68 @@ export function generateSampleGemProgression(): GemProgression {
         id: 'group-2',
         mainGem: {
           id: 'main-2',
-          name: 'Herald of Thunder',
-          type: 'spirit',
+          name: 'Ground Slam',
+          type: 'skill',
           acquired: false,
+          statRequirement: 'str', // Strength (red)
         },
         supportGems: [
           {
             id: 'support-2-1',
-            name: 'Increased Area of Effect',
+            name: 'Melee Physical Damage',
             type: 'support',
             acquired: false,
+            statRequirement: 'str', // Strength (red)
+          },
+          {
+            id: 'support-2-2',
+            name: 'Ice Shot',
+            type: 'support',
+            acquired: false,
+            statRequirement: 'dex', // Dexterity (green)
+          },
+        ],
+        maxSockets: 6,
+      },
+      {
+        id: 'group-3',
+        mainGem: {
+          id: 'main-3',
+          name: 'Herald of Thunder',
+          type: 'spirit',
+          acquired: false,
+          statRequirement: 'int', // Intelligence (blue)
+        },
+        supportGems: [
+          {
+            id: 'support-3-1',
+            name: 'Generic Support',
+            type: 'support',
+            acquired: false,
+            statRequirement: null, // No requirement (white)
           },
         ],
         maxSockets: 6,
       },
     ],
     lastImported: new Date().toISOString(),
+  };
+}
+
+// Migration function to add stat requirements to existing gems
+export function migrateGemProgression(gemProgression: GemProgression): GemProgression {
+  return {
+    ...gemProgression,
+    socketGroups: gemProgression.socketGroups.map(group => ({
+      ...group,
+      mainGem: {
+        ...group.mainGem,
+        statRequirement: group.mainGem.statRequirement ?? getStatRequirement(group.mainGem.name),
+      },
+      supportGems: group.supportGems.map(gem => ({
+        ...gem,
+        statRequirement: gem.statRequirement ?? getStatRequirement(gem.name),
+      })),
+    })),
   };
 }
