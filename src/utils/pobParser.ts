@@ -239,14 +239,68 @@ function parseGemsFromXML(xmlString: string): GemProgression {
   }
 }
 
+// Function to extract PoB code from pobb.in URL
+async function extractFromPobbinUrl(url: string): Promise<string> {
+  try {
+    // Extract the ID from pobb.in URL (e.g., https://pobb.in/P7nxXheeMuId -> P7nxXheeMuId)
+    const match = url.match(/pobb\.in\/([A-Za-z0-9_-]+)/);
+    if (!match) {
+      throw new Error('Invalid pobb.in URL format');
+    }
+    
+    const buildId = match[1];
+    const rawUrl = `https://pobb.in/${buildId}/raw`;
+    
+    // Fetch the raw build data from pobb.in
+    // Include User-Agent header as required by pobb.in API
+    const response = await fetch(rawUrl, {
+      headers: {
+        'User-Agent': 'poe2-quest-tracker/3.0 github.com/ohitsjudd (contact: github.com/ohitsjudd/poe2-quest-tracker)'
+      }
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Failed to fetch build data: ${response.status}`);
+    }
+    
+    // The /raw endpoint returns the POB code directly as text
+    const pobCode = await response.text();
+    
+    if (!pobCode || pobCode.trim().length === 0) {
+      throw new Error('Empty build code received');
+    }
+    
+    return pobCode.trim();
+  } catch (error) {
+    console.error('Error extracting from pobb.in URL:', error);
+    throw new Error('Failed to fetch build from pobb.in. Please check the URL and try again.');
+  }
+}
+
+// Function to detect if input is a pobb.in URL
+function isPobbinUrl(input: string): boolean {
+  return /https?:\/\/pobb\.in\/[A-Za-z0-9_-]+/.test(input.trim());
+}
+
 // Main function to parse PoB code
 export async function parsePathOfBuildingCode(pobCode: string): Promise<GemProgression> {
   try {
     // Clean the input
-    const cleanCode = pobCode.trim();
+    const cleanInput = pobCode.trim();
+    
+    let actualPobCode: string;
+    
+    // Check if input is a pobb.in URL
+    if (isPobbinUrl(cleanInput)) {
+      // Extract the actual PoB code from pobb.in
+      actualPobCode = await extractFromPobbinUrl(cleanInput);
+    } else {
+      // Use input directly as PoB code
+      actualPobCode = cleanInput;
+    }
     
     // Decompress the data
-    const xmlString = await zlibInflate(cleanCode);
+    const xmlString = await zlibInflate(actualPobCode);
     
     // Parse gems from XML
     const gemProgression = parseGemsFromXML(xmlString);
@@ -254,7 +308,7 @@ export async function parsePathOfBuildingCode(pobCode: string): Promise<GemProgr
     return gemProgression;
   } catch (error) {
     console.error('Error parsing PoB code:', error);
-    throw new Error('Invalid Path of Building code. Please check the format and try again.');
+    throw new Error(error instanceof Error ? error.message : 'Invalid Path of Building code. Please check the format and try again.');
   }
 }
 

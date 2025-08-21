@@ -93,7 +93,7 @@ export const Header: React.FC<HeaderProps> = ({
 
   const handleImportPoBCode = async () => {
     if (!pobCode.trim()) {
-      setPobError("Please enter a Path of Building code");
+      setPobError("Please enter a Path of Building code or pobb.in link");
       return;
     }
 
@@ -394,7 +394,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <div className="pob-import-section">
                   <textarea
                     className="pob-input"
-                    placeholder="Paste your Path of Building code here..."
+                    placeholder="Paste your Path of Building code or pobb.in link here..."
                     value={pobCode}
                     onChange={(e) => setPobCode(e.target.value)}
                     rows={3}
