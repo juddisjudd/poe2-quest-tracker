@@ -58,6 +58,12 @@ html:has(.quest-tracker.web-mode) {
 }
 
 .quest-tracker.web-mode .window-controls {
+  display: flex !important;
+}
+
+/* Hide only the Electron-specific controls in web mode */
+.quest-tracker.web-mode .minimize-btn,
+.quest-tracker.web-mode .close-btn {
   display: none !important;
 }
 

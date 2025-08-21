@@ -39,13 +39,13 @@ export const GemProgressionPanel: React.FC<GemProgressionPanelProps> = ({
       isMainGem ? "main-gem" : "support-gem"
     }
     `;
+    
 
     return (
       <div
         key={gem.id}
         className={slotClasses.trim()}
         onClick={() => onToggleGem(gem.id)}
-        title={`${gem.name}${gem.statRequirement ? ` (${gem.statRequirement.toUpperCase()})` : ''}`}
       >
         <div className="gem-slot-inner">
           {gem.acquired && <div className="gem-acquired-indicator" />}
@@ -57,7 +57,10 @@ export const GemProgressionPanel: React.FC<GemProgressionPanelProps> = ({
             />
           </div>
         </div>
-        <div className="gem-name-tooltip">{gem.name}</div>
+        <div className="gem-name-tooltip">
+          {gem.name}
+          {gem.statRequirement && <span className="stat-requirement"> ({gem.statRequirement.toUpperCase()})</span>}
+        </div>
       </div>
     );
   };

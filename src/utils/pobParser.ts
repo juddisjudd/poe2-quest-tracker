@@ -1,7 +1,57 @@
 import { GemProgression, GemSocketGroup, GemSlot } from "../types";
+import skillGemsData from "../data/skill_gems.json";
 
-// Function to determine stat requirement based on gem name
+// Function to get stat requirement from skill_gems.json by name matching
+function getStatRequirementFromData(gemName: string): 'str' | 'dex' | 'int' | null {
+  // More aggressive string cleaning for better matching
+  const cleanGemName = gemName
+    .toLowerCase()
+    .trim()
+    .normalize('NFD') // Normalize Unicode
+    .replace(/[\u0300-\u036f]/g, '') // Remove diacritics
+    .replace(/\s+/g, ' '); // Normalize whitespace
+  
+  // Search through the skill gems data for EXACT match only
+  for (const [, gemData] of Object.entries(skillGemsData)) {
+    const displayName = gemData.display_name
+      .toLowerCase()
+      .trim()
+      .normalize('NFD') // Normalize Unicode
+      .replace(/[\u0300-\u036f]/g, '') // Remove diacritics  
+      .replace(/\s+/g, ' '); // Normalize whitespace
+    
+    // Only exact match - no partial matching
+    if (displayName === cleanGemName) {
+      return determineStatFromRequirements(gemData.requirement_weights);
+    }
+  }
+  return null;
+}
+
+// Helper function to determine primary stat from requirement weights
+function determineStatFromRequirements(requirements: { strength: number; dexterity: number; intelligence: number }): 'str' | 'dex' | 'int' | null {
+  const { strength, dexterity, intelligence } = requirements;
+  
+  // Only consider stats with exactly 100 as the requirement value
+  if (strength === 100) {
+    return 'str';
+  } else if (dexterity === 100) {
+    return 'dex';
+  } else if (intelligence === 100) {
+    return 'int';
+  }
+  
+  // If no stat has exactly 100, return null (white)
+  return null;
+}
+
+// Function to determine stat requirement based on gem name (with fallback to data)
 function getStatRequirement(gemName: string): 'str' | 'dex' | 'int' | null {
+  // PRIORITIZE data lookup over keyword matching for better accuracy
+  const dataResult = getStatRequirementFromData(gemName);
+  if (dataResult) {
+    return dataResult;
+  }
   const name = gemName.toLowerCase();
   
   // Strength-based gems (red) - typically melee, fire, physical
@@ -148,7 +198,7 @@ function parseGemsFromXML(xmlString: string): GemProgression {
               mainGemName.toLowerCase().includes('herald') || 
               mainGemName.toLowerCase().includes('banner') ? 'spirit' : 'skill',
         acquired: false,
-        statRequirement: getStatRequirement(mainGemName),
+        statRequirement: null, // Main gems and spirit gems should be white
       };
 
       // Rest are support gems
@@ -219,22 +269,22 @@ export function generateSampleGemProgression(): GemProgression {
           name: 'Lightning Bolt',
           type: 'skill',
           acquired: false,
-          statRequirement: 'int', // Intelligence (blue)
+          statRequirement: null, // Main gems should be white
         },
         supportGems: [
           {
             id: 'support-1-1',
-            name: 'Added Lightning Damage',
+            name: 'Lightning Exposure',
             type: 'support',
             acquired: false,
-            statRequirement: 'int', // Intelligence (blue)
+            statRequirement: getStatRequirement('Lightning Exposure'),
           },
           {
             id: 'support-1-2',
-            name: 'Spell Echo',
+            name: 'Lightning Mastery',
             type: 'support',
             acquired: false,
-            statRequirement: 'int', // Intelligence (blue)
+            statRequirement: getStatRequirement('Lightning Mastery'),
           },
         ],
         maxSockets: 6,
@@ -246,22 +296,22 @@ export function generateSampleGemProgression(): GemProgression {
           name: 'Ground Slam',
           type: 'skill',
           acquired: false,
-          statRequirement: 'str', // Strength (red)
+          statRequirement: null, // Main gems should be white
         },
         supportGems: [
           {
             id: 'support-2-1',
-            name: 'Melee Physical Damage',
+            name: 'Fork',
             type: 'support',
             acquired: false,
-            statRequirement: 'str', // Strength (red)
+            statRequirement: getStatRequirement('Fork'),
           },
           {
             id: 'support-2-2',
-            name: 'Ice Shot',
+            name: 'Lightning Infusion',
             type: 'support',
             acquired: false,
-            statRequirement: 'dex', // Dexterity (green)
+            statRequirement: getStatRequirement('Lightning Infusion'),
           },
         ],
         maxSockets: 6,
@@ -273,7 +323,7 @@ export function generateSampleGemProgression(): GemProgression {
           name: 'Herald of Thunder',
           type: 'spirit',
           acquired: false,
-          statRequirement: 'int', // Intelligence (blue)
+          statRequirement: null, // Spirit gems should be white
         },
         supportGems: [
           {
@@ -299,7 +349,7 @@ export function migrateGemProgression(gemProgression: GemProgression): GemProgre
       ...group,
       mainGem: {
         ...group.mainGem,
-        statRequirement: group.mainGem.statRequirement ?? getStatRequirement(group.mainGem.name),
+        statRequirement: null, // Main gems and spirit gems should always be white
       },
       supportGems: group.supportGems.map(gem => ({
         ...gem,
@@ -308,3 +358,4 @@ export function migrateGemProgression(gemProgression: GemProgression): GemProgre
     })),
   };
 }
+

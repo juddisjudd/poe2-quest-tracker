@@ -250,27 +250,6 @@
   border: 3px solid var(--bg-overlay-3);
 }
 
-/* Stat-based gem slot colors */
-.gem-slot.stat-str {
-  background: linear-gradient(135deg, rgba(255, 100, 100, 0.4), var(--bg-overlay-4));
-  border-color: rgba(255, 100, 100, 0.7);
-}
-
-.gem-slot.stat-dex {
-  background: linear-gradient(135deg, rgba(100, 255, 100, 0.4), var(--bg-overlay-4));
-  border-color: rgba(100, 255, 100, 0.7);
-}
-
-.gem-slot.stat-int {
-  background: linear-gradient(135deg, rgba(100, 150, 255, 0.4), var(--bg-overlay-4));
-  border-color: rgba(100, 150, 255, 0.7);
-}
-
-.gem-slot.stat-none {
-  background: linear-gradient(135deg, rgba(200, 200, 200, 0.3), var(--bg-overlay-4));
-  border-color: rgba(200, 200, 200, 0.5);
-}
-
 /* Legacy type-based colors (fallback) */
 .gem-slot.skill {
   background: linear-gradient(135deg, rgba(255, 100, 100, 0.3), var(--bg-overlay-4));
@@ -301,6 +280,27 @@
 
 .gem-slot.empty .gem-name-tooltip {
   display: none;
+}
+
+/* Stat-based gem slot colors - MUST come after type-based colors for proper specificity */
+.gem-slot.stat-str {
+  background: linear-gradient(135deg, rgba(255, 100, 100, 0.4), var(--bg-overlay-4)) !important;
+  border-color: rgba(255, 100, 100, 0.7) !important;
+}
+
+.gem-slot.stat-dex {
+  background: linear-gradient(135deg, rgba(100, 255, 100, 0.4), var(--bg-overlay-4)) !important;
+  border-color: rgba(100, 255, 100, 0.7) !important;
+}
+
+.gem-slot.stat-int {
+  background: linear-gradient(135deg, rgba(100, 150, 255, 0.4), var(--bg-overlay-4)) !important;
+  border-color: rgba(100, 150, 255, 0.7) !important;
+}
+
+.gem-slot.stat-none {
+  background: linear-gradient(135deg, rgba(200, 200, 200, 0.3), var(--bg-overlay-4)) !important;
+  border-color: rgba(200, 200, 200, 0.5) !important;
 }
 
 .gem-slot-inner {
