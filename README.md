@@ -2,6 +2,9 @@
 
 A desktop overlay application for tracking quests, gems, regex filters, and notes in Path of Exile 2. Built with Electron, React, and TypeScript. Also available as a web version.
 
+![GitHub Downloads (all assets, latest release)](https://img.shields.io/github/downloads/juddisjudd/poe2-quest-tracker/latest/total) ![GitHub Release](https://img.shields.io/github/v/release/juddisjudd/poe2-quest-tracker)
+
+
 https://github.com/user-attachments/assets/94a43925-20e8-4eb1-88fd-7cd2393f3d73
 
 ## Features
