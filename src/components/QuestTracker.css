@@ -363,17 +363,46 @@ body {
   border-radius: var(--border-radius-md);
   border-left: 3px solid var(--accent-color);
   width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 }
 
 .help-text {
   font-size: 0.75rem;
   line-height: 1.4;
   color: #d0d0d0;
+  flex: 1;
 }
 
 .help-text strong {
   color: var(--accent-color);
   font-weight: 600;
+}
+
+.overlay-fix-btn {
+  background: var(--accent-color);
+  color: #000;
+  border: none;
+  padding: 6px 12px;
+  border-radius: var(--border-radius-sm);
+  font-size: 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-shadow: none;
+  flex-shrink: 0;
+}
+
+.overlay-fix-btn:hover:not(:disabled) {
+  background: var(--primary-color);
+  transform: translateY(-1px);
+}
+
+.overlay-fix-btn:disabled {
+  opacity: 0.6;
+  cursor: wait;
 }
 
 .support-section {

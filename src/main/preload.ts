@@ -9,6 +9,7 @@ const electronAPI = {
   checkForUpdates: () => ipcRenderer.invoke("check-for-updates"),
   updateHotkey: (hotkey: string) => ipcRenderer.invoke("update-hotkey", hotkey),
   openExternal: (url: string) => ipcRenderer.invoke("open-external", url),
+  reinforceOverlay: () => ipcRenderer.invoke("reinforce-overlay"),
   onUpdateAvailable: (callback: () => void) => {
     ipcRenderer.on("update-available", callback);
     return () => ipcRenderer.removeListener("update-available", callback);

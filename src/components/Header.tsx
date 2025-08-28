@@ -28,6 +28,7 @@ export const Header: React.FC<HeaderProps> = ({
   const [pobCode, setPobCode] = useState("");
   const [pobImporting, setPobImporting] = useState(false);
   const [pobError, setPobError] = useState("");
+  const [overlayReinforcing, setOverlayReinforcing] = useState(false);
 
   const isElectron = !!window.electronAPI;
 
@@ -150,6 +151,26 @@ export const Header: React.FC<HeaderProps> = ({
     setTimeout(() => setPobError(""), 2000);
   };
 
+  const handleReinforceOverlay = async () => {
+    if (!isElectron) return;
+    
+    setOverlayReinforcing(true);
+    try {
+      await (window.electronAPI as any).reinforceOverlay();
+      // Show success message briefly
+      setTimeout(() => {
+        setPobError("Overlay settings reinforced!");
+        setTimeout(() => setPobError(""), 2000);
+      }, 100);
+    } catch (error) {
+      console.error("Failed to reinforce overlay:", error);
+      setPobError("Failed to reinforce overlay settings");
+      setTimeout(() => setPobError(""), 3000);
+    } finally {
+      setOverlayReinforcing(false);
+    }
+  };
+
   const availableHotkeys = [
     "F9",
     "F8",
@@ -261,7 +282,16 @@ export const Header: React.FC<HeaderProps> = ({
                 <br />
                 • Use Borderless Windowed mode in PoE2 for best experience
                 <br />• Click version number to check for updates
+                <br />• If overlay isn't staying on top, try the fix button →
               </div>
+              <button
+                className="overlay-fix-btn"
+                onClick={handleReinforceOverlay}
+                disabled={overlayReinforcing}
+                title="Reinforce overlay settings to stay on top"
+              >
+                {overlayReinforcing ? "Fixing..." : "Fix Overlay"}
+              </button>
             </div>
           )}
 

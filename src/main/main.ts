@@ -62,7 +62,7 @@ const createWindow = (): void => {
     y: 20,
     frame: false,
     transparent: true,
-    alwaysOnTop: true,
+    alwaysOnTop: false, // Will be set properly after window creation
     skipTaskbar: false,
     resizable: true,
     show: false,
@@ -98,40 +98,34 @@ const createWindow = (): void => {
     }, 3000);
   }
 
+  // Set up improved overlay behavior after window creation
+  const setupOverlay = () => {
+    if (!mainWindow) return;
+
+    // Platform-specific overlay settings for better game compatibility
+    if (process.platform === "win32") {
+      // On Windows, use 'normal' level for better fullscreen game compatibility
+      mainWindow.setAlwaysOnTop(true, "normal");
+    } else if (process.platform === "darwin") {
+      // On macOS, use floating level and additional settings
+      mainWindow.setAlwaysOnTop(true, "floating");
+      mainWindow.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
+      mainWindow.setFullScreenable(false);
+    } else {
+      // Linux and other platforms
+      mainWindow.setAlwaysOnTop(true, "normal");
+    }
+  };
+
   mainWindow.on("ready-to-show", () => {
+    setupOverlay();
     mainWindow?.show();
-    mainWindow?.focus();
+    // Don't auto-focus to avoid interrupting games
+    // mainWindow?.focus();
   });
 
-  mainWindow.on("focus", () => {
-    if (mainWindow && !mainWindow.isDestroyed()) {
-      const [width, height] = mainWindow.getSize();
-      mainWindow.setIgnoreMouseEvents(true);
-      mainWindow.setSize(width, height - 1);
-
-      setTimeout(() => {
-        if (mainWindow && !mainWindow.isDestroyed()) {
-          mainWindow.setSize(width, height);
-          mainWindow.setIgnoreMouseEvents(false);
-        }
-      }, 5);
-    }
-  });
-
-  mainWindow.on("blur", () => {
-    if (mainWindow && !mainWindow.isDestroyed()) {
-      const [width, height] = mainWindow.getSize();
-      mainWindow.setIgnoreMouseEvents(true);
-      mainWindow.setSize(width, height - 1);
-
-      setTimeout(() => {
-        if (mainWindow && !mainWindow.isDestroyed()) {
-          mainWindow.setSize(width, height);
-          mainWindow.setIgnoreMouseEvents(false);
-        }
-      }, 5);
-    }
-  });
+  // Removed problematic focus/blur handlers that caused alt+tab-like behavior
+  // These resize tricks were interfering with game focus
 
   if (!isDevelopment) {
     setInterval(() => {
@@ -139,6 +133,11 @@ const createWindow = (): void => {
       autoUpdater.checkForUpdatesAndNotify();
     }, 30 * 60 * 1000);
   }
+
+  // Reinforce overlay settings periodically to ensure it stays on top
+  setInterval(() => {
+    reinforceOverlaySettings();
+  }, 60 * 1000); // Every minute
 };
 
 const createTray = (): void => {
@@ -194,7 +193,8 @@ const toggleVisibility = (): void => {
     mainWindow.hide();
   } else {
     mainWindow.show();
-    mainWindow.focus();
+    // Don't focus when showing to avoid interrupting the game
+    // The overlay should be visible but not steal focus
   }
 };
 
@@ -251,9 +251,28 @@ app.on("will-quit", () => {
   globalShortcut.unregisterAll();
 });
 
+// Function to reinforce overlay settings (can be called periodically if needed)
+const reinforceOverlaySettings = (): void => {
+  if (!mainWindow || mainWindow.isDestroyed()) return;
+
+  // Reapply platform-specific overlay settings
+  if (process.platform === "win32") {
+    mainWindow.setAlwaysOnTop(true, "normal");
+  } else if (process.platform === "darwin") {
+    mainWindow.setAlwaysOnTop(true, "floating");
+    mainWindow.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
+  } else {
+    mainWindow.setAlwaysOnTop(true, "normal");
+  }
+};
+
 ipcMain.handle("get-app-version", () => app.getVersion());
 ipcMain.handle("minimize-window", () => mainWindow?.minimize());
 ipcMain.handle("close-window", () => mainWindow?.close());
+ipcMain.handle("reinforce-overlay", () => {
+  reinforceOverlaySettings();
+  return { success: true };
+});
 
 ipcMain.handle("save-quest-data", async (_, data: any) => {
   try {
