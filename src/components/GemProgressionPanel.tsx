@@ -48,7 +48,11 @@ export const GemProgressionPanel: React.FC<GemProgressionPanelProps> = ({
         onClick={() => onToggleGem(gem.id)}
       >
         <div className="gem-slot-inner">
-          {gem.acquired && <div className="gem-acquired-indicator" />}
+          {gem.acquired && (
+            <div className="gem-acquired-indicator">
+              <span className="gem-checkmark">✓</span>
+            </div>
+          )}
           <div className="gem-icon">
             <img 
               src={getGemIcon(gem)} 

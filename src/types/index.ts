@@ -34,9 +34,32 @@ export interface GemProgression {
   lastImported?: string;
 }
 
+export interface RegexFilters {
+  vendor: {
+    weapons: string;
+    body: string;
+    offhandShields: string;
+    belt: string;
+    boots: string;
+    gloves: string;
+    ring: string;
+    amulet: string;
+  };
+  waystones: string;
+  tablets: string;
+  relics: string;
+}
+
+export interface NotesData {
+  userNotes: string;
+  pobNotes?: string;
+}
+
 export interface TrackerData {
   acts: Act[];
   gemProgression?: GemProgression;
+  regexFilters?: RegexFilters;
+  notesData?: NotesData;
   settings: {
     alwaysOnTop: boolean;
     opacity: number;
@@ -45,6 +68,8 @@ export interface TrackerData {
     showOptional?: boolean;
     hotkey?: string;
     showGemPanel?: boolean;
+    showRegexPanel?: boolean;
+    showNotesPanel?: boolean;
   };
 }
 

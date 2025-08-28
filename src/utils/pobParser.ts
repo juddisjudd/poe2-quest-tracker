@@ -1,6 +1,11 @@
 import { GemProgression, GemSocketGroup, GemSlot } from "../types";
 import skillGemsData from "../data/skill_gems.json";
 
+export interface PobParseResult {
+  gemProgression: GemProgression;
+  notes?: string;
+}
+
 // Function to get stat requirement from skill_gems.json by name matching
 function getStatRequirementFromData(gemName: string): 'str' | 'dex' | 'int' | null {
   // More aggressive string cleaning for better matching
@@ -170,6 +175,55 @@ async function zlibInflate(compressedData: string): Promise<string> {
   }
 }
 
+// Extract notes from XML
+function extractNotesFromXML(xmlString: string): string | undefined {
+  try {
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(xmlString, 'text/xml');
+    
+    // Check for parsing errors
+    const parseError = xmlDoc.querySelector('parsererror');
+    if (parseError) {
+      console.error('XML parsing error:', parseError.textContent);
+      return undefined;
+    }
+    
+    // Try multiple approaches to find Notes
+    let notesElement = xmlDoc.querySelector('Notes');
+    
+    if (!notesElement) {
+      // Try finding it within PathOfBuilding root
+      const pathOfBuildingElement = xmlDoc.querySelector('PathOfBuilding');
+      if (pathOfBuildingElement) {
+        notesElement = pathOfBuildingElement.querySelector('Notes');
+      }
+    }
+    
+    if (!notesElement) {
+      // Try case-insensitive search
+      const allElements = xmlDoc.getElementsByTagName('*');
+      for (let i = 0; i < allElements.length; i++) {
+        if (allElements[i].tagName.toLowerCase() === 'notes') {
+          notesElement = allElements[i];
+          break;
+        }
+      }
+    }
+    
+    if (notesElement) {
+      const notesText = notesElement.textContent?.trim();
+      console.log('POB Notes found:', { length: notesText?.length, preview: notesText?.substring(0, 100) + '...' });
+      return notesText && notesText.length > 0 ? notesText : undefined;
+    }
+    
+    console.log('No notes found in POB XML');
+    return undefined;
+  } catch (error) {
+    console.warn('Error extracting notes from XML:', error);
+    return undefined;
+  }
+}
+
 // Parse XML to extract gem information
 function parseGemsFromXML(xmlString: string): GemProgression {
   try {
@@ -282,8 +336,8 @@ function isPobbinUrl(input: string): boolean {
   return /https?:\/\/pobb\.in\/[A-Za-z0-9_-]+/.test(input.trim());
 }
 
-// Main function to parse PoB code
-export async function parsePathOfBuildingCode(pobCode: string): Promise<GemProgression> {
+// Main function to parse PoB code - returns both gems and notes
+export async function parsePathOfBuildingCodeWithNotes(pobCode: string): Promise<PobParseResult> {
   try {
     // Clean the input
     const cleanInput = pobCode.trim();
@@ -305,12 +359,26 @@ export async function parsePathOfBuildingCode(pobCode: string): Promise<GemProgr
     // Parse gems from XML
     const gemProgression = parseGemsFromXML(xmlString);
     
-    return gemProgression;
+    // Extract notes from XML
+    const notes = extractNotesFromXML(xmlString);
+    console.log('Final parse result:', { hasGemProgression: !!gemProgression, hasNotes: !!notes, notes });
+    
+    return {
+      gemProgression,
+      notes
+    };
   } catch (error) {
     console.error('Error parsing PoB code:', error);
     throw new Error(error instanceof Error ? error.message : 'Invalid Path of Building code. Please check the format and try again.');
   }
 }
+
+// Legacy function for backward compatibility - only returns gems
+export async function parsePathOfBuildingCode(pobCode: string): Promise<GemProgression> {
+  const result = await parsePathOfBuildingCodeWithNotes(pobCode);
+  return result.gemProgression;
+}
+
 
 // Generate sample gem progression for testing
 export function generateSampleGemProgression(): GemProgression {

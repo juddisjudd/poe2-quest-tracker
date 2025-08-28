@@ -10,9 +10,11 @@
   transition: all var(--transition-medium);
 }
 
-.gem-panel-toggle.panel-open,
-.gem-panel-toggle.settings-open {
-  display: none; /* Hide toggle when panel is open or settings are open */
+.quest-tracker.gem-panel-open .gem-panel-toggle,
+.quest-tracker.regex-panel-open .gem-panel-toggle,
+.quest-tracker.notes-panel-open .gem-panel-toggle,
+.quest-tracker.settings-open .gem-panel-toggle {
+  display: none; /* Hide when any panel or settings are open */
 }
 
 .gem-toggle-btn {
@@ -371,12 +373,22 @@
   position: absolute;
   top: -3px;
   right: -3px;
-  width: 14px;
-  height: 14px;
-  background: #4ade80;
+  width: 16px;
+  height: 16px;
+  background: #22c55e;
   border: 2px solid var(--bg-primary);
-  border-radius: 50%;
+  border-radius: 3px;
   z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gem-checkmark {
+  color: white;
+  font-size: 10px;
+  font-weight: bold;
+  line-height: 1;
 }
 
 /* Stat-based acquired states */
@@ -386,7 +398,7 @@
 }
 
 .gem-slot.stat-str.acquired .gem-acquired-indicator {
-  background: #ff6b6b;
+  background: #22c55e;
 }
 
 .gem-slot.stat-dex.acquired {
@@ -395,7 +407,7 @@
 }
 
 .gem-slot.stat-dex.acquired .gem-acquired-indicator {
-  background: #6bff6b;
+  background: #22c55e;
 }
 
 .gem-slot.stat-int.acquired {
@@ -404,7 +416,7 @@
 }
 
 .gem-slot.stat-int.acquired .gem-acquired-indicator {
-  background: #6bb6ff;
+  background: #22c55e;
 }
 
 .gem-slot.stat-none.acquired {
@@ -413,7 +425,7 @@
 }
 
 .gem-slot.stat-none.acquired .gem-acquired-indicator {
-  background: #cccccc;
+  background: #22c55e;
 }
 
 /* Legacy gem type specific acquired states (fallback) */
@@ -423,7 +435,7 @@
 }
 
 .gem-slot.skill.acquired .gem-acquired-indicator {
-  background: #ff6b6b;
+  background: #22c55e;
 }
 
 .gem-slot.support.acquired {
@@ -432,7 +444,7 @@
 }
 
 .gem-slot.support.acquired .gem-acquired-indicator {
-  background: #6bb6ff;
+  background: #22c55e;
 }
 
 .gem-slot.spirit.acquired {
@@ -441,7 +453,7 @@
 }
 
 .gem-slot.spirit.acquired .gem-acquired-indicator {
-  background: #6bff96;
+  background: #22c55e;
 }
 
 /* Font scaling for gem panel */

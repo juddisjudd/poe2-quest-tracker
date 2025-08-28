@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { TrackerData, Act, GemProgression } from "../types";
+import { TrackerData, Act, GemProgression, RegexFilters, NotesData } from "../types";
 import { defaultQuestData } from "../data/questData";
 import { migrateGemProgression } from "../utils/pobParser";
 
@@ -7,6 +7,24 @@ const initialData: TrackerData = {
   acts: defaultQuestData,
   gemProgression: {
     socketGroups: [],
+  },
+  regexFilters: {
+    vendor: {
+      weapons: "",
+      body: "",
+      offhandShields: "",
+      belt: "",
+      boots: "",
+      gloves: "",
+      ring: "",
+      amulet: "",
+    },
+    waystones: "",
+    tablets: "",
+    relics: "",
+  },
+  notesData: {
+    userNotes: "",
   },
   settings: {
     alwaysOnTop: true,
@@ -16,6 +34,8 @@ const initialData: TrackerData = {
     showOptional: true,
     hotkey: "F9",
     showGemPanel: false,
+    showRegexPanel: false,
+    showNotesPanel: false,
   },
 };
 
@@ -98,11 +118,18 @@ export const useTrackerData = () => {
               theme: savedData.settings.theme || "amoled",
               showOptional: savedData.settings.showOptional !== false,
               hotkey: savedData.settings.hotkey || "F9",
+              showGemPanel: savedData.settings.showGemPanel || false,
+              showRegexPanel: savedData.settings.showRegexPanel || false,
+              showNotesPanel: savedData.settings.showNotesPanel || false,
             },
             // Migrate gem progression to add stat requirements if missing
             gemProgression: savedData.gemProgression 
               ? migrateGemProgression(savedData.gemProgression)
               : undefined,
+            // Initialize regex filters if not present
+            regexFilters: savedData.regexFilters || initialData.regexFilters,
+            // Initialize notes data if not present
+            notesData: savedData.notesData || initialData.notesData,
           };
           setData(updatedData);
         }
@@ -240,6 +267,22 @@ export const useTrackerData = () => {
     saveData(newData);
   }, [data, saveData]);
 
+  const updateRegexFilters = useCallback((regexFilters: RegexFilters) => {
+    const newData = {
+      ...data,
+      regexFilters,
+    };
+    saveData(newData);
+  }, [data, saveData]);
+
+  const updateNotesData = useCallback((notesData: NotesData) => {
+    const newData = {
+      ...data,
+      notesData,
+    };
+    saveData(newData);
+  }, [data, saveData]);
+
   return {
     data,
     loading,
@@ -249,5 +292,7 @@ export const useTrackerData = () => {
     resetAllQuests,
     importGemProgression,
     toggleGem,
+    updateRegexFilters,
+    updateNotesData,
   };
 };

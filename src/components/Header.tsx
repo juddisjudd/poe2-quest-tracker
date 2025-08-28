@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { TrackerData } from "../types";
-import { parsePathOfBuildingCode, generateSampleGemProgression } from "../utils/pobParser";
+import { parsePathOfBuildingCodeWithNotes, generateSampleGemProgression } from "../utils/pobParser";
 
 interface HeaderProps {
   settings: TrackerData["settings"];
@@ -8,6 +8,7 @@ interface HeaderProps {
   onSettingsToggle: (isOpen: boolean) => void;
   onResetQuests: () => void;
   onImportGems: (gemProgression: any) => void;
+  onImportNotes?: (notes: string) => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -16,6 +17,7 @@ export const Header: React.FC<HeaderProps> = ({
   onSettingsToggle,
   onResetQuests,
   onImportGems,
+  onImportNotes,
 }) => {
   const [showSettings, setShowSettings] = useState(false);
   const [appVersion, setAppVersion] = useState<string>("");
@@ -101,13 +103,23 @@ export const Header: React.FC<HeaderProps> = ({
     setPobError("");
 
     try {
-      const gemProgression = await parsePathOfBuildingCode(pobCode);
-      onImportGems(gemProgression);
+      const result = await parsePathOfBuildingCodeWithNotes(pobCode);
+      console.log('Import result from header:', { result, hasNotes: !!result.notes });
+      onImportGems(result.gemProgression);
+      
+      // Also import notes if available and callback is provided
+      if (result.notes && onImportNotes) {
+        console.log('Importing notes:', result.notes);
+        onImportNotes(result.notes);
+      }
+      
       setPobCode("");
       setPobError("");
       // Show success message briefly
       setTimeout(() => {
-        setPobError("Import successful!");
+        const message = result.notes ? "Import successful! (Gems + Notes)" : "Import successful! (Gems only)";
+        console.log('Setting success message:', message);
+        setPobError(message);
         setTimeout(() => setPobError(""), 2000);
       }, 100);
     } catch (error) {

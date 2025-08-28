@@ -432,11 +432,14 @@ body {
   overflow-y: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  transition: padding-bottom 0.3s ease;
 }
 
 .acts-container::-webkit-scrollbar {
   display: none;
 }
+
+/* No padding needed since panels now take full space like settings */
 
 /* Act Panel */
 .act-panel {

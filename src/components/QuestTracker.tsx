@@ -4,6 +4,8 @@ import { ActPanel } from "./ActPanel";
 import { Header } from "./Header";
 import { UpdateNotification } from "./UpdateNotification";
 import { GemProgressionPanel } from "./GemProgressionPanel";
+import { RegexPanel } from "./RegexPanel";
+import { NotesPanel } from "./NotesPanel";
 import "./QuestTracker.css";
 import "./UpdateNotification.css";
 import "./WebStyles.css";
@@ -19,17 +21,23 @@ export const QuestTracker: React.FC = () => {
     updateSettings, 
     resetAllQuests,
     importGemProgression,
-    toggleGem
+    toggleGem,
+    updateRegexFilters,
+    updateNotesData
   } = useTrackerData();
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [gemPanelVisible, setGemPanelVisible] = useState(false);
+  const [regexPanelVisible, setRegexPanelVisible] = useState(false);
+  const [notesPanelVisible, setNotesPanelVisible] = useState(false);
 
   const isElectron = !!window.electronAPI;
 
-  // Sync gem panel visibility with settings
+  // Sync panel visibility with settings
   React.useEffect(() => {
     setGemPanelVisible(data.settings.showGemPanel !== false);
-  }, [data.settings.showGemPanel]);
+    setRegexPanelVisible(data.settings.showRegexPanel !== false);
+    setNotesPanelVisible(data.settings.showNotesPanel !== false);
+  }, [data.settings.showGemPanel, data.settings.showRegexPanel, data.settings.showNotesPanel]);
 
   if (loading) {
     return (
@@ -43,7 +51,9 @@ export const QuestTracker: React.FC = () => {
     <div
       className={`quest-tracker ${!isElectron ? "web-mode" : ""} ${
         settingsOpen ? "settings-open" : ""
-      } ${gemPanelVisible ? "gem-panel-open" : ""}`}
+      } ${gemPanelVisible ? "gem-panel-open" : ""} ${
+        regexPanelVisible ? "regex-panel-open" : ""
+      } ${notesPanelVisible ? "notes-panel-open" : ""}`}
       style={{ opacity: isElectron ? data.settings.opacity : 1 }}
       data-font-scale={data.settings.fontSize || 1.0}
       data-theme={(data.settings as any).theme || "amoled"}
@@ -54,6 +64,12 @@ export const QuestTracker: React.FC = () => {
         onSettingsToggle={setSettingsOpen}
         onResetQuests={resetAllQuests}
         onImportGems={importGemProgression}
+        onImportNotes={(notes) => {
+          updateNotesData({
+            userNotes: data.notesData?.userNotes || "",
+            pobNotes: notes
+          });
+        }}
       />
       <div className="acts-container">
         {data.acts.map((act) => (
@@ -78,6 +94,36 @@ export const QuestTracker: React.FC = () => {
             const newVisibility = !gemPanelVisible;
             setGemPanelVisible(newVisibility);
             updateSettings({ showGemPanel: newVisibility });
+          }}
+        />
+      )}
+
+      {/* Regex Panel */}
+      {data.regexFilters && (
+        <RegexPanel
+          regexFilters={data.regexFilters}
+          isVisible={regexPanelVisible}
+          settingsOpen={settingsOpen}
+          onUpdateFilters={updateRegexFilters}
+          onTogglePanel={() => {
+            const newVisibility = !regexPanelVisible;
+            setRegexPanelVisible(newVisibility);
+            updateSettings({ showRegexPanel: newVisibility });
+          }}
+        />
+      )}
+
+      {/* Notes Panel */}
+      {data.notesData && (
+        <NotesPanel
+          notesData={data.notesData}
+          isVisible={notesPanelVisible}
+          settingsOpen={settingsOpen}
+          onUpdateNotes={updateNotesData}
+          onTogglePanel={() => {
+            const newVisibility = !notesPanelVisible;
+            setNotesPanelVisible(newVisibility);
+            updateSettings({ showNotesPanel: newVisibility });
           }}
         />
       )}
