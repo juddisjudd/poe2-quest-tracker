@@ -283,6 +283,22 @@ export const useTrackerData = () => {
     saveData(newData);
   }, [data, saveData]);
 
+  const importGemsAndNotes = useCallback((gemProgression?: GemProgression, notes?: string) => {
+    const newData = {
+      ...data,
+      // Always import gems if provided
+      ...(gemProgression && { gemProgression: migrateGemProgression(gemProgression) }),
+      // Only update notes if notes are provided
+      ...(notes && {
+        notesData: {
+          userNotes: data.notesData?.userNotes || "",
+          pobNotes: notes
+        }
+      })
+    };
+    saveData(newData);
+  }, [data, saveData]);
+
   return {
     data,
     loading,
@@ -294,5 +310,6 @@ export const useTrackerData = () => {
     toggleGem,
     updateRegexFilters,
     updateNotesData,
+    importGemsAndNotes,
   };
 };

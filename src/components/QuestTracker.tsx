@@ -23,7 +23,8 @@ export const QuestTracker: React.FC = () => {
     importGemProgression,
     toggleGem,
     updateRegexFilters,
-    updateNotesData
+    updateNotesData,
+    importGemsAndNotes
   } = useTrackerData();
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [gemPanelVisible, setGemPanelVisible] = useState(false);
@@ -70,6 +71,7 @@ export const QuestTracker: React.FC = () => {
             pobNotes: notes
           });
         }}
+        onImportGemsAndNotes={importGemsAndNotes}
       />
       <div className="acts-container">
         {data.acts.map((act) => (

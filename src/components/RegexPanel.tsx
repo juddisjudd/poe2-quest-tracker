@@ -74,7 +74,7 @@ export const RegexPanel: React.FC<RegexPanelProps> = ({
             placeholder={`Enter regex for ${label.toLowerCase()}...`}
           />
           <button
-            className={`copy-button ${isCopied ? 'copied' : ''}`}
+            className={`copy-button-inline ${isCopied ? 'copied' : ''}`}
             onClick={() => handleCopy(value, fieldId)}
             disabled={!value.trim()}
             title={isCopied ? "Copied!" : "Copy to clipboard"}

@@ -9,6 +9,7 @@ interface HeaderProps {
   onResetQuests: () => void;
   onImportGems: (gemProgression: any) => void;
   onImportNotes?: (notes: string) => void;
+  onImportGemsAndNotes?: (gemProgression?: any, notes?: string) => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -18,6 +19,7 @@ export const Header: React.FC<HeaderProps> = ({
   onResetQuests,
   onImportGems,
   onImportNotes,
+  onImportGemsAndNotes,
 }) => {
   const [showSettings, setShowSettings] = useState(false);
   const [appVersion, setAppVersion] = useState<string>("");
@@ -104,21 +106,28 @@ export const Header: React.FC<HeaderProps> = ({
 
     try {
       const result = await parsePathOfBuildingCodeWithNotes(pobCode);
-      console.log('Import result from header:', { result, hasNotes: !!result.notes });
-      onImportGems(result.gemProgression);
       
-      // Also import notes if available and callback is provided
-      if (result.notes && onImportNotes) {
-        console.log('Importing notes:', result.notes);
-        onImportNotes(result.notes);
+      // Use combined import if available, otherwise fall back to individual imports
+      if (onImportGemsAndNotes) {
+        onImportGemsAndNotes(result.gemProgression, result.notes);
+      } else {
+        // Fallback to individual imports
+        onImportGems(result.gemProgression);
+        if (result.notes && onImportNotes) {
+          onImportNotes(result.notes);
+        }
       }
       
       setPobCode("");
       setPobError("");
       // Show success message briefly
       setTimeout(() => {
-        const message = result.notes ? "Import successful! (Gems + Notes)" : "Import successful! (Gems only)";
-        console.log('Setting success message:', message);
+        let message;
+        if (result.notes) {
+          message = "Import successful! (Gems + Notes)";
+        } else {
+          message = "Import successful! (Gems only - No notes found in POB)";
+        }
         setPobError(message);
         setTimeout(() => setPobError(""), 2000);
       }, 100);

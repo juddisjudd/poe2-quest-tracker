@@ -15,32 +15,38 @@
 }
 
 .regex-toggle-btn {
-  background: rgba(30, 30, 30, 0.95);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 8px;
-  padding: 8px 16px;
-  color: rgba(255, 255, 255, 0.9);
+  background: var(--bg-overlay-4);
+  color: var(--primary-color);
+  border: none;
+  padding: 8px 12px;
+  border-radius: var(--border-radius-md);
   cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 600;
+  transition: all var(--transition-fast);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 12px;
-  font-weight: 500;
-  backdrop-filter: blur(8px);
-  transition: all 0.2s ease;
-  min-width: 80px;
+  gap: 6px;
+  min-width: 60px;
   justify-content: center;
 }
 
 .regex-toggle-btn:hover {
-  background: rgba(40, 40, 40, 0.95);
-  border-color: rgba(255, 255, 255, 0.3);
-  transform: translateY(-1px);
+  background: var(--bg-overlay-3);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
 }
 
-.regex-toggle-btn .toggle-icon {
-  font-size: 10px;
-  transition: transform 0.2s ease;
+.toggle-icon {
+  font-size: 1rem;
+  transition: transform var(--transition-fast);
+}
+
+.toggle-text {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .regex-panel-toggle.panel-open .toggle-icon {
@@ -125,7 +131,7 @@
 }
 
 .regex-section {
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 }
 
 .regex-section:last-child {
@@ -133,7 +139,7 @@
 }
 
 .regex-section h4 {
-  margin: 0 0 16px 0;
+  margin: 0 0 12px 0;
   color: rgba(255, 255, 255, 0.8);
   font-size: 14px;
   font-weight: 600;
@@ -144,13 +150,13 @@
 .regex-inputs {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 16px;
+  gap: 12px;
 }
 
 .regex-input-group {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
 }
 
 .regex-label {
@@ -161,17 +167,17 @@
 }
 
 .regex-input-wrapper {
+  position: relative;
   display: flex;
-  gap: 8px;
   align-items: center;
 }
 
 .regex-input {
-  flex: 1;
+  width: 100%;
   background: rgba(40, 40, 40, 0.8);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 4px;
-  padding: 8px 12px;
+  padding: 8px 36px 8px 12px;
   color: rgba(255, 255, 255, 0.9);
   font-size: 12px;
   font-family: 'Courier New', monospace;
@@ -189,40 +195,46 @@
   color: rgba(255, 255, 255, 0.4);
 }
 
-.copy-button {
-  background: rgba(60, 60, 60, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 4px;
-  padding: 8px 10px;
-  color: rgba(255, 255, 255, 0.7);
+.copy-button-inline {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
   cursor: pointer;
-  font-size: 12px;
+  font-size: 14px;
+  padding: 4px;
+  border-radius: 3px;
   transition: all 0.2s ease;
-  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
 }
 
-.copy-button:hover:not(:disabled) {
-  background: rgba(70, 70, 70, 0.9);
-  color: rgba(255, 255, 255, 0.9);
-  border-color: rgba(255, 255, 255, 0.3);
+.copy-button-inline:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.8);
 }
 
-.copy-button:disabled {
-  opacity: 0.5;
+.copy-button-inline:disabled {
+  opacity: 0.3;
   cursor: not-allowed;
 }
 
-.copy-button.copied {
-  background: rgba(34, 197, 94, 0.8) !important;
-  color: rgba(255, 255, 255, 0.9) !important;
-  border-color: rgba(34, 197, 94, 0.6) !important;
+.copy-button-inline.copied {
+  background: rgba(34, 197, 94, 0.2) !important;
+  color: rgba(34, 197, 94, 1) !important;
   animation: copy-success 0.3s ease;
 }
 
 @keyframes copy-success {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.1); }
-  100% { transform: scale(1); }
+  0% { transform: translateY(-50%) scale(1); }
+  50% { transform: translateY(-50%) scale(1.1); }
+  100% { transform: translateY(-50%) scale(1); }
 }
 
 /* Web mode adjustments */
