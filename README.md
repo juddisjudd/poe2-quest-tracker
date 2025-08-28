@@ -2,7 +2,7 @@
 
 A desktop overlay application for tracking quests and rewards in Path of Exile 2. Built with Electron, React, and TypeScript.
 
-https://github.com/user-attachments/assets/c1c6cdc0-cb6d-48bc-82ae-d29daec32744
+https://github.com/user-attachments/assets/94a43925-20e8-4eb1-88fd-7cd2393f3d73
 
 ## Features
 
