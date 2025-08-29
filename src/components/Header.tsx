@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { TrackerData } from "../types";
-import { parsePathOfBuildingCodeWithNotes, generateSampleGemProgression } from "../utils/pobParser";
+import { parsePathOfBuildingCodeWithNotes, generateSamplePobResult } from "../utils/pobParser";
 
 interface HeaderProps {
   settings: TrackerData["settings"];
@@ -8,6 +8,7 @@ interface HeaderProps {
   onSettingsToggle: (isOpen: boolean) => void;
   onResetQuests: () => void;
   onImportGems: (gemProgression: any) => void;
+  onImportGemLoadouts?: (pobLoadouts: any[], defaultGemProgression: any) => void;
   onImportNotes?: (notes: string) => void;
   onImportGemsAndNotes?: (gemProgression?: any, notes?: string) => void;
 }
@@ -18,17 +19,20 @@ export const Header: React.FC<HeaderProps> = ({
   onSettingsToggle,
   onResetQuests,
   onImportGems,
+  onImportGemLoadouts,
   onImportNotes,
   onImportGemsAndNotes,
 }) => {
   const [showSettings, setShowSettings] = useState(false);
   const [appVersion, setAppVersion] = useState<string>("");
   const [updateChecking, setUpdateChecking] = useState(false);
-  const [showResetConfirm, setShowResetConfirm] = useState(false);
+  const [showResetSuccess, setShowResetSuccess] = useState(false);
   const [pobCode, setPobCode] = useState("");
   const [pobImporting, setPobImporting] = useState(false);
   const [pobError, setPobError] = useState("");
   const [overlayReinforcing, setOverlayReinforcing] = useState(false);
+  const [availableLoadouts, setAvailableLoadouts] = useState<any[]>([]);
+  const [selectedLoadout, setSelectedLoadout] = useState<number>(-1); // -1 means default/first
 
   const isElectron = !!window.electronAPI;
 
@@ -108,23 +112,46 @@ export const Header: React.FC<HeaderProps> = ({
     try {
       const result = await parsePathOfBuildingCodeWithNotes(pobCode);
       
+      // Check if there are multiple loadouts and we can handle them
+      if (result.hasMultipleLoadouts && result.loadouts && onImportGemLoadouts) {
+        // Import all loadouts using the new function
+        onImportGemLoadouts(result.loadouts, result.gemProgression);
+        
+        setPobCode("");
+        setPobError("");
+        setAvailableLoadouts([]);
+        
+        // Show success message briefly
+        setTimeout(() => {
+          setPobError(`Import successful! Loaded ${result.loadouts?.length || 0} loadouts. Use the dropdown in the gem panel to switch between them.`);
+          setTimeout(() => setPobError(""), 3000);
+        }, 100);
+        return;
+      }
+      
+      // Single loadout or fallback - proceed with normal import
+      const gemProgression = result.gemProgression;
+      const notes = result.notes;
+      
       // Use combined import if available, otherwise fall back to individual imports
       if (onImportGemsAndNotes) {
-        onImportGemsAndNotes(result.gemProgression, result.notes);
+        onImportGemsAndNotes(gemProgression, notes);
       } else {
         // Fallback to individual imports
-        onImportGems(result.gemProgression);
-        if (result.notes && onImportNotes) {
-          onImportNotes(result.notes);
+        onImportGems(gemProgression);
+        if (notes && onImportNotes) {
+          onImportNotes(notes);
         }
       }
       
       setPobCode("");
       setPobError("");
+      setAvailableLoadouts([]);
+      
       // Show success message briefly
       setTimeout(() => {
         let message;
-        if (result.notes) {
+        if (notes) {
           message = "Import successful! (Gems + Notes)";
         } else {
           message = "Import successful! (Gems only - No notes found in POB)";
@@ -141,14 +168,54 @@ export const Header: React.FC<HeaderProps> = ({
 
   const handleResetQuests = () => {
     onResetQuests();
-    setShowResetConfirm(false);
+    setShowResetSuccess(true);
+    // Hide the success message after 3 seconds
+    setTimeout(() => setShowResetSuccess(false), 3000);
   };
 
   const handleLoadSample = () => {
-    const sampleProgression = generateSampleGemProgression();
-    onImportGems(sampleProgression);
-    setPobError("Sample gems loaded!");
-    setTimeout(() => setPobError(""), 2000);
+    // Create a sample with multiple loadouts to test the system
+    const sampleResult = generateSamplePobResult();
+    
+    if (sampleResult.hasMultipleLoadouts && sampleResult.loadouts && onImportGemLoadouts) {
+      // Import multiple loadouts
+      onImportGemLoadouts(sampleResult.loadouts, sampleResult.gemProgression);
+      setPobError(`Sample loaded with ${sampleResult.loadouts.length} loadouts! Check the gem panel dropdown.`);
+    } else {
+      // Fallback to single loadout
+      onImportGems(sampleResult.gemProgression);
+      setPobError("Sample gems loaded!");
+    }
+    
+    setTimeout(() => setPobError(""), 3000);
+  };
+
+  const handleImportSelectedLoadout = () => {
+    if (selectedLoadout < 0 || selectedLoadout >= availableLoadouts.length) {
+      setPobError("Please select a loadout to import");
+      return;
+    }
+
+    const loadout = availableLoadouts[selectedLoadout];
+    const gemProgression = loadout.gemProgression;
+
+    // Use combined import if available, otherwise fall back to individual imports
+    if (onImportGemsAndNotes) {
+      onImportGemsAndNotes(gemProgression, undefined); // No notes for specific loadout
+    } else {
+      onImportGems(gemProgression);
+    }
+
+    setPobCode("");
+    setPobError("");
+    setAvailableLoadouts([]);
+    setSelectedLoadout(-1);
+
+    // Show success message briefly
+    setTimeout(() => {
+      setPobError(`Import successful! Loaded "${loadout.name}"`);
+      setTimeout(() => setPobError(""), 2000);
+    }, 100);
   };
 
   const handleReinforceOverlay = async () => {
@@ -266,7 +333,7 @@ export const Header: React.FC<HeaderProps> = ({
         <div className="settings-header">
           <h3>Settings</h3>
           <button
-            className="settings-close-btn"
+            className="control-btn close-btn"
             onClick={() => setShowSettings(false)}
             title="Close Settings"
           >
@@ -406,34 +473,19 @@ export const Header: React.FC<HeaderProps> = ({
               <div className="setting-item setting-half">
                 <div className="setting-label">RESET PROGRESS</div>
                 <div className="setting-control">
-                  {!showResetConfirm ? (
+                  <div className="reset-control-row">
                     <button
                       className="reset-button compact"
-                      onClick={() => setShowResetConfirm(true)}
+                      onClick={handleResetQuests}
                     >
                       Reset All
                     </button>
-                  ) : (
-                    <div className="reset-confirm compact">
-                      <div className="reset-confirm-text">
-                        Reset all quests?
-                      </div>
-                      <div className="reset-confirm-buttons">
-                        <button
-                          className="reset-confirm-btn reset-yes"
-                          onClick={handleResetQuests}
-                        >
-                          Yes
-                        </button>
-                        <button
-                          className="reset-confirm-btn reset-no"
-                          onClick={() => setShowResetConfirm(false)}
-                        >
-                          No
-                        </button>
-                      </div>
-                    </div>
-                  )}
+                    {showResetSuccess && (
+                      <span className="reset-success-message">
+                        ✓ Reset Successful
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
@@ -465,6 +517,34 @@ export const Header: React.FC<HeaderProps> = ({
                       Load Sample
                     </button>
                   </div>
+                  
+                  {/* Loadout Selection - shown when multiple loadouts are detected */}
+                  {availableLoadouts.length > 0 && (
+                    <div className="loadout-selection">
+                      <div className="loadout-label">Select Loadout:</div>
+                      <div className="loadout-controls">
+                        <select
+                          className="loadout-selector"
+                          value={selectedLoadout}
+                          onChange={(e) => setSelectedLoadout(parseInt(e.target.value))}
+                        >
+                          <option value={-1}>-- Choose a loadout --</option>
+                          {availableLoadouts.map((loadout, index) => (
+                            <option key={index} value={index}>
+                              {loadout.name}
+                            </option>
+                          ))}
+                        </select>
+                        <button
+                          className="loadout-import-btn"
+                          onClick={handleImportSelectedLoadout}
+                          disabled={selectedLoadout < 0}
+                        >
+                          Import Selected
+                        </button>
+                      </div>
+                    </div>
+                  )}
                   {pobError && (
                     <div className={`pob-message ${pobError.includes('successful') ? 'success' : 'error'}`}>
                       {pobError}

@@ -59,7 +59,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: var(--bg-primary);
+  background: rgba(0, 0, 0, 0.95);
   z-index: 100;
   display: none;
   flex-direction: column;
@@ -86,12 +86,172 @@
   flex-shrink: 0;
 }
 
+.gem-panel-title-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  position: relative;
+  z-index: 1;
+}
+
 .gem-panel-header h3 {
   margin: 0;
   font-size: 1.25rem;
   font-weight: 700;
   color: var(--primary-color);
   text-shadow: var(--text-shadow);
+}
+
+.loadout-selector-section {
+  padding: 8px 20px;
+  border-bottom: 1px solid var(--bg-overlay-4);
+  background: var(--bg-overlay-1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.loadout-label {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.loadout-dropdown-wrapper {
+  position: relative;
+  z-index: 200;
+}
+
+.loadout-dropdown-button {
+  background: var(--bg-overlay-4);
+  border: none;
+  border-radius: 4px;
+  color: var(--primary-color);
+  padding: 8px 12px;
+  font-family: var(--font-family);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  min-width: 120px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.loadout-dropdown-button:hover {
+  background: var(--bg-overlay-3);
+}
+
+.dropdown-arrow {
+  font-size: 0.6rem;
+  opacity: 0.6;
+}
+
+.loadout-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--bg-overlay-1);
+  border: 1px solid var(--bg-overlay-4);
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 300;
+  margin-top: 2px;
+}
+
+.loadout-dropdown-item {
+  width: 100%;
+  background: none;
+  border: none;
+  color: var(--primary-color);
+  padding: 8px 12px;
+  font-family: var(--font-family);
+  font-size: 0.75rem;
+  cursor: pointer;
+  text-align: left;
+  display: block;
+}
+
+.loadout-dropdown-item:hover {
+  background: var(--bg-overlay-3);
+}
+
+.loadout-dropdown-item.active {
+  background: var(--bg-overlay-4);
+  font-weight: 600;
+}
+
+.loadout-selector {
+  all: unset !important;
+  background: var(--bg-overlay-4) !important;
+  border: none !important;
+  border-radius: 4px !important;
+  color: var(--primary-color) !important;
+  padding: 8px 12px !important;
+  font-family: var(--font-family) !important;
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  min-width: 120px !important;
+  height: 32px !important;
+  display: block !important;
+  box-sizing: border-box !important;
+  position: relative !important;
+  z-index: 300 !important;
+  pointer-events: auto !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+}
+
+.loadout-selector:focus,
+.loadout-selector:hover {
+  background: var(--bg-overlay-3) !important;
+}
+
+.loadout-selector option {
+  background: rgba(0, 0, 0, 0.95) !important;
+  color: var(--primary-color) !important;
+}
+
+
+/* Control button styles - ensuring they work perfectly in gems panel */
+.gem-progression-panel .control-btn,
+.control-btn {
+  width: 24px !important;
+  height: 24px !important;
+  background: var(--bg-overlay-4) !important;
+  color: var(--primary-color) !important;
+  border-radius: var(--border-radius-sm) !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 0.875rem !important;
+  transition: all var(--transition-fast) !important;
+  border: none !important;
+  outline: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  position: relative !important;
+  z-index: 10 !important;
+}
+
+.gem-progression-panel .control-btn:hover,
+.control-btn:hover {
+  background: rgba(255, 255, 255, 0.2) !important;
+}
+
+.gem-progression-panel .close-btn:hover,
+.close-btn:hover {
+  background: rgba(220, 20, 20, 0.3) !important;
+  color: #ff6b6b !important;
 }
 
 .gem-panel-controls {
@@ -112,21 +272,6 @@
   border-radius: var(--border-radius-sm);
 }
 
-.gem-panel-close {
-  background: none;
-  border: none;
-  color: var(--primary-color);
-  font-size: 1.5rem;
-  cursor: pointer;
-  padding: 4px 8px;
-  border-radius: var(--border-radius-sm);
-  transition: all var(--transition-fast);
-  line-height: 1;
-}
-
-.gem-panel-close:hover {
-  background: var(--bg-overlay-4);
-}
 
 .gem-panel-content {
   padding: 20px;
@@ -176,8 +321,8 @@
 
 .skill-bar {
   display: flex;
-  align-items: center;
-  gap: 16px;
+  flex-direction: column;
+  gap: 8px;
   background: var(--bg-overlay-2);
   border-radius: var(--border-radius-md);
   padding: 16px 20px;
@@ -188,6 +333,26 @@
 .skill-bar:hover {
   background: var(--bg-overlay-3);
   border-color: var(--bg-overlay-4);
+}
+
+.skill-bar-header {
+  margin-bottom: 4px;
+}
+
+.skill-name {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  text-align: center;
+  line-height: 1.2;
+}
+
+.socket-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 .main-gem-slot {
@@ -269,19 +434,26 @@
 }
 
 .gem-slot.empty {
-  background: var(--bg-overlay-1);
+  background: rgba(0, 0, 0, 0.3);
   border: 2px dashed var(--bg-overlay-3);
   cursor: default;
-  opacity: 0.6;
+  opacity: 0.4;
 }
 
 .gem-slot.empty:hover {
   transform: none;
   border-color: var(--bg-overlay-3);
+  opacity: 0.6;
 }
 
 .gem-slot.empty .gem-name-tooltip {
-  display: none;
+  opacity: 0.7;
+  font-size: 0.65rem;
+}
+
+.empty-socket {
+  opacity: 0.15 !important;
+  filter: grayscale(100%) brightness(0.3);
 }
 
 /* Stat-based gem slot colors - MUST come after type-based colors for proper specificity */

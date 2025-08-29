@@ -1,3 +1,29 @@
+/* Control button styles to ensure they work in this panel */
+.control-btn {
+  width: 24px;
+  height: 24px;
+  background: var(--bg-overlay-4);
+  color: var(--primary-color);
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+  transition: all var(--transition-fast);
+  border: none !important;
+  outline: none !important;
+}
+
+.control-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.close-btn:hover {
+  background: rgba(220, 20, 20, 0.3);
+  color: #ff6b6b;
+}
+
 /* Regex Panel Toggle Button */
 .regex-panel-toggle {
   position: fixed;

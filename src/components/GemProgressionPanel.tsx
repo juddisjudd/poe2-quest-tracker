@@ -1,5 +1,5 @@
-import React from "react";
-import { GemProgression, GemSlot } from "../types";
+import React, { useState } from "react";
+import { GemProgression, GemSlot, GemProgressionWithLoadouts } from "../types";
 import "./GemProgressionPanel.css";
 
 // Import gem images
@@ -7,21 +7,75 @@ import UncutSkillGem from "/assets/global/UncutSkillGem.webp";
 import UncutSkillGemBuff from "/assets/global/UncutSkillGemBuff.webp";
 import UncutSupportGem from "/assets/global/UncutSupportGem.webp";
 
+interface LoadoutDropdownProps {
+  loadouts: Array<{ id: string; name: string }>;
+  activeLoadoutId: string;
+  onSwitchLoadout: (loadoutId: string) => void;
+}
+
+const LoadoutDropdown: React.FC<LoadoutDropdownProps> = ({ loadouts, activeLoadoutId, onSwitchLoadout }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const activeLoadout = loadouts.find(l => l.id === activeLoadoutId);
+
+  return (
+    <div className="loadout-dropdown-wrapper">
+      <button 
+        className="loadout-dropdown-button"
+        onClick={() => setIsOpen(!isOpen)}
+        title="Switch between different POB loadouts"
+      >
+        {activeLoadout?.name || 'Select Loadout'}
+        <span className="dropdown-arrow">{isOpen ? '▲' : '▼'}</span>
+      </button>
+      
+      {isOpen && (
+        <div className="loadout-dropdown-menu">
+          {loadouts.map(loadout => (
+            <button
+              key={loadout.id}
+              className={`loadout-dropdown-item ${loadout.id === activeLoadoutId ? 'active' : ''}`}
+              onClick={() => {
+                onSwitchLoadout(loadout.id);
+                setIsOpen(false);
+              }}
+            >
+              {loadout.name}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
 interface GemProgressionPanelProps {
   gemProgression: GemProgression;
+  gemLoadouts?: GemProgressionWithLoadouts;
   isVisible: boolean;
   settingsOpen: boolean;
   onToggleGem: (gemId: string) => void;
   onTogglePanel: () => void;
+  onSwitchLoadout?: (loadoutId: string) => void;
 }
 
 export const GemProgressionPanel: React.FC<GemProgressionPanelProps> = ({
   gemProgression,
+  gemLoadouts,
   isVisible,
   settingsOpen,
   onToggleGem,
   onTogglePanel,
+  onSwitchLoadout,
 }) => {
+  // Debug: log loadout info
+  console.log('GemProgressionPanel debug:', {
+    hasGemLoadouts: !!gemLoadouts,
+    loadoutCount: gemLoadouts?.loadouts?.length || 0,
+    loadoutNames: gemLoadouts?.loadouts?.map(l => l.name) || [],
+    activeLoadoutId: gemLoadouts?.activeLoadoutId,
+    hasOnSwitchLoadout: !!onSwitchLoadout
+  });
+
   const getGemIcon = (gem: GemSlot) => {
     if (gem.type === 'support') {
       return UncutSupportGem;
@@ -70,33 +124,40 @@ export const GemProgressionPanel: React.FC<GemProgressionPanelProps> = ({
   };
 
   const renderSkillBar = (socketGroup: any, groupIndex: number) => {
-    const emptySlots = Math.max(0, socketGroup.maxSockets - socketGroup.supportGems.length - 1);
+    const maxSupportSlots = 5; // PoE2 has maximum 5 support gem slots per skill
+    const currentSupportGems = socketGroup.supportGems.length;
+    const emptySlots = Math.max(0, maxSupportSlots - currentSupportGems);
     
     return (
       <div key={socketGroup.id} className="skill-bar">
-        {/* Main gem on the left */}
-        <div className="main-gem-slot">
-          {renderGemSlot(socketGroup.mainGem, true)}
-          <div className="gem-name-label">{socketGroup.mainGem.name}</div>
+        {/* Main gem name above the socket group */}
+        <div className="skill-bar-header">
+          <div className="skill-name">{socketGroup.mainGem.name}</div>
         </div>
         
-        {/* Support gems in a horizontal row */}
-        <div className="support-gems-row">
+        {/* All gems in a horizontal row (main + supports + empty slots) */}
+        <div className="socket-group">
+          {/* Main gem first */}
+          {renderGemSlot(socketGroup.mainGem, true)}
+          
+          {/* Support gems */}
           {socketGroup.supportGems.map((supportGem: GemSlot) =>
             renderGemSlot(supportGem)
           )}
+          
+          {/* Empty support gem slots (up to 5 total) */}
           {Array.from({ length: emptySlots }, (_, index) => (
-            <div key={`empty-${groupIndex}-${index}`} className="gem-slot empty">
+            <div key={`empty-support-${groupIndex}-${index}`} className="gem-slot empty support-gem">
               <div className="gem-slot-inner">
                 <div className="gem-icon">
                   <img 
                     src={UncutSupportGem} 
-                    alt="empty gem slot"
-                    className="gem-icon-image"
-                    style={{ opacity: 0.3 }}
+                    alt="empty support slot"
+                    className="gem-icon-image empty-socket"
                   />
                 </div>
               </div>
+              <div className="gem-name-tooltip">Empty Support Slot</div>
             </div>
           ))}
         </div>
@@ -135,7 +196,9 @@ export const GemProgressionPanel: React.FC<GemProgressionPanelProps> = ({
       {/* Gem Panel - slides up from bottom */}
       <div className={`gem-progression-panel ${isVisible ? "visible" : "hidden"}`}>
         <div className="gem-panel-header">
-          <h3>Gem Progression</h3>
+          <div className="gem-panel-title-row">
+            <h3>Gem Progression</h3>
+          </div>
           <div className="gem-panel-controls">
             <div className="gem-panel-stats">
               <span className="gem-count">
@@ -143,7 +206,7 @@ export const GemProgressionPanel: React.FC<GemProgressionPanelProps> = ({
               </span>
             </div>
             <button
-              className="gem-panel-close"
+              className="control-btn close-btn"
               onClick={onTogglePanel}
               title="Close Gem Panel"
             >
@@ -151,6 +214,18 @@ export const GemProgressionPanel: React.FC<GemProgressionPanelProps> = ({
             </button>
           </div>
         </div>
+
+        {/* Loadout selector - positioned between header and content */}
+        {gemLoadouts && gemLoadouts.loadouts.length > 1 && onSwitchLoadout && (
+          <div className="loadout-selector-section">
+            <span className="loadout-label">POB Loadouts</span>
+            <LoadoutDropdown
+              loadouts={gemLoadouts.loadouts}
+              activeLoadoutId={gemLoadouts.activeLoadoutId}
+              onSwitchLoadout={onSwitchLoadout}
+            />
+          </div>
+        )}
 
         <div className="gem-panel-content">
           {gemProgression.socketGroups.length === 0 ? (

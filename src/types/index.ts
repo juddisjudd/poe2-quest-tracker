@@ -34,6 +34,18 @@ export interface GemProgression {
   lastImported?: string;
 }
 
+export interface GemLoadout {
+  id: string;
+  name: string;
+  gemProgression: GemProgression;
+}
+
+export interface GemProgressionWithLoadouts {
+  loadouts: GemLoadout[];
+  activeLoadoutId: string;
+  lastImported?: string;
+}
+
 export interface RegexFilters {
   vendor: {
     weapons: string;
@@ -58,6 +70,7 @@ export interface NotesData {
 export interface TrackerData {
   acts: Act[];
   gemProgression?: GemProgression;
+  gemLoadouts?: GemProgressionWithLoadouts;
   regexFilters?: RegexFilters;
   notesData?: NotesData;
   settings: {

@@ -51,7 +51,7 @@ export const NotesPanel: React.FC<NotesPanelProps> = ({
           <h3>Notes</h3>
           <div className="notes-panel-controls">
             <button
-              className="notes-panel-close"
+              className="control-btn close-btn"
               onClick={onTogglePanel}
               title="Close Notes Panel"
             >

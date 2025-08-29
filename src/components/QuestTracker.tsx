@@ -21,6 +21,8 @@ export const QuestTracker: React.FC = () => {
     updateSettings, 
     resetAllQuests,
     importGemProgression,
+    importGemLoadouts,
+    switchLoadout,
     toggleGem,
     updateRegexFilters,
     updateNotesData,
@@ -65,6 +67,7 @@ export const QuestTracker: React.FC = () => {
         onSettingsToggle={setSettingsOpen}
         onResetQuests={resetAllQuests}
         onImportGems={importGemProgression}
+        onImportGemLoadouts={importGemLoadouts}
         onImportNotes={(notes) => {
           updateNotesData({
             userNotes: data.notesData?.userNotes || "",
@@ -89,9 +92,11 @@ export const QuestTracker: React.FC = () => {
       {data.gemProgression && (
         <GemProgressionPanel
           gemProgression={data.gemProgression}
+          gemLoadouts={data.gemLoadouts}
           isVisible={gemPanelVisible}
           settingsOpen={settingsOpen}
           onToggleGem={toggleGem}
+          onSwitchLoadout={switchLoadout}
           onTogglePanel={() => {
             const newVisibility = !gemPanelVisible;
             setGemPanelVisible(newVisibility);
@@ -99,6 +104,16 @@ export const QuestTracker: React.FC = () => {
           }}
         />
       )}
+      
+      {/* Debug: log tracker data */}
+      {(() => {
+        console.log('QuestTracker data debug:', {
+          hasGemProgression: !!data.gemProgression,
+          hasGemLoadouts: !!data.gemLoadouts,
+          loadoutCount: data.gemLoadouts?.loadouts?.length || 0
+        });
+        return null;
+      })()}
 
       {/* Regex Panel */}
       {data.regexFilters && (

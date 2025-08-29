@@ -358,9 +358,9 @@ body {
 /* Move overlay-help to top and adjust spacing */
 .overlay-help {
   margin: 0 0 24px 0;
-  padding: 16px;
+  padding: 6px;
   background: rgba(0, 0, 0, 0.3);
-  border-radius: var(--border-radius-md);
+  border-radius: 0;
   border-left: 3px solid var(--accent-color);
   width: 100%;
   display: flex;
@@ -791,6 +791,36 @@ body {
   font-size: 0.65rem;
 }
 
+.reset-control-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.reset-success-message {
+  color: #22c55e;
+  font-size: 0.7rem;
+  font-weight: 600;
+  background: rgba(34, 197, 94, 0.1);
+  padding: 6px 10px;
+  border-radius: var(--border-radius-sm);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  white-space: nowrap;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 /* PoB Import Styles */
 .pob-import-section {
   display: flex;
@@ -886,6 +916,75 @@ body {
   background: rgba(34, 197, 94, 0.1);
   color: #4ade80;
   border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+/* Loadout Selection Styles */
+.loadout-selection {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 12px;
+  background: var(--bg-overlay-2);
+  border-radius: var(--border-radius-sm);
+  border: 1px solid var(--bg-overlay-3);
+}
+
+.loadout-label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--accent-color);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.loadout-controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.loadout-selector {
+  flex: 1;
+  padding: 6px 8px;
+  background: var(--bg-overlay-1);
+  border: 1px solid var(--bg-overlay-3);
+  border-radius: var(--border-radius-sm);
+  color: var(--primary-color);
+  font-family: var(--font-family);
+  font-size: 0.7rem;
+  cursor: pointer;
+}
+
+.loadout-selector:focus {
+  outline: 2px solid var(--accent-color);
+  outline-offset: -2px;
+}
+
+.loadout-import-btn {
+  padding: 6px 12px;
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius-sm);
+  font-family: var(--font-family);
+  font-weight: 600;
+  font-size: 0.65rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.loadout-import-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  background: linear-gradient(135deg, #34d399, #10b981);
+}
+
+.loadout-import-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
 }
 
 /* Font Scaling - Comprehensive */

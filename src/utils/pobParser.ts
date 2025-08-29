@@ -1,9 +1,16 @@
 import { GemProgression, GemSocketGroup, GemSlot } from "../types";
 import skillGemsData from "../data/skill_gems.json";
 
+export interface PobLoadout {
+  name: string;
+  gemProgression: GemProgression;
+}
+
 export interface PobParseResult {
   gemProgression: GemProgression;
   notes?: string;
+  loadouts?: PobLoadout[];
+  hasMultipleLoadouts?: boolean;
 }
 
 // Function to get stat requirement from skill_gems.json by name matching
@@ -224,16 +231,149 @@ function extractNotesFromXML(xmlString: string): string | undefined {
   }
 }
 
-// Parse XML to extract gem information
-function parseGemsFromXML(xmlString: string): GemProgression {
+// Extract all available builds/trees from XML
+function extractBuildsFromXML(xmlString: string): { builds: Element[], trees: Element[] } {
+  const parser = new DOMParser();
+  const xmlDoc = parser.parseFromString(xmlString, 'text/xml');
+  
+  // Look for multiple Build elements (different loadouts)
+  const builds = Array.from(xmlDoc.querySelectorAll('Build'));
+  
+  // Look for multiple Tree elements (different passive tree configurations)  
+  const trees = Array.from(xmlDoc.querySelectorAll('Tree'));
+  
+  // Also check for other possible loadout structures
+  const specs = Array.from(xmlDoc.querySelectorAll('TreeSpec'));
+  const configs = Array.from(xmlDoc.querySelectorAll('Config'));
+  
+  console.log(`POB Analysis: Found ${builds.length} Build elements, ${trees.length} Tree elements, ${specs.length} TreeSpec elements, ${configs.length} Config elements`);
+  
+  // Debug: log all top-level elements to understand structure
+  const rootElements = Array.from(xmlDoc.documentElement?.children || []);
+  console.log('Root elements:', rootElements.map(el => `${el.tagName}(${el.children.length} children)`));
+  
+  // Debug: look for any element with a "name" attribute that might contain loadout names
+  const allElements = Array.from(xmlDoc.querySelectorAll('*[name]'));
+  console.log('Elements with name attribute:', allElements.map(el => `${el.tagName}[name="${el.getAttribute('name')}"]`));
+  
+  // Debug: find elements that might contain "lvl" or level information
+  const levelElements = Array.from(xmlDoc.querySelectorAll('*')).filter(el => {
+    const name = el.getAttribute('name') || el.textContent || '';
+    return name.toLowerCase().includes('lvl') || name.toLowerCase().includes('level');
+  });
+  console.log('Level-related elements:', levelElements.map(el => `${el.tagName}[name="${el.getAttribute('name')}"] content: "${(el.textContent || '').substring(0, 50)}"`));
+  
+  // Debug: log build names if any
+  builds.forEach((build, index) => {
+    const name = build.getAttribute('name') || build.getAttribute('title') || `Build ${index + 1}`;
+    const skillCount = build.querySelectorAll('Skill').length;
+    console.log(`  Build ${index}: "${name}" (${skillCount} skills)`);
+  });
+  
+  // Debug: log tree names if any
+  trees.forEach((tree, index) => {
+    const name = tree.getAttribute('name') || tree.getAttribute('title') || tree.getAttribute('activeSpec') || `Tree ${index + 1}`;
+    console.log(`  Tree ${index}: "${name}"`);
+  });
+  
+  // Debug: log TreeSpec elements (might be the actual loadouts)
+  specs.forEach((spec, index) => {
+    const name = spec.getAttribute('name') || spec.getAttribute('title') || `TreeSpec ${index + 1}`;
+    console.log(`  TreeSpec ${index}: "${name}"`);
+  });
+  
+  return { builds, trees };
+}
+
+// Parse XML to extract gem information from a specific SkillSet element
+function parseGemsFromSkillSet(skillSetElement: Element): GemProgression {
+  try {
+    const socketGroups: GemSocketGroup[] = [];
+    
+    // Find all skill elements within this specific SkillSet
+    const skills = skillSetElement.querySelectorAll('Skill');
+    console.log(`parseGemsFromSkillSet: Found ${skills.length} skills in SkillSet`);
+    
+    skills.forEach((skill, index) => {
+      // Get all gems from this skill element
+      const gemElements = skill.querySelectorAll('Gem');
+      
+      if (gemElements.length === 0) {
+        console.log(`  Skill ${index}: No gems found`);
+        return;
+      }
+      
+      // The first gem is usually the main skill gem
+      const firstGem = gemElements[0];
+      const mainGemName = firstGem.getAttribute('nameSpec') || 
+                         firstGem.getAttribute('variantId') || 
+                         'Unknown Gem';
+      const skillId = firstGem.getAttribute('skillId') || `skill-${index}`;
+      
+      console.log(`  Skill ${index}: ${mainGemName} (${gemElements.length} gems total)`);
+      
+      // Create main gem entry
+      const mainGem: GemSlot = {
+        id: skillId,
+        name: mainGemName,
+        type: 'skill' as const,
+        acquired: false,
+        statRequirement: null,
+      };
+      
+      // Parse support gems (all gems after the first one)
+      const supportGems: GemSlot[] = [];
+      for (let i = 1; i < gemElements.length; i++) {
+        const supportGem = gemElements[i];
+        const supportName = supportGem.getAttribute('nameSpec') || 
+                           supportGem.getAttribute('variantId') || 
+                           'Unknown Support';
+        
+        // Determine if this is a support gem based on skillId or variantId
+        const supportSkillId = supportGem.getAttribute('skillId') || '';
+        const isSupport = supportSkillId.includes('Support') || 
+                         supportGem.getAttribute('variantId')?.includes('Support');
+        
+        supportGems.push({
+          id: `${skillId}-support-${i}`,
+          name: supportName,
+          type: isSupport ? 'support' as const : 'skill' as const,
+          acquired: false,
+          statRequirement: null,
+        });
+      }
+      
+      // Create socket group
+      const socketGroup: GemSocketGroup = {
+        id: `group-${index}`,
+        mainGem,
+        supportGems,
+        maxSockets: gemElements.length,
+      };
+      
+      socketGroups.push(socketGroup);
+    });
+    
+    console.log(`parseGemsFromSkillSet: Created ${socketGroups.length} socket groups`);
+    return { socketGroups };
+  } catch (error) {
+    console.error('Error parsing gems from SkillSet:', error);
+    return { socketGroups: [] };
+  }
+}
+
+// Parse XML to extract gem information from a specific build element or the whole document
+function parseGemsFromXML(xmlString: string, buildElement?: Element): GemProgression {
   try {
     const parser = new DOMParser();
     const xmlDoc = parser.parseFromString(xmlString, 'text/xml');
     
     const socketGroups: GemSocketGroup[] = [];
     
-    // Find all skill elements
-    const skills = xmlDoc.querySelectorAll('Skill');
+    // Find all skill elements - either from a specific build or the whole document
+    const skills = buildElement ? 
+      buildElement.querySelectorAll('Skill') : 
+      xmlDoc.querySelectorAll('Skill');
     
     skills.forEach((skill, index) => {
       const skillGems = skill.querySelectorAll('Gem');
@@ -336,6 +476,163 @@ function isPobbinUrl(input: string): boolean {
   return /https?:\/\/pobb\.in\/[A-Za-z0-9_-]+/.test(input.trim());
 }
 
+// Filter gems for a specific loadout to create distinct skill sets
+function filterGemsForLoadout(allGemProgression: GemProgression, loadoutName: string, loadoutIndex: number): GemProgression {
+  const socketGroups = allGemProgression.socketGroups;
+  
+  // Create different skill subsets based on loadout
+  // This is a heuristic approach until we have proper POB parsing
+  let filteredGroups: GemSocketGroup[] = [];
+  
+  if (loadoutName.toLowerCase().includes('1-5') || loadoutIndex === 0) {
+    // Early game loadout - first few skills
+    filteredGroups = socketGroups.slice(0, Math.max(1, Math.floor(socketGroups.length / 3)));
+  } else if (loadoutName.toLowerCase().includes('6-14') || loadoutIndex === 1) {
+    // Mid game loadout - middle skills
+    const start = Math.floor(socketGroups.length / 3);
+    const end = Math.floor(socketGroups.length * 2 / 3);
+    filteredGroups = socketGroups.slice(start, Math.max(start + 1, end));
+  } else if (loadoutIndex === 2) {
+    // Late game loadout - final skills
+    const start = Math.floor(socketGroups.length * 2 / 3);
+    filteredGroups = socketGroups.slice(start);
+  } else {
+    // Default: distribute evenly based on index
+    const groupsPerLoadout = Math.max(1, Math.floor(socketGroups.length / 4));
+    const startIndex = loadoutIndex * groupsPerLoadout;
+    filteredGroups = socketGroups.slice(startIndex, startIndex + groupsPerLoadout);
+  }
+  
+  // Ensure we always have at least one group
+  if (filteredGroups.length === 0) {
+    filteredGroups = socketGroups.slice(0, 1);
+  }
+  
+  console.log(`Filtered loadout "${loadoutName}": ${filteredGroups.length} skill groups (from ${socketGroups.length} total)`);
+  
+  return {
+    socketGroups: filteredGroups,
+    lastImported: allGemProgression.lastImported
+  };
+}
+
+// Extract all available loadouts from the XML
+function extractLoadoutsFromXML(xmlString: string): PobLoadout[] {
+  const { builds, trees } = extractBuildsFromXML(xmlString);
+  const parser = new DOMParser();
+  const xmlDoc = parser.parseFromString(xmlString, 'text/xml');
+  const loadouts: PobLoadout[] = [];
+  
+  // Check for SkillSet elements (these contain the actual loadouts like "lvl 1-5", "lvl 6-14")
+  const skillSets = Array.from(xmlDoc.querySelectorAll('SkillSet[title]'));
+  console.log(`Found ${skillSets.length} SkillSet elements with titles`);
+  
+  // Handle SkillSet elements (contains the "lvl 1-5", "lvl 6-14" etc.)
+  if (skillSets.length > 0) {
+    console.log('Using SkillSet elements as loadouts');
+    skillSets.forEach((skillSet, index) => {
+      const skillSetName = skillSet.getAttribute('title') || 
+                          skillSet.getAttribute('name') ||
+                          `SkillSet ${index + 1}`;
+      const skillSetId = skillSet.getAttribute('id');
+                      
+      console.log(`Processing SkillSet: "${skillSetName}" (id: ${skillSetId})`);
+      
+      try {
+        // Parse gems specifically from this SkillSet
+        const gemProgression = parseGemsFromSkillSet(skillSet);
+        
+        loadouts.push({
+          name: skillSetName,
+          gemProgression: gemProgression
+        });
+      } catch (error) {
+        console.warn(`Failed to parse SkillSet "${skillSetName}":`, error);
+      }
+    });
+    return loadouts;
+  }
+  
+  // Fallback: Check for TreeSpec elements (old approach)
+  const treeSpecs = Array.from(xmlDoc.querySelectorAll('TreeSpec'));
+  console.log(`Found ${treeSpecs.length} TreeSpec elements`);
+  
+  // Handle TreeSpec elements (might contain the "lvl 1-5", "lvl 6-14" etc.)
+  if (treeSpecs.length > 1) {
+    console.log('Using TreeSpec elements as loadouts');
+    treeSpecs.forEach((spec, index) => {
+      const specName = spec.getAttribute('name') || 
+                      spec.getAttribute('title') ||
+                      `TreeSpec ${index + 1}`;
+                      
+      console.log(`Processing TreeSpec: "${specName}"`);
+      
+      try {
+        // For TreeSpecs, parse gems from whole document and then filter based on loadout
+        const allGemProgression = parseGemsFromXML(xmlString);
+        
+        // Create filtered gem progression based on loadout name/level
+        const filteredGemProgression = filterGemsForLoadout(allGemProgression, specName, index);
+        
+        loadouts.push({
+          name: specName,
+          gemProgression: filteredGemProgression
+        });
+      } catch (error) {
+        console.warn(`Failed to parse TreeSpec "${specName}":`, error);
+      }
+    });
+    return loadouts;
+  }
+  
+  // Handle multiple Build elements
+  if (builds.length > 1) {
+    console.log('Using Build elements as loadouts');
+    builds.forEach((build, index) => {
+      const buildName = build.getAttribute('name') || 
+                       build.getAttribute('title') || 
+                       `Build ${index + 1}`;
+                       
+      try {
+        const gemProgression = parseGemsFromXML(xmlString, build);
+        loadouts.push({
+          name: buildName,
+          gemProgression
+        });
+      } catch (error) {
+        console.warn(`Failed to parse build "${buildName}":`, error);
+      }
+    });
+    return loadouts;
+  }
+  
+  // Handle multiple Tree elements (different passive configurations)
+  if (trees.length > 1 && builds.length <= 1) {
+    console.log('Using Tree elements as loadouts');
+    trees.forEach((tree, index) => {
+      const treeName = tree.getAttribute('name') || 
+                      tree.getAttribute('title') ||
+                      tree.getAttribute('activeSpec') ||
+                      `Tree ${index + 1}`;
+      
+      try {
+        // For trees, we still parse gems from the whole document but associate with tree name
+        const gemProgression = parseGemsFromXML(xmlString);
+        loadouts.push({
+          name: treeName,
+          gemProgression
+        });
+      } catch (error) {
+        console.warn(`Failed to parse tree "${treeName}":`, error);
+      }
+    });
+    return loadouts;
+  }
+  
+  console.log('No multiple loadouts detected, returning empty array');
+  return loadouts;
+}
+
 // Main function to parse PoB code - returns both gems and notes
 export async function parsePathOfBuildingCodeWithNotes(pobCode: string): Promise<PobParseResult> {
   try {
@@ -356,16 +653,34 @@ export async function parsePathOfBuildingCodeWithNotes(pobCode: string): Promise
     // Decompress the data
     const xmlString = await zlibInflate(actualPobCode);
     
-    // Parse gems from XML
+    // DEBUG: Log first 2000 characters of decompressed XML to understand structure
+    console.log('=== DECOMPRESSED POB XML PREVIEW ===');
+    console.log(xmlString.substring(0, 2000) + '...');
+    console.log('=== END XML PREVIEW ===');
+    
+    // Extract loadouts from XML
+    const loadouts = extractLoadoutsFromXML(xmlString);
+    const hasMultipleLoadouts = loadouts.length > 1;
+    
+    // Parse gems from XML (default/first loadout)
     const gemProgression = parseGemsFromXML(xmlString);
     
     // Extract notes from XML
     const notes = extractNotesFromXML(xmlString);
-    console.log('Final parse result:', { hasGemProgression: !!gemProgression, hasNotes: !!notes, notes });
+    console.log('Final parse result:', { 
+      hasGemProgression: !!gemProgression, 
+      hasNotes: !!notes, 
+      hasMultipleLoadouts,
+      loadoutCount: loadouts.length,
+      loadoutNames: loadouts.map(l => l.name),
+      notes 
+    });
     
     return {
       gemProgression,
-      notes
+      notes,
+      loadouts: loadouts.length > 0 ? loadouts : undefined,
+      hasMultipleLoadouts
     };
   } catch (error) {
     console.error('Error parsing PoB code:', error);
@@ -379,6 +694,60 @@ export async function parsePathOfBuildingCode(pobCode: string): Promise<GemProgr
   return result.gemProgression;
 }
 
+
+// Generate sample POB result with multiple loadouts for testing
+export function generateSamplePobResult(): PobParseResult {
+  const baseProgression = generateSampleGemProgression();
+  
+  // Create a second loadout with different gems
+  const secondLoadout: PobLoadout = {
+    name: "Fire Build",
+    gemProgression: {
+      socketGroups: [
+        {
+          id: 'group-fire-1',
+          mainGem: {
+            id: 'main-fire-1',
+            name: 'Fireball',
+            type: 'skill',
+            acquired: false,
+            statRequirement: null,
+          },
+          supportGems: [
+            {
+              id: 'support-fire-1-1',
+              name: 'Fire Mastery',
+              type: 'support',
+              acquired: false,
+              statRequirement: getStatRequirement('Fire Mastery'),
+            },
+            {
+              id: 'support-fire-1-2',
+              name: 'Spell Echo',
+              type: 'support',
+              acquired: false,
+              statRequirement: getStatRequirement('Spell Echo'),
+            },
+          ],
+          maxSockets: 6,
+        },
+      ],
+      lastImported: new Date().toISOString(),
+    }
+  };
+  
+  return {
+    gemProgression: baseProgression, // Default shows first loadout
+    loadouts: [
+      {
+        name: "Lightning Build",
+        gemProgression: baseProgression
+      },
+      secondLoadout
+    ],
+    hasMultipleLoadouts: true
+  };
+}
 
 // Generate sample gem progression for testing
 export function generateSampleGemProgression(): GemProgression {

@@ -106,7 +106,7 @@ export const RegexPanel: React.FC<RegexPanelProps> = ({
           <h3>Regex Filters</h3>
           <div className="regex-panel-controls">
             <button
-              className="regex-panel-close"
+              className="control-btn close-btn"
               onClick={onTogglePanel}
               title="Close Regex Panel"
             >

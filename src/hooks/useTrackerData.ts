@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
-import { TrackerData, Act, GemProgression, RegexFilters, NotesData } from "../types";
+import { TrackerData, Act, GemProgression, GemLoadout, RegexFilters, NotesData } from "../types";
 import { defaultQuestData } from "../data/questData";
-import { migrateGemProgression } from "../utils/pobParser";
+import { migrateGemProgression, PobLoadout } from "../utils/pobParser";
 
 const initialData: TrackerData = {
   acts: defaultQuestData,
@@ -244,6 +244,52 @@ export const useTrackerData = () => {
     saveData(newData);
   }, [data, saveData]);
 
+  // Import multiple loadouts from POB
+  const importGemLoadouts = useCallback((pobLoadouts: PobLoadout[], defaultGemProgression: GemProgression) => {
+    const gemLoadouts: GemLoadout[] = pobLoadouts.map((pobLoadout, index) => ({
+      id: `loadout-${index}`,
+      name: pobLoadout.name,
+      gemProgression: migrateGemProgression(pobLoadout.gemProgression),
+    }));
+
+    console.log('importGemLoadouts debug:', {
+      pobLoadoutsLength: pobLoadouts.length,
+      gemLoadoutsLength: gemLoadouts.length,
+      gemLoadoutNames: gemLoadouts.map(l => l.name),
+      activeLoadoutId: gemLoadouts[0]?.id || ''
+    });
+
+    const newData = {
+      ...data,
+      // Set gem progression to the first loadout instead of the combined progression
+      gemProgression: gemLoadouts[0]?.gemProgression || migrateGemProgression(defaultGemProgression),
+      gemLoadouts: {
+        loadouts: gemLoadouts,
+        activeLoadoutId: gemLoadouts[0]?.id || '',
+        lastImported: new Date().toISOString(),
+      },
+    };
+    saveData(newData);
+  }, [data, saveData]);
+
+  // Switch active loadout
+  const switchLoadout = useCallback((loadoutId: string) => {
+    if (!data.gemLoadouts) return;
+
+    const selectedLoadout = data.gemLoadouts.loadouts.find(l => l.id === loadoutId);
+    if (!selectedLoadout) return;
+
+    const newData = {
+      ...data,
+      gemProgression: selectedLoadout.gemProgression,
+      gemLoadouts: {
+        ...data.gemLoadouts,
+        activeLoadoutId: loadoutId,
+      },
+    };
+    saveData(newData);
+  }, [data, saveData]);
+
   const toggleGem = useCallback((gemId: string) => {
     if (!data.gemProgression) return;
 
@@ -307,6 +353,8 @@ export const useTrackerData = () => {
     updateSettings,
     resetAllQuests,
     importGemProgression,
+    importGemLoadouts,
+    switchLoadout,
     toggleGem,
     updateRegexFilters,
     updateNotesData,
