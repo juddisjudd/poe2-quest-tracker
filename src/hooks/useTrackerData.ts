@@ -25,6 +25,7 @@ const initialData: TrackerData = {
   },
   notesData: {
     userNotes: "",
+    pobNotes: undefined,
   },
   settings: {
     alwaysOnTop: true,
@@ -324,14 +325,43 @@ export const useTrackerData = () => {
   }, [data, saveData]);
 
   const updateNotesData = useCallback((notesData: NotesData) => {
+    console.log('🎯 [HOOK] updateNotesData called with:', {
+      hasUserNotes: !!notesData.userNotes,
+      userNotesLength: notesData.userNotes?.length || 0,
+      hasPobNotes: !!notesData.pobNotes,
+      pobNotesLength: notesData.pobNotes?.length || 0,
+      pobNotesPreview: notesData.pobNotes ? notesData.pobNotes.substring(0, 100) + '...' : 'No POB notes'
+    });
+    
     const newData = {
       ...data,
       notesData,
     };
+    
+    console.log('💾 [HOOK] Saving notes data:', {
+      hasNotesData: !!newData.notesData,
+      userNotes: newData.notesData?.userNotes?.length || 0,
+      pobNotes: newData.notesData?.pobNotes?.length || 0
+    });
+    
     saveData(newData);
   }, [data, saveData]);
 
   const importGemsAndNotes = useCallback((gemProgression?: GemProgression, notes?: string) => {
+    console.log('🎯 [HOOK] importGemsAndNotes called with:', {
+      hasGemProgression: !!gemProgression,
+      socketGroups: gemProgression?.socketGroups?.length || 0,
+      hasNotes: !!notes,
+      notesLength: notes?.length || 0,
+      notesPreview: notes ? notes.substring(0, 100) + '...' : 'No notes'
+    });
+    
+    console.log('🔍 [HOOK] Current data.notesData:', {
+      hasNotesData: !!data.notesData,
+      userNotes: data.notesData?.userNotes?.length || 0,
+      pobNotes: data.notesData?.pobNotes?.length || 0
+    });
+    
     const newData = {
       ...data,
       ...(gemProgression && { gemProgression: migrateGemProgression(gemProgression) }),
@@ -343,6 +373,14 @@ export const useTrackerData = () => {
         }
       })
     };
+    
+    console.log('💾 [HOOK] New data notesData:', {
+      hasNotesData: !!newData.notesData,
+      userNotes: newData.notesData?.userNotes?.length || 0,
+      pobNotes: newData.notesData?.pobNotes?.length || 0,
+      notesWillBeAdded: !!notes
+    });
+    
     saveData(newData);
   }, [data, saveData]);
 

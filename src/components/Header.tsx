@@ -118,7 +118,21 @@ export const Header: React.FC<HeaderProps> = ({
       const result = await parsePathOfBuildingCodeWithNotes(pobCode);
       
       if (result.hasMultipleLoadouts && result.loadouts && result.loadouts.length > 1 && onImportGemLoadouts) {
+        console.log('📤 [HEADER] Multiple loadouts path - importing:', {
+          loadouts: result.loadouts.length,
+          hasNotes: !!result.notes,
+          notesLength: result.notes?.length || 0
+        });
+        
         onImportGemLoadouts(result.loadouts, result.gemProgression);
+        
+        // Also import notes if present
+        if (result.notes && onImportNotes) {
+          console.log('📤 [HEADER] Also importing notes in multiple loadouts path');
+          onImportNotes(result.notes);
+        } else {
+          console.log('⚠️ [HEADER] Not importing notes - notes:', !!result.notes, 'onImportNotes:', !!onImportNotes);
+        }
         
         setPobCode("");
         setAvailableLoadouts([]);
@@ -131,12 +145,29 @@ export const Header: React.FC<HeaderProps> = ({
       const gemProgression = result.gemProgression;
       const notes = result.notes;
       
+      console.log('🎯 [HEADER] POB Import result received:', {
+        hasNotes: !!notes,
+        notesLength: notes?.length || 0,
+        notesContent: notes ? notes.substring(0, 100) + '...' : 'No notes',
+        hasOnImportGemsAndNotes: !!onImportGemsAndNotes,
+        hasOnImportNotes: !!onImportNotes
+      });
+      
       if (onImportGemsAndNotes) {
+        console.log('📤 [HEADER] Calling onImportGemsAndNotes with:', {
+          hasGemProgression: !!gemProgression,
+          hasNotes: !!notes,
+          notesLength: notes?.length || 0
+        });
         onImportGemsAndNotes(gemProgression, notes);
       } else {
+        console.log('📤 [HEADER] Calling separate import functions');
         onImportGems(gemProgression);
         if (notes && onImportNotes) {
+          console.log('📤 [HEADER] Calling onImportNotes');
           onImportNotes(notes);
+        } else {
+          console.log('⚠️ [HEADER] Not calling onImportNotes - notes:', !!notes, 'onImportNotes:', !!onImportNotes);
         }
       }
       

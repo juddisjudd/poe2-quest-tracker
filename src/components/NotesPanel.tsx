@@ -17,6 +17,13 @@ export const NotesPanel: React.FC<NotesPanelProps> = ({
   onUpdateNotes,
   onTogglePanel,
 }) => {
+  console.log('🎯 [NOTES_PANEL] Rendering with data:', {
+    hasPobNotes: !!notesData.pobNotes,
+    pobNotesLength: notesData.pobNotes?.length || 0,
+    pobNotesContent: notesData.pobNotes ? notesData.pobNotes.substring(0, 100) + '...' : 'No POB notes',
+    userNotesLength: notesData.userNotes?.length || 0,
+    fullNotesData: notesData
+  });
   const handleUserNotesChange = (value: string) => {
     onUpdateNotes({
       ...notesData,
@@ -61,27 +68,25 @@ export const NotesPanel: React.FC<NotesPanelProps> = ({
         </div>
 
         <div className="notes-panel-content">
-          {/* POB Notes Display - only show if notes exist */}
-          {notesData.pobNotes && (
-            <div className="notes-section">
-              <h4>Notes from Path of Building Import</h4>
-              <div className="pob-notes-display">
-                <div className="pob-notes-header">
-                  <label>Imported Notes</label>
-                  <button
-                    className="clear-button"
-                    onClick={clearPobNotes}
-                    title="Clear POB notes"
-                  >
-                    Clear
-                  </button>
-                </div>
-                <div className="pob-notes-content">
-                  {notesData.pobNotes}
-                </div>
+          {/* POB Notes Display - temporarily always show for debugging */}
+          <div className="notes-section">
+            <h4>Notes from Path of Building Import</h4>
+            <div className="pob-notes-display">
+              <div className="pob-notes-header">
+                <label>Imported Notes</label>
+                <button
+                  className="clear-button"
+                  onClick={clearPobNotes}
+                  title="Clear POB notes"
+                >
+                  Clear
+                </button>
+              </div>
+              <div className="pob-notes-content">
+                {notesData.pobNotes || "No POB notes imported yet"}
               </div>
             </div>
-          )}
+          </div>
 
           {/* Manual Notes Section */}
           <div className="notes-section">

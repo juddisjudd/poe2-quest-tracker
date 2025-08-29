@@ -184,6 +184,7 @@ async function zlibInflate(compressedData: string): Promise<string> {
 
 // Extract notes from XML
 function extractNotesFromXML(xmlString: string): string | undefined {
+  console.log('🔍 [POB] Starting notes extraction from XML...');
   try {
     const parser = new DOMParser();
     const xmlDoc = parser.parseFromString(xmlString, 'text/xml');
@@ -191,39 +192,71 @@ function extractNotesFromXML(xmlString: string): string | undefined {
     // Check for parsing errors
     const parseError = xmlDoc.querySelector('parsererror');
     if (parseError) {
-      console.error('XML parsing error:', parseError.textContent);
+      console.error('❌ [POB] XML parsing error:', parseError.textContent);
       return undefined;
     }
     
+    console.log('✅ [POB] XML parsed successfully');
+    
+    // Debug: log root element
+    console.log('🔍 [POB] Root element:', xmlDoc.documentElement?.tagName);
+    
     // Try multiple approaches to find Notes
     let notesElement = xmlDoc.querySelector('Notes');
+    console.log('🔍 [POB] Direct Notes query result:', !!notesElement);
     
     if (!notesElement) {
-      // Try finding it within PathOfBuilding root
-      const pathOfBuildingElement = xmlDoc.querySelector('PathOfBuilding');
+      // Try finding it within PathOfBuilding root - check both PathOfBuilding and PathOfBuilding2
+      let pathOfBuildingElement = xmlDoc.querySelector('PathOfBuilding');
+      if (!pathOfBuildingElement) {
+        pathOfBuildingElement = xmlDoc.querySelector('PathOfBuilding2');
+      }
+      
+      console.log('🔍 [POB] PathOfBuilding root element found:', !!pathOfBuildingElement);
+      console.log('🔍 [POB] PathOfBuilding root tag name:', pathOfBuildingElement?.tagName);
+      
       if (pathOfBuildingElement) {
         notesElement = pathOfBuildingElement.querySelector('Notes');
+        console.log('🔍 [POB] Notes found in PathOfBuilding:', !!notesElement);
       }
     }
     
     if (!notesElement) {
       // Try case-insensitive search
       const allElements = xmlDoc.getElementsByTagName('*');
+      console.log('🔍 [POB] Searching through', allElements.length, 'elements...');
+      
+      // Log some element names for debugging
+      const elementNames = new Set();
+      for (let i = 0; i < Math.min(allElements.length, 50); i++) {
+        elementNames.add(allElements[i].tagName);
+      }
+      console.log('🔍 [POB] First 50 element types:', Array.from(elementNames));
+      
       for (let i = 0; i < allElements.length; i++) {
         if (allElements[i].tagName.toLowerCase() === 'notes') {
           notesElement = allElements[i];
+          console.log('✅ [POB] Found notes via case-insensitive search');
           break;
         }
       }
     }
     
     if (notesElement) {
+      console.log('✅ [POB] Notes element found!');
       const notesText = notesElement.textContent?.trim();
-      return notesText && notesText.length > 0 ? notesText : undefined;
+      console.log('📝 [POB] Notes text length:', notesText?.length || 0);
+      console.log('📝 [POB] Notes preview:', notesText ? notesText.substring(0, 150) + '...' : 'Empty');
+      
+      const result = notesText && notesText.length > 0 ? notesText : undefined;
+      console.log('🎯 [POB] Final notes result:', !!result);
+      return result;
     }
+    
+    console.log('❌ [POB] No notes element found anywhere');
     return undefined;
   } catch (error) {
-    console.warn('Error extracting notes from XML:', error);
+    console.error('❌ [POB] Error extracting notes from XML:', error);
     return undefined;
   }
 }
@@ -660,6 +693,16 @@ export async function parsePathOfBuildingCodeWithNotes(pobCode: string): Promise
     
     // Extract notes from XML
     const notes = extractNotesFromXML(xmlString);
+    
+    console.log('🎯 [POB] Parse complete - Final result:', {
+      hasGemProgression: !!gemProgression,
+      socketGroups: gemProgression?.socketGroups?.length || 0,
+      hasNotes: !!notes,
+      notesLength: notes?.length || 0,
+      notesPreview: notes ? notes.substring(0, 100) + '...' : 'No notes',
+      hasLoadouts: loadouts.length > 0,
+      loadoutsCount: loadouts.length
+    });
     
     return {
       gemProgression,
