@@ -36,6 +36,8 @@ const initialData: TrackerData = {
     showGemPanel: false,
     showRegexPanel: false,
     showNotesPanel: false,
+    logFilePath: undefined,
+    logFileDetected: false,
   },
 };
 
@@ -69,9 +71,7 @@ const mergeQuestData = (
     };
   });
 
-  // Filter out any deprecated Cruel mode acts from saved data
   const filteredMergedActs = mergedActs.filter((act) => {
-    // Remove old cruel acts that are no longer in the new quest data
     return !act.id.includes("-cruel") || newQuestData.some(newAct => newAct.id === act.id);
   });
 
@@ -121,14 +121,13 @@ export const useTrackerData = () => {
               showGemPanel: savedData.settings.showGemPanel || false,
               showRegexPanel: savedData.settings.showRegexPanel || false,
               showNotesPanel: savedData.settings.showNotesPanel || false,
+              logFilePath: savedData.settings.logFilePath,
+              logFileDetected: savedData.settings.logFileDetected || false,
             },
-            // Migrate gem progression to add stat requirements if missing
             gemProgression: savedData.gemProgression 
               ? migrateGemProgression(savedData.gemProgression)
               : undefined,
-            // Initialize regex filters if not present
             regexFilters: savedData.regexFilters || initialData.regexFilters,
-            // Initialize notes data if not present
             notesData: savedData.notesData || initialData.notesData,
           };
           setData(updatedData);
@@ -163,7 +162,6 @@ export const useTrackerData = () => {
               "poe2-quest-tracker-data",
               JSON.stringify(newData)
             );
-            console.log("Saved to localStorage as backup");
           } catch (localError) {
             console.error("localStorage backup also failed:", localError);
           }
@@ -240,28 +238,32 @@ export const useTrackerData = () => {
     const newData = {
       ...data,
       gemProgression: migrateGemProgression(gemProgression),
+      gemLoadouts: undefined,
     };
     saveData(newData);
   }, [data, saveData]);
 
-  // Import multiple loadouts from POB
   const importGemLoadouts = useCallback((pobLoadouts: PobLoadout[], defaultGemProgression: GemProgression) => {
+    if (pobLoadouts.length <= 1) {
+      const gemProgression = pobLoadouts[0]?.gemProgression || defaultGemProgression;
+      const newData = {
+        ...data,
+        gemProgression: migrateGemProgression(gemProgression),
+        gemLoadouts: undefined,
+      };
+      saveData(newData);
+      return;
+    }
+
     const gemLoadouts: GemLoadout[] = pobLoadouts.map((pobLoadout, index) => ({
       id: `loadout-${index}`,
       name: pobLoadout.name,
       gemProgression: migrateGemProgression(pobLoadout.gemProgression),
     }));
 
-    console.log('importGemLoadouts debug:', {
-      pobLoadoutsLength: pobLoadouts.length,
-      gemLoadoutsLength: gemLoadouts.length,
-      gemLoadoutNames: gemLoadouts.map(l => l.name),
-      activeLoadoutId: gemLoadouts[0]?.id || ''
-    });
 
     const newData = {
       ...data,
-      // Set gem progression to the first loadout instead of the combined progression
       gemProgression: gemLoadouts[0]?.gemProgression || migrateGemProgression(defaultGemProgression),
       gemLoadouts: {
         loadouts: gemLoadouts,
@@ -332,9 +334,8 @@ export const useTrackerData = () => {
   const importGemsAndNotes = useCallback((gemProgression?: GemProgression, notes?: string) => {
     const newData = {
       ...data,
-      // Always import gems if provided
       ...(gemProgression && { gemProgression: migrateGemProgression(gemProgression) }),
-      // Only update notes if notes are provided
+      ...(gemProgression && { gemLoadouts: undefined }),
       ...(notes && {
         notesData: {
           userNotes: data.notesData?.userNotes || "",

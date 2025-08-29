@@ -219,11 +219,8 @@ function extractNotesFromXML(xmlString: string): string | undefined {
     
     if (notesElement) {
       const notesText = notesElement.textContent?.trim();
-      console.log('POB Notes found:', { length: notesText?.length, preview: notesText?.substring(0, 100) + '...' });
       return notesText && notesText.length > 0 ? notesText : undefined;
     }
-    
-    console.log('No notes found in POB XML');
     return undefined;
   } catch (error) {
     console.warn('Error extracting notes from XML:', error);
@@ -653,10 +650,6 @@ export async function parsePathOfBuildingCodeWithNotes(pobCode: string): Promise
     // Decompress the data
     const xmlString = await zlibInflate(actualPobCode);
     
-    // DEBUG: Log first 2000 characters of decompressed XML to understand structure
-    console.log('=== DECOMPRESSED POB XML PREVIEW ===');
-    console.log(xmlString.substring(0, 2000) + '...');
-    console.log('=== END XML PREVIEW ===');
     
     // Extract loadouts from XML
     const loadouts = extractLoadoutsFromXML(xmlString);
@@ -667,14 +660,6 @@ export async function parsePathOfBuildingCodeWithNotes(pobCode: string): Promise
     
     // Extract notes from XML
     const notes = extractNotesFromXML(xmlString);
-    console.log('Final parse result:', { 
-      hasGemProgression: !!gemProgression, 
-      hasNotes: !!notes, 
-      hasMultipleLoadouts,
-      loadoutCount: loadouts.length,
-      loadoutNames: loadouts.map(l => l.name),
-      notes 
-    });
     
     return {
       gemProgression,

@@ -75,6 +75,11 @@ export const QuestTracker: React.FC = () => {
           });
         }}
         onImportGemsAndNotes={importGemsAndNotes}
+        onResetGems={() => {
+          importGemProgression({
+            socketGroups: [],
+          });
+        }}
       />
       <div className="acts-container">
         {data.acts.map((act) => (

@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { GemProgression, GemSlot, GemProgressionWithLoadouts } from "../types";
 import "./GemProgressionPanel.css";
 
-// Import gem images
 import UncutSkillGem from "/assets/global/UncutSkillGem.webp";
 import UncutSkillGemBuff from "/assets/global/UncutSkillGemBuff.webp";
 import UncutSupportGem from "/assets/global/UncutSupportGem.webp";
@@ -67,14 +66,6 @@ export const GemProgressionPanel: React.FC<GemProgressionPanelProps> = ({
   onTogglePanel,
   onSwitchLoadout,
 }) => {
-  // Debug: log loadout info
-  console.log('GemProgressionPanel debug:', {
-    hasGemLoadouts: !!gemLoadouts,
-    loadoutCount: gemLoadouts?.loadouts?.length || 0,
-    loadoutNames: gemLoadouts?.loadouts?.map(l => l.name) || [],
-    activeLoadoutId: gemLoadouts?.activeLoadoutId,
-    hasOnSwitchLoadout: !!onSwitchLoadout
-  });
 
   const getGemIcon = (gem: GemSlot) => {
     if (gem.type === 'support') {
@@ -124,28 +115,22 @@ export const GemProgressionPanel: React.FC<GemProgressionPanelProps> = ({
   };
 
   const renderSkillBar = (socketGroup: any, groupIndex: number) => {
-    const maxSupportSlots = 5; // PoE2 has maximum 5 support gem slots per skill
+    const maxSupportSlots = 5;
     const currentSupportGems = socketGroup.supportGems.length;
     const emptySlots = Math.max(0, maxSupportSlots - currentSupportGems);
     
     return (
       <div key={socketGroup.id} className="skill-bar">
-        {/* Main gem name above the socket group */}
         <div className="skill-bar-header">
           <div className="skill-name">{socketGroup.mainGem.name}</div>
         </div>
         
-        {/* All gems in a horizontal row (main + supports + empty slots) */}
         <div className="socket-group">
-          {/* Main gem first */}
           {renderGemSlot(socketGroup.mainGem, true)}
           
-          {/* Support gems */}
           {socketGroup.supportGems.map((supportGem: GemSlot) =>
             renderGemSlot(supportGem)
           )}
-          
-          {/* Empty support gem slots (up to 5 total) */}
           {Array.from({ length: emptySlots }, (_, index) => (
             <div key={`empty-support-${groupIndex}-${index}`} className="gem-slot empty support-gem">
               <div className="gem-slot-inner">
@@ -165,7 +150,6 @@ export const GemProgressionPanel: React.FC<GemProgressionPanelProps> = ({
     );
   };
 
-  // Calculate gem statistics
   const totalGems = gemProgression.socketGroups.reduce(
     (total, group) => total + 1 + group.supportGems.length,
     0
@@ -216,7 +200,11 @@ export const GemProgressionPanel: React.FC<GemProgressionPanelProps> = ({
         </div>
 
         {/* Loadout selector - positioned between header and content */}
-        {gemLoadouts && gemLoadouts.loadouts.length > 1 && onSwitchLoadout && (
+        {gemLoadouts && 
+         gemLoadouts.loadouts && 
+         gemLoadouts.loadouts.length > 1 && 
+         gemLoadouts.loadouts.some(loadout => loadout.name && loadout.name.trim()) && 
+         onSwitchLoadout && (
           <div className="loadout-selector-section">
             <span className="loadout-label">POB Loadouts</span>
             <LoadoutDropdown

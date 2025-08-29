@@ -83,6 +83,8 @@ export interface TrackerData {
     showGemPanel?: boolean;
     showRegexPanel?: boolean;
     showNotesPanel?: boolean;
+    logFilePath?: string;
+    logFileDetected?: boolean;
   };
 }
 
@@ -100,6 +102,8 @@ declare global {
       onUpdateAvailable: (callback: () => void) => () => void;
       onUpdateDownloaded: (callback: () => void) => () => void;
       restartApp: () => void;
+      detectPoeLogFile: () => Promise<string | null>;
+      checkFileExists: (filePath: string) => Promise<boolean>;
     };
   }
 }

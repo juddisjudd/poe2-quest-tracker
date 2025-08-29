@@ -10,6 +10,8 @@ const electronAPI = {
   updateHotkey: (hotkey: string) => ipcRenderer.invoke("update-hotkey", hotkey),
   openExternal: (url: string) => ipcRenderer.invoke("open-external", url),
   reinforceOverlay: () => ipcRenderer.invoke("reinforce-overlay"),
+  detectPoeLogFile: () => ipcRenderer.invoke("detect-poe-log-file"),
+  checkFileExists: (filePath: string) => ipcRenderer.invoke("check-file-exists", filePath),
   onUpdateAvailable: (callback: () => void) => {
     ipcRenderer.on("update-available", callback);
     return () => ipcRenderer.removeListener("update-available", callback);

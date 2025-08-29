@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { TrackerData } from "../types";
-import { parsePathOfBuildingCodeWithNotes, generateSamplePobResult } from "../utils/pobParser";
+import { parsePathOfBuildingCodeWithNotes } from "../utils/pobParser";
 
 interface HeaderProps {
   settings: TrackerData["settings"];
@@ -11,6 +11,7 @@ interface HeaderProps {
   onImportGemLoadouts?: (pobLoadouts: any[], defaultGemProgression: any) => void;
   onImportNotes?: (notes: string) => void;
   onImportGemsAndNotes?: (gemProgression?: any, notes?: string) => void;
+  onResetGems?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -22,6 +23,7 @@ export const Header: React.FC<HeaderProps> = ({
   onImportGemLoadouts,
   onImportNotes,
   onImportGemsAndNotes,
+  onResetGems,
 }) => {
   const [showSettings, setShowSettings] = useState(false);
   const [appVersion, setAppVersion] = useState<string>("");
@@ -29,10 +31,12 @@ export const Header: React.FC<HeaderProps> = ({
   const [showResetSuccess, setShowResetSuccess] = useState(false);
   const [pobCode, setPobCode] = useState("");
   const [pobImporting, setPobImporting] = useState(false);
-  const [pobError, setPobError] = useState("");
   const [overlayReinforcing, setOverlayReinforcing] = useState(false);
   const [availableLoadouts, setAvailableLoadouts] = useState<any[]>([]);
-  const [selectedLoadout, setSelectedLoadout] = useState<number>(-1); // -1 means default/first
+  const [selectedLoadout, setSelectedLoadout] = useState<number>(-1);
+  const [logFileDetecting, setLogFileDetecting] = useState(false);
+  const [logFileMessage, setLogFileMessage] = useState("");
+  const [importButtonState, setImportButtonState] = useState<"normal" | "success" | "error">("normal");
 
   const isElectron = !!window.electronAPI;
 
@@ -102,42 +106,34 @@ export const Header: React.FC<HeaderProps> = ({
 
   const handleImportPoBCode = async () => {
     if (!pobCode.trim()) {
-      setPobError("Please enter a Path of Building code or pobb.in link");
+      setImportButtonState("error");
+      setTimeout(() => setImportButtonState("normal"), 2000);
       return;
     }
 
     setPobImporting(true);
-    setPobError("");
+    setImportButtonState("normal");
 
     try {
       const result = await parsePathOfBuildingCodeWithNotes(pobCode);
       
-      // Check if there are multiple loadouts and we can handle them
-      if (result.hasMultipleLoadouts && result.loadouts && onImportGemLoadouts) {
-        // Import all loadouts using the new function
+      if (result.hasMultipleLoadouts && result.loadouts && result.loadouts.length > 1 && onImportGemLoadouts) {
         onImportGemLoadouts(result.loadouts, result.gemProgression);
         
         setPobCode("");
-        setPobError("");
         setAvailableLoadouts([]);
         
-        // Show success message briefly
-        setTimeout(() => {
-          setPobError(`Import successful! Loaded ${result.loadouts?.length || 0} loadouts. Use the dropdown in the gem panel to switch between them.`);
-          setTimeout(() => setPobError(""), 3000);
-        }, 100);
+        setImportButtonState("success");
+        setTimeout(() => setImportButtonState("normal"), 2000);
         return;
       }
       
-      // Single loadout or fallback - proceed with normal import
       const gemProgression = result.gemProgression;
       const notes = result.notes;
       
-      // Use combined import if available, otherwise fall back to individual imports
       if (onImportGemsAndNotes) {
         onImportGemsAndNotes(gemProgression, notes);
       } else {
-        // Fallback to individual imports
         onImportGems(gemProgression);
         if (notes && onImportNotes) {
           onImportNotes(notes);
@@ -145,22 +141,14 @@ export const Header: React.FC<HeaderProps> = ({
       }
       
       setPobCode("");
-      setPobError("");
       setAvailableLoadouts([]);
       
-      // Show success message briefly
-      setTimeout(() => {
-        let message;
-        if (notes) {
-          message = "Import successful! (Gems + Notes)";
-        } else {
-          message = "Import successful! (Gems only - No notes found in POB)";
-        }
-        setPobError(message);
-        setTimeout(() => setPobError(""), 2000);
-      }, 100);
+      setImportButtonState("success");
+      setTimeout(() => setImportButtonState("normal"), 2000);
     } catch (error) {
-      setPobError(error instanceof Error ? error.message : "Import failed");
+      console.error("Import failed:", error);
+      setImportButtonState("error");
+      setTimeout(() => setImportButtonState("normal"), 2000);
     } finally {
       setPobImporting(false);
     }
@@ -169,53 +157,32 @@ export const Header: React.FC<HeaderProps> = ({
   const handleResetQuests = () => {
     onResetQuests();
     setShowResetSuccess(true);
-    // Hide the success message after 3 seconds
     setTimeout(() => setShowResetSuccess(false), 3000);
   };
 
-  const handleLoadSample = () => {
-    // Create a sample with multiple loadouts to test the system
-    const sampleResult = generateSamplePobResult();
-    
-    if (sampleResult.hasMultipleLoadouts && sampleResult.loadouts && onImportGemLoadouts) {
-      // Import multiple loadouts
-      onImportGemLoadouts(sampleResult.loadouts, sampleResult.gemProgression);
-      setPobError(`Sample loaded with ${sampleResult.loadouts.length} loadouts! Check the gem panel dropdown.`);
-    } else {
-      // Fallback to single loadout
-      onImportGems(sampleResult.gemProgression);
-      setPobError("Sample gems loaded!");
+  const handleResetGems = () => {
+    if (onResetGems) {
+      onResetGems();
     }
-    
-    setTimeout(() => setPobError(""), 3000);
   };
 
   const handleImportSelectedLoadout = () => {
     if (selectedLoadout < 0 || selectedLoadout >= availableLoadouts.length) {
-      setPobError("Please select a loadout to import");
       return;
     }
 
     const loadout = availableLoadouts[selectedLoadout];
     const gemProgression = loadout.gemProgression;
 
-    // Use combined import if available, otherwise fall back to individual imports
     if (onImportGemsAndNotes) {
-      onImportGemsAndNotes(gemProgression, undefined); // No notes for specific loadout
+      onImportGemsAndNotes(gemProgression, undefined);
     } else {
       onImportGems(gemProgression);
     }
 
     setPobCode("");
-    setPobError("");
     setAvailableLoadouts([]);
     setSelectedLoadout(-1);
-
-    // Show success message briefly
-    setTimeout(() => {
-      setPobError(`Import successful! Loaded "${loadout.name}"`);
-      setTimeout(() => setPobError(""), 2000);
-    }, 100);
   };
 
   const handleReinforceOverlay = async () => {
@@ -224,17 +191,43 @@ export const Header: React.FC<HeaderProps> = ({
     setOverlayReinforcing(true);
     try {
       await (window.electronAPI as any).reinforceOverlay();
-      // Show success message briefly
-      setTimeout(() => {
-        setPobError("Overlay settings reinforced!");
-        setTimeout(() => setPobError(""), 2000);
-      }, 100);
+      console.log("Overlay settings reinforced successfully");
     } catch (error) {
       console.error("Failed to reinforce overlay:", error);
-      setPobError("Failed to reinforce overlay settings");
-      setTimeout(() => setPobError(""), 3000);
     } finally {
       setOverlayReinforcing(false);
+    }
+  };
+
+  const handleDetectLogFile = async () => {
+    if (!isElectron) return;
+    
+    setLogFileDetecting(true);
+    setLogFileMessage("");
+    
+    try {
+      const logFilePath = await window.electronAPI.detectPoeLogFile();
+      
+      if (logFilePath) {
+        onSettingsChange({ 
+          logFilePath: logFilePath,
+          logFileDetected: true 
+        });
+        setLogFileMessage(`✓ Log file found: ${logFilePath}`);
+      } else {
+        onSettingsChange({ 
+          logFileDetected: false 
+        });
+        setLogFileMessage("❌ Path of Exile 2 not running or log file not found. Start the game and try again.");
+      }
+      
+      setTimeout(() => setLogFileMessage(""), 5000);
+    } catch (error) {
+      console.error("Failed to detect log file:", error);
+      setLogFileMessage("❌ Failed to detect log file");
+      setTimeout(() => setLogFileMessage(""), 5000);
+    } finally {
+      setLogFileDetecting(false);
     }
   };
 
@@ -504,17 +497,19 @@ export const Header: React.FC<HeaderProps> = ({
                   />
                   <div className="pob-buttons">
                     <button
-                      className="pob-import-btn"
+                      className={`pob-import-btn ${importButtonState === "success" ? "success" : ""} ${importButtonState === "error" ? "error" : ""}`}
                       onClick={handleImportPoBCode}
                       disabled={pobImporting}
                     >
-                      {pobImporting ? "Importing..." : "Import PoB"}
+                      {pobImporting ? "Importing..." : 
+                       importButtonState === "success" ? "✓ Success" :
+                       importButtonState === "error" ? "✗ Error" : "Import PoB"}
                     </button>
                     <button
-                      className="pob-sample-btn"
-                      onClick={handleLoadSample}
+                      className="pob-reset-btn"
+                      onClick={handleResetGems}
                     >
-                      Load Sample
+                      Reset Gems
                     </button>
                   </div>
                   
@@ -545,14 +540,54 @@ export const Header: React.FC<HeaderProps> = ({
                       </div>
                     </div>
                   )}
-                  {pobError && (
-                    <div className={`pob-message ${pobError.includes('successful') ? 'success' : 'error'}`}>
-                      {pobError}
-                    </div>
-                  )}
                 </div>
               </div>
             </div>
+
+            {/* Log File Detection - Only show in Electron */}
+            {isElectron && (
+              <div className="setting-item">
+                <div className="setting-label">LOG FILE DETECTION</div>
+                <div className="setting-control">
+                  <div className="log-detection-section">
+                    <div className="log-status-row">
+                      <div className="log-status">
+                        {settings.logFileDetected ? (
+                          <span className="log-status-detected">
+                            ✓ Log file detected
+                          </span>
+                        ) : (
+                          <span className="log-status-not-detected">
+                            ❌ Log file not detected yet
+                          </span>
+                        )}
+                      </div>
+                      <button
+                        className="log-detect-btn"
+                        onClick={handleDetectLogFile}
+                        disabled={logFileDetecting}
+                        title="Auto-detect Path of Exile 2 log file location"
+                      >
+                        {logFileDetecting ? "Detecting..." : "Detect Log File"}
+                      </button>
+                    </div>
+                    {settings.logFilePath && (
+                      <div className="log-path">
+                        <strong>Path:</strong> {settings.logFilePath}
+                      </div>
+                    )}
+                    {logFileMessage && (
+                      <div className={`log-message ${logFileMessage.includes('✓') ? 'success' : 'error'}`}>
+                        {logFileMessage}
+                      </div>
+                    )}
+                    <div className="log-help-text">
+                      Start Path of Exile 2 and click "Detect Log File" to automatically find the Client.txt log file location.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="support-section">

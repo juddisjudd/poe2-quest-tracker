@@ -14,6 +14,7 @@ import * as fs from "fs";
 import { format as formatUrl } from "url";
 import { isDev } from "./utils";
 import log from "electron-log";
+import { detectPoeLogFile, checkFileExists } from "../utils/processDetection";
 
 log.transports.file.level = "info";
 log.transports.console.level = "info";
@@ -57,12 +58,12 @@ const createWindow = (): void => {
 
   mainWindow = new BrowserWindow({
     width: 550,
-    height: 700,
+    height: 817,
     x: width - 570,
     y: 20,
     frame: false,
     transparent: true,
-    alwaysOnTop: false, // Will be set properly after window creation
+    alwaysOnTop: false,
     skipTaskbar: false,
     resizable: true,
     show: false,
@@ -98,21 +99,16 @@ const createWindow = (): void => {
     }, 3000);
   }
 
-  // Set up improved overlay behavior after window creation
   const setupOverlay = () => {
     if (!mainWindow) return;
 
-    // Platform-specific overlay settings for better game compatibility
     if (process.platform === "win32") {
-      // On Windows, use 'normal' level for better fullscreen game compatibility
       mainWindow.setAlwaysOnTop(true, "normal");
     } else if (process.platform === "darwin") {
-      // On macOS, use floating level and additional settings
       mainWindow.setAlwaysOnTop(true, "floating");
       mainWindow.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
       mainWindow.setFullScreenable(false);
     } else {
-      // Linux and other platforms
       mainWindow.setAlwaysOnTop(true, "normal");
     }
   };
@@ -120,12 +116,7 @@ const createWindow = (): void => {
   mainWindow.on("ready-to-show", () => {
     setupOverlay();
     mainWindow?.show();
-    // Don't auto-focus to avoid interrupting games
-    // mainWindow?.focus();
   });
-
-  // Removed problematic focus/blur handlers that caused alt+tab-like behavior
-  // These resize tricks were interfering with game focus
 
   if (!isDevelopment) {
     setInterval(() => {
@@ -134,10 +125,9 @@ const createWindow = (): void => {
     }, 30 * 60 * 1000);
   }
 
-  // Reinforce overlay settings periodically to ensure it stays on top
   setInterval(() => {
     reinforceOverlaySettings();
-  }, 60 * 1000); // Every minute
+  }, 60 * 1000);
 };
 
 const createTray = (): void => {
@@ -193,8 +183,6 @@ const toggleVisibility = (): void => {
     mainWindow.hide();
   } else {
     mainWindow.show();
-    // Don't focus when showing to avoid interrupting the game
-    // The overlay should be visible but not steal focus
   }
 };
 
@@ -251,11 +239,8 @@ app.on("will-quit", () => {
   globalShortcut.unregisterAll();
 });
 
-// Function to reinforce overlay settings (can be called periodically if needed)
 const reinforceOverlaySettings = (): void => {
   if (!mainWindow || mainWindow.isDestroyed()) return;
-
-  // Reapply platform-specific overlay settings
   if (process.platform === "win32") {
     mainWindow.setAlwaysOnTop(true, "normal");
   } else if (process.platform === "darwin") {
@@ -316,7 +301,6 @@ ipcMain.handle("update-hotkey", async (_, newHotkey: string) => {
     if (success) {
       updateTrayMenu();
       
-      // Update the saved data file with the new hotkey
       try {
         const dataPath = getDataPath();
         let data: any = {};
@@ -326,18 +310,15 @@ ipcMain.handle("update-hotkey", async (_, newHotkey: string) => {
           data = JSON.parse(rawData);
         }
         
-        // Ensure settings object exists and update hotkey
         if (!data.settings) {
           data.settings = {};
         }
         data.settings.hotkey = newHotkey;
         
-        // Write the updated data back to file
         fs.writeFileSync(dataPath, JSON.stringify(data, null, 2), "utf8");
         console.log(`Hotkey updated to ${newHotkey} and saved to data file`);
       } catch (saveError) {
         console.error("Failed to save hotkey to data file:", saveError);
-        // Don't throw here - the hotkey registration succeeded, just the persistence failed
       }
       
       return { success: true };
@@ -404,4 +385,25 @@ ipcMain.handle("check-for-updates", () => {
 
 ipcMain.on("restart-app", () => {
   autoUpdater.quitAndInstall();
+});
+
+ipcMain.handle("detect-poe-log-file", async () => {
+  try {
+    const logFilePath = await detectPoeLogFile();
+    log.info("POE log file detection result:", logFilePath);
+    return logFilePath;
+  } catch (error) {
+    log.error("Error detecting POE log file:", error);
+    return null;
+  }
+});
+
+ipcMain.handle("check-file-exists", async (_, filePath: string) => {
+  try {
+    const exists = await checkFileExists(filePath);
+    return exists;
+  } catch (error) {
+    log.error("Error checking file existence:", error);
+    return false;
+  }
 });
