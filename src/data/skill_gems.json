@@ -14,6 +14,30 @@
       "aura"
     ]
   },
+  "Metadata/Items/Gem/SkillGemAncestralCry": {
+    "display_name": "Ancestral Cry",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "warcry",
+      "strength",
+      "grants_active_skill",
+      "attack",
+      "buff",
+      "area",
+      "melee",
+      "slam",
+      "projectile",
+      "trigger",
+      "fire",
+      "duration",
+      "nova",
+      "conditional"
+    ]
+  },
   "Metadata/Items/Gem/SkillGemArchmage": {
     "display_name": "Archmage",
     "requirement_weights": {
@@ -91,6 +115,131 @@
       "duration"
     ]
   },
+  "Metadata/Items/Gem/SkillGemAscendancyCommandFireDjinnFlameRunes": {
+    "display_name": "[DNT] Command Flame Runes",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "grants_active_skill",
+      "command"
+    ]
+  },
+  "Metadata/Items/Gem/SkillGemAscendancyCommandFireDjinnMassFusillade": {
+    "display_name": "[DNT] Command Big Sun",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "grants_active_skill",
+      "command"
+    ]
+  },
+  "Metadata/Items/Gem/SkillGemAscendancyCommandFireDjinnMeteor": {
+    "display_name": "[DNT] Command Meteor",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "grants_active_skill",
+      "command"
+    ]
+  },
+  "Metadata/Items/Gem/SkillGemAscendancyCommandSandDaggerSlam": {
+    "display_name": "[DNT] Command: Hand Slam",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "grants_active_skill",
+      "command",
+      "channelling"
+    ]
+  },
+  "Metadata/Items/Gem/SkillGemAscendancyCommandSandExplodeTeleport": {
+    "display_name": "[DNT] Command: Explode Teleport",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "grants_active_skill",
+      "command"
+    ]
+  },
+  "Metadata/Items/Gem/SkillGemAscendancyCommandWaterDjinnESRecharge": {
+    "display_name": "[DNT] Command ES Recharge",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "grants_active_skill",
+      "command"
+    ]
+  },
+  "Metadata/Items/Gem/SkillGemAscendancyCommandWaterDjinnGroundBurst": {
+    "display_name": "[DNT] Command Chilled Ground Burst",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "grants_active_skill",
+      "command"
+    ]
+  },
+  "Metadata/Items/Gem/SkillGemAscendancyCommandWaterDjinnOasis": {
+    "display_name": "[DNT] Command Oasis",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "grants_active_skill",
+      "command"
+    ]
+  },
+  "Metadata/Items/Gem/SkillGemAscendancyCompanionBear": {
+    "display_name": "[DNT] Companion Bear",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "grants_active_skill",
+      "minion",
+      "companion",
+      "persistent"
+    ]
+  },
+  "Metadata/Items/Gem/SkillGemAscendancyCorpseBeetles": {
+    "display_name": "[DNT] Corpse Beetles",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "grants_active_skill",
+      "command",
+      "minion",
+      "persistent"
+    ]
+  },
   "Metadata/Items/Gem/SkillGemAscendancyDemonForm": {
     "display_name": "Demon Form",
     "requirement_weights": {
@@ -101,8 +250,7 @@
     "tags": [
       "grants_active_skill",
       "shapeshift",
-      "buff",
-      "persistent"
+      "buff"
     ]
   },
   "Metadata/Items/Gem/SkillGemAscendancyElementalExpression": {
@@ -170,8 +318,7 @@
       "attack",
       "area",
       "projectile",
-      "fire",
-      "duration"
+      "fire"
     ]
   },
   "Metadata/Items/Gem/SkillGemAscendancyFireSpellOnHit": {
@@ -202,12 +349,26 @@
       "attack",
       "area",
       "projectile",
-      "lightning",
-      "duration"
+      "lightning"
+    ]
+  },
+  "Metadata/Items/Gem/SkillGemAscendancyInevitableAgony": {
+    "display_name": "Inevitable Agony",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "grants_active_skill",
+      "spell",
+      "area",
+      "duration",
+      "curse"
     ]
   },
   "Metadata/Items/Gem/SkillGemAscendancyInfuseWeapon": {
-    "display_name": "Infuse Weapon",
+    "display_name": "Elemental Surge",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -277,8 +438,81 @@
       "channelling"
     ]
   },
+  "Metadata/Items/Gem/SkillGemAscendancyMetaArcaneArchery": {
+    "display_name": "[DNT] Arcane Archery",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "grants_active_skill",
+      "buff",
+      "persistent",
+      "meta"
+    ]
+  },
+  "Metadata/Items/Gem/SkillGemAscendancyMetaMantraOfIllusions": {
+    "display_name": "[DNT] Mantra of Illusions",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "grants_active_skill",
+      "buff",
+      "persistent",
+      "meta"
+    ]
+  },
+  "Metadata/Items/Gem/SkillGemAscendancyMetaRangedAttackOnFreeze": {
+    "display_name": "[DNT] Meta Ranged Attack on Freeze",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "grants_active_skill",
+      "buff",
+      "persistent",
+      "cold",
+      "meta"
+    ]
+  },
+  "Metadata/Items/Gem/SkillGemAscendancyMetaRangedAttackOnIgnite": {
+    "display_name": "[DNT] Meta Ranged Attack on Ignite",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "grants_active_skill",
+      "buff",
+      "persistent",
+      "fire",
+      "meta"
+    ]
+  },
+  "Metadata/Items/Gem/SkillGemAscendancyMetaRangedAttackOnShock": {
+    "display_name": "[DNT] Meta Ranged Attack on Shock",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "grants_active_skill",
+      "buff",
+      "persistent",
+      "lightning",
+      "meta"
+    ]
+  },
   "Metadata/Items/Gem/SkillGemAscendancyPoisonousConcoction": {
-    "display_name": "Poisonous Concoction",
+    "display_name": "Acidic Concoction",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -289,8 +523,20 @@
       "attack",
       "area",
       "projectile",
-      "physical",
-      "chaos"
+      "physical"
+    ]
+  },
+  "Metadata/Items/Gem/SkillGemAscendancyRipFromTime": {
+    "display_name": "[DNT] Rip from Time",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "grants_active_skill",
+      "spell",
+      "duration"
     ]
   },
   "Metadata/Items/Gem/SkillGemAscendancyRitualSacrifice": {
@@ -318,8 +564,7 @@
       "attack",
       "area",
       "projectile",
-      "cold",
-      "duration"
+      "cold"
     ]
   },
   "Metadata/Items/Gem/SkillGemAscendancySorceryWard": {
@@ -339,6 +584,65 @@
       "fire"
     ]
   },
+  "Metadata/Items/Gem/SkillGemAscendancySpectralBellCarried": {
+    "display_name": "[DNT] Carried Spectral Bell",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "grants_active_skill",
+      "attack",
+      "buff",
+      "area"
+    ]
+  },
+  "Metadata/Items/Gem/SkillGemAscendancySpectralBells": {
+    "display_name": "[DNT] Spectral Bells",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "grants_active_skill",
+      "attack",
+      "buff",
+      "persistent",
+      "area",
+      "duration"
+    ]
+  },
+  "Metadata/Items/Gem/SkillGemAscendancySpellflux": {
+    "display_name": "[DNT] Spellflux",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "grants_active_skill",
+      "buff",
+      "persistent",
+      "duration"
+    ]
+  },
+  "Metadata/Items/Gem/SkillGemAscendancySummonFireDjinn": {
+    "display_name": "[DNT] Summon Fire Djinn",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "grants_active_skill",
+      "command",
+      "minion",
+      "persistent",
+      "fire"
+    ]
+  },
   "Metadata/Items/Gem/SkillGemAscendancySummonInfernalHound": {
     "display_name": "Summon Infernal Hound",
     "requirement_weights": {
@@ -352,6 +656,35 @@
       "companion",
       "persistent",
       "fire"
+    ]
+  },
+  "Metadata/Items/Gem/SkillGemAscendancySummonSandDjinn": {
+    "display_name": "[DNT] Summon Sand Djinn",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "grants_active_skill",
+      "command",
+      "minion",
+      "persistent"
+    ]
+  },
+  "Metadata/Items/Gem/SkillGemAscendancySummonWaterDjinn": {
+    "display_name": "[DNT] Summon Water Djinn",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "grants_active_skill",
+      "command",
+      "minion",
+      "persistent",
+      "cold"
     ]
   },
   "Metadata/Items/Gem/SkillGemAscendancyTemperWeapon": {
@@ -443,6 +776,68 @@
       "duration"
     ]
   },
+  "Metadata/Items/Gem/SkillGemAscendancyVividStags": {
+    "display_name": "[DNT] Vivid Stags",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "grants_active_skill",
+      "attack",
+      "buff",
+      "persistent",
+      "area",
+      "melee",
+      "lightning"
+    ]
+  },
+  "Metadata/Items/Gem/SkillGemAscendancyVoidIllusion": {
+    "display_name": "Void Illusion",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "grants_active_skill",
+      "attack",
+      "buff",
+      "persistent",
+      "area",
+      "duration"
+    ]
+  },
+  "Metadata/Items/Gem/SkillGemAscendancyWitchHunterMark": {
+    "display_name": "[DNT] UNUSED",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "grants_active_skill",
+      "mark",
+      "duration",
+      "remnant"
+    ]
+  },
+  "Metadata/Items/Gem/SkillGemAscendanyMetaDeadeyeMarks": {
+    "display_name": "Called Shots",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "grants_active_skill",
+      "buff",
+      "persistent",
+      "area",
+      "meta"
+    ]
+  },
   "Metadata/Items/Gem/SkillGemAttrition": {
     "display_name": "Attrition",
     "requirement_weights": {
@@ -472,6 +867,26 @@
       "persistent"
     ]
   },
+  "Metadata/Items/Gem/SkillGemBlackPowderBlitz": {
+    "display_name": "Black Powder Blitz",
+    "requirement_weights": {
+      "dexterity": 50,
+      "intelligence": 0,
+      "strength": 50
+    },
+    "tags": [
+      "buff",
+      "strength",
+      "dexterity",
+      "grants_active_skill",
+      "persistent",
+      "area",
+      "physical",
+      "fire",
+      "detonator",
+      "travel"
+    ]
+  },
   "Metadata/Items/Gem/SkillGemBlink": {
     "display_name": "Blink",
     "requirement_weights": {
@@ -496,6 +911,7 @@
       "strength": 0
     },
     "tags": [
+      "buff",
       "grants_active_skill",
       "spell",
       "travel"
@@ -509,16 +925,13 @@
       "strength": 0
     },
     "tags": [
+      "mark",
       "dexterity",
       "grants_active_skill",
-      "barrageable",
-      "spell",
       "attack",
       "area",
-      "mark",
       "physical",
       "duration",
-      "nova",
       "payoff"
     ]
   },
@@ -532,7 +945,6 @@
     "tags": [
       "intelligence",
       "grants_active_skill",
-      "barrageable",
       "spell",
       "area",
       "physical",
@@ -549,7 +961,6 @@
     "tags": [
       "intelligence",
       "grants_active_skill",
-      "barrageable",
       "spell",
       "area",
       "physical",
@@ -576,7 +987,7 @@
     ]
   },
   "Metadata/Items/Gem/SkillGemChaoticInfusion": {
-    "display_name": "Chaotic Infusion",
+    "display_name": "Chaotic Surge",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -590,7 +1001,7 @@
     ]
   },
   "Metadata/Items/Gem/SkillGemChargeInfusion": {
-    "display_name": "Charge Infusion",
+    "display_name": "Charge Regulation",
     "requirement_weights": {
       "dexterity": 50,
       "intelligence": 50,
@@ -623,7 +1034,7 @@
     ]
   },
   "Metadata/Items/Gem/SkillGemColdSnap": {
-    "display_name": "Cold Snap",
+    "display_name": "Snap",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 100,
@@ -632,11 +1043,13 @@
     "tags": [
       "intelligence",
       "grants_active_skill",
-      "barrageable",
       "spell",
       "area",
+      "lightning",
       "cold",
-      "payoff"
+      "fire",
+      "payoff",
+      "remnant"
     ]
   },
   "Metadata/Items/Gem/SkillGemCombatFrenzy": {
@@ -738,7 +1151,8 @@
       "persistent",
       "area",
       "aura",
-      "duration"
+      "duration",
+      "conditional"
     ]
   },
   "Metadata/Items/Gem/SkillGemDetonateMinion": {
@@ -751,7 +1165,7 @@
     "tags": [
       "dexterity",
       "grants_active_skill",
-      "spell",
+      "attack",
       "area",
       "fire"
     ]
@@ -766,14 +1180,14 @@
     "tags": [
       "dexterity",
       "grants_active_skill",
-      "barrageable",
       "attack",
       "area",
       "projectile",
       "fire",
       "channelling",
       "detonator",
-      "stages"
+      "stages",
+      "barrageable"
     ]
   },
   "Metadata/Items/Gem/SkillGemDreadBanner": {
@@ -792,7 +1206,8 @@
       "persistent",
       "area",
       "aura",
-      "duration"
+      "duration",
+      "conditional"
     ]
   },
   "Metadata/Items/Gem/SkillGemElectrocutingArrow": {
@@ -806,9 +1221,11 @@
       "dexterity",
       "grants_active_skill",
       "attack",
+      "area",
       "projectile",
       "lightning",
-      "duration"
+      "duration",
+      "barrageable"
     ]
   },
   "Metadata/Items/Gem/SkillGemElementalConflux": {
@@ -846,6 +1263,7 @@
       "lightning",
       "cold",
       "fire",
+      "invocation",
       "meta"
     ]
   },
@@ -888,6 +1306,25 @@
       "payoff"
     ]
   },
+  "Metadata/Items/Gem/SkillGemElementalWeakness": {
+    "display_name": "Elemental Weakness",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "intelligence",
+      "grants_active_skill",
+      "spell",
+      "area",
+      "lightning",
+      "cold",
+      "fire",
+      "duration",
+      "curse"
+    ]
+  },
   "Metadata/Items/Gem/SkillGemEmergencyReload": {
     "display_name": "Emergency Reload",
     "requirement_weights": {
@@ -901,6 +1338,19 @@
       "grants_active_skill",
       "buff",
       "duration"
+    ]
+  },
+  "Metadata/Items/Gem/SkillGemEmpowerMultishot": {
+    "display_name": "[DNT] Owl Feather Multishot",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "grants_active_skill",
+      "buff",
+      "persistent"
     ]
   },
   "Metadata/Items/Gem/SkillGemExplodingPoisonToad": {
@@ -966,13 +1416,13 @@
     "tags": [
       "dexterity",
       "grants_active_skill",
-      "barrageable",
       "attack",
       "area",
       "projectile",
       "fire",
       "duration",
-      "detonator"
+      "detonator",
+      "barrageable"
     ]
   },
   "Metadata/Items/Gem/SkillGemFangsOfFrost": {
@@ -992,6 +1442,22 @@
       "cold"
     ]
   },
+  "Metadata/Items/Gem/SkillGemFeastOfFlesh": {
+    "display_name": "Feast of Flesh",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "intelligence",
+      "grants_active_skill",
+      "spell",
+      "buff",
+      "area",
+      "nova"
+    ]
+  },
   "Metadata/Items/Gem/SkillGemFireball": {
     "display_name": "Fireball",
     "requirement_weights": {
@@ -1002,11 +1468,27 @@
     "tags": [
       "intelligence",
       "grants_active_skill",
-      "barrageable",
       "spell",
       "area",
       "projectile",
       "fire"
+    ]
+  },
+  "Metadata/Items/Gem/SkillGemFlameLink": {
+    "display_name": "[DNT] Flame Link",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "intelligence",
+      "grants_active_skill",
+      "link",
+      "spell",
+      "buff",
+      "fire",
+      "duration"
     ]
   },
   "Metadata/Items/Gem/SkillGemFlashGrenade": {
@@ -1026,6 +1508,45 @@
       "grenade"
     ]
   },
+  "Metadata/Items/Gem/SkillGemForgeHammer": {
+    "display_name": "Forge Hammer",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "strength",
+      "grants_active_skill",
+      "attack",
+      "area",
+      "melee",
+      "slam",
+      "sustained",
+      "fire",
+      "duration"
+    ]
+  },
+  "Metadata/Items/Gem/SkillGemFortifyingCry": {
+    "display_name": "Fortifying Cry",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "warcry",
+      "strength",
+      "grants_active_skill",
+      "attack",
+      "area",
+      "melee",
+      "trigger",
+      "physical",
+      "duration",
+      "nova"
+    ]
+  },
   "Metadata/Items/Gem/SkillGemFragmentationRounds": {
     "display_name": "Fragmentation Rounds",
     "requirement_weights": {
@@ -1038,9 +1559,11 @@
       "dexterity",
       "grants_active_skill",
       "attack",
+      "area",
       "ammunition",
       "projectile",
-      "payoff"
+      "payoff",
+      "merging"
     ]
   },
   "Metadata/Items/Gem/SkillGemFreezingMark": {
@@ -1051,17 +1574,14 @@
       "strength": 0
     },
     "tags": [
+      "mark",
       "dexterity",
       "intelligence",
       "grants_active_skill",
-      "barrageable",
-      "spell",
       "attack",
       "area",
-      "mark",
       "cold",
-      "duration",
-      "nova"
+      "duration"
     ]
   },
   "Metadata/Items/Gem/SkillGemFreezingSalvo": {
@@ -1077,8 +1597,24 @@
       "attack",
       "area",
       "projectile",
+      "cold"
+    ]
+  },
+  "Metadata/Items/Gem/SkillGemFrostDarts": {
+    "display_name": "Frost Darts",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "intelligence",
+      "grants_active_skill",
+      "spell",
+      "area",
+      "projectile",
       "cold",
-      "stages"
+      "payoff"
     ]
   },
   "Metadata/Items/Gem/SkillGemFrozenLocus": {
@@ -1096,8 +1632,23 @@
       "area",
       "melee",
       "cold",
-      "duration",
-      "nova"
+      "duration"
+    ]
+  },
+  "Metadata/Items/Gem/SkillGemFulmination": {
+    "display_name": "Fulmination",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "intelligence",
+      "grants_active_skill",
+      "buff",
+      "persistent",
+      "aura",
+      "lightning"
     ]
   },
   "Metadata/Items/Gem/SkillGemGalvanicShards": {
@@ -1115,7 +1666,8 @@
       "ammunition",
       "projectile",
       "lightning",
-      "chaining"
+      "chaining",
+      "merging"
     ]
   },
   "Metadata/Items/Gem/SkillGemGasArrow": {
@@ -1128,13 +1680,13 @@
     "tags": [
       "dexterity",
       "grants_active_skill",
-      "barrageable",
       "attack",
       "area",
       "projectile",
       "fire",
       "chaos",
-      "duration"
+      "duration",
+      "barrageable"
     ]
   },
   "Metadata/Items/Gem/SkillGemGasGrenade": {
@@ -1177,6 +1729,23 @@
       "travel"
     ]
   },
+  "Metadata/Items/Gem/SkillGemGeminiSurge": {
+    "display_name": "Gemini Surge",
+    "requirement_weights": {
+      "dexterity": 50,
+      "intelligence": 0,
+      "strength": 50
+    },
+    "tags": [
+      "strength",
+      "dexterity",
+      "grants_active_skill",
+      "attack",
+      "area",
+      "cold",
+      "fire"
+    ]
+  },
   "Metadata/Items/Gem/SkillGemGlacialBolt": {
     "display_name": "Glacial Bolt",
     "requirement_weights": {
@@ -1207,6 +1776,7 @@
       "buff",
       "intelligence",
       "grants_active_skill",
+      "spell",
       "minion",
       "persistent",
       "remnant"
@@ -1229,6 +1799,24 @@
       "projectile",
       "sustained",
       "cold"
+    ]
+  },
+  "Metadata/Items/Gem/SkillGemHammerOfNgamahu": {
+    "display_name": "[DNT] Hammer of Ngamahu",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "strength",
+      "grants_active_skill",
+      "attack",
+      "area",
+      "melee",
+      "slam",
+      "duration",
+      "conditional"
     ]
   },
   "Metadata/Items/Gem/SkillGemHammerOfTheGods": {
@@ -1336,6 +1924,7 @@
       "ammunition",
       "projectile",
       "physical",
+      "duration",
       "payoff"
     ]
   },
@@ -1354,6 +1943,21 @@
       "persistent",
       "trigger",
       "meta"
+    ]
+  },
+  "Metadata/Items/Gem/SkillGemIceFragments": {
+    "display_name": "Ice Fragments",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "grants_active_skill",
+      "attack",
+      "area",
+      "projectile",
+      "cold"
     ]
   },
   "Metadata/Items/Gem/SkillGemIceShards": {
@@ -1386,10 +1990,29 @@
     "tags": [
       "dexterity",
       "grants_active_skill",
-      "barrageable",
       "attack",
       "projectile",
-      "cold"
+      "cold",
+      "barrageable"
+    ]
+  },
+  "Metadata/Items/Gem/SkillGemIceTippedArrows": {
+    "display_name": "Ice-Tipped Arrows",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "dexterity",
+      "grants_active_skill",
+      "spell",
+      "attack",
+      "buff",
+      "area",
+      "projectile",
+      "cold",
+      "duration"
     ]
   },
   "Metadata/Items/Gem/SkillGemIcestorm": {
@@ -1402,28 +2025,12 @@
     "tags": [
       "intelligence",
       "grants_active_skill",
-      "barrageable",
       "spell",
       "area",
       "sustained",
       "cold",
       "duration",
       "payoff"
-    ]
-  },
-  "Metadata/Items/Gem/SkillGemIcewalker": {
-    "display_name": "[DNT] Icewalker",
-    "requirement_weights": {
-      "dexterity": 50,
-      "intelligence": 50,
-      "strength": 0
-    },
-    "tags": [
-      "dexterity",
-      "intelligence",
-      "grants_active_skill",
-      "buff",
-      "persistent"
     ]
   },
   "Metadata/Items/Gem/SkillGemIncendiaryShot": {
@@ -1441,7 +2048,38 @@
       "area",
       "ammunition",
       "projectile",
-      "fire"
+      "fire",
+      "merging"
+    ]
+  },
+  "Metadata/Items/Gem/SkillGemIronWard": {
+    "display_name": "Iron Ward",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "strength",
+      "grants_active_skill",
+      "buff",
+      "persistent",
+      "area",
+      "physical",
+      "nova"
+    ]
+  },
+  "Metadata/Items/Gem/SkillGemLightlessStalker": {
+    "display_name": "[DNT] Lightless Stalker",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "grants_active_skill",
+      "minion",
+      "persistent"
     ]
   },
   "Metadata/Items/Gem/SkillGemLightningRod": {
@@ -1454,13 +2092,13 @@
     "tags": [
       "dexterity",
       "grants_active_skill",
-      "barrageable",
       "attack",
       "area",
       "projectile",
       "sustained",
       "lightning",
-      "duration"
+      "duration",
+      "barrageable"
     ]
   },
   "Metadata/Items/Gem/SkillGemLivingBombPlayer": {
@@ -1476,7 +2114,8 @@
       "spell",
       "area",
       "fire",
-      "duration"
+      "duration",
+      "remnant"
     ]
   },
   "Metadata/Items/Gem/SkillGemMagmaBarrier": {
@@ -1529,8 +2168,7 @@
       "buff",
       "persistent",
       "aura",
-      "duration",
-      "critical"
+      "duration"
     ]
   },
   "Metadata/Items/Gem/SkillGemManaDrain": {
@@ -1578,6 +2216,23 @@
       "conditional"
     ]
   },
+  "Metadata/Items/Gem/SkillGemMirageArcher": {
+    "display_name": "Mirage Archer",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "buff",
+      "dexterity",
+      "grants_active_skill",
+      "persistent",
+      "trigger",
+      "duration",
+      "meta"
+    ]
+  },
   "Metadata/Items/Gem/SkillGemMoltenBlast": {
     "display_name": "Molten Blast",
     "requirement_weights": {
@@ -1592,6 +2247,23 @@
       "area",
       "projectile",
       "fire"
+    ]
+  },
+  "Metadata/Items/Gem/SkillGemMortarCannon": {
+    "display_name": "Mortar Cannon",
+    "requirement_weights": {
+      "dexterity": 50,
+      "intelligence": 0,
+      "strength": 50
+    },
+    "tags": [
+      "strength",
+      "dexterity",
+      "grants_active_skill",
+      "totem",
+      "grenade",
+      "duration",
+      "meta"
     ]
   },
   "Metadata/Items/Gem/SkillGemOilGrenade": {
@@ -1659,7 +2331,6 @@
       "melee",
       "strike",
       "fire",
-      "duration",
       "channelling"
     ]
   },
@@ -1678,7 +2349,26 @@
       "area",
       "ammunition",
       "projectile",
-      "cold"
+      "cold",
+      "merging"
+    ]
+  },
+  "Metadata/Items/Gem/SkillGemPhantasmalArrow": {
+    "display_name": "Phantasmal Arrow",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "dexterity",
+      "grants_active_skill",
+      "attack",
+      "area",
+      "projectile",
+      "fire",
+      "duration",
+      "barrageable"
     ]
   },
   "Metadata/Items/Gem/SkillGemPinnacleOfPower": {
@@ -1832,9 +2522,9 @@
     },
     "tags": [
       "grants_active_skill",
-      "barrageable",
       "attack",
-      "projectile"
+      "projectile",
+      "barrageable"
     ]
   },
   "Metadata/Items/Gem/SkillGemPlayerDefaultClaw": {
@@ -1996,10 +2686,10 @@
     },
     "tags": [
       "grants_active_skill",
-      "barrageable",
       "attack",
       "area",
-      "projectile"
+      "projectile",
+      "barrageable"
     ]
   },
   "Metadata/Items/Gem/SkillGemPlayerDefaultSwordSword": {
@@ -2072,7 +2762,6 @@
     },
     "tags": [
       "grants_active_skill",
-      "barrageable",
       "spell",
       "area",
       "projectile",
@@ -2089,12 +2778,12 @@
     "tags": [
       "dexterity",
       "grants_active_skill",
-      "barrageable",
       "attack",
       "area",
       "projectile",
       "chaos",
-      "duration"
+      "duration",
+      "barrageable"
     ]
   },
   "Metadata/Items/Gem/SkillGemPrimalStrikes": {
@@ -2125,7 +2814,6 @@
     "tags": [
       "intelligence",
       "grants_active_skill",
-      "barrageable",
       "spell",
       "area",
       "chaos",
@@ -2163,8 +2851,7 @@
       "area",
       "melee",
       "strike",
-      "physical",
-      "travel"
+      "physical"
     ]
   },
   "Metadata/Items/Gem/SkillGemRapidShot": {
@@ -2184,6 +2871,24 @@
       "fire"
     ]
   },
+  "Metadata/Items/Gem/SkillGemRavenousSwarm": {
+    "display_name": "Ravenous Swarm",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "buff",
+      "intelligence",
+      "grants_active_skill",
+      "minion",
+      "persistent",
+      "physical",
+      "chaos",
+      "duration"
+    ]
+  },
   "Metadata/Items/Gem/SkillGemReapersInvocation": {
     "display_name": "Reaper's Invocation",
     "requirement_weights": {
@@ -2198,6 +2903,7 @@
       "buff",
       "persistent",
       "trigger",
+      "invocation",
       "meta"
     ]
   },
@@ -2303,25 +3009,6 @@
       "duration"
     ]
   },
-  "Metadata/Items/Gem/SkillGemShieldingCry": {
-    "display_name": "Shielding Cry",
-    "requirement_weights": {
-      "dexterity": 0,
-      "intelligence": 0,
-      "strength": 100
-    },
-    "tags": [
-      "strength",
-      "grants_active_skill",
-      "attack",
-      "warcry",
-      "area",
-      "melee",
-      "trigger",
-      "physical",
-      "duration"
-    ]
-  },
   "Metadata/Items/Gem/SkillGemShockburstRounds": {
     "display_name": "Shockburst Rounds",
     "requirement_weights": {
@@ -2351,13 +3038,13 @@
     "tags": [
       "dexterity",
       "grants_active_skill",
-      "barrageable",
       "attack",
       "area",
       "projectile",
       "lightning",
       "chaining",
-      "payoff"
+      "payoff",
+      "barrageable"
     ]
   },
   "Metadata/Items/Gem/SkillGemSiegeCascade": {
@@ -2375,9 +3062,25 @@
       "area",
       "ammunition",
       "projectile",
-      "sustained",
+      "sustained"
+    ]
+  },
+  "Metadata/Items/Gem/SkillGemSiphonElements": {
+    "display_name": "Siphon Elements",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "intelligence",
+      "grants_active_skill",
+      "buff",
+      "persistent",
+      "lightning",
+      "cold",
       "fire",
-      "payoff"
+      "remnant"
     ]
   },
   "Metadata/Items/Gem/SkillGemSiphoningStrike": {
@@ -2409,11 +3112,13 @@
     "tags": [
       "dexterity",
       "grants_active_skill",
-      "barrageable",
       "attack",
       "area",
       "projectile",
-      "channelling"
+      "cold",
+      "channelling",
+      "payoff",
+      "barrageable"
     ]
   },
   "Metadata/Items/Gem/SkillGemSolarOrb": {
@@ -2434,6 +3139,22 @@
       "orb"
     ]
   },
+  "Metadata/Items/Gem/SkillGemSoulLink": {
+    "display_name": "[DNT] Soul Link",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "intelligence",
+      "grants_active_skill",
+      "link",
+      "spell",
+      "buff",
+      "duration"
+    ]
+  },
   "Metadata/Items/Gem/SkillGemSoulOffering": {
     "display_name": "Soul Offering",
     "requirement_weights": {
@@ -2447,25 +3168,6 @@
       "minion",
       "buff",
       "duration"
-    ]
-  },
-  "Metadata/Items/Gem/SkillGemSpearDischarge": {
-    "display_name": "[DNT] Spear Discharge",
-    "requirement_weights": {
-      "dexterity": 100,
-      "intelligence": 0,
-      "strength": 0
-    },
-    "tags": [
-      "dexterity",
-      "grants_active_skill",
-      "attack",
-      "area",
-      "projectile",
-      "lightning",
-      "cold",
-      "fire",
-      "conditional"
     ]
   },
   "Metadata/Items/Gem/SkillGemSpearOfSolaris": {
@@ -2487,7 +3189,7 @@
     ]
   },
   "Metadata/Items/Gem/SkillGemSpearWindVortex": {
-    "display_name": "[DNT] Spear Vortex",
+    "display_name": "[DNT-UNUSED] Spear Vortex",
     "requirement_weights": {
       "dexterity": 100,
       "intelligence": 0,
@@ -2499,6 +3201,23 @@
       "attack",
       "area",
       "melee"
+    ]
+  },
+  "Metadata/Items/Gem/SkillGemSpellslinger": {
+    "display_name": "Spellslinger",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "intelligence",
+      "grants_active_skill",
+      "buff",
+      "persistent",
+      "trigger",
+      "invocation",
+      "meta"
     ]
   },
   "Metadata/Items/Gem/SkillGemStampede": {
@@ -2529,13 +3248,13 @@
     "tags": [
       "dexterity",
       "grants_active_skill",
-      "barrageable",
       "attack",
       "area",
       "projectile",
       "sustained",
       "lightning",
-      "duration"
+      "duration",
+      "barrageable"
     ]
   },
   "Metadata/Items/Gem/SkillGemStormWave": {
@@ -2584,12 +3303,12 @@
     "tags": [
       "dexterity",
       "grants_active_skill",
-      "barrageable",
       "attack",
       "area",
       "projectile",
       "lightning",
-      "duration"
+      "duration",
+      "barrageable"
     ]
   },
   "Metadata/Items/Gem/SkillGemTameBeast": {
@@ -2624,7 +3343,6 @@
       "melee",
       "sustained",
       "duration",
-      "nova",
       "conditional"
     ]
   },
@@ -2651,11 +3369,12 @@
     "display_name": "Time of Need",
     "requirement_weights": {
       "dexterity": 0,
-      "intelligence": 0,
-      "strength": 100
+      "intelligence": 25,
+      "strength": 75
     },
     "tags": [
       "strength",
+      "intelligence",
       "grants_active_skill",
       "buff",
       "persistent",
@@ -2672,11 +3391,29 @@
     "tags": [
       "dexterity",
       "grants_active_skill",
-      "barrageable",
       "attack",
       "area",
       "projectile",
       "physical",
+      "duration",
+      "barrageable"
+    ]
+  },
+  "Metadata/Items/Gem/SkillGemToxicDomain": {
+    "display_name": "Toxic Domain",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "buff",
+      "dexterity",
+      "grants_active_skill",
+      "attack",
+      "area",
+      "physical",
+      "chaos",
       "duration"
     ]
   },
@@ -2693,11 +3430,38 @@
       "attack",
       "area",
       "projectile",
-      "chaos"
+      "chaos",
+      "barrageable"
+    ]
+  },
+  "Metadata/Items/Gem/SkillGemTriggeredAbyssalApparition": {
+    "display_name": "Abyssal Apparition",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "grants_active_skill",
+      "spell"
+    ]
+  },
+  "Metadata/Items/Gem/SkillGemTriggeredCausticCloud": {
+    "display_name": "[DNT] Caustic Cloud",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "grants_active_skill",
+      "area",
+      "chaos",
+      "duration"
     ]
   },
   "Metadata/Items/Gem/SkillGemTriggeredDetonation": {
-    "display_name": "[DNT] Detonation",
+    "display_name": "[DNT-UNUSED] Detonation",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -2708,23 +3472,8 @@
       "area"
     ]
   },
-  "Metadata/Items/Gem/SkillGemTriggeredDoubleVision": {
-    "display_name": "Gemini Infusion",
-    "requirement_weights": {
-      "dexterity": 0,
-      "intelligence": 0,
-      "strength": 0
-    },
-    "tags": [
-      "grants_active_skill",
-      "attack",
-      "area",
-      "cold",
-      "fire"
-    ]
-  },
   "Metadata/Items/Gem/SkillGemTriggeredGasCloud": {
-    "display_name": "[DNT] Gas Cloud",
+    "display_name": "[DNT-UNUSED] Gas Cloud",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -2739,12 +3488,13 @@
   "Metadata/Items/Gem/SkillGemTrinity": {
     "display_name": "Trinity",
     "requirement_weights": {
-      "dexterity": 100,
-      "intelligence": 0,
+      "dexterity": 50,
+      "intelligence": 50,
       "strength": 0
     },
     "tags": [
       "dexterity",
+      "intelligence",
       "grants_active_skill",
       "buff",
       "persistent",
@@ -2763,11 +3513,11 @@
     "tags": [
       "dexterity",
       "grants_active_skill",
-      "barrageable",
       "attack",
       "area",
       "projectile",
-      "duration"
+      "duration",
+      "barrageable"
     ]
   },
   "Metadata/Items/Gem/SkillGemUnearth": {
@@ -2780,7 +3530,6 @@
     "tags": [
       "intelligence",
       "grants_active_skill",
-      "barrageable",
       "spell",
       "minion",
       "area",
@@ -2798,7 +3547,6 @@
     "tags": [
       "intelligence",
       "grants_active_skill",
-      "barrageable",
       "spell",
       "area",
       "lightning"
@@ -2814,7 +3562,6 @@
     "tags": [
       "intelligence",
       "grants_active_skill",
-      "barrageable",
       "spell",
       "area",
       "projectile",
@@ -2832,10 +3579,10 @@
     "tags": [
       "intelligence",
       "grants_active_skill",
-      "barrageable",
       "spell",
       "projectile",
       "lightning",
+      "cold",
       "duration"
     ]
   },
@@ -2865,7 +3612,10 @@
       "area",
       "melee",
       "slam",
-      "travel"
+      "physical",
+      "duration",
+      "travel",
+      "payoff"
     ]
   },
   "Metadata/Items/Gem/SkillGemVineArrow": {
@@ -2878,12 +3628,12 @@
     "tags": [
       "dexterity",
       "grants_active_skill",
-      "barrageable",
       "attack",
       "area",
       "projectile",
       "chaos",
-      "duration"
+      "duration",
+      "barrageable"
     ]
   },
   "Metadata/Items/Gem/SkillGemVoltaicMark": {
@@ -2894,16 +3644,13 @@
       "strength": 0
     },
     "tags": [
+      "mark",
       "dexterity",
       "grants_active_skill",
-      "barrageable",
-      "spell",
       "attack",
       "area",
-      "mark",
       "lightning",
-      "duration",
-      "nova"
+      "duration"
     ]
   },
   "Metadata/Items/Gem/SkillGemWarBanner": {
@@ -2922,7 +3669,8 @@
       "persistent",
       "area",
       "aura",
-      "duration"
+      "duration",
+      "conditional"
     ]
   },
   "Metadata/Items/Gem/SkillGemWhirlwindLance": {
@@ -2935,11 +3683,11 @@
     "tags": [
       "dexterity",
       "grants_active_skill",
-      "barrageable",
       "attack",
       "area",
       "projectile",
-      "duration"
+      "duration",
+      "barrageable"
     ]
   },
   "Metadata/Items/Gem/SkillGemWindDancer": {
@@ -3007,7 +3755,7 @@
     ]
   },
   "Metadata/Items/Gem/SupportGemAblation": {
-    "display_name": "Ablation",
+    "display_name": "Sacrificial Offering",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 100,
@@ -3029,7 +3777,7 @@
     ]
   },
   "Metadata/Items/Gem/SupportGemAdhere": {
-    "display_name": "Adhere",
+    "display_name": "Adhesive Grenades I",
     "requirement_weights": {
       "dexterity": 100,
       "intelligence": 0,
@@ -3040,8 +3788,45 @@
       "grenade"
     ]
   },
+  "Metadata/Items/Gem/SupportGemAdhereThree": {
+    "display_name": "Adhesive Grenades III",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "grenade"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemAdhereTwo": {
+    "display_name": "Adhesive Grenades II",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "grenade"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemAdmixture": {
+    "display_name": "Admixture",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "physical",
+      "chaos"
+    ]
+  },
   "Metadata/Items/Gem/SupportGemAilmentCDR": {
-    "display_name": "[DNT] Ailment CDR",
+    "display_name": "[DNT-UNUSED] Ailment CDR",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 100,
@@ -3052,7 +3837,7 @@
     ]
   },
   "Metadata/Items/Gem/SupportGemAlignment": {
-    "display_name": "Alignment",
+    "display_name": "Alignment I",
     "requirement_weights": {
       "dexterity": 100,
       "intelligence": 0,
@@ -3062,6 +3847,46 @@
       "support",
       "attack",
       "projectile"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemAlignmentThree": {
+    "display_name": "Alignment III",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "attack",
+      "projectile"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemAlignmentTwo": {
+    "display_name": "Alignment II",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "attack",
+      "projectile"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemAmanamusTithe": {
+    "display_name": "Amanamu's Tithe",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "lineage",
+      "minion",
+      "persistent"
     ]
   },
   "Metadata/Items/Gem/SupportGemAmbrosia": {
@@ -3076,14 +3901,56 @@
     ]
   },
   "Metadata/Items/Gem/SupportGemAmmoConservation": {
-    "display_name": "Ammo Conservation",
+    "display_name": "Ammo Conservation I",
     "requirement_weights": {
       "dexterity": 100,
       "intelligence": 0,
       "strength": 0
     },
     "tags": [
-      "support"
+      "support",
+      "ammunition",
+      "projectile"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemAmmoConservationFour": {
+    "display_name": "Arjun's Medal",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "lineage",
+      "ammunition",
+      "projectile"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemAmmoConservationThree": {
+    "display_name": "Ammo Conservation III",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "ammunition",
+      "projectile"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemAmmoConservationTwo": {
+    "display_name": "Ammo Conservation II",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "ammunition",
+      "projectile"
     ]
   },
   "Metadata/Items/Gem/SupportGemAncestralAid": {
@@ -3102,7 +3969,35 @@
     ]
   },
   "Metadata/Items/Gem/SupportGemAncestralCall": {
-    "display_name": "Ancestral Call",
+    "display_name": "Ancestral Call I",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "attack",
+      "melee",
+      "strike"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemAncestralCallThree": {
+    "display_name": "Ancestral Call III",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "attack",
+      "melee",
+      "strike"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemAncestralCallTwo": {
+    "display_name": "Ancestral Call II",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -3116,7 +4011,7 @@
     ]
   },
   "Metadata/Items/Gem/SupportGemAncestralUrgency": {
-    "display_name": "Ancestral Urgency",
+    "display_name": "Urgent Totems I",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -3125,6 +4020,56 @@
     "tags": [
       "support",
       "totem"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemAncestralUrgencyThree": {
+    "display_name": "Urgent Totems III",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "totem"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemAncestralUrgencyTwo": {
+    "display_name": "Urgent Totems II",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "totem"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemArakaalisLust": {
+    "display_name": "Arakaali's Lust",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "lineage"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemArbitersIgnition": {
+    "display_name": "Arbiter's Ignition",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "lineage",
+      "spell",
+      "fire"
     ]
   },
   "Metadata/Items/Gem/SupportGemArmourExplosion": {
@@ -3166,6 +4111,19 @@
       "support"
     ]
   },
+  "Metadata/Items/Gem/SupportGemAtzirisAllure": {
+    "display_name": "Atziri's Allure",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "lineage",
+      "curse"
+    ]
+  },
   "Metadata/Items/Gem/SupportGemAutoReload": {
     "display_name": "Auto Reload",
     "requirement_weights": {
@@ -3174,11 +4132,41 @@
       "strength": 100
     },
     "tags": [
-      "support"
+      "support",
+      "ammunition",
+      "projectile"
     ]
   },
   "Metadata/Items/Gem/SupportGemBarbs": {
-    "display_name": "Barbs",
+    "display_name": "Barbs I",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "attack",
+      "melee",
+      "strike"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemBarbsThree": {
+    "display_name": "Barbs III",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "attack",
+      "melee",
+      "strike"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemBarbsTwo": {
+    "display_name": "Barbs II",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -3209,7 +4197,33 @@
     ]
   },
   "Metadata/Items/Gem/SupportGemBidding": {
-    "display_name": "Bidding",
+    "display_name": "Bidding I",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "command",
+      "minion"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemBiddingThree": {
+    "display_name": "Bidding III",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "command",
+      "minion"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemBiddingTwo": {
+    "display_name": "Bidding II",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 100,
@@ -3229,12 +4243,11 @@
       "strength": 0
     },
     "tags": [
-      "support",
-      "critical"
+      "support"
     ]
   },
   "Metadata/Items/Gem/SupportGemBlockCDR": {
-    "display_name": "[DNT] Block CDR",
+    "display_name": "[DNT-UNUSED] Block CDR",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 100,
@@ -3245,7 +4258,7 @@
     ]
   },
   "Metadata/Items/Gem/SupportGemBloodintheEyes": {
-    "display_name": "Blood in the Eyes",
+    "display_name": "Hobble",
     "requirement_weights": {
       "dexterity": 100,
       "intelligence": 0,
@@ -3271,6 +4284,50 @@
       "physical"
     ]
   },
+  "Metadata/Items/Gem/SupportGemBrambleslam": {
+    "display_name": "Brambleslam",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "grants_active_skill",
+      "attack",
+      "area",
+      "melee",
+      "slam",
+      "physical",
+      "hazard"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemBranchingFissures": {
+    "display_name": "Branching Fissures I",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "attack",
+      "melee"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemBranchingFissuresTwo": {
+    "display_name": "Branching Fissures II",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "attack",
+      "melee"
+    ]
+  },
   "Metadata/Items/Gem/SupportGemBreakEndurance": {
     "display_name": "Break Endurance",
     "requirement_weights": {
@@ -3283,7 +4340,20 @@
     ]
   },
   "Metadata/Items/Gem/SupportGemBrink": {
-    "display_name": "Brink",
+    "display_name": "Brink I",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "attack",
+      "melee"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemBrinkTwo": {
+    "display_name": "Brink II",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -3296,7 +4366,19 @@
     ]
   },
   "Metadata/Items/Gem/SupportGemBurgeon": {
-    "display_name": "Burgeon",
+    "display_name": "Burgeon I",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "channelling"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemBurgeonTwo": {
+    "display_name": "Burgeon II",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 100,
@@ -3333,13 +4415,12 @@
       "area",
       "projectile",
       "trigger",
-      "physical",
       "duration",
       "hazard"
     ]
   },
   "Metadata/Items/Gem/SupportGemCapacitor": {
-    "display_name": "Capacitor",
+    "display_name": "Energy Capacitor",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 100,
@@ -3377,7 +4458,20 @@
     ]
   },
   "Metadata/Items/Gem/SupportGemChargedShots": {
-    "display_name": "Charged Shots",
+    "display_name": "Charged Shots I",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "attack",
+      "projectile"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemChargedShotsTwo": {
+    "display_name": "Charged Shots II",
     "requirement_weights": {
       "dexterity": 100,
       "intelligence": 0,
@@ -3413,6 +4507,20 @@
       "melee"
     ]
   },
+  "Metadata/Items/Gem/SupportGemCombatReload": {
+    "display_name": "Ratha's Assault",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "lineage",
+      "ammunition",
+      "projectile"
+    ]
+  },
   "Metadata/Items/Gem/SupportGemCommandment": {
     "display_name": "Commandment",
     "requirement_weights": {
@@ -3438,7 +4546,18 @@
     ]
   },
   "Metadata/Items/Gem/SupportGemConcoct": {
-    "display_name": "Concoct",
+    "display_name": "Concoct I",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemConcoctTwo": {
+    "display_name": "Concoct II",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -3497,6 +4616,23 @@
       "channelling"
     ]
   },
+  "Metadata/Items/Gem/SupportGemCrater": {
+    "display_name": "Crater",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "grants_active_skill",
+      "attack",
+      "area",
+      "melee",
+      "fire",
+      "duration"
+    ]
+  },
   "Metadata/Items/Gem/SupportGemCrazedMinions": {
     "display_name": "Crazed Minions",
     "requirement_weights": {
@@ -3510,8 +4646,31 @@
       "persistent"
     ]
   },
+  "Metadata/Items/Gem/SupportGemCrystallineShards": {
+    "display_name": "Crystalline Shards",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "support"
+    ]
+  },
   "Metadata/Items/Gem/SupportGemCullingStrike": {
-    "display_name": "Culling Strike",
+    "display_name": "Culling Strike I",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "attack"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemCullingStrikeTwo": {
+    "display_name": "Culling Strike II",
     "requirement_weights": {
       "dexterity": 100,
       "intelligence": 0,
@@ -3523,7 +4682,21 @@
     ]
   },
   "Metadata/Items/Gem/SupportGemCulmination": {
-    "display_name": "Culmination",
+    "display_name": "Culmination I",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "attack",
+      "melee",
+      "conditional"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemCulminationTwo": {
+    "display_name": "Culmination II",
     "requirement_weights": {
       "dexterity": 100,
       "intelligence": 0,
@@ -3544,7 +4717,8 @@
       "strength": 0
     },
     "tags": [
-      "support"
+      "support",
+      "curse"
     ]
   },
   "Metadata/Items/Gem/SupportGemDanseMacabre": {
@@ -3556,6 +4730,19 @@
     },
     "tags": [
       "support"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemDaressosPassion": {
+    "display_name": "Daresso's Passion",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "banner",
+      "lineage"
     ]
   },
   "Metadata/Items/Gem/SupportGemDauntless": {
@@ -3621,7 +4808,19 @@
     ]
   },
   "Metadata/Items/Gem/SupportGemDefy": {
-    "display_name": "Defy",
+    "display_name": "Defy I",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "attack"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemDefyTwo": {
+    "display_name": "Defy II",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -3690,8 +4889,33 @@
       "melee"
     ]
   },
+  "Metadata/Items/Gem/SupportGemDiallasDesire": {
+    "display_name": "Dialla's Desire",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "lineage"
+    ]
+  },
   "Metadata/Items/Gem/SupportGemDireStrike": {
-    "display_name": "Direstrike",
+    "display_name": "Direstrike I",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "buff",
+      "persistent"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemDireStrikeTwo": {
+    "display_name": "Direstrike II",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -3704,7 +4928,7 @@
     ]
   },
   "Metadata/Items/Gem/SupportGemDissipate": {
-    "display_name": "Dissipate",
+    "display_name": "Harmonic Remnants I",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 100,
@@ -3715,8 +4939,59 @@
       "remnant"
     ]
   },
+  "Metadata/Items/Gem/SupportGemDissipateTwo": {
+    "display_name": "Harmonic Remnants II",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "remnant"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemDoedresUndoing": {
+    "display_name": "Doedre's Undoing",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "grants_active_skill",
+      "lineage",
+      "area",
+      "chaos",
+      "curse",
+      "hazard"
+    ]
+  },
   "Metadata/Items/Gem/SupportGemDomain": {
-    "display_name": "Domain",
+    "display_name": "Persistent Ground I",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemDomainThree": {
+    "display_name": "Persistent Ground III",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemDomainTwo": {
+    "display_name": "Persistent Ground II",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -3727,11 +5002,50 @@
     ]
   },
   "Metadata/Items/Gem/SupportGemDoubleBarrel": {
-    "display_name": "Double Barrel",
+    "display_name": "Double Barrel I",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
       "strength": 100
+    },
+    "tags": [
+      "support",
+      "ammunition",
+      "projectile"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemDoubleBarrelThree": {
+    "display_name": "Double Barrel III",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "ammunition",
+      "projectile"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemDoubleBarrelTwo": {
+    "display_name": "Double Barrel II",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "ammunition",
+      "projectile"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemDurability": {
+    "display_name": "Durability",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
     },
     "tags": [
       "support"
@@ -3749,6 +5063,28 @@
       "cold"
     ]
   },
+  "Metadata/Items/Gem/SupportGemEnduringImpact": {
+    "display_name": "Enduring Impact I",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemEnduringImpactTwo": {
+    "display_name": "Enduring Impact II",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support"
+    ]
+  },
   "Metadata/Items/Gem/SupportGemEnergyRetention": {
     "display_name": "Energy Retention",
     "requirement_weights": {
@@ -3762,7 +5098,7 @@
     ]
   },
   "Metadata/Items/Gem/SupportGemEnormity": {
-    "display_name": "Enormity",
+    "display_name": "Hulking Minions",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 100,
@@ -3774,8 +5110,20 @@
       "persistent"
     ]
   },
+  "Metadata/Items/Gem/SupportGemEshsRadiance": {
+    "display_name": "Esh's Radiance",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "lineage"
+    ]
+  },
   "Metadata/Items/Gem/SupportGemEternalService": {
-    "display_name": "[DNT] Eternal Service",
+    "display_name": "[DNT-UNUSED] Eternal Service",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 100,
@@ -3834,7 +5182,18 @@
     ]
   },
   "Metadata/Items/Gem/SupportGemExpedite": {
-    "display_name": "Expedite",
+    "display_name": "Short Fuse I",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemExpediteTwo": {
+    "display_name": "Short Fuse II",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -3868,7 +5227,7 @@
     ]
   },
   "Metadata/Items/Gem/SupportGemFigurehead": {
-    "display_name": "Figurehead",
+    "display_name": "Selfless Remnants",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -3890,6 +5249,20 @@
       "support",
       "attack",
       "physical"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemFlamePillar": {
+    "display_name": "Flame Pillar",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "grants_active_skill",
+      "area",
+      "fire"
     ]
   },
   "Metadata/Items/Gem/SupportGemFlamepierce": {
@@ -3928,6 +5301,19 @@
       "trigger"
     ]
   },
+  "Metadata/Items/Gem/SupportGemFlukeTwo": {
+    "display_name": "Ixchel's Torment",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "lineage",
+      "trigger"
+    ]
+  },
   "Metadata/Items/Gem/SupportGemFocusedCurse": {
     "display_name": "Focused Curse",
     "requirement_weights": {
@@ -3954,7 +5340,7 @@
     ]
   },
   "Metadata/Items/Gem/SupportGemFreshClip": {
-    "display_name": "Fresh Clip",
+    "display_name": "Fresh Clip I",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -3964,8 +5350,35 @@
       "support"
     ]
   },
+  "Metadata/Items/Gem/SupportGemFreshClipTwo": {
+    "display_name": "Fresh Clip II",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemFromTheGrave": {
+    "display_name": "[DNT] From the Grave",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "grants_active_skill",
+      "minion",
+      "area",
+      "projectile",
+      "cold"
+    ]
+  },
   "Metadata/Items/Gem/SupportGemFrosthunger": {
-    "display_name": "[DNT] Frosthunger",
+    "display_name": "[DNT-UNUSED] Frosthunger",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 100,
@@ -3973,6 +5386,21 @@
     },
     "tags": [
       "support"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemFrozenSpite": {
+    "display_name": "Frozen Spite",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "grants_active_skill",
+      "area",
+      "projectile",
+      "cold"
     ]
   },
   "Metadata/Items/Gem/SupportGemGambleshot": {
@@ -3987,6 +5415,20 @@
       "projectile"
     ]
   },
+  "Metadata/Items/Gem/SupportGemGarukhansResolve": {
+    "display_name": "Garukhan's Resolve",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "lineage",
+      "attack",
+      "conditional"
+    ]
+  },
   "Metadata/Items/Gem/SupportGemGlacier": {
     "display_name": "Glacier",
     "requirement_weights": {
@@ -3999,7 +5441,7 @@
     ]
   },
   "Metadata/Items/Gem/SupportGemGreatwood": {
-    "display_name": "Greatwood",
+    "display_name": "Greatwood I",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -4008,6 +5450,44 @@
     "tags": [
       "support",
       "totem"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemGreatwoodTwo": {
+    "display_name": "Greatwood II",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "totem"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemGroundingShocks": {
+    "display_name": "[DNT] GroundingShocks",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "grants_active_skill",
+      "spell",
+      "area",
+      "lightning"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemGrudge": {
+    "display_name": "Relentless Rage",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support"
     ]
   },
   "Metadata/Items/Gem/SupportGemHaemocrystals": {
@@ -4023,6 +5503,46 @@
       "attack",
       "area",
       "physical"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemHardyTotems": {
+    "display_name": "Hardy Totems I",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "totem"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemHardyTotemsThree": {
+    "display_name": "Tawhoa's Tending",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "grants_active_skill",
+      "lineage",
+      "totem",
+      "area",
+      "physical"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemHardyTotemsTwo": {
+    "display_name": "Hardy Totems II",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "totem"
     ]
   },
   "Metadata/Items/Gem/SupportGemHeft": {
@@ -4117,7 +5637,18 @@
     ]
   },
   "Metadata/Items/Gem/SupportGemImpetus": {
-    "display_name": "Impetus",
+    "display_name": "Boundless Energy I",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "support"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemImpetusTwo": {
+    "display_name": "Boundless Energy II",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 100,
@@ -4180,7 +5711,7 @@
     ]
   },
   "Metadata/Items/Gem/SupportGemInterlude": {
-    "display_name": "Interlude",
+    "display_name": "Remnant Potency I",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -4191,8 +5722,59 @@
       "remnant"
     ]
   },
+  "Metadata/Items/Gem/SupportGemInterludeThree": {
+    "display_name": "Remnant Potency III",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "remnant"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemInterludeTwo": {
+    "display_name": "Remnant Potency II",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "remnant"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemIronGrip": {
+    "display_name": "[DNT] Iron Grip",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "attack",
+      "melee",
+      "projectile"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemIronWill": {
+    "display_name": "[DNT] Iron Will",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "spell",
+      "melee"
+    ]
+  },
   "Metadata/Items/Gem/SupportGemIronwood": {
-    "display_name": "Ironwood",
+    "display_name": "Reinforced Totems I",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -4201,6 +5783,68 @@
     "tags": [
       "support",
       "totem"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemIronwoodTwo": {
+    "display_name": "Reinforced Totems II",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "totem"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemKalisasCrescendo": {
+    "display_name": "Kalisa's Crescendo",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "lineage"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemKaomsMadness": {
+    "display_name": "Kaom's Madness",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "lineage",
+      "attack",
+      "melee"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemKulemaksDominion": {
+    "display_name": "Kulemak's Dominion",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "lineage"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemKurgalsLeash": {
+    "display_name": "Kurgal's Leash",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "lineage"
     ]
   },
   "Metadata/Items/Gem/SupportGemLastGasp": {
@@ -4229,7 +5873,7 @@
     ]
   },
   "Metadata/Items/Gem/SupportGemLingeringPresence": {
-    "display_name": "[DNT] Lingering Presence",
+    "display_name": "[DNT-UNUSED] Lingering Presence",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -4239,16 +5883,56 @@
       "support"
     ]
   },
+  "Metadata/Items/Gem/SupportGemLivingLightning": {
+    "display_name": "Living Lightning",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "grants_active_skill",
+      "minion",
+      "lightning",
+      "duration"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemLivingLightningTwo": {
+    "display_name": "Living Lightning II",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "grants_active_skill",
+      "minion",
+      "lightning",
+      "duration"
+    ]
+  },
   "Metadata/Items/Gem/SupportGemLongFuse": {
-    "display_name": "Long Fuse",
+    "display_name": "Long Fuse I",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
       "strength": 100
     },
     "tags": [
-      "support",
-      "grenade"
+      "support"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemLongFuseTwo": {
+    "display_name": "Long Fuse II",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support"
     ]
   },
   "Metadata/Items/Gem/SupportGemLoyalty": {
@@ -4264,7 +5948,7 @@
     ]
   },
   "Metadata/Items/Gem/SupportGemMagnetism": {
-    "display_name": "Magnetism",
+    "display_name": "Magnetic Remnants",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 100,
@@ -4299,7 +5983,7 @@
     ]
   },
   "Metadata/Items/Gem/SupportGemMinionPact": {
-    "display_name": "Minion Pact",
+    "display_name": "Minion Pact I",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 100,
@@ -4308,6 +5992,29 @@
     "tags": [
       "support",
       "minion"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemMinionPactTwo": {
+    "display_name": "Minion Pact II",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "minion"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemMunitions": {
+    "display_name": "[DNT] Munitions",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support"
     ]
   },
   "Metadata/Items/Gem/SupportGemMuster": {
@@ -4323,7 +6030,20 @@
     ]
   },
   "Metadata/Items/Gem/SupportGemMysticism": {
-    "display_name": "Mysticism",
+    "display_name": "Mysticism I",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "buff",
+      "persistent"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemMysticismTwo": {
+    "display_name": "Mysticism II",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 100,
@@ -4355,7 +6075,9 @@
       "strength": 0
     },
     "tags": [
-      "support"
+      "support",
+      "ammunition",
+      "projectile"
     ]
   },
   "Metadata/Items/Gem/SupportGemOutmaneuver": {
@@ -4379,19 +6101,7 @@
     },
     "tags": [
       "support",
-      "attack",
-      "critical"
-    ]
-  },
-  "Metadata/Items/Gem/SupportGemOverwhelmingForce": {
-    "display_name": "[DNT] Overwhelming Force",
-    "requirement_weights": {
-      "dexterity": 0,
-      "intelligence": 0,
-      "strength": 100
-    },
-    "tags": [
-      "support"
+      "attack"
     ]
   },
   "Metadata/Items/Gem/SupportGemPayload": {
@@ -4406,6 +6116,18 @@
       "grenade"
     ]
   },
+  "Metadata/Items/Gem/SupportGemPerfectedEndurance": {
+    "display_name": "Perfected Endurance",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "channelling"
+    ]
+  },
   "Metadata/Items/Gem/SupportGemPerfection": {
     "display_name": "Perfection",
     "requirement_weights": {
@@ -4415,6 +6137,18 @@
     },
     "tags": [
       "support"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemPietysMercy": {
+    "display_name": "Piety's Mercy",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "lineage"
     ]
   },
   "Metadata/Items/Gem/SupportGemPotential": {
@@ -4443,7 +6177,19 @@
     ]
   },
   "Metadata/Items/Gem/SupportGemProfanity": {
-    "display_name": "Profanity",
+    "display_name": "Profanity I",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "chaos"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemProfanityTwo": {
+    "display_name": "Profanity II",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 100,
@@ -4468,7 +6214,33 @@
     ]
   },
   "Metadata/Items/Gem/SupportGemPursuit": {
-    "display_name": "Pursuit",
+    "display_name": "Pursuit I",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "attack",
+      "melee"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemPursuitThree": {
+    "display_name": "Pursuit III",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "attack",
+      "melee"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemPursuitTwo": {
+    "display_name": "Pursuit II",
     "requirement_weights": {
       "dexterity": 100,
       "intelligence": 0,
@@ -4498,7 +6270,18 @@
     ]
   },
   "Metadata/Items/Gem/SupportGemRageforged": {
-    "display_name": "Rageforged",
+    "display_name": "Rageforged I",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemRageforgedTwo": {
+    "display_name": "Rageforged II",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -4520,6 +6303,18 @@
       "warcry"
     ]
   },
+  "Metadata/Items/Gem/SupportGemRakiatasFlow": {
+    "display_name": "Rakiata's Flow",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "lineage"
+    ]
+  },
   "Metadata/Items/Gem/SupportGemRally": {
     "display_name": "Rally",
     "requirement_weights": {
@@ -4534,7 +6329,7 @@
     ]
   },
   "Metadata/Items/Gem/SupportGemReach": {
-    "display_name": "Reach",
+    "display_name": "Overreach",
     "requirement_weights": {
       "dexterity": 100,
       "intelligence": 0,
@@ -4547,7 +6342,19 @@
     ]
   },
   "Metadata/Items/Gem/SupportGemRearm": {
-    "display_name": "Rearm",
+    "display_name": "Rearm I",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "hazard"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemRearmTwo": {
+    "display_name": "Rearm II",
     "requirement_weights": {
       "dexterity": 100,
       "intelligence": 0,
@@ -4559,7 +6366,33 @@
     ]
   },
   "Metadata/Items/Gem/SupportGemRefraction": {
-    "display_name": "Refraction",
+    "display_name": "Refraction I",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "buff",
+      "persistent"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemRefractionThree": {
+    "display_name": "Refraction III",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "buff",
+      "persistent"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemRefractionTwo": {
+    "display_name": "Refraction II",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -4572,7 +6405,20 @@
     ]
   },
   "Metadata/Items/Gem/SupportGemRetaliate": {
-    "display_name": "Retaliate",
+    "display_name": "Retaliate I",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "attack",
+      "melee"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemRetaliateTwo": {
+    "display_name": "Retaliate II",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -4585,7 +6431,7 @@
     ]
   },
   "Metadata/Items/Gem/SupportGemRetort": {
-    "display_name": "Retort",
+    "display_name": "Frenzied Riposte",
     "requirement_weights": {
       "dexterity": 100,
       "intelligence": 0,
@@ -4597,7 +6443,31 @@
     ]
   },
   "Metadata/Items/Gem/SupportGemRetreat": {
-    "display_name": "Retreat",
+    "display_name": "Retreat I",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "projectile"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemRetreatThree": {
+    "display_name": "Retreat III",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "projectile"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemRetreatTwo": {
+    "display_name": "Retreat II",
     "requirement_weights": {
       "dexterity": 100,
       "intelligence": 0,
@@ -4623,7 +6493,7 @@
     ]
   },
   "Metadata/Items/Gem/SupportGemRicochet": {
-    "display_name": "Ricochet",
+    "display_name": "Ricochet I",
     "requirement_weights": {
       "dexterity": 100,
       "intelligence": 0,
@@ -4632,6 +6502,43 @@
     "tags": [
       "support",
       "projectile"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemRicochetThree": {
+    "display_name": "Ricochet III",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "projectile"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemRicochetTwo": {
+    "display_name": "Ricochet II",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "projectile"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemRigwaldsFerocity": {
+    "display_name": "Rigwald's Ferocity",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "lineage",
+      "attack"
     ]
   },
   "Metadata/Items/Gem/SupportGemRime": {
@@ -4674,6 +6581,19 @@
       "curse"
     ]
   },
+  "Metadata/Items/Gem/SupportGemRomirasRequital": {
+    "display_name": "Romira's Requital",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "lineage",
+      "minion"
+    ]
+  },
   "Metadata/Items/Gem/SupportGemRupture": {
     "display_name": "Rupture",
     "requirement_weights": {
@@ -4698,7 +6618,19 @@
     ]
   },
   "Metadata/Items/Gem/SupportGemSacrificialLamb": {
-    "display_name": "Sacrificial Lamb",
+    "display_name": "Sacrificial Lamb I",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "minion"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemSacrificialLambTwo": {
+    "display_name": "Sacrificial Lamb II",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 100,
@@ -4748,8 +6680,23 @@
       "duration"
     ]
   },
+  "Metadata/Items/Gem/SupportGemShockingRift": {
+    "display_name": "[DNT] Shocking Rift",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "grants_active_skill",
+      "area",
+      "sustained",
+      "lightning"
+    ]
+  },
   "Metadata/Items/Gem/SupportGemSingleOut": {
-    "display_name": "Single Out",
+    "display_name": "Mark for Death",
     "requirement_weights": {
       "dexterity": 100,
       "intelligence": 0,
@@ -4759,6 +6706,36 @@
       "support",
       "mark",
       "physical"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemSkitteringStone": {
+    "display_name": "Skittering Stone I",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "grants_active_skill",
+      "minion",
+      "physical",
+      "duration"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemSkitteringStoneTwo": {
+    "display_name": "Skittering Stone II",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "grants_active_skill",
+      "minion",
+      "physical",
+      "duration"
     ]
   },
   "Metadata/Items/Gem/SupportGemSoulbreaker": {
@@ -4789,7 +6766,7 @@
     ]
   },
   "Metadata/Items/Gem/SupportGemSpectralPalm": {
-    "display_name": "[DNT] Spectral Palm",
+    "display_name": "[DNT-UNUSED] Spectral Palm",
     "requirement_weights": {
       "dexterity": 100,
       "intelligence": 0,
@@ -4824,7 +6801,7 @@
     ]
   },
   "Metadata/Items/Gem/SupportGemSpellblade": {
-    "display_name": "[DNT] Spellblade",
+    "display_name": "[DNT-UNUSED] Spellblade",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 100,
@@ -4835,7 +6812,7 @@
     ]
   },
   "Metadata/Items/Gem/SupportGemSteadfast": {
-    "display_name": "Steadfast",
+    "display_name": "Steadfast I",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -4844,6 +6821,40 @@
     "tags": [
       "support",
       "channelling"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemSteadfastTwo": {
+    "display_name": "Steadfast II",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "channelling"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemStoicism": {
+    "display_name": "Stoicism I",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemStoicismTwo": {
+    "display_name": "Stoicism II",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support"
     ]
   },
   "Metadata/Items/Gem/SupportGemStompingGround": {
@@ -4858,8 +6869,18 @@
       "grants_active_skill",
       "attack",
       "area",
-      "trigger",
-      "physical"
+      "trigger"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemStoneSlamAegis": {
+    "display_name": "[DNT] Stone Slam Aegis",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support"
     ]
   },
   "Metadata/Items/Gem/SupportGemStormchain": {
@@ -4876,8 +6897,21 @@
       "chaining"
     ]
   },
+  "Metadata/Items/Gem/SupportGemStreamlinedRounds": {
+    "display_name": "Streamlined Rounds",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "ammunition",
+      "projectile"
+    ]
+  },
   "Metadata/Items/Gem/SupportGemStripAway": {
-    "display_name": "Strip Away",
+    "display_name": "Potent Exposure",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 100,
@@ -4902,7 +6936,7 @@
     ]
   },
   "Metadata/Items/Gem/SupportGemStunCDR": {
-    "display_name": "[DNT] Stun CDR",
+    "display_name": "[DNT-UNUSED] Stun CDR",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 100,
@@ -4913,7 +6947,7 @@
     ]
   },
   "Metadata/Items/Gem/SupportGemSuffuse": {
-    "display_name": "Suffuse",
+    "display_name": "Encroaching Ground",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 100,
@@ -4925,7 +6959,31 @@
     ]
   },
   "Metadata/Items/Gem/SupportGemSwiftAffliction": {
-    "display_name": "Swift Affliction",
+    "display_name": "Swift Affliction I",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "duration"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemSwiftAfflictionThree": {
+    "display_name": "Swift Affliction III",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "duration"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemSwiftAfflictionTwo": {
+    "display_name": "Swift Affliction II",
     "requirement_weights": {
       "dexterity": 100,
       "intelligence": 0,
@@ -4951,6 +7009,19 @@
       "fire"
     ]
   },
+  "Metadata/Items/Gem/SupportGemTacatisIre": {
+    "display_name": "Tacati's Ire",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "lineage",
+      "chaos"
+    ]
+  },
   "Metadata/Items/Gem/SupportGemTear": {
     "display_name": "Tear",
     "requirement_weights": {
@@ -4965,8 +7036,36 @@
       "physical"
     ]
   },
+  "Metadata/Items/Gem/SupportGemTecrodsRevenge": {
+    "display_name": "Tecrod's Revenge",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "lineage",
+      "minion",
+      "persistent",
+      "duration"
+    ]
+  },
   "Metadata/Items/Gem/SupportGemThornskin": {
-    "display_name": "Thornskin",
+    "display_name": "Thornskin I",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "buff",
+      "persistent"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemThornskinTwo": {
+    "display_name": "Thornskin II",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -4979,7 +7078,7 @@
     ]
   },
   "Metadata/Items/Gem/SupportGemTimerot": {
-    "display_name": "[DNT] Timerot",
+    "display_name": "[DNT-UNUSED] Timerot",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -5003,7 +7102,7 @@
     ]
   },
   "Metadata/Items/Gem/SupportGemTitanicArrows": {
-    "display_name": "[DNT] Titanic Arrows",
+    "display_name": "[DNT-UNUSED] Titanic Arrows",
     "requirement_weights": {
       "dexterity": 100,
       "intelligence": 0,
@@ -5014,6 +7113,17 @@
       "grants_active_skill",
       "area",
       "physical"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemTotemicAegis": {
+    "display_name": "[DNT] Totemic Aegis",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support"
     ]
   },
   "Metadata/Items/Gem/SupportGemTremors": {
@@ -5030,6 +7140,18 @@
       "slam"
     ]
   },
+  "Metadata/Items/Gem/SupportGemTulsStillness": {
+    "display_name": "Tul's Stillness",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "lineage"
+    ]
+  },
   "Metadata/Items/Gem/SupportGemTumult": {
     "display_name": "Tumult",
     "requirement_weights": {
@@ -5043,7 +7165,7 @@
     ]
   },
   "Metadata/Items/Gem/SupportGemTwofold": {
-    "display_name": "Twofold",
+    "display_name": "Heightened Charges",
     "requirement_weights": {
       "dexterity": 100,
       "intelligence": 0,
@@ -5051,6 +7173,42 @@
     },
     "tags": [
       "support"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemUhtredsAugury": {
+    "display_name": "Uhtred's Augury",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "lineage"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemUhtredsExodus": {
+    "display_name": "Uhtred's Exodus",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "lineage"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemUhtredsOmen": {
+    "display_name": "Uhtred's Omen",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "lineage"
     ]
   },
   "Metadata/Items/Gem/SupportGemUnabating": {
@@ -5111,8 +7269,7 @@
     "tags": [
       "support",
       "attack",
-      "melee",
-      "critical"
+      "melee"
     ]
   },
   "Metadata/Items/Gem/SupportGemUntouchable": {
@@ -5141,7 +7298,20 @@
     ]
   },
   "Metadata/Items/Gem/SupportGemUpheaval": {
-    "display_name": "Upheaval",
+    "display_name": "Upheaval I",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "attack",
+      "melee"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemUpheavalTwo": {
+    "display_name": "Upheaval II",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -5154,7 +7324,7 @@
     ]
   },
   "Metadata/Items/Gem/SupportGemUpwelling": {
-    "display_name": "Upwelling",
+    "display_name": "Upwelling I",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 100,
@@ -5164,6 +7334,65 @@
       "support",
       "buff",
       "persistent"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemUpwellingTwo": {
+    "display_name": "Upwelling II",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "buff",
+      "persistent"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemUulNetolsEmbrace": {
+    "display_name": "Uul-Netol's Embrace",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "lineage"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemVanguard": {
+    "display_name": "Vanguard I",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemVanguardTwo": {
+    "display_name": "Vanguard II",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemVarashtasBlessing": {
+    "display_name": "Varashta's Blessing",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "lineage"
     ]
   },
   "Metadata/Items/Gem/SupportGemVerglas": {
@@ -5201,8 +7430,7 @@
     "tags": [
       "support",
       "physical",
-      "chaos",
-      "critical"
+      "chaos"
     ]
   },
   "Metadata/Items/Gem/SupportGemVolcanicEruption": {
@@ -5240,7 +7468,7 @@
     ]
   },
   "Metadata/Items/Gem/SupportGemVulnerableExtension": {
-    "display_name": "[DNT] Vulnerable Extension",
+    "display_name": "[DNT-UNUSED] Vulnerable Extension",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -5266,7 +7494,7 @@
     ]
   },
   "Metadata/Items/Gem/SupportGemWildshards": {
-    "display_name": "Wildshards",
+    "display_name": "Wildshards I",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 100,
@@ -5278,8 +7506,73 @@
       "projectile"
     ]
   },
+  "Metadata/Items/Gem/SupportGemWildshardsThree": {
+    "display_name": "Sione's Temper",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "lineage",
+      "spell",
+      "projectile"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemWildshardsTwo": {
+    "display_name": "Wildshards II",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "spell",
+      "projectile"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemXophsPyre": {
+    "display_name": "Xoph's Pyre",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "lineage"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemZarokhsRefrain": {
+    "display_name": "Zarokh's Refrain",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "lineage",
+      "spell",
+      "area"
+    ]
+  },
   "Metadata/Items/Gem/SupportGemZenith": {
-    "display_name": "Zenith",
+    "display_name": "Zenith I",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "spell"
+    ]
+  },
+  "Metadata/Items/Gem/SupportGemZenithTwo": {
+    "display_name": "Zenith II",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 100,
@@ -5421,8 +7714,8 @@
       "totem",
       "area",
       "melee",
-      "physical",
       "duration",
+      "conditional",
       "meta"
     ]
   },
@@ -5436,12 +7729,10 @@
     "tags": [
       "intelligence",
       "grants_active_skill",
-      "barrageable",
       "spell",
-      "area",
+      "projectile",
       "lightning",
-      "chaining",
-      "payoff"
+      "chaining"
     ]
   },
   "Metadata/Items/Gems/SkillGemArcticArmour": {
@@ -5480,7 +7771,7 @@
     ]
   },
   "Metadata/Items/Gems/SkillGemArtilleryBallista": {
-    "display_name": "Artillery Ballista",
+    "display_name": "Siege Ballista",
     "requirement_weights": {
       "dexterity": 50,
       "intelligence": 0,
@@ -5490,13 +7781,13 @@
       "strength",
       "dexterity",
       "grants_active_skill",
-      "barrageable",
       "attack",
       "totem",
       "area",
       "projectile",
       "fire",
-      "duration"
+      "duration",
+      "barrageable"
     ]
   },
   "Metadata/Items/Gems/SkillGemAscendancySupportingFire": {
@@ -5513,7 +7804,7 @@
     ]
   },
   "Metadata/Items/Gems/SkillGemAxeChop": {
-    "display_name": "[DNT] Axe Chop",
+    "display_name": "[DNT-UNUSED] Axe Chop",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -5528,7 +7819,7 @@
     ]
   },
   "Metadata/Items/Gems/SkillGemAxeExecute": {
-    "display_name": "[DNT] Axe Execute",
+    "display_name": "[DNT-UNUSED] Axe Execute",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -5543,7 +7834,7 @@
     ]
   },
   "Metadata/Items/Gems/SkillGemAxeHeavyCleave": {
-    "display_name": "[DNT] Axe Heavy Cleave",
+    "display_name": "[DNT-UNUSED] Axe Heavy Cleave",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -5558,7 +7849,7 @@
     ]
   },
   "Metadata/Items/Gems/SkillGemAxeLeapingChop": {
-    "display_name": "[DNT] Axe Leaping Chop",
+    "display_name": "[DNT-UNUSED] Axe Leaping Chop",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -5573,7 +7864,7 @@
     ]
   },
   "Metadata/Items/Gems/SkillGemAxeRaisedChop": {
-    "display_name": "[DNT] Axe Raised Chop",
+    "display_name": "[DNT-UNUSED] Axe Raised Chop",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -5589,7 +7880,7 @@
     ]
   },
   "Metadata/Items/Gems/SkillGemAxeSlash": {
-    "display_name": "[DNT] Axe Slash",
+    "display_name": "[DNT-UNUSED] Axe Slash",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -5604,7 +7895,7 @@
     ]
   },
   "Metadata/Items/Gems/SkillGemAxeWhirlingSlash": {
-    "display_name": "[DNT] Axe Whirling Slash",
+    "display_name": "[DNT-UNUSED] Axe Whirling Slash",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -5628,12 +7919,12 @@
     "tags": [
       "intelligence",
       "grants_active_skill",
-      "barrageable",
       "spell",
       "area",
       "projectile",
       "sustained",
       "lightning",
+      "duration",
       "chaining"
     ]
   },
@@ -5666,6 +7957,7 @@
       "buff",
       "persistent",
       "trigger",
+      "invocation",
       "meta"
     ]
   },
@@ -5720,7 +8012,7 @@
     ]
   },
   "Metadata/Items/Gems/SkillGemBladeDance": {
-    "display_name": "[DNT] Blade Dance",
+    "display_name": "[DNT-UNUSED] Blade Dance",
     "requirement_weights": {
       "dexterity": 50,
       "intelligence": 0,
@@ -5737,7 +8029,7 @@
     ]
   },
   "Metadata/Items/Gems/SkillGemBladeNova": {
-    "display_name": "[DNT] Blade Nova",
+    "display_name": "[DNT-UNUSED] Blade Nova",
     "requirement_weights": {
       "dexterity": 50,
       "intelligence": 50,
@@ -5747,7 +8039,6 @@
       "dexterity",
       "intelligence",
       "grants_active_skill",
-      "barrageable",
       "spell",
       "projectile",
       "physical",
@@ -5799,7 +8090,6 @@
     "tags": [
       "intelligence",
       "grants_active_skill",
-      "barrageable",
       "minion",
       "buff",
       "area",
@@ -5821,6 +8111,23 @@
       "area",
       "melee",
       "strike"
+    ]
+  },
+  "Metadata/Items/Gems/SkillGemCastCurseOnBlock": {
+    "display_name": "Curse on Block",
+    "requirement_weights": {
+      "dexterity": 50,
+      "intelligence": 50,
+      "strength": 0
+    },
+    "tags": [
+      "buff",
+      "dexterity",
+      "intelligence",
+      "grants_active_skill",
+      "persistent",
+      "trigger",
+      "meta"
     ]
   },
   "Metadata/Items/Gems/SkillGemCastOnBlock": {
@@ -5902,6 +8209,25 @@
       "buff",
       "persistent",
       "trigger",
+      "meta"
+    ]
+  },
+  "Metadata/Items/Gems/SkillGemCastOnElementalAilment": {
+    "display_name": "Cast on Elemental Ailment",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "intelligence",
+      "grants_active_skill",
+      "buff",
+      "persistent",
+      "trigger",
+      "lightning",
+      "cold",
+      "fire",
       "meta"
     ]
   },
@@ -6065,7 +8391,6 @@
     "tags": [
       "intelligence",
       "grants_active_skill",
-      "barrageable",
       "spell",
       "projectile",
       "chaos"
@@ -6091,7 +8416,7 @@
     ]
   },
   "Metadata/Items/Gems/SkillGemClawRake": {
-    "display_name": "[DNT] Claw Rake",
+    "display_name": "[DNT-UNUSED] Claw Rake",
     "requirement_weights": {
       "dexterity": 100,
       "intelligence": 0,
@@ -6107,7 +8432,7 @@
     ]
   },
   "Metadata/Items/Gems/SkillGemComboKnifeThrow": {
-    "display_name": "[DNT] Combo Knife Throw",
+    "display_name": "[DNT-UNUSED] Combo Knife Throw",
     "requirement_weights": {
       "dexterity": 50,
       "intelligence": 50,
@@ -6117,7 +8442,6 @@
       "dexterity",
       "intelligence",
       "grants_active_skill",
-      "barrageable",
       "spell",
       "projectile",
       "physical",
@@ -6134,7 +8458,6 @@
     "tags": [
       "intelligence",
       "grants_active_skill",
-      "barrageable",
       "spell",
       "area",
       "cold"
@@ -6150,7 +8473,6 @@
     "tags": [
       "intelligence",
       "grants_active_skill",
-      "barrageable",
       "spell",
       "area",
       "lightning",
@@ -6168,7 +8490,6 @@
     "tags": [
       "intelligence",
       "grants_active_skill",
-      "barrageable",
       "spell",
       "area",
       "chaos",
@@ -6208,6 +8529,24 @@
       "duration"
     ]
   },
+  "Metadata/Items/Gems/SkillGemCracklingPalm": {
+    "display_name": "Crackling Palm",
+    "requirement_weights": {
+      "dexterity": 50,
+      "intelligence": 50,
+      "strength": 0
+    },
+    "tags": [
+      "buff",
+      "dexterity",
+      "intelligence",
+      "grants_active_skill",
+      "attack",
+      "persistent",
+      "area",
+      "lightning"
+    ]
+  },
   "Metadata/Items/Gems/SkillGemDarkPact": {
     "display_name": "Dark Pact",
     "requirement_weights": {
@@ -6218,12 +8557,26 @@
     "tags": [
       "intelligence",
       "grants_active_skill",
-      "barrageable",
       "spell",
       "minion",
       "area",
       "chaos",
       "nova"
+    ]
+  },
+  "Metadata/Items/Gems/SkillGemDarkTempest": {
+    "display_name": "His Dark Horizon",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "intelligence",
+      "grants_active_skill",
+      "spell",
+      "buff",
+      "cold"
     ]
   },
   "Metadata/Items/Gems/SkillGemDemonMagus": {
@@ -6252,7 +8605,6 @@
     "tags": [
       "intelligence",
       "grants_active_skill",
-      "barrageable",
       "spell",
       "area",
       "chaos",
@@ -6270,7 +8622,6 @@
     "tags": [
       "intelligence",
       "grants_active_skill",
-      "barrageable",
       "spell",
       "area",
       "physical",
@@ -6312,7 +8663,7 @@
     ]
   },
   "Metadata/Items/Gems/SkillGemDodgeRoll": {
-    "display_name": "[DNT] Dodge Roll",
+    "display_name": "[DNT-UNUSED] Dodge Roll",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -6323,7 +8674,7 @@
     ]
   },
   "Metadata/Items/Gems/SkillGemDominatingAura": {
-    "display_name": "[DNT] Dominating Aura",
+    "display_name": "[DNT-UNUSED] Dominating Aura",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -6383,12 +8734,28 @@
     "tags": [
       "intelligence",
       "grants_active_skill",
-      "barrageable",
       "spell",
       "area",
       "projectile",
       "fire",
       "duration"
+    ]
+  },
+  "Metadata/Items/Gems/SkillGemEnervatingNova": {
+    "display_name": "Enervating Nova",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "intelligence",
+      "grants_active_skill",
+      "spell",
+      "area",
+      "lightning",
+      "duration",
+      "nova"
     ]
   },
   "Metadata/Items/Gems/SkillGemEnfeeble": {
@@ -6401,7 +8768,6 @@
     "tags": [
       "intelligence",
       "grants_active_skill",
-      "barrageable",
       "spell",
       "area",
       "duration",
@@ -6434,7 +8800,6 @@
     "tags": [
       "intelligence",
       "grants_active_skill",
-      "barrageable",
       "spell",
       "projectile",
       "chaos",
@@ -6442,7 +8807,7 @@
     ]
   },
   "Metadata/Items/Gems/SkillGemEvasiveStrike": {
-    "display_name": "[DNT] Evasive Strike",
+    "display_name": "[DNT-UNUSED] Evasive Strike",
     "requirement_weights": {
       "dexterity": 100,
       "intelligence": 0,
@@ -6461,14 +8826,12 @@
     "display_name": "Exsanguinate",
     "requirement_weights": {
       "dexterity": 0,
-      "intelligence": 50,
-      "strength": 50
+      "intelligence": 100,
+      "strength": 0
     },
     "tags": [
-      "strength",
       "intelligence",
       "grants_active_skill",
-      "barrageable",
       "spell",
       "physical",
       "duration",
@@ -6485,7 +8848,6 @@
     "tags": [
       "intelligence",
       "grants_active_skill",
-      "barrageable",
       "spell",
       "projectile",
       "cold"
@@ -6520,7 +8882,6 @@
     "tags": [
       "intelligence",
       "grants_active_skill",
-      "barrageable",
       "spell",
       "area",
       "projectile",
@@ -6537,17 +8898,15 @@
     "tags": [
       "intelligence",
       "grants_active_skill",
-      "barrageable",
       "spell",
       "area",
       "sustained",
       "fire",
-      "duration",
-      "payoff"
+      "duration"
     ]
   },
   "Metadata/Items/Gems/SkillGemFlameSlice": {
-    "display_name": "[DNT] Flame Slice",
+    "display_name": "[DNT-UNUSED] Flame Slice",
     "requirement_weights": {
       "dexterity": 50,
       "intelligence": 0,
@@ -6572,7 +8931,6 @@
     "tags": [
       "intelligence",
       "grants_active_skill",
-      "barrageable",
       "spell",
       "area",
       "fire",
@@ -6607,7 +8965,6 @@
     "tags": [
       "intelligence",
       "grants_active_skill",
-      "barrageable",
       "spell",
       "area",
       "fire",
@@ -6642,7 +8999,6 @@
     "tags": [
       "intelligence",
       "grants_active_skill",
-      "barrageable",
       "spell",
       "projectile",
       "cold"
@@ -6662,7 +9018,8 @@
       "area",
       "cold",
       "duration",
-      "orb"
+      "orb",
+      "remnant"
     ]
   },
   "Metadata/Items/Gems/SkillGemFrostWall": {
@@ -6691,12 +9048,10 @@
     "tags": [
       "intelligence",
       "grants_active_skill",
-      "barrageable",
       "spell",
       "area",
       "projectile",
-      "cold",
-      "duration"
+      "cold"
     ]
   },
   "Metadata/Items/Gems/SkillGemFuriousSlam": {
@@ -6716,6 +9071,20 @@
       "slam"
     ]
   },
+  "Metadata/Items/Gems/SkillGemFuturePast": {
+    "display_name": "Future-Past",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "buff",
+      "grants_active_skill",
+      "persistent",
+      "duration"
+    ]
+  },
   "Metadata/Items/Gems/SkillGemGalvanicField": {
     "display_name": "Galvanic Field",
     "requirement_weights": {
@@ -6729,6 +9098,7 @@
       "spell",
       "buff",
       "area",
+      "sustained",
       "lightning",
       "duration",
       "chaining",
@@ -6779,11 +9149,26 @@
     "tags": [
       "dexterity",
       "grants_active_skill",
-      "barrageable",
       "attack",
       "area",
       "projectile",
       "cold",
+      "duration",
+      "barrageable"
+    ]
+  },
+  "Metadata/Items/Gems/SkillGemGraveCommand": {
+    "display_name": "His Grave Command",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "intelligence",
+      "grants_active_skill",
+      "minion",
+      "companion",
       "duration"
     ]
   },
@@ -6854,15 +9239,46 @@
     "tags": [
       "intelligence",
       "grants_active_skill",
-      "barrageable",
       "spell",
       "area",
       "chaos",
       "payoff"
     ]
   },
+  "Metadata/Items/Gems/SkillGemHisFoulEmergence": {
+    "display_name": "His Foul Emergence",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "intelligence",
+      "grants_active_skill",
+      "spell",
+      "area",
+      "physical",
+      "chaos"
+    ]
+  },
+  "Metadata/Items/Gems/SkillGemHisWinnowingFlame": {
+    "display_name": "His Winnowing Flame",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "intelligence",
+      "grants_active_skill",
+      "spell",
+      "area",
+      "fire",
+      "payoff"
+    ]
+  },
   "Metadata/Items/Gems/SkillGemHyperSlash": {
-    "display_name": "[DNT] Hyper Slash",
+    "display_name": "[DNT-UNUSED] Hyper Slash",
     "requirement_weights": {
       "dexterity": 50,
       "intelligence": 50,
@@ -6887,7 +9303,6 @@
     "tags": [
       "intelligence",
       "grants_active_skill",
-      "barrageable",
       "spell",
       "area",
       "cold",
@@ -6905,10 +9320,10 @@
     "tags": [
       "intelligence",
       "grants_active_skill",
-      "barrageable",
       "spell",
       "area",
       "cold",
+      "duration",
       "nova"
     ]
   },
@@ -6980,7 +9395,8 @@
       "area",
       "trigger",
       "fire",
-      "duration"
+      "duration",
+      "nova"
     ]
   },
   "Metadata/Items/Gems/SkillGemKillingPalm": {
@@ -7002,7 +9418,7 @@
     ]
   },
   "Metadata/Items/Gems/SkillGemKnifeFlip": {
-    "display_name": "[DNT] Knife Flip",
+    "display_name": "[DNT-UNUSED] Knife Flip",
     "requirement_weights": {
       "dexterity": 50,
       "intelligence": 50,
@@ -7012,7 +9428,6 @@
       "dexterity",
       "intelligence",
       "grants_active_skill",
-      "barrageable",
       "spell",
       "projectile",
       "physical",
@@ -7038,7 +9453,7 @@
     ]
   },
   "Metadata/Items/Gems/SkillGemLeapingAxeCatch": {
-    "display_name": "[DNT] Leaping Axe Catch",
+    "display_name": "[DNT-UNUSED] Leaping Axe Catch",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -7062,12 +9477,12 @@
     "tags": [
       "dexterity",
       "grants_active_skill",
-      "barrageable",
       "attack",
       "area",
       "projectile",
       "lightning",
-      "chaining"
+      "chaining",
+      "barrageable"
     ]
   },
   "Metadata/Items/Gems/SkillGemLightningBolt": {
@@ -7080,7 +9495,6 @@
     "tags": [
       "intelligence",
       "grants_active_skill",
-      "barrageable",
       "spell",
       "area",
       "lightning"
@@ -7096,11 +9510,9 @@
     "tags": [
       "intelligence",
       "grants_active_skill",
-      "barrageable",
       "spell",
       "area",
-      "lightning",
-      "payoff"
+      "lightning"
     ]
   },
   "Metadata/Items/Gems/SkillGemLightningSpear": {
@@ -7113,11 +9525,11 @@
     "tags": [
       "dexterity",
       "grants_active_skill",
-      "barrageable",
       "attack",
       "area",
       "projectile",
-      "lightning"
+      "lightning",
+      "barrageable"
     ]
   },
   "Metadata/Items/Gems/SkillGemLightningSpellOnHit": {
@@ -7150,6 +9562,7 @@
       "grants_active_skill",
       "spell",
       "area",
+      "sustained",
       "lightning",
       "duration"
     ]
@@ -7164,7 +9577,6 @@
     "tags": [
       "intelligence",
       "grants_active_skill",
-      "barrageable",
       "spell",
       "area",
       "lightning",
@@ -7202,23 +9614,8 @@
       "lightning"
     ]
   },
-  "Metadata/Items/Gems/SkillGemManaforgedShots": {
-    "display_name": "[DNT] Manaforged Shots",
-    "requirement_weights": {
-      "dexterity": 100,
-      "intelligence": 0,
-      "strength": 0
-    },
-    "tags": [
-      "dexterity",
-      "grants_active_skill",
-      "buff",
-      "persistent",
-      "meta"
-    ]
-  },
   "Metadata/Items/Gems/SkillGemMetaBowTotem": {
-    "display_name": "[DNT] Meta Bow Totem",
+    "display_name": "[DNT-UNUSED] Meta Bow Totem",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -7232,7 +9629,7 @@
     ]
   },
   "Metadata/Items/Gems/SkillGemMetaSpellTotem": {
-    "display_name": "[DNT] Meta Spell Totem",
+    "display_name": "[DNT-UNUSED] Meta Spell Totem",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -7261,7 +9658,8 @@
       "lightning",
       "duration",
       "chaining",
-      "orb"
+      "orb",
+      "remnant"
     ]
   },
   "Metadata/Items/Gems/SkillGemPainOffering": {
@@ -7274,11 +9672,11 @@
     "tags": [
       "intelligence",
       "grants_active_skill",
-      "barrageable",
       "minion",
       "buff",
       "area",
-      "duration"
+      "duration",
+      "barrageable"
     ]
   },
   "Metadata/Items/Gems/SkillGemPlagueBearer": {
@@ -7300,7 +9698,7 @@
     ]
   },
   "Metadata/Items/Gems/SkillGemPlungingBlade": {
-    "display_name": "[DNT] Plunging Blade",
+    "display_name": "[DNT-UNUSED] Plunging Blade",
     "requirement_weights": {
       "dexterity": 50,
       "intelligence": 0,
@@ -7432,19 +9830,16 @@
     "display_name": "Reap",
     "requirement_weights": {
       "dexterity": 0,
-      "intelligence": 50,
-      "strength": 50
+      "intelligence": 100,
+      "strength": 0
     },
     "tags": [
-      "strength",
       "intelligence",
       "grants_active_skill",
-      "barrageable",
       "spell",
       "area",
       "physical",
-      "duration",
-      "critical"
+      "duration"
     ]
   },
   "Metadata/Items/Gems/SkillGemRhoaMount": {
@@ -7464,7 +9859,7 @@
     ]
   },
   "Metadata/Items/Gems/SkillGemRingOfBlades": {
-    "display_name": "[DNT] RingOfBlades",
+    "display_name": "[DNT-UNUSED] RingOfBlades",
     "requirement_weights": {
       "dexterity": 50,
       "intelligence": 50,
@@ -7474,13 +9869,12 @@
       "dexterity",
       "intelligence",
       "grants_active_skill",
-      "barrageable",
       "spell",
       "projectile"
     ]
   },
   "Metadata/Items/Gems/SkillGemRipwireBallista": {
-    "display_name": "Ripwire Ballista",
+    "display_name": "Artillery Ballista",
     "requirement_weights": {
       "dexterity": 50,
       "intelligence": 0,
@@ -7490,10 +9884,11 @@
       "strength",
       "dexterity",
       "grants_active_skill",
-      "barrageable",
       "attack",
       "totem",
+      "area",
       "projectile",
+      "sustained",
       "duration"
     ]
   },
@@ -7507,7 +9902,6 @@
     "tags": [
       "intelligence",
       "grants_active_skill",
-      "barrageable",
       "spell",
       "area",
       "projectile",
@@ -7530,6 +9924,36 @@
       "slam"
     ]
   },
+  "Metadata/Items/Gems/SkillGemRunicTempering": {
+    "display_name": "Runic Tempering",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "buff",
+      "grants_active_skill",
+      "channelling"
+    ]
+  },
+  "Metadata/Items/Gems/SkillGemScatteringCalamity": {
+    "display_name": "His Scattering Calamity",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "intelligence",
+      "grants_active_skill",
+      "spell",
+      "area",
+      "projectile",
+      "lightning",
+      "duration"
+    ]
+  },
   "Metadata/Items/Gems/SkillGemSeismicCry": {
     "display_name": "Seismic Cry",
     "requirement_weights": {
@@ -7543,11 +9967,11 @@
       "warcry",
       "area",
       "physical",
-      "duration"
+      "nova"
     ]
   },
   "Metadata/Items/Gems/SkillGemShadowAmbush": {
-    "display_name": "[DNT] Shadow Ambush",
+    "display_name": "[DNT-UNUSED] Shadow Ambush",
     "requirement_weights": {
       "dexterity": 50,
       "intelligence": 50,
@@ -7563,7 +9987,7 @@
     ]
   },
   "Metadata/Items/Gems/SkillGemShadowDash": {
-    "display_name": "[DNT] Shadow Dash",
+    "display_name": "[DNT-UNUSED] Shadow Dash",
     "requirement_weights": {
       "dexterity": 50,
       "intelligence": 50,
@@ -7579,7 +10003,7 @@
     ]
   },
   "Metadata/Items/Gems/SkillGemShadowThiefSlash": {
-    "display_name": "[DNT] Shadow Thief Slash",
+    "display_name": "[DNT-UNUSED] Shadow Thief Slash",
     "requirement_weights": {
       "dexterity": 50,
       "intelligence": 50,
@@ -7608,8 +10032,7 @@
       "area",
       "melee",
       "strike",
-      "cold",
-      "nova"
+      "cold"
     ]
   },
   "Metadata/Items/Gems/SkillGemShieldCharge": {
@@ -7630,23 +10053,6 @@
       "travel"
     ]
   },
-  "Metadata/Items/Gems/SkillGemShockNova": {
-    "display_name": "Shock Nova",
-    "requirement_weights": {
-      "dexterity": 0,
-      "intelligence": 100,
-      "strength": 0
-    },
-    "tags": [
-      "intelligence",
-      "grants_active_skill",
-      "barrageable",
-      "spell",
-      "area",
-      "lightning",
-      "nova"
-    ]
-  },
   "Metadata/Items/Gems/SkillGemShockwaveTotem": {
     "display_name": "Shockwave Totem",
     "requirement_weights": {
@@ -7662,7 +10068,6 @@
       "area",
       "melee",
       "slam",
-      "physical",
       "duration",
       "nova"
     ]
@@ -7725,7 +10130,8 @@
       "grants_active_skill",
       "minion",
       "persistent",
-      "physical"
+      "physical",
+      "payoff"
     ]
   },
   "Metadata/Items/Gems/SkillGemSkeletalCleric": {
@@ -7846,10 +10252,23 @@
     "tags": [
       "dexterity",
       "grants_active_skill",
-      "barrageable",
-      "spell",
       "mark",
       "duration"
+    ]
+  },
+  "Metadata/Items/Gems/SkillGemSoulCrystal": {
+    "display_name": "Soul Crystal: {0}",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "intelligence",
+      "grants_active_skill",
+      "minion",
+      "companion",
+      "persistent"
     ]
   },
   "Metadata/Items/Gems/SkillGemSoulrend": {
@@ -7862,7 +10281,6 @@
     "tags": [
       "intelligence",
       "grants_active_skill",
-      "barrageable",
       "spell",
       "projectile",
       "chaos",
@@ -7879,7 +10297,6 @@
     "tags": [
       "intelligence",
       "grants_active_skill",
-      "barrageable",
       "spell",
       "projectile",
       "lightning",
@@ -7905,7 +10322,7 @@
     ]
   },
   "Metadata/Items/Gems/SkillGemSpinningFlail": {
-    "display_name": "[DNT] Spinning Flail",
+    "display_name": "[DNT-UNUSED] Spinning Flail",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 50,
@@ -7939,7 +10356,7 @@
     ]
   },
   "Metadata/Items/Gems/SkillGemSpinningThrow": {
-    "display_name": "[DNT] Spinning Throw",
+    "display_name": "[DNT-UNUSED] Spinning Throw",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -7953,7 +10370,7 @@
     ]
   },
   "Metadata/Items/Gems/SkillGemSpiralThrow": {
-    "display_name": "[DNT] Spiral Throw",
+    "display_name": "[DNT-UNUSED] Spiral Throw",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -8003,7 +10420,7 @@
     ]
   },
   "Metadata/Items/Gems/SkillGemStormBlade": {
-    "display_name": "[DNT] Storm Blade",
+    "display_name": "[DNT-UNUSED] Storm Blade",
     "requirement_weights": {
       "dexterity": 50,
       "intelligence": 0,
@@ -8029,7 +10446,6 @@
     "tags": [
       "dexterity",
       "grants_active_skill",
-      "barrageable",
       "minion",
       "companion",
       "persistent"
@@ -8062,7 +10478,6 @@
     "tags": [
       "intelligence",
       "grants_active_skill",
-      "barrageable",
       "minion",
       "persistent"
     ]
@@ -8078,8 +10493,10 @@
       "strength",
       "intelligence",
       "grants_active_skill",
-      "spell",
-      "minion"
+      "minion",
+      "companion",
+      "persistent",
+      "physical"
     ]
   },
   "Metadata/Items/Gems/SkillGemSunder": {
@@ -8096,6 +10513,7 @@
       "area",
       "melee",
       "slam",
+      "duration",
       "payoff"
     ]
   },
@@ -8118,7 +10536,7 @@
     ]
   },
   "Metadata/Items/Gems/SkillGemSwordLeapSlash": {
-    "display_name": "[DNT] Sword Leap Slash",
+    "display_name": "[DNT-UNUSED] Sword Leap Slash",
     "requirement_weights": {
       "dexterity": 50,
       "intelligence": 0,
@@ -8134,7 +10552,7 @@
     ]
   },
   "Metadata/Items/Gems/SkillGemSwordLunge": {
-    "display_name": "[DNT] Sword Lunge",
+    "display_name": "[DNT-UNUSED] Sword Lunge",
     "requirement_weights": {
       "dexterity": 50,
       "intelligence": 0,
@@ -8177,11 +10595,24 @@
     "tags": [
       "intelligence",
       "grants_active_skill",
-      "barrageable",
       "spell",
       "area",
       "duration",
       "curse"
+    ]
+  },
+  "Metadata/Items/Gems/SkillGemTheFlawedEdict": {
+    "display_name": "[DNT] The Flawed Edict",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "grants_active_skill",
+      "attack",
+      "area",
+      "channelling"
     ]
   },
   "Metadata/Items/Gems/SkillGemTornado": {
@@ -8223,7 +10654,7 @@
     ]
   },
   "Metadata/Items/Gems/SkillGemTripleSlash": {
-    "display_name": "[DNT] Triple Slash Combo",
+    "display_name": "[DNT-UNUSED] Triple Slash Combo",
     "requirement_weights": {
       "dexterity": 50,
       "intelligence": 0,
@@ -8564,6 +10995,40 @@
       "grants_active_skill"
     ]
   },
+  "Metadata/Items/Gems/SkillGemValakosCharge": {
+    "display_name": "Valako's Charge",
+    "requirement_weights": {
+      "dexterity": 50,
+      "intelligence": 0,
+      "strength": 50
+    },
+    "tags": [
+      "strength",
+      "dexterity",
+      "grants_active_skill",
+      "spell",
+      "area",
+      "trigger",
+      "lightning",
+      "chaining"
+    ]
+  },
+  "Metadata/Items/Gems/SkillGemVileDisruption": {
+    "display_name": "His Vile Intrusion",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "intelligence",
+      "grants_active_skill",
+      "spell",
+      "area",
+      "physical",
+      "duration"
+    ]
+  },
   "Metadata/Items/Gems/SkillGemVolatileDead": {
     "display_name": "Volatile Dead",
     "requirement_weights": {
@@ -8574,7 +11039,6 @@
     "tags": [
       "intelligence",
       "grants_active_skill",
-      "barrageable",
       "spell",
       "area",
       "fire"
@@ -8613,6 +11077,7 @@
       "spell",
       "area",
       "projectile",
+      "sustained",
       "fire",
       "duration",
       "channelling"
@@ -8633,7 +11098,8 @@
       "area",
       "projectile",
       "grenade",
-      "lightning"
+      "lightning",
+      "duration"
     ]
   },
   "Metadata/Items/Gems/SkillGemVulnerability": {
@@ -8646,7 +11112,6 @@
     "tags": [
       "intelligence",
       "grants_active_skill",
-      "barrageable",
       "spell",
       "area",
       "physical",
@@ -8739,7 +11204,7 @@
     ]
   },
   "Metadata/Items/Gems/SkillGemWolfHowl": {
-    "display_name": "[DNT] Howl",
+    "display_name": "[DNT-UNUSED] Howl",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 50,
@@ -8753,23 +11218,7 @@
     ]
   },
   "Metadata/Items/Gems/SkillGemWolfLeapAttack": {
-    "display_name": "[DNT] Leaping Claw",
-    "requirement_weights": {
-      "dexterity": 0,
-      "intelligence": 50,
-      "strength": 50
-    },
-    "tags": [
-      "strength",
-      "intelligence",
-      "grants_active_skill",
-      "attack",
-      "melee",
-      "strike"
-    ]
-  },
-  "Metadata/Items/Gems/SkillGemWyvernMaul": {
-    "display_name": "[DNT] Maul",
+    "display_name": "[DNT-UNUSED] Leaping Claw",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 50,
@@ -8796,7 +11245,31 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemAcceleration": {
-    "display_name": "Acceleration",
+    "display_name": "Projectile Acceleration I",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "projectile"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemAccelerationThree": {
+    "display_name": "Projectile Acceleration III",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "projectile"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemAccelerationTwo": {
+    "display_name": "Projectile Acceleration II",
     "requirement_weights": {
       "dexterity": 100,
       "intelligence": 0,
@@ -8808,7 +11281,7 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemAftershock": {
-    "display_name": "Aftershock",
+    "display_name": "Aftershock I",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -8821,6 +11294,58 @@
       "slam"
     ]
   },
+  "Metadata/Items/Gems/SupportGemAftershockThree": {
+    "display_name": "Aftershock III",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "attack",
+      "melee",
+      "slam"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemAftershockTwo": {
+    "display_name": "Aftershock II",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "attack",
+      "melee",
+      "slam"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemAhnsCitadel": {
+    "display_name": "Ahn's Citadel",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "lineage"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemAilithLineage": {
+    "display_name": "Ailith's Chimes",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "lineage"
+    ]
+  },
   "Metadata/Items/Gems/SupportGemAmbush": {
     "display_name": "Ambush",
     "requirement_weights": {
@@ -8829,8 +11354,7 @@
       "strength": 0
     },
     "tags": [
-      "support",
-      "critical"
+      "support"
     ]
   },
   "Metadata/Items/Gems/SupportGemArcaneSurge": {
@@ -8847,7 +11371,7 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemArcaneTempo": {
-    "display_name": "Arcane Tempo",
+    "display_name": "Rapid Casting I",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 100,
@@ -8858,8 +11382,59 @@
       "spell"
     ]
   },
+  "Metadata/Items/Gems/SupportGemArcaneTempoThree": {
+    "display_name": "Rapid Casting III",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "spell"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemArcaneTempoTwo": {
+    "display_name": "Rapid Casting II",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "spell"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemAtaluiBloodletting": {
+    "display_name": "Atalui's Bloodletting",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "lineage",
+      "physical"
+    ]
+  },
   "Metadata/Items/Gems/SupportGemBehead": {
-    "display_name": "Behead",
+    "display_name": "Behead I",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "attack",
+      "melee",
+      "strike"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemBeheadTwo": {
+    "display_name": "Behead II",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -8886,7 +11461,18 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemBlind": {
-    "display_name": "Blind",
+    "display_name": "Blind I",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemBlindTwo": {
+    "display_name": "Blind II",
     "requirement_weights": {
       "dexterity": 100,
       "intelligence": 0,
@@ -8911,11 +11497,33 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemBludgeon": {
-    "display_name": "Bludgeon",
+    "display_name": "Knockback",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
       "strength": 100
+    },
+    "tags": [
+      "support"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemBounty": {
+    "display_name": "Bounty I",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemBountyTwo": {
+    "display_name": "Bounty II",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
     },
     "tags": [
       "support"
@@ -8934,7 +11542,7 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemBrutality": {
-    "display_name": "Brutality",
+    "display_name": "Brutality I",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -8945,8 +11553,57 @@
       "physical"
     ]
   },
+  "Metadata/Items/Gems/SupportGemBrutalityThree": {
+    "display_name": "Brutality III",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "physical"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemBrutalityTwo": {
+    "display_name": "Brutality II",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "physical"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemBrutusBrain": {
+    "display_name": "Brutus' Brain",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "lineage",
+      "minion"
+    ]
+  },
   "Metadata/Items/Gems/SupportGemBullseye": {
-    "display_name": "Bullseye",
+    "display_name": "Heightened Accuracy I",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "attack"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemBullseyeTwo": {
+    "display_name": "Heightened Accuracy II",
     "requirement_weights": {
       "dexterity": 100,
       "intelligence": 0,
@@ -8989,7 +11646,20 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemCannibalism": {
-    "display_name": "Cannibalism",
+    "display_name": "Cannibalism I",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "buff",
+      "persistent"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemCannibalismTwo": {
+    "display_name": "Cannibalism II",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -9002,7 +11672,33 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemChain": {
-    "display_name": "Chain",
+    "display_name": "Chain I",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "projectile",
+      "chaining"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemChainThree": {
+    "display_name": "Chain III",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "projectile",
+      "chaining"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemChainTwo": {
+    "display_name": "Chain II",
     "requirement_weights": {
       "dexterity": 100,
       "intelligence": 0,
@@ -9026,7 +11722,7 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemChaosInfusion": {
-    "display_name": "Chaos Infusion",
+    "display_name": "Chaos Attunement",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 100,
@@ -9051,7 +11747,20 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemClarity": {
-    "display_name": "Clarity",
+    "display_name": "Clarity I",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "buff",
+      "persistent"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemClarityTwo": {
+    "display_name": "Clarity II",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 100,
@@ -9064,7 +11773,19 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemCloseCombat": {
-    "display_name": "Close Combat",
+    "display_name": "Close Combat I",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "attack"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemCloseCombatTwo": {
+    "display_name": "Close Combat II",
     "requirement_weights": {
       "dexterity": 100,
       "intelligence": 0,
@@ -9085,12 +11806,11 @@
     "tags": [
       "support",
       "cold",
-      "duration",
-      "critical"
+      "duration"
     ]
   },
   "Metadata/Items/Gems/SupportGemColdInfusion": {
-    "display_name": "Cold Infusion",
+    "display_name": "Cold Attunement",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 100,
@@ -9127,7 +11847,22 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemComboFinisher": {
-    "display_name": "Combo Finisher",
+    "display_name": "Combo Finisher I",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "attack",
+      "melee",
+      "strike",
+      "conditional"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemComboFinisherTwo": {
+    "display_name": "Combo Finisher II",
     "requirement_weights": {
       "dexterity": 100,
       "intelligence": 0,
@@ -9142,7 +11877,7 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemComorbidity": {
-    "display_name": "Comorbidity",
+    "display_name": "Escalating Poison",
     "requirement_weights": {
       "dexterity": 100,
       "intelligence": 0,
@@ -9154,7 +11889,7 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemConcentratedEffect": {
-    "display_name": "Concentrated Effect",
+    "display_name": "Concentrated Area",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 100,
@@ -9166,7 +11901,7 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemConduction": {
-    "display_name": "Conduction",
+    "display_name": "Shock",
     "requirement_weights": {
       "dexterity": 100,
       "intelligence": 0,
@@ -9186,8 +11921,7 @@
     },
     "tags": [
       "support",
-      "spell",
-      "critical"
+      "spell"
     ]
   },
   "Metadata/Items/Gems/SupportGemCorrosion": {
@@ -9204,7 +11938,36 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemCorruptingCry": {
-    "display_name": "Corrupting Cry",
+    "display_name": "Corrupting Cry I",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "warcry",
+      "physical",
+      "duration"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemCorruptingCryThree": {
+    "display_name": "Paquate's Pact",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "lineage",
+      "warcry",
+      "physical",
+      "duration"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemCorruptingCryTwo": {
+    "display_name": "Corrupting Cry II",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -9218,7 +11981,7 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemCoursingCurrent": {
-    "display_name": "Coursing Current",
+    "display_name": "Shock Conduction",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 100,
@@ -9231,7 +11994,35 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemCrescendo": {
-    "display_name": "Crescendo",
+    "display_name": "Crescendo I",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "attack",
+      "melee",
+      "strike"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemCrescendoThree": {
+    "display_name": "Crescendo III",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "attack",
+      "melee",
+      "strike"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemCrescendoTwo": {
+    "display_name": "Crescendo II",
     "requirement_weights": {
       "dexterity": 100,
       "intelligence": 0,
@@ -9257,7 +12048,19 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemDeadlyPoison": {
-    "display_name": "Deadly Poison",
+    "display_name": "Deadly Poison I",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "chaos"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemDeadlyPoisonTwo": {
+    "display_name": "Deadly Poison II",
     "requirement_weights": {
       "dexterity": 100,
       "intelligence": 0,
@@ -9269,7 +12072,19 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemDeceleration": {
-    "display_name": "Deceleration",
+    "display_name": "Projectile Deceleration I",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "projectile"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemDecelerationTwo": {
+    "display_name": "Projectile Deceleration II",
     "requirement_weights": {
       "dexterity": 100,
       "intelligence": 0,
@@ -9281,7 +12096,19 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemDeepCuts": {
-    "display_name": "Deep Cuts",
+    "display_name": "Deep Cuts I",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "physical"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemDeepCutsTwo": {
+    "display_name": "Deep Cuts II",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -9305,7 +12132,19 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemDemolisher": {
-    "display_name": "Demolisher",
+    "display_name": "Armour Demolisher I",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "spell"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemDemolisherTwo": {
+    "display_name": "Armour Demolisher II",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -9317,15 +12156,14 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemDespoiler": {
-    "display_name": "Despoiler",
+    "display_name": "Lasting Ground",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
       "strength": 100
     },
     "tags": [
-      "support",
-      "duration"
+      "support"
     ]
   },
   "Metadata/Items/Gems/SupportGemDevastate": {
@@ -9340,7 +12178,7 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemDiscombobulate": {
-    "display_name": "Discombobulate",
+    "display_name": "Daze",
     "requirement_weights": {
       "dexterity": 100,
       "intelligence": 0,
@@ -9362,6 +12200,21 @@
     "tags": [
       "support",
       "spell"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemEinharsBeastrite": {
+    "display_name": "Einhar's Beastrite",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "lineage",
+      "attack",
+      "melee",
+      "strike"
     ]
   },
   "Metadata/Items/Gems/SupportGemElectrocute": {
@@ -9419,7 +12272,7 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemEncumbrance": {
-    "display_name": "Encumbrance",
+    "display_name": "Slow Potency",
     "requirement_weights": {
       "dexterity": 100,
       "intelligence": 0,
@@ -9442,7 +12295,7 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemEnragedWarcry": {
-    "display_name": "Enraged Warcry",
+    "display_name": "Enraged Warcry I",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -9450,12 +12303,47 @@
     },
     "tags": [
       "support",
-      "attack",
+      "warcry"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemEnragedWarcryTwo": {
+    "display_name": "Enraged Warcry II",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
       "warcry"
     ]
   },
   "Metadata/Items/Gems/SupportGemEnvenom": {
-    "display_name": "Envenom",
+    "display_name": "Poison I",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "chaos"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemEnvenomThree": {
+    "display_name": "Poison III",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "chaos"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemEnvenomTwo": {
+    "display_name": "Poison II",
     "requirement_weights": {
       "dexterity": 100,
       "intelligence": 0,
@@ -9480,7 +12368,31 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemEternalFlame": {
-    "display_name": "Eternal Flame",
+    "display_name": "Eternal Flame I",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "fire"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemEternalFlameThree": {
+    "display_name": "Eternal Flame III",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "fire"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemEternalFlameTwo": {
+    "display_name": "Eternal Flame II",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -9492,7 +12404,7 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemExecute": {
-    "display_name": "Execute",
+    "display_name": "Execute I",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -9500,6 +12412,41 @@
     },
     "tags": [
       "support"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemExecuteThree": {
+    "display_name": "Execute III",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemExecuteTwo": {
+    "display_name": "Execute II",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemExpand": {
+    "display_name": "[DNT] Expand Support",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "spell",
+      "area"
     ]
   },
   "Metadata/Items/Gems/SupportGemExploitWeakness": {
@@ -9515,7 +12462,19 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemFastForward": {
-    "display_name": "Fast Forward",
+    "display_name": "Compressed Duration I",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "duration"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemFastForwardTwo": {
+    "display_name": "Compressed Duration II",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -9527,7 +12486,19 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemFeedingFrenzy": {
-    "display_name": "Feeding Frenzy",
+    "display_name": "Feeding Frenzy I",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "minion"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemFeedingFrenzyTwo": {
+    "display_name": "Feeding Frenzy II",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 100,
@@ -9583,7 +12554,7 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemFireInfusion": {
-    "display_name": "Fire Infusion",
+    "display_name": "Fire Attunement",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -9608,7 +12579,19 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemFirePenetration": {
-    "display_name": "Fire Penetration",
+    "display_name": "Fire Penetration I",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "fire"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemFirePenetrationTwo": {
+    "display_name": "Fire Penetration II",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -9620,7 +12603,35 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemFistOfWar": {
-    "display_name": "Fist of War",
+    "display_name": "Fist of War I",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "attack",
+      "melee",
+      "slam"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemFistOfWarThree": {
+    "display_name": "Fist of War III",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "attack",
+      "melee",
+      "slam"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemFistOfWarTwo": {
+    "display_name": "Fist of War II",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -9682,7 +12693,18 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemFortress": {
-    "display_name": "Fortress",
+    "display_name": "Fortress I",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "support"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemFortressTwo": {
+    "display_name": "Fortress II",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 100,
@@ -9749,7 +12771,7 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemGlaciation": {
-    "display_name": "Glaciation",
+    "display_name": "Freeze",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 100,
@@ -9787,7 +12809,20 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemHerbalism": {
-    "display_name": "Herbalism",
+    "display_name": "Herbalism I",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "buff",
+      "persistent"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemHerbalismTwo": {
+    "display_name": "Herbalism II",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -9838,7 +12873,31 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemIgnition": {
-    "display_name": "Ignition",
+    "display_name": "Ignite I",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "fire"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemIgnitionThree": {
+    "display_name": "Ignite III",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "fire"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemIgnitionTwo": {
+    "display_name": "Ignite II",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -9901,12 +12960,39 @@
       "strength": 0
     },
     "tags": [
-      "support",
-      "critical"
+      "support"
     ]
   },
   "Metadata/Items/Gems/SupportGemInfernalLegion": {
-    "display_name": "Infernal Legion",
+    "display_name": "Infernal Legion I",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "minion",
+      "area",
+      "fire"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemInfernalLegionThree": {
+    "display_name": "Infernal Legion III",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "minion",
+      "area",
+      "fire"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemInfernalLegionTwo": {
+    "display_name": "Infernal Legion II",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -9932,7 +13018,18 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemIngenuity": {
-    "display_name": "Ingenuity",
+    "display_name": "Cooldown Recovery I",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemIngenuityTwo": {
+    "display_name": "Cooldown Recovery II",
     "requirement_weights": {
       "dexterity": 100,
       "intelligence": 0,
@@ -9943,7 +13040,18 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemInspiration": {
-    "display_name": "Inspiration",
+    "display_name": "Efficiency I",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemInspirationTwo": {
+    "display_name": "Efficiency II",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -9967,7 +13075,23 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemJaggedGround": {
-    "display_name": "Jagged Ground",
+    "display_name": "Jagged Ground I",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "attack",
+      "area",
+      "melee",
+      "slam",
+      "duration"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemJaggedGroundTwo": {
+    "display_name": "Jagged Ground II",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -9983,7 +13107,43 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemLacerate": {
-    "display_name": "Lacerate",
+    "display_name": "Bleed I",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "physical"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemLacerateFour": {
+    "display_name": "Bleed IV",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "physical"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemLacerateThree": {
+    "display_name": "Bleed III",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "physical"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemLacerateTwo": {
+    "display_name": "Bleed II",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -10029,7 +13189,33 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemLifeThief": {
-    "display_name": "Life Thief",
+    "display_name": "Life Leech I",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "attack",
+      "physical"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemLifeThiefThree": {
+    "display_name": "Life Leech III",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "attack",
+      "physical"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemLifeThiefTwo": {
+    "display_name": "Life Leech II",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -10066,7 +13252,7 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemLightningInfusion": {
-    "display_name": "Lightning Infusion",
+    "display_name": "Lightning Attunement",
     "requirement_weights": {
       "dexterity": 100,
       "intelligence": 0,
@@ -10114,7 +13300,19 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemLongshot": {
-    "display_name": "Longshot",
+    "display_name": "Longshot I",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "attack"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemLongshotTwo": {
+    "display_name": "Longshot II",
     "requirement_weights": {
       "dexterity": 100,
       "intelligence": 0,
@@ -10126,7 +13324,19 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemMagnifiedEffect": {
-    "display_name": "Magnified Effect",
+    "display_name": "Magnified Area I",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "area"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemMagnifiedEffectTwo": {
+    "display_name": "Magnified Area II",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 100,
@@ -10173,12 +13383,35 @@
       "spell",
       "area",
       "trigger",
-      "fire",
-      "critical"
+      "fire"
     ]
   },
   "Metadata/Items/Gems/SupportGemMartialTempo": {
-    "display_name": "Martial Tempo",
+    "display_name": "Rapid Attacks I",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "attack"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemMartialTempoThree": {
+    "display_name": "Rapid Attacks III",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "attack"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemMartialTempoTwo": {
+    "display_name": "Rapid Attacks II",
     "requirement_weights": {
       "dexterity": 100,
       "intelligence": 0,
@@ -10190,7 +13423,19 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemMeatShield": {
-    "display_name": "Meat Shield",
+    "display_name": "Meat Shield I",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "minion"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemMeatShieldTwo": {
+    "display_name": "Meat Shield II",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -10258,8 +13503,43 @@
       "lightning"
     ]
   },
+  "Metadata/Items/Gems/SupportGemNovaProjectiles": {
+    "display_name": "Nova Projectiles",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "projectile"
+    ]
+  },
   "Metadata/Items/Gems/SupportGemOverabundance": {
-    "display_name": "Overabundance",
+    "display_name": "Overabundance I",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemOverabundanceThree": {
+    "display_name": "Overabundance III",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "curse"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemOverabundanceTwo": {
+    "display_name": "Overabundance II",
     "requirement_weights": {
       "dexterity": 100,
       "intelligence": 0,
@@ -10282,7 +13562,29 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemOverpower": {
-    "display_name": "Overpower",
+    "display_name": "Stun I",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemOverpowerThree": {
+    "display_name": "Stun III",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemOverpowerTwo": {
+    "display_name": "Stun II",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -10304,7 +13606,31 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemPersistence": {
-    "display_name": "Persistence",
+    "display_name": "Prolonged Duration I",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "duration"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemPersistenceThree": {
+    "display_name": "Prolonged Duration III",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "duration"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemPersistenceTwo": {
+    "display_name": "Prolonged Duration II",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -10328,7 +13654,31 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemPierce": {
-    "display_name": "Pierce",
+    "display_name": "Pierce I",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "projectile"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemPierceThree": {
+    "display_name": "Pierce III",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "projectile"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemPierceTwo": {
+    "display_name": "Pierce II",
     "requirement_weights": {
       "dexterity": 100,
       "intelligence": 0,
@@ -10340,7 +13690,31 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemPin": {
-    "display_name": "Pin",
+    "display_name": "Pin I",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "physical"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemPinThree": {
+    "display_name": "Pin III",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "physical"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemPinTwo": {
+    "display_name": "Pin II",
     "requirement_weights": {
       "dexterity": 100,
       "intelligence": 0,
@@ -10359,12 +13733,24 @@
       "strength": 0
     },
     "tags": [
-      "support",
-      "critical"
+      "support"
     ]
   },
   "Metadata/Items/Gems/SupportGemPrecision": {
-    "display_name": "Precision",
+    "display_name": "Precision I",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "buff",
+      "persistent"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemPrecisionTwo": {
+    "display_name": "Precision II",
     "requirement_weights": {
       "dexterity": 100,
       "intelligence": 0,
@@ -10388,7 +13774,31 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemPrimalArmament": {
-    "display_name": "Primal Armament",
+    "display_name": "Elemental Armament I",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "attack"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemPrimalArmamentThree": {
+    "display_name": "Elemental Armament III",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "attack"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemPrimalArmamentTwo": {
+    "display_name": "Elemental Armament II",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -10400,7 +13810,18 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemProfusion": {
-    "display_name": "Profusion",
+    "display_name": "Charge Profusion I",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemProfusionTwo": {
+    "display_name": "Charge Profusion II",
     "requirement_weights": {
       "dexterity": 100,
       "intelligence": 0,
@@ -10411,7 +13832,33 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemRage": {
-    "display_name": "Rage",
+    "display_name": "Rage I",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "attack",
+      "melee"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemRageThree": {
+    "display_name": "Rage III",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "attack",
+      "melee"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemRageTwo": {
+    "display_name": "Rage II",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -10446,7 +13893,19 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemScattershot": {
-    "display_name": "Scattershot",
+    "display_name": "Multishot I",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "projectile"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemScattershotTwo": {
+    "display_name": "Multishot II",
     "requirement_weights": {
       "dexterity": 100,
       "intelligence": 0,
@@ -10458,7 +13917,19 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemSearingFlame": {
-    "display_name": "Searing Flame",
+    "display_name": "Searing Flame I",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "fire"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemSearingFlameTwo": {
+    "display_name": "Searing Flame II",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -10470,7 +13941,29 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemSecondWind": {
-    "display_name": "Second Wind",
+    "display_name": "Second Wind I",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemSecondWindThree": {
+    "display_name": "Second Wind III",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemSecondWindTwo": {
+    "display_name": "Second Wind II",
     "requirement_weights": {
       "dexterity": 100,
       "intelligence": 0,
@@ -10504,7 +13997,7 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemSoulThief": {
-    "display_name": "Soul Thief",
+    "display_name": "Mana Leech",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 100,
@@ -10529,8 +14022,44 @@
       "area"
     ]
   },
+  "Metadata/Items/Gems/SupportGemSpiralProjectiles": {
+    "display_name": "[DNT] Spiral Projectiles I",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "projectile"
+    ]
+  },
   "Metadata/Items/Gems/SupportGemSplinter": {
-    "display_name": "Splinter",
+    "display_name": "Armour Break I",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "physical"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemSplinterThree": {
+    "display_name": "Armour Break III",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "physical"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemSplinterTwo": {
+    "display_name": "Armour Break II",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -10574,8 +14103,7 @@
       "strength": 0
     },
     "tags": [
-      "support",
-      "critical"
+      "support"
     ]
   },
   "Metadata/Items/Gems/SupportGemUnbreakable": {
@@ -10700,8 +14228,48 @@
       "spell"
     ]
   },
+  "Metadata/Items/Gems/SupportGemUruksSmelting": {
+    "display_name": "Uruk's Smelting",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "lineage",
+      "spell"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemVilentasPropulsion": {
+    "display_name": "Vilenta's Propulsion",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 100,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "lineage",
+      "spell",
+      "projectile"
+    ]
+  },
   "Metadata/Items/Gems/SupportGemVitality": {
-    "display_name": "Vitality",
+    "display_name": "Vitality I",
+    "requirement_weights": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "strength": 100
+    },
+    "tags": [
+      "support",
+      "buff",
+      "persistent"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemVitalityTwo": {
+    "display_name": "Vitality II",
     "requirement_weights": {
       "dexterity": 0,
       "intelligence": 0,
@@ -10741,7 +14309,19 @@
     ]
   },
   "Metadata/Items/Gems/SupportGemWindowOfOpportunity": {
-    "display_name": "Window of Opportunity",
+    "display_name": "Window of Opportunity I",
+    "requirement_weights": {
+      "dexterity": 100,
+      "intelligence": 0,
+      "strength": 0
+    },
+    "tags": [
+      "support",
+      "channelling"
+    ]
+  },
+  "Metadata/Items/Gems/SupportGemWindowOfOpportunityTwo": {
+    "display_name": "Window of Opportunity II",
     "requirement_weights": {
       "dexterity": 100,
       "intelligence": 0,
