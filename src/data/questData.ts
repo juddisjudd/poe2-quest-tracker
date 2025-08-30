@@ -569,11 +569,157 @@ export const defaultQuestData: Act[] = [
     expanded: false,
     quests: [
       {
-        id: "a4-placeholder-quest",
-        name: "Act 4 - Main Story Quest",
-        description: "Placeholder quest - details TBA with 3.0 update",
+        id: "a4-the-search",
+        name: "The Search",
+        description: "Reward: Boat Charter",
         completed: false,
         optional: false,
+      },
+      {
+        id: "a4-the-blind-beast",
+        name: "The Blind Beast",
+        description:
+          "Reward: Sulphite Potion, Uncut Skill Gem, 2 Passive Skill Points, 2 Passive Respec Points",
+        completed: false,
+        optional: true,
+      },
+      {
+        id: "a4-shrike-island",
+        name: "Shrike Island",
+        description:
+          "Reward: Ruby Ring, Sapphire Ring, Topaz Ring, Amethyst Ring, Uncut Skill Gem. Explore Shrike Island.",
+        completed: false,
+        optional: false,
+      },
+      {
+        id: "a4-land-of-the-kin",
+        name: "Land of the Kin",
+        description:
+          "There is something dark at the heart of the Isle of Kin. Search it for an answer.",
+        completed: false,
+        optional: false,
+      },
+      {
+        id: "a4-utopia",
+        name: "Utopia",
+        description: "Travel to Arastas.",
+        completed: false,
+        optional: false,
+      },
+      {
+        id: "a4-whakapanu-island",
+        name: "Whakapanu Island",
+        description:
+          "Reward: Uncut Skill Gem. This island seems to be quite lush. Explore Whakapanu Island.",
+        completed: false,
+        optional: true,
+      },
+      {
+        id: "a4-abandoned-prison",
+        name: "Abandoned Prison",
+        description:
+          "Reward: Amber Amulet, Jade Amulet, Lapis Amulet, Uncut Skill Gem. You have found a prison built by the Eternal Empire. Something is very wrong here. Explore it in search of an answer.",
+        completed: false,
+        optional: true,
+      },
+      {
+        id: "a4-the-prisoner",
+        name: "The Prisoner",
+        description: "Use a Ballista.",
+        completed: false,
+        optional: true,
+      },
+      {
+        id: "a4-tribal-medicine",
+        name: "Tribal Medicine",
+        description:
+          "Reward: Uncut Skill Gem, Uncut Spirit Gem, Uncut Support Gem. Explore Ngakanu.",
+        completed: false,
+        optional: true,
+      },
+      {
+        id: "a4-dark-mists-1",
+        name: "Dark Mists",
+        description:
+          "Reward: Verisium Spikes. Speak to Makoru to travel to Kedge Bay.",
+        completed: false,
+        optional: false,
+      },
+      {
+        id: "a4-dark-mists-2",
+        name: "Dark Mists",
+        description: "Reward: Uncut Skill Gem, 7500 Gold.",
+        completed: false,
+        optional: false,
+      },
+      {
+        id: "a4-forgotten-bounty",
+        name: "Forgotten Bounty",
+        description:
+          "You have found a piece of a Treasure Map. Makoru should know more about this. Return to Kingsmarch and bring it to her.",
+        completed: false,
+        optional: true,
+      },
+      {
+        id: "a4-trial-of-the-ancestors",
+        name: "Trial of the Ancestors",
+        description:
+          "Reward: Tattoo of Hinekora. There was a trapped man named Matiki nearby. Defeating Krutog has freed him. Speak to Matiki.",
+        completed: false,
+        optional: true,
+      },
+      {
+        id: "a4-tawhoas-test",
+        name: "Tawhoa's Test",
+        description:
+          "Reward: Dexterity Tattoo of Tawhoa, Lightning Tattoo of Tawhoa. Complete Tawhoa's Test.",
+        completed: false,
+        optional: true,
+      },
+      {
+        id: "a4-tasalios-test",
+        name: "Tasalio's Test",
+        description:
+          "Reward: Intelligence Tattoo of Tasalio, Cold Tattoo of Tasalio. Complete Tasalio's Test.",
+        completed: false,
+        optional: true,
+      },
+      {
+        id: "a4-ngamahus-test",
+        name: "Ngamahu's Test",
+        description:
+          "Reward: Strength Tattoo of Ngamahu, Fire Tattoo of Ngamahu. Complete Ngamahu's Test.",
+        completed: false,
+        optional: true,
+      },
+      {
+        id: "a4-siren-pearl",
+        name: "Siren Pearl",
+        description: "Reward: Pearlescent Amulet.",
+        completed: false,
+        optional: true,
+      },
+      {
+        id: "a4-siege-of-oriath",
+        name: "Siege of Oriath",
+        description:
+          "Reward: Book of Specialisation. Speak to Hooded One in Kingsmarch.",
+        completed: false,
+        optional: false,
+      },
+      {
+        id: "a4-hostile-takeover",
+        name: "Hostile Takeover",
+        description: "Find a suitable location to establish a Hideout.",
+        completed: false,
+        optional: true,
+      },
+      {
+        id: "a4-follow-tavakai",
+        name: "Follow Tavakai",
+        description: "Follow Tavakai.",
+        completed: false,
+        optional: true,
       },
     ],
   },
