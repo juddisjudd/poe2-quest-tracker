@@ -7,6 +7,7 @@ import {
   Tray,
   Menu,
   shell,
+  dialog,
 } from "electron";
 import { autoUpdater } from "electron-updater";
 import * as path from "path";
@@ -405,5 +406,38 @@ ipcMain.handle("check-file-exists", async (_, filePath: string) => {
   } catch (error) {
     log.error("Error checking file existence:", error);
     return false;
+  }
+});
+
+ipcMain.handle("select-log-file", async () => {
+  try {
+    const result = await dialog.showOpenDialog(mainWindow!, {
+      title: "Select Path of Exile 2 Log File",
+      defaultPath: "Client.txt",
+      filters: [
+        { name: "Log Files", extensions: ["txt"] },
+        { name: "All Files", extensions: ["*"] }
+      ],
+      properties: ["openFile"]
+    });
+
+    if (result.canceled || result.filePaths.length === 0) {
+      return null;
+    }
+
+    const selectedPath = result.filePaths[0];
+    log.info("Manual log file selected:", selectedPath);
+    
+    // Verify the selected file exists
+    const exists = await checkFileExists(selectedPath);
+    if (!exists) {
+      log.error("Selected log file does not exist:", selectedPath);
+      return null;
+    }
+
+    return selectedPath;
+  } catch (error) {
+    log.error("Error selecting log file:", error);
+    return null;
   }
 });

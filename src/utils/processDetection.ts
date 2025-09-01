@@ -61,37 +61,43 @@ export async function findProcessByName(processName: string): Promise<ProcessInf
  */
 export async function detectPoeLogFile(): Promise<string | null> {
   try {
-    // Look for PathOfExile.exe process
-    const processes = await findProcessByName('PathOfExile.exe');
+    // Look for both regular and Steam versions of Path of Exile 2
+    const processNames = ['PathOfExile.exe', 'PathOfExileSteam.exe'];
     
-    if (processes.length === 0) {
-      console.log('Path of Exile 2 process not found');
-      return null;
+    for (const processName of processNames) {
+      const processes = await findProcessByName(processName);
+      
+      if (processes.length > 0) {
+        console.log(`Found ${processName} process`);
+        
+        // Use the first found process
+        const process = processes[0];
+        const executablePath = process.executablePath;
+        
+        if (!executablePath || !fs.existsSync(executablePath)) {
+          console.log('Executable path not found or invalid:', executablePath);
+          continue;
+        }
+        
+        // Derive the game directory from executable path
+        // Expected: S:\Grinding Gear Games\Path of Exile 2\PathOfExile.exe
+        // Or: Steam version path\PathOfExileSteam.exe
+        // Logs dir: game_directory\logs\Client.txt
+        const gameDirectory = path.dirname(executablePath);
+        const logFilePath = path.join(gameDirectory, 'logs', 'Client.txt');
+        
+        // Verify the log file exists
+        if (fs.existsSync(logFilePath)) {
+          console.log(`Found POE2 log file for ${processName}:`, logFilePath);
+          return logFilePath;
+        } else {
+          console.log('Log file not found at expected location:', logFilePath);
+        }
+      }
     }
     
-    // Use the first found process
-    const process = processes[0];
-    const executablePath = process.executablePath;
-    
-    if (!executablePath || !fs.existsSync(executablePath)) {
-      console.log('Executable path not found or invalid:', executablePath);
-      return null;
-    }
-    
-    // Derive the game directory from executable path
-    // Expected: S:\Grinding Gear Games\Path of Exile 2\PathOfExile.exe
-    // Logs dir: S:\Grinding Gear Games\Path of Exile 2\logs\Client.txt
-    const gameDirectory = path.dirname(executablePath);
-    const logFilePath = path.join(gameDirectory, 'logs', 'Client.txt');
-    
-    // Verify the log file exists
-    if (fs.existsSync(logFilePath)) {
-      console.log('Found POE2 log file:', logFilePath);
-      return logFilePath;
-    } else {
-      console.log('Log file not found at expected location:', logFilePath);
-      return null;
-    }
+    console.log('Path of Exile 2 process not found (checked both regular and Steam versions)');
+    return null;
   } catch (error) {
     console.error('Error detecting POE log file:', error);
     return null;

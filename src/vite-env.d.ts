@@ -12,6 +12,9 @@ declare global {
       updateHotkey: (hotkey: string) => Promise<any>;
       openExternal: (url: string) => Promise<any>;
       reinforceOverlay: () => Promise<any>;
+      detectPoeLogFile: () => Promise<string | null>;
+      checkFileExists: (filePath: string) => Promise<boolean>;
+      selectLogFile: () => Promise<string | null>;
       onUpdateAvailable: (callback: () => void) => () => void;
       onUpdateDownloaded: (callback: () => void) => () => void;
       restartApp: () => void;

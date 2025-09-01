@@ -12,6 +12,7 @@ const electronAPI = {
   reinforceOverlay: () => ipcRenderer.invoke("reinforce-overlay"),
   detectPoeLogFile: () => ipcRenderer.invoke("detect-poe-log-file"),
   checkFileExists: (filePath: string) => ipcRenderer.invoke("check-file-exists", filePath),
+  selectLogFile: () => ipcRenderer.invoke("select-log-file"),
   onUpdateAvailable: (callback: () => void) => {
     ipcRenderer.on("update-available", callback);
     return () => ipcRenderer.removeListener("update-available", callback);

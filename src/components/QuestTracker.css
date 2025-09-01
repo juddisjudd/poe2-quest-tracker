@@ -1118,7 +1118,13 @@ body {
   font-size: 0.7rem;
 }
 
-.log-detect-btn {
+.log-buttons {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.log-detect-btn, .log-select-btn {
   padding: 6px 12px;
   border: none;
   border-radius: var(--border-radius-sm);
@@ -1128,9 +1134,18 @@ body {
   cursor: pointer;
   transition: all var(--transition-fast);
   text-transform: uppercase;
-  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
   color: white;
-  min-width: 100px;
+  min-width: 80px;
+}
+
+.log-detect-btn {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  box-shadow: 0 2px 4px rgba(139, 92, 246, 0.3);
+}
+
+.log-select-btn {
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  box-shadow: 0 2px 4px rgba(99, 102, 241, 0.3);
 }
 
 .log-detect-btn:hover:not(:disabled) {
@@ -1138,7 +1153,12 @@ body {
   background: linear-gradient(135deg, #a78bfa, #8b5cf6);
 }
 
-.log-detect-btn:disabled {
+.log-select-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  background: linear-gradient(135deg, #818cf8, #6366f1);
+}
+
+.log-detect-btn:disabled, .log-select-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
@@ -1200,7 +1220,12 @@ body {
     gap: 8px;
   }
 
-  .log-detect-btn {
+  .log-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .log-detect-btn, .log-select-btn {
     width: 100%;
   }
 }

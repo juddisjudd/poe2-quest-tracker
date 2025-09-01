@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { TrackerData } from "../types";
 import { parsePathOfBuildingCodeWithNotes } from "../utils/pobParser";
+import type { ElectronAPI } from "../main/preload";
 
 interface HeaderProps {
   settings: TrackerData["settings"];
@@ -256,6 +257,35 @@ export const Header: React.FC<HeaderProps> = ({
     } catch (error) {
       console.error("Failed to detect log file:", error);
       setLogFileMessage("❌ Failed to detect log file");
+      setTimeout(() => setLogFileMessage(""), 5000);
+    } finally {
+      setLogFileDetecting(false);
+    }
+  };
+
+  const handleSelectLogFile = async () => {
+    if (!isElectron) return;
+    
+    setLogFileDetecting(true);
+    setLogFileMessage("");
+    
+    try {
+      const logFilePath = await (window.electronAPI as ElectronAPI).selectLogFile();
+      
+      if (logFilePath) {
+        onSettingsChange({ 
+          logFilePath: logFilePath,
+          logFileDetected: true 
+        });
+        setLogFileMessage(`✓ Log file selected: ${logFilePath}`);
+      } else {
+        setLogFileMessage("❌ No file selected");
+      }
+      
+      setTimeout(() => setLogFileMessage(""), 5000);
+    } catch (error) {
+      console.error("Failed to select log file:", error);
+      setLogFileMessage("❌ Failed to select log file");
       setTimeout(() => setLogFileMessage(""), 5000);
     } finally {
       setLogFileDetecting(false);
@@ -593,14 +623,24 @@ export const Header: React.FC<HeaderProps> = ({
                           </span>
                         )}
                       </div>
-                      <button
-                        className="log-detect-btn"
-                        onClick={handleDetectLogFile}
-                        disabled={logFileDetecting}
-                        title="Auto-detect Path of Exile 2 log file location"
-                      >
-                        {logFileDetecting ? "Detecting..." : "Detect Log File"}
-                      </button>
+                      <div className="log-buttons">
+                        <button
+                          className="log-detect-btn"
+                          onClick={handleDetectLogFile}
+                          disabled={logFileDetecting}
+                          title="Auto-detect Path of Exile 2 log file location"
+                        >
+                          {logFileDetecting ? "Detecting..." : "Auto Detect"}
+                        </button>
+                        <button
+                          className="log-select-btn"
+                          onClick={handleSelectLogFile}
+                          disabled={logFileDetecting}
+                          title="Manually select Path of Exile 2 log file (Client.txt)"
+                        >
+                          Browse...
+                        </button>
+                      </div>
                     </div>
                     {settings.logFilePath && (
                       <div className="log-path">
@@ -613,7 +653,7 @@ export const Header: React.FC<HeaderProps> = ({
                       </div>
                     )}
                     <div className="log-help-text">
-                      Start Path of Exile 2 and click "Detect Log File" to automatically find the Client.txt log file location.
+                      Start Path of Exile 2 and click "Auto Detect" to find the Client.txt log file automatically, or use "Browse..." to select it manually.
                     </div>
                   </div>
                 </div>
