@@ -315,6 +315,15 @@ body {
   accent-color: var(--accent-color);
 }
 
+.setting-checkbox.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.setting-checkbox.disabled input[type="checkbox"] {
+  cursor: not-allowed;
+}
+
 .theme-selector,
 .hotkey-selector {
   background: var(--bg-overlay-4);
@@ -669,6 +678,63 @@ body {
   padding: 4px 8px;
   border-radius: var(--border-radius-sm);
   font-weight: 500;
+}
+
+/* Quest styling elements */
+.quest-location {
+  color: #8fbc8f;
+  font-weight: 600;
+  text-shadow: 0 0 4px rgba(143, 188, 143, 0.5);
+}
+
+.quest-boss {
+  color: #ffa500;
+  font-weight: 600;
+  text-shadow: 0 0 4px rgba(255, 165, 0, 0.5);
+}
+
+.quest-tip {
+  color: #87ceeb;
+  font-weight: 600;
+  font-style: italic;
+  text-shadow: 0 0 4px rgba(135, 206, 235, 0.5);
+}
+
+.quest-reward {
+  font-size: 0.6875rem;
+  color: #90ee90;
+  line-height: 1.4;
+  margin-top: 4px;
+  background: rgba(144, 238, 144, 0.1);
+  padding: 4px 8px;
+  border-radius: var(--border-radius-sm);
+  border-left: 3px solid #90ee90;
+}
+
+.reward-label {
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.6rem;
+  letter-spacing: 0.5px;
+}
+
+.quest-warning {
+  font-size: 0.6875rem;
+  color: #ffb347;
+  line-height: 1.4;
+  margin-top: 4px;
+  background: rgba(255, 179, 71, 0.15);
+  padding: 6px 8px;
+  border-radius: var(--border-radius-sm);
+  border-left: 3px solid #ff8c00;
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.warning-icon {
+  flex-shrink: 0;
+  font-size: 0.8rem;
 }
 
 .optional-badge {
@@ -1037,6 +1103,27 @@ body {
 .quest-tracker[data-font-scale="1.0"] .quest-description { font-size: 0.6875rem; }
 .quest-tracker[data-font-scale="1.1"] .quest-description { font-size: 0.756rem; }
 .quest-tracker[data-font-scale="1.2"] .quest-description { font-size: 0.825rem; }
+
+/* Quest reward scaling */
+.quest-tracker[data-font-scale="0.8"] .quest-reward { font-size: 0.55rem; }
+.quest-tracker[data-font-scale="0.9"] .quest-reward { font-size: 0.62rem; }
+.quest-tracker[data-font-scale="1.0"] .quest-reward { font-size: 0.6875rem; }
+.quest-tracker[data-font-scale="1.1"] .quest-reward { font-size: 0.756rem; }
+.quest-tracker[data-font-scale="1.2"] .quest-reward { font-size: 0.825rem; }
+
+/* Quest warning scaling */
+.quest-tracker[data-font-scale="0.8"] .quest-warning { font-size: 0.55rem; }
+.quest-tracker[data-font-scale="0.9"] .quest-warning { font-size: 0.62rem; }
+.quest-tracker[data-font-scale="1.0"] .quest-warning { font-size: 0.6875rem; }
+.quest-tracker[data-font-scale="1.1"] .quest-warning { font-size: 0.756rem; }
+.quest-tracker[data-font-scale="1.2"] .quest-warning { font-size: 0.825rem; }
+
+/* Reward label scaling */
+.quest-tracker[data-font-scale="0.8"] .reward-label { font-size: 0.48rem; }
+.quest-tracker[data-font-scale="0.9"] .reward-label { font-size: 0.54rem; }
+.quest-tracker[data-font-scale="1.0"] .reward-label { font-size: 0.6rem; }
+.quest-tracker[data-font-scale="1.1"] .reward-label { font-size: 0.66rem; }
+.quest-tracker[data-font-scale="1.2"] .reward-label { font-size: 0.72rem; }
 
 /* Progress text scaling */
 .quest-tracker[data-font-scale="0.8"] .progress-text { font-size: 0.6rem; }

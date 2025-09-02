@@ -511,10 +511,14 @@ export const Header: React.FC<HeaderProps> = ({
               <div className="setting-item setting-half">
                 <div className="setting-label">SHOW OPTIONAL</div>
                 <div className="setting-control">
-                  <label className="setting-checkbox">
+                  <label 
+                    className="setting-checkbox disabled"
+                    title="Temporarily disabled - Optional quests will be restored in a future update"
+                  >
                     <input
                       type="checkbox"
-                      checked={settings.showOptional !== false}
+                      checked={false}
+                      disabled={true}
                       onChange={(e) =>
                         onSettingsChange({ showOptional: e.target.checked })
                       }

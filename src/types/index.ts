@@ -4,6 +4,8 @@ export interface QuestStep {
   description?: string;
   completed: boolean;
   optional?: boolean;
+  warning?: string;
+  reward?: string;
 }
 
 export interface Act {
