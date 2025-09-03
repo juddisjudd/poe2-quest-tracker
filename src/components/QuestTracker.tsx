@@ -72,14 +72,14 @@ export const QuestTracker: React.FC = () => {
         onResetQuests={resetAllQuests}
         onImportGems={importGemProgression}
         onImportGemLoadouts={importGemLoadouts}
-        onImportNotes={(notes) => {
+        onImportNotes={async (notes) => {
           console.log('🎯 [QUESTTRACKER] onImportNotes called with:', {
             hasNotes: !!notes,
             notesLength: notes?.length || 0,
             notesPreview: notes ? notes.substring(0, 100) + '...' : 'No notes'
           });
           
-          updateNotesData({
+          await updateNotesData({
             userNotes: data.notesData?.userNotes || "",
             pobNotes: notes
           });

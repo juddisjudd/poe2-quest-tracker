@@ -111,7 +111,6 @@ export const useTrackerData = () => {
         // Load notes data separately
         const savedNotesData = await window.electronAPI.loadNotesData();
         if (savedNotesData && savedData) {
-          console.log('🔍 [HOOK] Loading separate notes data:', savedNotesData);
           savedData.notesData = savedNotesData;
         }
 
@@ -148,7 +147,7 @@ export const useTrackerData = () => {
               ? migrateGemProgression(savedData.gemProgression)
               : initialData.gemProgression,
             regexFilters: savedData.regexFilters || initialData.regexFilters,
-            notesData: savedData.notesData || initialData.notesData,
+            notesData: mergedData.notesData || savedData.notesData || initialData.notesData,
           };
           setData(updatedData);
         }
@@ -190,7 +189,12 @@ export const useTrackerData = () => {
           });
           await window.electronAPI.saveGemData(gemData);
         }
-        setData(newData);
+        
+        // Preserve current notes data when updating state since notes are saved separately
+        setData(prev => ({
+          ...newData,
+          notesData: prev.notesData, // Keep the current notes data
+        }));
       } catch (error) {
         console.error("Failed to save quest data:", error);
       }
@@ -370,14 +374,11 @@ export const useTrackerData = () => {
   }, [data, saveData]);
 
   const updateNotesData = useCallback(async (notesData: NotesData) => {
-    console.log('🎯 [HOOK] updateNotesData called with:', { notesData });
-    
     // Save notes separately to avoid race condition with gem data
     try {
-      const result = await window.electronAPI.saveNotesData(notesData);
-      console.log('🎯 [HOOK] Notes data saved separately:', result);
+      await window.electronAPI.saveNotesData(notesData);
       
-      // Update local state only
+      // Update local state
       setData(prev => ({
         ...prev,
         notesData,

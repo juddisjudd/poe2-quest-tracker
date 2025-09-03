@@ -6,7 +6,7 @@ interface NotesPanelProps {
   notesData: NotesData;
   isVisible: boolean;
   settingsOpen: boolean;
-  onUpdateNotes: (notes: NotesData) => void;
+  onUpdateNotes: (notes: NotesData) => Promise<void>;
   onTogglePanel: () => void;
   showToggleButton?: boolean;
 }
@@ -26,15 +26,15 @@ export const NotesPanel: React.FC<NotesPanelProps> = ({
     userNotesLength: notesData.userNotes?.length || 0,
     fullNotesData: notesData
   });
-  const handleUserNotesChange = (value: string) => {
-    onUpdateNotes({
+  const handleUserNotesChange = async (value: string) => {
+    await onUpdateNotes({
       ...notesData,
       userNotes: value
     });
   };
 
-  const clearPobNotes = () => {
-    onUpdateNotes({
+  const clearPobNotes = async () => {
+    await onUpdateNotes({
       ...notesData,
       pobNotes: undefined
     });
