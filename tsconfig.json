@@ -22,6 +22,6 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["src/main/**/*", "src/types/**/*", "src/data/**/*", "src/components/**/*", "src/renderer/**/*", "src/vite-env.d.ts"],
-  "exclude": ["node_modules"]
+  "include": ["src/main/**/*", "src/types/**/*", "src/data/**/*", "src/utils/**/*"],
+  "exclude": ["node_modules", "src/data/guideLoader.ts", "src/data/questData.ts"]
 }

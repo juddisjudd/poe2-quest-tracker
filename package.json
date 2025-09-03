@@ -1,7 +1,7 @@
 {
-  "name": "poe2-quest-tracker",
-  "version": "1.6.9",
-  "description": "Path of Exile 2 Quest Tracker Overlay",
+  "name": "exile-compass",
+  "version": "1.7.0",
+  "description": "Path of Exile 2 Exile Compass Overlay",
   "main": "dist/main/main.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=development concurrently \"npm run dev:renderer\" \"npm run dev:main\"",
@@ -18,7 +18,7 @@
   },
   "keywords": [
     "path-of-exile",
-    "quest-tracker",
+    "exile-compass",
     "overlay",
     "electron"
   ],
@@ -53,7 +53,7 @@
   },
   "build": {
     "appId": "com.juddisjudd.poe2questtracker",
-    "productName": "POE2 Quest Tracker",
+    "productName": "POE2 Exile Compass",
     "directories": {
       "output": "release"
     },

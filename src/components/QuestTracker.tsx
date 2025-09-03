@@ -6,6 +6,8 @@ import { UpdateNotification } from "./UpdateNotification";
 import { GemProgressionPanel } from "./GemProgressionPanel";
 import { RegexPanel } from "./RegexPanel";
 import { NotesPanel } from "./NotesPanel";
+import { SimpleGuideSelector } from "./SimpleGuideSelector";
+import { PanelFooter } from "./PanelFooter";
 import "./QuestTracker.css";
 import "./UpdateNotification.css";
 import "./WebStyles.css";
@@ -26,7 +28,9 @@ export const QuestTracker: React.FC = () => {
     toggleGem,
     updateRegexFilters,
     updateNotesData,
-    importGemsAndNotes
+    importGemsAndNotes,
+    // Campaign Guide functions
+    selectCampaignGuide,
   } = useTrackerData();
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [gemPanelVisible, setGemPanelVisible] = useState(false);
@@ -87,6 +91,14 @@ export const QuestTracker: React.FC = () => {
           });
         }}
       />
+      
+      {/* Simple Guide Selector */}
+      <SimpleGuideSelector
+        campaignGuides={data.campaignGuides || []}
+        activeGuideId={data.activeCampaignGuideId || ""}
+        onSelectGuide={selectCampaignGuide}
+      />
+      
       <div className="acts-container">
         {data.acts.map((act) => (
           <ActPanel
@@ -113,6 +125,7 @@ export const QuestTracker: React.FC = () => {
             setGemPanelVisible(newVisibility);
             updateSettings({ showGemPanel: newVisibility });
           }}
+          showToggleButton={false}
         />
       )}
       
@@ -138,6 +151,7 @@ export const QuestTracker: React.FC = () => {
             setRegexPanelVisible(newVisibility);
             updateSettings({ showRegexPanel: newVisibility });
           }}
+          showToggleButton={false}
         />
       )}
 
@@ -153,8 +167,35 @@ export const QuestTracker: React.FC = () => {
             setNotesPanelVisible(newVisibility);
             updateSettings({ showNotesPanel: newVisibility });
           }}
+          showToggleButton={false}
         />
       )}
+      
+      {/* Panel Footer with toggle buttons */}
+      <PanelFooter
+        gemPanelVisible={gemPanelVisible}
+        onToggleGemPanel={() => {
+          const newVisibility = !gemPanelVisible;
+          setGemPanelVisible(newVisibility);
+          updateSettings({ showGemPanel: newVisibility });
+        }}
+        hasGemData={!!data.gemProgression}
+        regexPanelVisible={regexPanelVisible}
+        onToggleRegexPanel={() => {
+          const newVisibility = !regexPanelVisible;
+          setRegexPanelVisible(newVisibility);
+          updateSettings({ showRegexPanel: newVisibility });
+        }}
+        hasRegexData={!!data.regexFilters}
+        notesPanelVisible={notesPanelVisible}
+        onToggleNotesPanel={() => {
+          const newVisibility = !notesPanelVisible;
+          setNotesPanelVisible(newVisibility);
+          updateSettings({ showNotesPanel: newVisibility });
+        }}
+        hasNotesData={!!data.notesData}
+        settingsOpen={settingsOpen}
+      />
       
       {isElectron && <UpdateNotification />}
     </div>

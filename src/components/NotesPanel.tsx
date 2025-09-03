@@ -8,6 +8,7 @@ interface NotesPanelProps {
   settingsOpen: boolean;
   onUpdateNotes: (notes: NotesData) => void;
   onTogglePanel: () => void;
+  showToggleButton?: boolean;
 }
 
 export const NotesPanel: React.FC<NotesPanelProps> = ({
@@ -16,6 +17,7 @@ export const NotesPanel: React.FC<NotesPanelProps> = ({
   settingsOpen,
   onUpdateNotes,
   onTogglePanel,
+  showToggleButton = true,
 }) => {
   console.log('🎯 [NOTES_PANEL] Rendering with data:', {
     hasPobNotes: !!notesData.pobNotes,
@@ -41,16 +43,18 @@ export const NotesPanel: React.FC<NotesPanelProps> = ({
   return (
     <>
       {/* Toggle Button - positioned at bottom */}
-      <div className={`notes-panel-toggle ${isVisible ? "panel-open" : ""} ${settingsOpen ? "settings-open" : ""}`}>
-        <button
-          className="notes-toggle-btn"
-          onClick={onTogglePanel}
-          title={isVisible ? "Hide Notes" : "Show Notes"}
-        >
-          <span className="toggle-icon">{isVisible ? "▼" : "▲"}</span>
-          <span className="toggle-text">Notes</span>
-        </button>
-      </div>
+      {showToggleButton && (
+        <div className={`notes-panel-toggle ${isVisible ? "panel-open" : ""} ${settingsOpen ? "settings-open" : ""}`}>
+          <button
+            className="notes-toggle-btn"
+            onClick={onTogglePanel}
+            title={isVisible ? "Hide Notes" : "Show Notes"}
+          >
+            <span className="toggle-icon">{isVisible ? "▼" : "▲"}</span>
+            <span className="toggle-text">Notes</span>
+          </button>
+        </div>
+      )}
 
       {/* Notes Panel - slides up from bottom */}
       <div className={`notes-panel ${isVisible ? "visible" : "hidden"}`}>

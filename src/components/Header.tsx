@@ -322,7 +322,7 @@ export const Header: React.FC<HeaderProps> = ({
       <div className="header">
         <div className="title-bar">
           <div className="title">
-            <span className="title-text">Quest Tracker</span>
+            <span className="title-text">Exile Compass</span>
             {/* Show version next to title in Electron */}
             {isElectron && appVersion && (
               <span
@@ -344,7 +344,7 @@ export const Header: React.FC<HeaderProps> = ({
             )}
           </div>
           <div className="window-controls">
-            {/* Support and Settings buttons for ALL versions */}
+            {/* Support, Edit, and Settings buttons for ALL versions */}
             <button
               className="control-btn support-btn"
               onClick={handleSupportClick}
@@ -511,14 +511,10 @@ export const Header: React.FC<HeaderProps> = ({
               <div className="setting-item setting-half">
                 <div className="setting-label">SHOW OPTIONAL</div>
                 <div className="setting-control">
-                  <label 
-                    className="setting-checkbox disabled"
-                    title="Temporarily disabled - Optional quests will be restored in a future update"
-                  >
+                  <label className="setting-checkbox">
                     <input
                       type="checkbox"
-                      checked={false}
-                      disabled={true}
+                      checked={settings.showOptional !== false}
                       onChange={(e) =>
                         onSettingsChange({ showOptional: e.target.checked })
                       }

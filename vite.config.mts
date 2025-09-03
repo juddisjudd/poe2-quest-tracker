@@ -6,12 +6,10 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const isGitHubPages = process.env.GITHUB_PAGES === 'true';
-
 export default defineConfig({
   plugins: [react()],
   root: 'src/renderer',
-  base: isGitHubPages ? '/poe2-quest-tracker/' : './',
+  base: './',
   build: {
     outDir: '../../dist/renderer',
     emptyOutDir: true,

@@ -1,10 +1,13 @@
 import { useState, useEffect, useCallback } from "react";
-import { TrackerData, Act, GemProgression, GemLoadout, RegexFilters, NotesData } from "../types";
-import { defaultQuestData } from "../data/questData";
+import { TrackerData, Act, GemProgression, GemLoadout, RegexFilters, NotesData, CampaignGuide, QuestStep } from "../types";
+import { defaultQuestData, availableCampaignGuides, defaultCampaignGuide } from "../data/questData";
 import { migrateGemProgression, PobLoadout } from "../utils/pobParser";
 
 const initialData: TrackerData = {
   acts: defaultQuestData,
+  campaignGuides: availableCampaignGuides,
+  activeCampaignGuideId: defaultCampaignGuide.id,
+  editMode: false,
   gemProgression: {
     socketGroups: [],
   },
@@ -111,8 +114,17 @@ export const useTrackerData = () => {
 
         if (savedData) {
           const mergedData = mergeQuestData(savedData, defaultQuestData);
+          
+          // Ensure built-in guides are always available and merge with any custom guides
+          const mergedGuides = [
+            ...availableCampaignGuides, // Always include built-in guides
+            ...(savedData.campaignGuides || []).filter(guide => guide.custom) // Add custom guides
+          ];
+          
           const updatedData: TrackerData = {
             ...mergedData,
+            campaignGuides: mergedGuides,
+            activeCampaignGuideId: savedData.activeCampaignGuideId || defaultCampaignGuide.id,
             settings: {
               ...savedData.settings,
               fontSize: savedData.settings.fontSize || 1.0,
@@ -384,6 +396,375 @@ export const useTrackerData = () => {
     saveData(newData);
   }, [data, saveData]);
 
+  // Campaign Guide Management
+  const selectCampaignGuide = useCallback((guideId: string) => {
+    const guide = data.campaignGuides?.find(g => g.id === guideId);
+    if (!guide) return;
+
+    const newData = {
+      ...data,
+      activeCampaignGuideId: guideId,
+      acts: guide.acts.map(act => {
+        // Preserve expansion state from current acts if same act ID exists
+        const currentAct = data.acts.find(currentAct => currentAct.id === act.id);
+        return {
+          ...act,
+          expanded: currentAct ? currentAct.expanded : act.expanded, // Preserve user's expansion preference
+          quests: act.quests.map(quest => ({
+            ...quest,
+            completed: false, // Reset progress when switching guides
+          })),
+        };
+      }),
+    };
+    saveData(newData);
+  }, [data, saveData]);
+
+  const createCampaignGuide = useCallback((guide: Omit<CampaignGuide, 'id'>) => {
+    const newId = `custom-${Date.now()}`;
+    const newGuide: CampaignGuide = {
+      ...guide,
+      id: newId,
+    };
+
+    const newData = {
+      ...data,
+      campaignGuides: [...(data.campaignGuides || []), newGuide],
+      activeCampaignGuideId: newId,
+      acts: newGuide.acts,
+    };
+    saveData(newData);
+  }, [data, saveData]);
+
+  const deleteCampaignGuide = useCallback((guideId: string) => {
+    const guide = data.campaignGuides?.find(g => g.id === guideId);
+    if (!guide?.custom) return; // Can't delete built-in guides
+
+    const remainingGuides = data.campaignGuides?.filter(g => g.id !== guideId) || [];
+    const defaultGuide = remainingGuides.find(g => g.isDefault) || remainingGuides[0];
+
+    const newData = {
+      ...data,
+      campaignGuides: remainingGuides,
+      activeCampaignGuideId: defaultGuide?.id || 'standard-guide',
+      acts: defaultGuide?.acts || [],
+    };
+    saveData(newData);
+  }, [data, saveData]);
+
+  const duplicateCampaignGuide = useCallback((sourceGuideId: string, newName: string) => {
+    const sourceGuide = data.campaignGuides?.find(g => g.id === sourceGuideId);
+    if (!sourceGuide) return;
+
+    const newId = `custom-${Date.now()}`;
+    const duplicatedGuide: CampaignGuide = {
+      ...sourceGuide,
+      id: newId,
+      name: newName,
+      custom: true,
+      isDefault: false,
+    };
+
+    const newData = {
+      ...data,
+      campaignGuides: [...(data.campaignGuides || []), duplicatedGuide],
+      activeCampaignGuideId: newId,
+      acts: duplicatedGuide.acts.map(act => ({
+        ...act,
+        quests: act.quests.map(quest => ({
+          ...quest,
+          completed: false,
+        })),
+      })),
+    };
+    saveData(newData);
+  }, [data, saveData]);
+
+  // Edit Mode Functions
+  const toggleEditMode = useCallback(() => {
+    const newData = {
+      ...data,
+      editMode: !data.editMode,
+    };
+    saveData(newData);
+  }, [data, saveData]);
+
+  const addQuest = useCallback((actId: string, quest: Omit<QuestStep, 'id' | 'completed'>) => {
+    const newId = `custom-quest-${Date.now()}`;
+    const newQuest: QuestStep = {
+      ...quest,
+      id: newId,
+      completed: false,
+      custom: true,
+    };
+
+    const newData = {
+      ...data,
+      acts: data.acts.map(act => 
+        act.id === actId 
+          ? { ...act, quests: [...act.quests, newQuest] }
+          : act
+      ),
+    };
+    // Update current campaign guide if it's custom
+    if (newData.activeCampaignGuideId && newData.campaignGuides) {
+      const activeGuide = newData.campaignGuides.find(g => g.id === newData.activeCampaignGuideId);
+      if (activeGuide?.custom) {
+        const updatedGuides = newData.campaignGuides.map(guide =>
+          guide.id === newData.activeCampaignGuideId
+            ? { ...guide, acts: newData.acts }
+            : guide
+        );
+        newData.campaignGuides = updatedGuides;
+      }
+    }
+    saveData(newData);
+  }, [data, saveData]);
+
+  const editQuest = useCallback((actId: string, questId: string, questUpdates: Partial<QuestStep>) => {
+    const newData = {
+      ...data,
+      acts: data.acts.map(act => 
+        act.id === actId 
+          ? {
+              ...act,
+              quests: act.quests.map(quest =>
+                quest.id === questId
+                  ? { ...quest, ...questUpdates }
+                  : quest
+              ),
+            }
+          : act
+      ),
+    };
+    // Update current campaign guide if it's custom
+    if (newData.activeCampaignGuideId && newData.campaignGuides) {
+      const activeGuide = newData.campaignGuides.find(g => g.id === newData.activeCampaignGuideId);
+      if (activeGuide?.custom) {
+        const updatedGuides = newData.campaignGuides.map(guide =>
+          guide.id === newData.activeCampaignGuideId
+            ? { ...guide, acts: newData.acts }
+            : guide
+        );
+        newData.campaignGuides = updatedGuides;
+      }
+    }
+    saveData(newData);
+  }, [data, saveData]);
+
+  const deleteQuest = useCallback((actId: string, questId: string) => {
+    const newData = {
+      ...data,
+      acts: data.acts.map(act => 
+        act.id === actId 
+          ? { ...act, quests: act.quests.filter(quest => quest.id !== questId) }
+          : act
+      ),
+    };
+    // Update current campaign guide if it's custom
+    if (newData.activeCampaignGuideId && newData.campaignGuides) {
+      const activeGuide = newData.campaignGuides.find(g => g.id === newData.activeCampaignGuideId);
+      if (activeGuide?.custom) {
+        const updatedGuides = newData.campaignGuides.map(guide =>
+          guide.id === newData.activeCampaignGuideId
+            ? { ...guide, acts: newData.acts }
+            : guide
+        );
+        newData.campaignGuides = updatedGuides;
+      }
+    }
+    saveData(newData);
+  }, [data, saveData]);
+
+  const addAct = useCallback((act: Omit<Act, 'id'>) => {
+    const newId = `custom-act-${Date.now()}`;
+    const newAct: Act = {
+      ...act,
+      id: newId,
+      custom: true,
+    };
+
+    const newData = {
+      ...data,
+      acts: [...data.acts, newAct],
+    };
+    // Update current campaign guide if it's custom
+    if (newData.activeCampaignGuideId && newData.campaignGuides) {
+      const activeGuide = newData.campaignGuides.find(g => g.id === newData.activeCampaignGuideId);
+      if (activeGuide?.custom) {
+        const updatedGuides = newData.campaignGuides.map(guide =>
+          guide.id === newData.activeCampaignGuideId
+            ? { ...guide, acts: newData.acts }
+            : guide
+        );
+        newData.campaignGuides = updatedGuides;
+      }
+    }
+    saveData(newData);
+  }, [data, saveData]);
+
+  const editAct = useCallback((actId: string, actUpdates: Partial<Act>) => {
+    const newData = {
+      ...data,
+      acts: data.acts.map(act => 
+        act.id === actId ? { ...act, ...actUpdates } : act
+      ),
+    };
+    // Update current campaign guide if it's custom
+    if (newData.activeCampaignGuideId && newData.campaignGuides) {
+      const activeGuide = newData.campaignGuides.find(g => g.id === newData.activeCampaignGuideId);
+      if (activeGuide?.custom) {
+        const updatedGuides = newData.campaignGuides.map(guide =>
+          guide.id === newData.activeCampaignGuideId
+            ? { ...guide, acts: newData.acts }
+            : guide
+        );
+        newData.campaignGuides = updatedGuides;
+      }
+    }
+    saveData(newData);
+  }, [data, saveData]);
+
+  const deleteAct = useCallback((actId: string) => {
+    const newData = {
+      ...data,
+      acts: data.acts.filter(act => act.id !== actId),
+    };
+    // Update current campaign guide if it's custom
+    if (newData.activeCampaignGuideId && newData.campaignGuides) {
+      const activeGuide = newData.campaignGuides.find(g => g.id === newData.activeCampaignGuideId);
+      if (activeGuide?.custom) {
+        const updatedGuides = newData.campaignGuides.map(guide =>
+          guide.id === newData.activeCampaignGuideId
+            ? { ...guide, acts: newData.acts }
+            : guide
+        );
+        newData.campaignGuides = updatedGuides;
+      }
+    }
+    saveData(newData);
+  }, [data, saveData]);
+
+  const reorderQuest = useCallback((actId: string, questId: string, direction: 'up' | 'down') => {
+    const newData = {
+      ...data,
+      acts: data.acts.map(act => {
+        if (act.id !== actId) return act;
+        
+        const questIndex = act.quests.findIndex(q => q.id === questId);
+        if (questIndex === -1) return act;
+        
+        const newIndex = direction === 'up' ? questIndex - 1 : questIndex + 1;
+        if (newIndex < 0 || newIndex >= act.quests.length) return act;
+        
+        const newQuests = [...act.quests];
+        [newQuests[questIndex], newQuests[newIndex]] = [newQuests[newIndex], newQuests[questIndex]];
+        
+        return { ...act, quests: newQuests };
+      }),
+    };
+    // Update current campaign guide if it's custom
+    if (newData.activeCampaignGuideId && newData.campaignGuides) {
+      const activeGuide = newData.campaignGuides.find(g => g.id === newData.activeCampaignGuideId);
+      if (activeGuide?.custom) {
+        const updatedGuides = newData.campaignGuides.map(guide =>
+          guide.id === newData.activeCampaignGuideId
+            ? { ...guide, acts: newData.acts }
+            : guide
+        );
+        newData.campaignGuides = updatedGuides;
+      }
+    }
+    saveData(newData);
+  }, [data, saveData]);
+
+  const reorderAct = useCallback((actId: string, direction: 'up' | 'down') => {
+    const actIndex = data.acts.findIndex(act => act.id === actId);
+    if (actIndex === -1) return;
+    
+    const newIndex = direction === 'up' ? actIndex - 1 : actIndex + 1;
+    if (newIndex < 0 || newIndex >= data.acts.length) return;
+    
+    const newActs = [...data.acts];
+    [newActs[actIndex], newActs[newIndex]] = [newActs[newIndex], newActs[actIndex]];
+    
+    const newData = {
+      ...data,
+      acts: newActs,
+    };
+    // Update current campaign guide if it's custom
+    if (newData.activeCampaignGuideId && newData.campaignGuides) {
+      const activeGuide = newData.campaignGuides.find(g => g.id === newData.activeCampaignGuideId);
+      if (activeGuide?.custom) {
+        const updatedGuides = newData.campaignGuides.map(guide =>
+          guide.id === newData.activeCampaignGuideId
+            ? { ...guide, acts: newData.acts }
+            : guide
+        );
+        newData.campaignGuides = updatedGuides;
+      }
+    }
+    saveData(newData);
+  }, [data, saveData]);
+
+  // Export/Import Functions
+  const exportGuide = useCallback((guideId: string) => {
+    const guide = data.campaignGuides?.find(g => g.id === guideId);
+    if (!guide) return;
+
+    const exportData = {
+      guide,
+      version: "1.0",
+      exportedAt: new Date().toISOString(),
+    };
+
+    const jsonString = JSON.stringify(exportData, null, 2);
+    
+    if (!!window.electronAPI) {
+      // Electron version - save to file
+      window.electronAPI.saveFile(jsonString, `${guide.name.replace(/[^a-z0-9]/gi, '_')}_guide.json`);
+    } else {
+      // Web version - download
+      const blob = new Blob([jsonString], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${guide.name.replace(/[^a-z0-9]/gi, '_')}_guide.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+  }, [data]);
+
+  const importGuide = useCallback((guideData: string) => {
+    try {
+      const parsedData = JSON.parse(guideData);
+      
+      if (!parsedData.guide || !parsedData.guide.name || !parsedData.guide.acts) {
+        throw new Error('Invalid guide format');
+      }
+
+      const importedGuide: CampaignGuide = {
+        ...parsedData.guide,
+        id: `imported-${Date.now()}`,
+        custom: true,
+        isDefault: false,
+      };
+
+      const newData = {
+        ...data,
+        campaignGuides: [...(data.campaignGuides || []), importedGuide],
+      };
+      saveData(newData);
+      
+      return true;
+    } catch (error) {
+      console.error('Failed to import guide:', error);
+      return false;
+    }
+  }, [data, saveData]);
+
   return {
     data,
     loading,
@@ -398,5 +779,7 @@ export const useTrackerData = () => {
     updateRegexFilters,
     updateNotesData,
     importGemsAndNotes,
+    // Campaign Guide Management (simplified)
+    selectCampaignGuide,
   };
 };

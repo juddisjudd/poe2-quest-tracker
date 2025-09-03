@@ -8,6 +8,7 @@ interface RegexPanelProps {
   settingsOpen: boolean;
   onUpdateFilters: (filters: RegexFilters) => void;
   onTogglePanel: () => void;
+  showToggleButton?: boolean;
 }
 
 export const RegexPanel: React.FC<RegexPanelProps> = ({
@@ -16,6 +17,7 @@ export const RegexPanel: React.FC<RegexPanelProps> = ({
   settingsOpen,
   onUpdateFilters,
   onTogglePanel,
+  showToggleButton = true,
 }) => {
   const [copiedField, setCopiedField] = useState<string | null>(null);
 
@@ -89,16 +91,18 @@ export const RegexPanel: React.FC<RegexPanelProps> = ({
   return (
     <>
       {/* Toggle Button - positioned at bottom */}
-      <div className={`regex-panel-toggle ${isVisible ? "panel-open" : ""} ${settingsOpen ? "settings-open" : ""}`}>
-        <button
-          className="regex-toggle-btn"
-          onClick={onTogglePanel}
-          title={isVisible ? "Hide Regex Filters" : "Show Regex Filters"}
-        >
-          <span className="toggle-icon">{isVisible ? "▼" : "▲"}</span>
-          <span className="toggle-text">Regex</span>
-        </button>
-      </div>
+      {showToggleButton && (
+        <div className={`regex-panel-toggle ${isVisible ? "panel-open" : ""} ${settingsOpen ? "settings-open" : ""}`}>
+          <button
+            className="regex-toggle-btn"
+            onClick={onTogglePanel}
+            title={isVisible ? "Hide Regex Filters" : "Show Regex Filters"}
+          >
+            <span className="toggle-icon">{isVisible ? "▼" : "▲"}</span>
+            <span className="toggle-text">Regex</span>
+          </button>
+        </div>
+      )}
 
       {/* Regex Panel - slides up from bottom */}
       <div className={`regex-panel ${isVisible ? "visible" : "hidden"}`}>

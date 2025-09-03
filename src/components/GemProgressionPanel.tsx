@@ -55,6 +55,7 @@ interface GemProgressionPanelProps {
   onToggleGem: (gemId: string) => void;
   onTogglePanel: () => void;
   onSwitchLoadout?: (loadoutId: string) => void;
+  showToggleButton?: boolean;
 }
 
 export const GemProgressionPanel: React.FC<GemProgressionPanelProps> = ({
@@ -65,6 +66,7 @@ export const GemProgressionPanel: React.FC<GemProgressionPanelProps> = ({
   onToggleGem,
   onTogglePanel,
   onSwitchLoadout,
+  showToggleButton = true,
 }) => {
 
   const getGemIcon = (gem: GemSlot) => {
@@ -166,16 +168,18 @@ export const GemProgressionPanel: React.FC<GemProgressionPanelProps> = ({
   return (
     <>
       {/* Toggle Button - positioned at bottom */}
-      <div className={`gem-panel-toggle ${isVisible ? "panel-open" : ""} ${settingsOpen ? "settings-open" : ""}`}>
-        <button
-          className="gem-toggle-btn"
-          onClick={onTogglePanel}
-          title={isVisible ? "Hide Gem Progression" : "Show Gem Progression"}
-        >
-          <span className="toggle-icon">{isVisible ? "▼" : "▲"}</span>
-          <span className="toggle-text">Gems</span>
-        </button>
-      </div>
+      {showToggleButton && (
+        <div className={`gem-panel-toggle ${isVisible ? "panel-open" : ""} ${settingsOpen ? "settings-open" : ""}`}>
+          <button
+            className="gem-toggle-btn"
+            onClick={onTogglePanel}
+            title={isVisible ? "Hide Gem Progression" : "Show Gem Progression"}
+          >
+            <span className="toggle-icon">{isVisible ? "▼" : "▲"}</span>
+            <span className="toggle-text">Gems</span>
+          </button>
+        </div>
+      )}
 
       {/* Gem Panel - slides up from bottom */}
       <div className={`gem-progression-panel ${isVisible ? "visible" : "hidden"}`}>

@@ -1,6 +1,6 @@
-# PoE2 Quest Tracker
+# Exile Compass
 
-A desktop overlay application for tracking quests, gems, regex filters, and notes in Path of Exile 2. Built with Electron, React, and TypeScript. Also available as a web version.
+A desktop overlay application for tracking quests, gems, storing regex filters, and notes in Path of Exile 2.
 
 [![GitHub Downloads (all assets, latest release)](https://img.shields.io/github/downloads/juddisjudd/poe2-quest-tracker/latest/total)](https://github.com/juddisjudd/poe2-quest-tracker/releases) [![GitHub Release](https://img.shields.io/github/v/release/juddisjudd/poe2-quest-tracker)](https://github.com/juddisjudd/poe2-quest-tracker/releases)
 
@@ -10,10 +10,10 @@ https://github.com/user-attachments/assets/94a43925-20e8-4eb1-88fd-7cd2393f3d73
 ## Features
 
 ### Quest Tracking
-- 📋 **Comprehensive Quest Tracking** - Track all quests across all acts in Path of Exile 2
-- 🎯 **Reward Information** - See what rewards each quest provides (skill points, resistances, etc.)
+- 🎯 **Detailed Quest Information** - Complete reward descriptions, warnings, and strategic advice
 - 📁 **Collapsible Acts** - Organize quests by act with expandable/collapsible sections
 - 👁️ **Optional Quest Toggle** - Show/hide optional quests
+- 📚 **Community Guides** - Easy contribution system for community-created guides
 
 ### Gem Progression
 - Import gem builds directly from POB codes or pobb.in links
@@ -53,6 +53,11 @@ https://github.com/user-attachments/assets/94a43925-20e8-4eb1-88fd-7cd2393f3d73
 4. Use the GEMS button to view and track your imported build
 5. Click on gem slots to mark them as acquired
 
+### Selecting Campaign Guides
+1. Use the guide selector dropdown in the top-right to choose your preferred campaign guide
+2. Guides include author information and detailed quest progression
+3. Community contributors can easily add new guides by submitting JSON files
+
 ### Using Regex Filters
 1. Click the REGEX button at the bottom
 2. Enter regex patterns for different item categories
@@ -71,28 +76,19 @@ https://github.com/user-attachments/assets/94a43925-20e8-4eb1-88fd-7cd2393f3d73
 4. Set global hotkey for quick show/hide (desktop version)
 5. All settings and progress are automatically saved
 
-## Quest Data
-
-The application includes comprehensive quest data for Path of Exile 2, including:
-
-- **Act 1-4 & Interlude** quests with their respective rewards
-- **Optional quests** that can be toggled on/off
+### Community Guide System
+Contributors can easily add new campaign guides by:
+1. Creating a JSON file following the guide format
+2. Adding it to `src/data/guides/`
+3. Submitting a pull request
+4. The guide will automatically appear in the dropdown after merging
 
 Each quest entry includes:
-- Quest name and location
-- Reward description (skill points, resistances, etc.)
-- Completion status
+- Quest name, giver, and location details
+- Complete reward descriptions with strategic value
+- Completion tracking with persistent state
 - Optional/main quest classification
-
-## Technical Features
-
-- **Dual Platform Support** - Desktop app with overlay functionality and web version
-- **Path of Building Integration** - Full POB code parsing including gem builds and notes
-- **Persistent Data Storage** - Electron file system storage with localStorage fallback
-- **Real-time Updates** - Instant saving and loading of all user data
-- **Theme System** - CSS custom properties with multiple color schemes
-- **Responsive Design** - Adapts to different screen sizes and orientations
-
+- Author attribution for community guides
 
 ## License
 

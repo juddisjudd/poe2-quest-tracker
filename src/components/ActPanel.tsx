@@ -32,6 +32,7 @@ export const ActPanel: React.FC<ActPanelProps> = ({
   }
   `;
 
+
   return (
     <div className={panelClasses.trim()}>
       <div className="act-header" onClick={onToggleAct}>

@@ -15,6 +15,7 @@ declare global {
       detectPoeLogFile: () => Promise<string | null>;
       checkFileExists: (filePath: string) => Promise<boolean>;
       selectLogFile: () => Promise<string | null>;
+      saveFile: (content: string, defaultName: string) => Promise<boolean>;
       onUpdateAvailable: (callback: () => void) => () => void;
       onUpdateDownloaded: (callback: () => void) => () => void;
       restartApp: () => void;

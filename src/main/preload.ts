@@ -13,6 +13,7 @@ const electronAPI = {
   detectPoeLogFile: () => ipcRenderer.invoke("detect-poe-log-file"),
   checkFileExists: (filePath: string) => ipcRenderer.invoke("check-file-exists", filePath),
   selectLogFile: () => ipcRenderer.invoke("select-log-file"),
+  saveFile: (content: string, defaultName: string) => ipcRenderer.invoke("save-file", content, defaultName),
   onUpdateAvailable: (callback: () => void) => {
     ipcRenderer.on("update-available", callback);
     return () => ipcRenderer.removeListener("update-available", callback);

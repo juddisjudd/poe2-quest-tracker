@@ -6,6 +6,7 @@ export interface QuestStep {
   optional?: boolean;
   warning?: string;
   reward?: string;
+  custom?: boolean; // Indicates if this quest was added by user
 }
 
 export interface Act {
@@ -13,6 +14,18 @@ export interface Act {
   name: string;
   expanded: boolean;
   quests: QuestStep[];
+  custom?: boolean; // Indicates if this act was added by user
+}
+
+export interface CampaignGuide {
+  id: string;
+  name: string;
+  description: string;
+  author?: string;
+  version?: string;
+  acts: Act[];
+  isDefault?: boolean;
+  custom?: boolean; // Indicates if this guide was created by user
 }
 
 export interface GemSlot {
@@ -71,6 +84,9 @@ export interface NotesData {
 
 export interface TrackerData {
   acts: Act[];
+  campaignGuides?: CampaignGuide[];
+  activeCampaignGuideId?: string;
+  editMode?: boolean;
   gemProgression?: GemProgression;
   gemLoadouts?: GemProgressionWithLoadouts;
   regexFilters?: RegexFilters;

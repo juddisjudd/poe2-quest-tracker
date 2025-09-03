@@ -1,0 +1,143 @@
+.panel-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 8px;
+  padding: 8px 16px 12px;
+  background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.3) 50%, rgba(0, 0, 0, 0.6) 100%);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.panel-footer.settings-open {
+  opacity: 0;
+  transform: translateY(100%);
+  pointer-events: none;
+}
+
+.panel-toggle {
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.panel-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.panel-toggle-btn:hover {
+  background: rgba(0, 0, 0, 0.9);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.panel-toggle-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.panel-toggle.panel-open .panel-toggle-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.4);
+  color: #ffffff;
+}
+
+.panel-toggle.panel-open .panel-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.toggle-icon {
+  font-size: 10px;
+  line-height: 1;
+  transition: transform 0.2s ease;
+}
+
+.panel-toggle.panel-open .toggle-icon {
+  transform: rotate(180deg);
+}
+
+.toggle-text {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+/* Hide footer when any panel is open */
+.quest-tracker.gem-panel-open .panel-footer,
+.quest-tracker.regex-panel-open .panel-footer,
+.quest-tracker.notes-panel-open .panel-footer {
+  opacity: 0;
+  transform: translateY(100%);
+  pointer-events: none;
+}
+
+/* Web mode adjustments */
+.web-mode .panel-footer {
+  background: linear-gradient(180deg, transparent 0%, rgba(20, 20, 20, 0.4) 50%, rgba(20, 20, 20, 0.8) 100%);
+}
+
+.web-mode .panel-toggle-btn {
+  background: rgba(20, 20, 20, 0.9);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.web-mode .panel-toggle-btn:hover {
+  background: rgba(30, 30, 30, 0.95);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+/* Theme support */
+[data-theme="amoled-crimson"] .panel-toggle-btn {
+  border-color: rgba(220, 38, 127, 0.3);
+}
+
+[data-theme="amoled-crimson"] .panel-toggle.panel-open .panel-toggle-btn {
+  background: rgba(220, 38, 127, 0.1);
+  border-color: rgba(220, 38, 127, 0.4);
+}
+
+[data-theme="amoled-yellow"] .panel-toggle-btn {
+  border-color: rgba(255, 193, 7, 0.3);
+}
+
+[data-theme="amoled-yellow"] .panel-toggle.panel-open .panel-toggle-btn {
+  background: rgba(255, 193, 7, 0.1);
+  border-color: rgba(255, 193, 7, 0.4);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .panel-footer {
+    padding: 6px 12px 8px;
+    gap: 6px;
+  }
+  
+  .panel-toggle-btn {
+    padding: 6px 8px;
+    font-size: 11px;
+    gap: 4px;
+  }
+  
+  .toggle-text {
+    font-size: 10px;
+  }
+}

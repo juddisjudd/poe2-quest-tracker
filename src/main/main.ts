@@ -149,7 +149,7 @@ const createTray = (): void => {
     { label: "Exit", click: () => app.quit() },
   ]);
 
-  tray.setToolTip(`POE2 Quest Tracker - Press ${currentHotkey} to toggle`);
+  tray.setToolTip(`POE2 Exile Compass - Press ${currentHotkey} to toggle`);
   tray.setContextMenu(contextMenu);
   tray.on("click", toggleVisibility);
 };
@@ -171,7 +171,7 @@ const updateTrayMenu = (): void => {
     { label: "Exit", click: () => app.quit() },
   ]);
 
-  tray.setToolTip(`POE2 Quest Tracker - Press ${currentHotkey} to toggle`);
+  tray.setToolTip(`POE2 Exile Compass - Press ${currentHotkey} to toggle`);
   tray.setContextMenu(contextMenu);
 };
 
@@ -439,5 +439,29 @@ ipcMain.handle("select-log-file", async () => {
   } catch (error) {
     log.error("Error selecting log file:", error);
     return null;
+  }
+});
+
+ipcMain.handle("save-file", async (_, content: string, defaultName: string) => {
+  try {
+    const result = await dialog.showSaveDialog(mainWindow!, {
+      title: "Save Guide File",
+      defaultPath: defaultName,
+      filters: [
+        { name: "JSON Files", extensions: ["json"] },
+        { name: "All Files", extensions: ["*"] }
+      ]
+    });
+
+    if (result.canceled || !result.filePath) {
+      return false;
+    }
+
+    await fs.promises.writeFile(result.filePath, content, 'utf8');
+    log.info("Guide file saved:", result.filePath);
+    return true;
+  } catch (error) {
+    log.error("Error saving guide file:", error);
+    return false;
   }
 });
