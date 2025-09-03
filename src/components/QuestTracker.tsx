@@ -112,11 +112,18 @@ export const QuestTracker: React.FC = () => {
       </div>
       
       {/* Gem Progression Panel */}
-      {data.gemProgression && (
-        <GemProgressionPanel
-          gemProgression={data.gemProgression}
-          gemLoadouts={data.gemLoadouts}
-          isVisible={gemPanelVisible}
+      {data.gemProgression && (() => {
+        console.log('🎯 [QUESTTRACKER] Rendering GemProgressionPanel with:', {
+          hasGemProgression: !!data.gemProgression,
+          socketGroups: data.gemProgression?.socketGroups?.length || 0,
+          isVisible: gemPanelVisible,
+          firstGroupName: data.gemProgression?.socketGroups?.[0]?.skillName || 'none'
+        });
+        return (
+          <GemProgressionPanel
+            gemProgression={data.gemProgression}
+            gemLoadouts={data.gemLoadouts}
+            isVisible={gemPanelVisible}
           settingsOpen={settingsOpen}
           onToggleGem={toggleGem}
           onSwitchLoadout={switchLoadout}
@@ -127,7 +134,8 @@ export const QuestTracker: React.FC = () => {
           }}
           showToggleButton={false}
         />
-      )}
+        );
+      })()}
       
       {/* Debug: log tracker data */}
       {(() => {
@@ -179,7 +187,7 @@ export const QuestTracker: React.FC = () => {
           setGemPanelVisible(newVisibility);
           updateSettings({ showGemPanel: newVisibility });
         }}
-        hasGemData={!!data.gemProgression}
+        hasGemData={true}
         regexPanelVisible={regexPanelVisible}
         onToggleRegexPanel={() => {
           const newVisibility = !regexPanelVisible;

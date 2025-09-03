@@ -114,6 +114,10 @@ declare global {
       closeWindow: () => Promise<void>;
       saveQuestData: (data: TrackerData) => Promise<void>;
       loadQuestData: () => Promise<TrackerData | null>;
+      saveGemData: (data: any) => Promise<{ success: boolean; error?: string }>;
+      loadGemData: () => Promise<any>;
+      saveNotesData: (data: NotesData) => Promise<{ success: boolean; error?: string }>;
+      loadNotesData: () => Promise<NotesData | null>;
       checkForUpdates: () => Promise<void>;
       updateHotkey: (hotkey: string) => Promise<void>;
       openExternal: (url: string) => Promise<void>;
@@ -122,6 +126,8 @@ declare global {
       restartApp: () => void;
       detectPoeLogFile: () => Promise<string | null>;
       checkFileExists: (filePath: string) => Promise<boolean>;
+      selectLogFile: () => Promise<string | null>;
+      saveFile: (content: string, defaultName: string) => Promise<boolean>;
     };
   }
 }

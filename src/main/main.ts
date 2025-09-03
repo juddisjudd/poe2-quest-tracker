@@ -33,6 +33,16 @@ const getDataPath = () => {
   return path.join(userDataPath, "quest-data.json");
 };
 
+const getGemDataPath = () => {
+  const userDataPath = app.getPath("userData");
+  return path.join(userDataPath, "gem-data.json");
+};
+
+const getNotesDataPath = () => {
+  const userDataPath = app.getPath("userData");
+  return path.join(userDataPath, "notes-data.json");
+};
+
 const registerHotkey = (hotkey: string): boolean => {
   globalShortcut.unregisterAll();
 
@@ -296,6 +306,42 @@ ipcMain.handle("load-quest-data", async () => {
   }
 });
 
+ipcMain.handle("save-gem-data", async (_, gemData: any) => {
+  try {
+    const gemDataPath = getGemDataPath();
+    const gemDataDir = path.dirname(gemDataPath);
+
+    if (!fs.existsSync(gemDataDir)) {
+      fs.mkdirSync(gemDataDir, { recursive: true });
+    }
+
+    fs.writeFileSync(gemDataPath, JSON.stringify(gemData, null, 2), "utf8");
+    console.log("Gem data saved successfully to:", gemDataPath);
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to save gem data:", error);
+    return { success: false, error: (error as Error).message };
+  }
+});
+
+ipcMain.handle("load-gem-data", async () => {
+  try {
+    const gemDataPath = getGemDataPath();
+    if (!fs.existsSync(gemDataPath)) {
+      console.log("No saved gem data found");
+      return null;
+    }
+
+    const rawData = fs.readFileSync(gemDataPath, "utf8");
+    const data = JSON.parse(rawData);
+    console.log("Gem data loaded successfully from:", gemDataPath);
+    return data;
+  } catch (error) {
+    console.error("Failed to load gem data:", error);
+    return null;
+  }
+});
+
 ipcMain.handle("update-hotkey", async (_, newHotkey: string) => {
   try {
     const success = registerHotkey(newHotkey);
@@ -438,6 +484,42 @@ ipcMain.handle("select-log-file", async () => {
     return selectedPath;
   } catch (error) {
     log.error("Error selecting log file:", error);
+    return null;
+  }
+});
+
+ipcMain.handle("save-notes-data", async (_, notesData: any) => {
+  try {
+    const notesDataPath = getNotesDataPath();
+    const notesDataDir = path.dirname(notesDataPath);
+
+    if (!fs.existsSync(notesDataDir)) {
+      fs.mkdirSync(notesDataDir, { recursive: true });
+    }
+
+    fs.writeFileSync(notesDataPath, JSON.stringify(notesData, null, 2), "utf8");
+    console.log("Notes data saved successfully to:", notesDataPath);
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to save notes data:", error);
+    return { success: false, error: (error as Error).message };
+  }
+});
+
+ipcMain.handle("load-notes-data", async () => {
+  try {
+    const notesDataPath = getNotesDataPath();
+    if (!fs.existsSync(notesDataPath)) {
+      console.log("No saved notes data found");
+      return null;
+    }
+
+    const rawData = fs.readFileSync(notesDataPath, "utf8");
+    const data = JSON.parse(rawData);
+    console.log("Notes data loaded successfully from:", notesDataPath);
+    return data;
+  } catch (error) {
+    console.error("Failed to load notes data:", error);
     return null;
   }
 });

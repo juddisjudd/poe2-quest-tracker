@@ -220,7 +220,14 @@ export const GemProgressionPanel: React.FC<GemProgressionPanelProps> = ({
         )}
 
         <div className="gem-panel-content">
-          {gemProgression.socketGroups.length === 0 ? (
+          {(() => {
+            console.log('🎯 [GEM_PANEL] Rendering gem panel with data:', {
+              hasGemProgression: !!gemProgression,
+              socketGroupsLength: gemProgression?.socketGroups?.length || 0,
+              socketGroups: gemProgression?.socketGroups?.slice(0, 2) || 'undefined'
+            });
+            return gemProgression.socketGroups.length === 0;
+          })() ? (
             <div className="gem-panel-empty">
               <div className="empty-icon">💎</div>
               <h4>No gems imported yet</h4>

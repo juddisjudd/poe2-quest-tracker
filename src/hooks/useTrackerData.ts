@@ -89,30 +89,37 @@ export const useTrackerData = () => {
   const [data, setData] = useState<TrackerData>(initialData);
   const [loading, setLoading] = useState(true);
 
-  const isElectron = !!window.electronAPI;
-
   useEffect(() => {
     const loadData = async () => {
       try {
         let savedData: TrackerData | null = null;
 
-        if (isElectron) {
-          savedData = await window.electronAPI.loadQuestData();
-        } else {
-          const localStorageData = localStorage.getItem(
-            "poe2-quest-tracker-data"
-          );
-          if (localStorageData) {
-            try {
-              savedData = JSON.parse(localStorageData) as TrackerData;
-            } catch (parseError) {
-              console.error("Failed to parse localStorage data:", parseError);
-              savedData = null;
-            }
-          }
+        savedData = await window.electronAPI.loadQuestData();
+        
+        // Load gem data separately
+        const savedGemData = await window.electronAPI.loadGemData();
+        if (savedGemData && savedData) {
+          console.log('🔍 [HOOK] Loading separate gem data:', {
+            hasGemProgression: !!savedGemData.gemProgression,
+            socketGroups: savedGemData.gemProgression?.socketGroups?.length || 0,
+            hasGemLoadouts: !!savedGemData.gemLoadouts
+          });
+          savedData.gemProgression = savedGemData.gemProgression;
+          savedData.gemLoadouts = savedGemData.gemLoadouts;
+        }
+        
+        // Load notes data separately
+        const savedNotesData = await window.electronAPI.loadNotesData();
+        if (savedNotesData && savedData) {
+          console.log('🔍 [HOOK] Loading separate notes data:', savedNotesData);
+          savedData.notesData = savedNotesData;
         }
 
         if (savedData) {
+          console.log('🔍 [HOOK] Loading saved data, gem progression info:', {
+            hasSavedGemProgression: !!savedData.gemProgression,
+            savedSocketGroups: savedData.gemProgression?.socketGroups?.length || 0
+          });
           const mergedData = mergeQuestData(savedData, defaultQuestData);
           
           // Ensure built-in guides are always available and merge with any custom guides
@@ -139,7 +146,7 @@ export const useTrackerData = () => {
             },
             gemProgression: savedData.gemProgression 
               ? migrateGemProgression(savedData.gemProgression)
-              : undefined,
+              : initialData.gemProgression,
             regexFilters: savedData.regexFilters || initialData.regexFilters,
             notesData: savedData.notesData || initialData.notesData,
           };
@@ -153,35 +160,42 @@ export const useTrackerData = () => {
     };
 
     loadData();
-  }, [isElectron]);
+  }, []);
 
   const saveData = useCallback(
     async (newData: TrackerData) => {
+      // Add stack trace to see what's calling saveData
+      console.log('📍 [HOOK] saveData called with gem info:', {
+        hasGemProgression: !!newData.gemProgression,
+        socketGroups: newData.gemProgression?.socketGroups?.length || 0,
+        firstSkillName: newData.gemProgression?.socketGroups?.[0]?.skillName,
+        firstMainGem: newData.gemProgression?.socketGroups?.[0]?.mainGem?.name,
+        stackTrace: new Error().stack?.split('\n').slice(1, 3).join(' -> ') || 'no stack'
+      });
       try {
-        if (isElectron) {
-          await window.electronAPI.saveQuestData(newData);
-        } else {
-          localStorage.setItem(
-            "poe2-quest-tracker-data",
-            JSON.stringify(newData)
-          );
+        await window.electronAPI.saveQuestData(newData);
+        
+        // Save gem data separately if it exists
+        if (newData.gemProgression || newData.gemLoadouts) {
+          const gemData = {
+            gemProgression: newData.gemProgression,
+            gemLoadouts: newData.gemLoadouts,
+          };
+          console.log('💾 [HOOK] Saving gem data separately:', {
+            hasGemProgression: !!gemData.gemProgression,
+            socketGroups: gemData.gemProgression?.socketGroups?.length || 0,
+            hasGemLoadouts: !!gemData.gemLoadouts,
+            firstSkillName: gemData.gemProgression?.socketGroups?.[0]?.skillName || 'none',
+            actualGemData: gemData
+          });
+          await window.electronAPI.saveGemData(gemData);
         }
         setData(newData);
       } catch (error) {
         console.error("Failed to save quest data:", error);
-        if (isElectron) {
-          try {
-            localStorage.setItem(
-              "poe2-quest-tracker-data",
-              JSON.stringify(newData)
-            );
-          } catch (localError) {
-            console.error("localStorage backup also failed:", localError);
-          }
-        }
       }
     },
-    [isElectron]
+    []
   );
 
   const toggleQuest = useCallback(
@@ -257,8 +271,14 @@ export const useTrackerData = () => {
   }, [data, saveData]);
 
   const importGemLoadouts = useCallback((pobLoadouts: PobLoadout[], defaultGemProgression: GemProgression) => {
+    console.log('🎯 [HOOK] importGemLoadouts called with:', {
+      loadoutsCount: pobLoadouts.length,
+      defaultSocketGroups: defaultGemProgression?.socketGroups?.length || 0
+    });
+    
     if (pobLoadouts.length <= 1) {
       const gemProgression = pobLoadouts[0]?.gemProgression || defaultGemProgression;
+      console.log('🎯 [HOOK] Single loadout path, socketGroups:', gemProgression?.socketGroups?.length || 0);
       const newData = {
         ...data,
         gemProgression: migrateGemProgression(gemProgression),
@@ -274,6 +294,11 @@ export const useTrackerData = () => {
       gemProgression: migrateGemProgression(pobLoadout.gemProgression),
     }));
 
+    console.log('🎯 [HOOK] Multiple loadouts path:', {
+      loadoutsCount: gemLoadouts.length,
+      firstLoadoutSocketGroups: gemLoadouts[0]?.gemProgression?.socketGroups?.length || 0,
+      firstLoadoutName: gemLoadouts[0]?.name
+    });
 
     const newData = {
       ...data,
@@ -284,6 +309,14 @@ export const useTrackerData = () => {
         lastImported: new Date().toISOString(),
       },
     };
+    
+    console.log('🎯 [HOOK] Final gem progression socketGroups:', newData.gemProgression?.socketGroups?.length || 0);
+    console.log('🔍 [HOOK] About to save data with gem progression:', {
+      hasGemProgression: !!newData.gemProgression,
+      socketGroups: newData.gemProgression?.socketGroups?.length || 0,
+      firstGroupName: newData.gemProgression?.socketGroups?.[0]?.skillName || 'none',
+      actualSocketGroups: newData.gemProgression?.socketGroups?.slice(0, 2) // Show first 2 groups
+    });
     saveData(newData);
   }, [data, saveData]);
 
@@ -336,28 +369,23 @@ export const useTrackerData = () => {
     saveData(newData);
   }, [data, saveData]);
 
-  const updateNotesData = useCallback((notesData: NotesData) => {
-    console.log('🎯 [HOOK] updateNotesData called with:', {
-      hasUserNotes: !!notesData.userNotes,
-      userNotesLength: notesData.userNotes?.length || 0,
-      hasPobNotes: !!notesData.pobNotes,
-      pobNotesLength: notesData.pobNotes?.length || 0,
-      pobNotesPreview: notesData.pobNotes ? notesData.pobNotes.substring(0, 100) + '...' : 'No POB notes'
-    });
+  const updateNotesData = useCallback(async (notesData: NotesData) => {
+    console.log('🎯 [HOOK] updateNotesData called with:', { notesData });
     
-    const newData = {
-      ...data,
-      notesData,
-    };
-    
-    console.log('💾 [HOOK] Saving notes data:', {
-      hasNotesData: !!newData.notesData,
-      userNotes: newData.notesData?.userNotes?.length || 0,
-      pobNotes: newData.notesData?.pobNotes?.length || 0
-    });
-    
-    saveData(newData);
-  }, [data, saveData]);
+    // Save notes separately to avoid race condition with gem data
+    try {
+      const result = await window.electronAPI.saveNotesData(notesData);
+      console.log('🎯 [HOOK] Notes data saved separately:', result);
+      
+      // Update local state only
+      setData(prev => ({
+        ...prev,
+        notesData,
+      }));
+    } catch (error) {
+      console.error('Failed to save notes data separately:', error);
+    }
+  }, []);
 
   const importGemsAndNotes = useCallback((gemProgression?: GemProgression, notes?: string) => {
     console.log('🎯 [HOOK] importGemsAndNotes called with:', {
