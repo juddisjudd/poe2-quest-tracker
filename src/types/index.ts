@@ -82,6 +82,71 @@ export interface NotesData {
   pobNotes?: string;
 }
 
+export interface ItemModifier {
+  text: string;
+  tier?: number;
+  type: 'prefix' | 'suffix' | 'implicit' | 'crafted' | 'rune' | 'desecrated';
+}
+
+export interface ItemData {
+  id: string;
+  name: string;
+  baseType: string;
+  itemClass: string;
+  rarity: string;
+  level: number;
+  ilvl: number;
+  modifiers: ItemModifier[];
+  requirements?: {
+    level?: number;
+    str?: number;
+    dex?: number;
+    int?: number;
+  };
+  sockets?: string;
+  quality?: number;
+  loadoutNames?: string[];
+}
+
+export interface ItemCheckData {
+  items: ItemData[];
+  lastImported?: string;
+}
+
+export interface MatchingModifiers {
+  matchingPrefixes: { source: ItemModifier; target: ItemModifier }[];
+  matchingSuffixes: { source: ItemModifier; target: ItemModifier }[];
+}
+
+export interface BaseTypeMatch {
+  exactMatch: boolean;
+  categoryMatch: boolean;
+}
+
+export interface ItemCheckResult {
+  item: ItemData;
+  matches: {
+    item: ItemData;
+    prefixMatches: number;
+    suffixMatches: number;
+    totalMatches: number;
+    score: number;
+    recommendation: 'keep' | 'vendor' | 'consider';
+    matchingModifiers?: MatchingModifiers;
+    baseTypeMatch?: BaseTypeMatch;
+  }[];
+  bestMatch?: {
+    item: ItemData;
+    prefixMatches: number;
+    suffixMatches: number;
+    totalMatches: number;
+    score: number;
+    recommendation: 'keep' | 'vendor' | 'consider';
+    matchingModifiers?: MatchingModifiers;
+    baseTypeMatch?: BaseTypeMatch;
+  };
+}
+
 export interface TrackerData {
   acts: Act[];
   campaignGuides?: CampaignGuide[];
@@ -91,6 +156,7 @@ export interface TrackerData {
   gemLoadouts?: GemProgressionWithLoadouts;
   regexFilters?: RegexFilters;
   notesData?: NotesData;
+  itemCheckData?: ItemCheckData;
   settings: {
     alwaysOnTop: boolean;
     opacity: number;
@@ -101,6 +167,7 @@ export interface TrackerData {
     showGemPanel?: boolean;
     showRegexPanel?: boolean;
     showNotesPanel?: boolean;
+    showItemCheckPanel?: boolean;
     logFilePath?: string;
     logFileDetected?: boolean;
   };
@@ -118,6 +185,8 @@ declare global {
       loadGemData: () => Promise<any>;
       saveNotesData: (data: NotesData) => Promise<{ success: boolean; error?: string }>;
       loadNotesData: () => Promise<NotesData | null>;
+      saveItemCheckData: (data: ItemCheckData) => Promise<{ success: boolean; error?: string }>;
+      loadItemCheckData: () => Promise<ItemCheckData | null>;
       checkForUpdates: () => Promise<void>;
       updateHotkey: (hotkey: string) => Promise<void>;
       openExternal: (url: string) => Promise<void>;

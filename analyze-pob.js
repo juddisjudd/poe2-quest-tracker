@@ -103,8 +103,68 @@ async function analyzePOB(url) {
       }
     });
     
+    console.log('\n--- Search for Item-related structures ---');
+    
+    // Look for ItemSet elements
+    const itemSetPattern = /<ItemSet[^>]*>([\s\S]*?)<\/ItemSet>/gi;
+    const itemSets = [...xmlString.matchAll(itemSetPattern)];
+    
+    console.log(`Found ${itemSets.length} ItemSet elements`);
+    
+    itemSets.forEach((match, index) => {
+      const fullItemSet = match[0];
+      const content = match[1];
+      
+      const titleMatch = fullItemSet.match(/title="([^"]*)"/);
+      const nameMatch = fullItemSet.match(/name="([^"]*)"/);
+      const title = titleMatch ? titleMatch[1] : (nameMatch ? nameMatch[1] : 'No title');
+      
+      console.log(`\n--- ItemSet ${index + 1}: "${title}" ---`);
+      console.log('ItemSet opening tag:', fullItemSet.split('>')[0] + '>');
+      console.log('ItemSet content preview:', content.substring(0, 500) + '...');
+      
+      // Look for Item elements within ItemSet
+      const itemPattern = /<Item[^>]*(?:\/>|>[\s\S]*?<\/Item>)/gi;
+      const items = [...content.matchAll(itemPattern)];
+      console.log(`  Contains ${items.length} Item elements`);
+      
+      // Look for Slot elements within ItemSet
+      const slotPattern = /<Slot[^>]*(?:\/>|>[\s\S]*?<\/Slot>)/gi;
+      const slots = [...content.matchAll(slotPattern)];
+      console.log(`  Contains ${slots.length} Slot elements`);
+      if (slots.length > 0) {
+        slots.slice(0, 3).forEach((slotMatch, slotIndex) => {
+          console.log(`    Slot ${slotIndex + 1}: ${slotMatch[0]}`)
+        });
+      }
+      
+      if (items.length > 0) {
+        items.slice(0, 3).forEach((itemMatch, itemIndex) => {
+          console.log(`    Item ${itemIndex + 1}: ${itemMatch[0].substring(0, 100)}...`);
+        });
+      }
+    });
+    
+    // Also search for any element containing "item" and loadout-related patterns
+    console.log('\n--- Search for item-loadout patterns ---');
+    const itemLoadoutPatterns = [
+      /<ItemSet[^>]*>/gi,
+      /<Equipment[^>]*>/gi,
+      /<Slot[^>]*>/gi,
+      /<Gear[^>]*>/gi,
+      /name="[^"]*item[^"]*"/gi,
+      /title="[^"]*item[^"]*"/gi
+    ];
+    
+    itemLoadoutPatterns.forEach((pattern, index) => {
+      const matches = xmlString.match(pattern);
+      if (matches && matches.length > 0) {
+        console.log(`Pattern ${index + 1} matches (${pattern}):`, matches.slice(0, 5));
+      }
+    });
+
     console.log('\n--- Element counts ---');
-    const elements = ['Build', 'Tree', 'TreeSpec', 'Skill', 'Skills', 'Config'];
+    const elements = ['Build', 'Tree', 'TreeSpec', 'Skill', 'Skills', 'Config', 'ItemSet', 'Equipment', 'Slot', 'Items'];
     elements.forEach(element => {
       const regex = new RegExp(`<${element}`, 'gi');
       const matches = xmlString.match(regex);

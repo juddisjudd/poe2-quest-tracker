@@ -84,7 +84,8 @@
 /* Hide footer when any panel is open */
 .quest-tracker.gem-panel-open .panel-footer,
 .quest-tracker.regex-panel-open .panel-footer,
-.quest-tracker.notes-panel-open .panel-footer {
+.quest-tracker.notes-panel-open .panel-footer,
+.quest-tracker.item-check-panel-open .panel-footer {
   opacity: 0;
   transform: translateY(100%);
   pointer-events: none;

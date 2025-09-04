@@ -6,6 +6,7 @@ import { UpdateNotification } from "./UpdateNotification";
 import { GemProgressionPanel } from "./GemProgressionPanel";
 import { RegexPanel } from "./RegexPanel";
 import { NotesPanel } from "./NotesPanel";
+import { ItemCheckPanel } from "./ItemCheckPanel";
 import { SimpleGuideSelector } from "./SimpleGuideSelector";
 import { PanelFooter } from "./PanelFooter";
 import "./QuestTracker.css";
@@ -28,7 +29,9 @@ export const QuestTracker: React.FC = () => {
     toggleGem,
     updateRegexFilters,
     updateNotesData,
+    updateItemCheckData,
     importGemsAndNotes,
+    importCompletePoB,
     // Campaign Guide functions
     selectCampaignGuide,
   } = useTrackerData();
@@ -36,6 +39,7 @@ export const QuestTracker: React.FC = () => {
   const [gemPanelVisible, setGemPanelVisible] = useState(false);
   const [regexPanelVisible, setRegexPanelVisible] = useState(false);
   const [notesPanelVisible, setNotesPanelVisible] = useState(false);
+  const [itemCheckPanelVisible, setItemCheckPanelVisible] = useState(false);
 
   const isElectron = !!window.electronAPI;
 
@@ -44,7 +48,8 @@ export const QuestTracker: React.FC = () => {
     setGemPanelVisible(data.settings.showGemPanel !== false);
     setRegexPanelVisible(data.settings.showRegexPanel !== false);
     setNotesPanelVisible(data.settings.showNotesPanel !== false);
-  }, [data.settings.showGemPanel, data.settings.showRegexPanel, data.settings.showNotesPanel]);
+    setItemCheckPanelVisible(data.settings.showItemCheckPanel !== false);
+  }, [data.settings.showGemPanel, data.settings.showRegexPanel, data.settings.showNotesPanel, data.settings.showItemCheckPanel]);
 
   if (loading) {
     return (
@@ -60,7 +65,9 @@ export const QuestTracker: React.FC = () => {
         settingsOpen ? "settings-open" : ""
       } ${gemPanelVisible ? "gem-panel-open" : ""} ${
         regexPanelVisible ? "regex-panel-open" : ""
-      } ${notesPanelVisible ? "notes-panel-open" : ""}`}
+      } ${notesPanelVisible ? "notes-panel-open" : ""} ${
+        itemCheckPanelVisible ? "item-check-panel-open" : ""
+      }`}
       style={{ opacity: isElectron ? data.settings.opacity : 1 }}
       data-font-scale={data.settings.fontSize || 1.0}
       data-theme={(data.settings as any).theme || "amoled"}
@@ -85,6 +92,7 @@ export const QuestTracker: React.FC = () => {
           });
         }}
         onImportGemsAndNotes={importGemsAndNotes}
+        onImportCompletePoB={importCompletePoB}
         onResetGems={() => {
           importGemProgression({
             socketGroups: [],
@@ -178,6 +186,20 @@ export const QuestTracker: React.FC = () => {
           showToggleButton={false}
         />
       )}
+
+      {/* Item Check Panel */}
+      <ItemCheckPanel
+        itemCheckData={data.itemCheckData}
+        isVisible={itemCheckPanelVisible}
+        settingsOpen={settingsOpen}
+        onUpdateItemData={updateItemCheckData}
+        onTogglePanel={() => {
+          const newVisibility = !itemCheckPanelVisible;
+          setItemCheckPanelVisible(newVisibility);
+          updateSettings({ showItemCheckPanel: newVisibility });
+        }}
+        showToggleButton={true}
+      />
       
       {/* Panel Footer with toggle buttons */}
       <PanelFooter
@@ -202,6 +224,13 @@ export const QuestTracker: React.FC = () => {
           updateSettings({ showNotesPanel: newVisibility });
         }}
         hasNotesData={!!data.notesData}
+        itemCheckPanelVisible={itemCheckPanelVisible}
+        onToggleItemCheckPanel={() => {
+          const newVisibility = !itemCheckPanelVisible;
+          setItemCheckPanelVisible(newVisibility);
+          updateSettings({ showItemCheckPanel: newVisibility });
+        }}
+        hasItemCheckData={true}
         settingsOpen={settingsOpen}
       />
       

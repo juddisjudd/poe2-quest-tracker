@@ -43,6 +43,11 @@ const getNotesDataPath = () => {
   return path.join(userDataPath, "notes-data.json");
 };
 
+const getItemCheckDataPath = () => {
+  const userDataPath = app.getPath("userData");
+  return path.join(userDataPath, "item-check-data.json");
+};
+
 const registerHotkey = (hotkey: string): boolean => {
   globalShortcut.unregisterAll();
 
@@ -520,6 +525,37 @@ ipcMain.handle("load-notes-data", async () => {
     return data;
   } catch (error) {
     console.error("Failed to load notes data:", error);
+    return null;
+  }
+});
+
+// Item Check Data handlers
+ipcMain.handle("save-item-check-data", async (_, itemCheckData: any) => {
+  try {
+    const itemCheckDataPath = getItemCheckDataPath();
+    fs.writeFileSync(itemCheckDataPath, JSON.stringify(itemCheckData, null, 2), "utf8");
+    console.log("Item check data saved successfully to:", itemCheckDataPath);
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to save item check data:", error);
+    return { success: false, error: (error as Error).message };
+  }
+});
+
+ipcMain.handle("load-item-check-data", async () => {
+  try {
+    const itemCheckDataPath = getItemCheckDataPath();
+    if (!fs.existsSync(itemCheckDataPath)) {
+      console.log("No saved item check data found");
+      return null;
+    }
+
+    const rawData = fs.readFileSync(itemCheckDataPath, "utf8");
+    const data = JSON.parse(rawData);
+    console.log("Item check data loaded successfully from:", itemCheckDataPath);
+    return data;
+  } catch (error) {
+    console.error("Failed to load item check data:", error);
     return null;
   }
 });

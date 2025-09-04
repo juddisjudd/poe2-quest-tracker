@@ -12,6 +12,7 @@ interface HeaderProps {
   onImportGemLoadouts?: (pobLoadouts: any[], defaultGemProgression: any) => void;
   onImportNotes?: (notes: string) => void;
   onImportGemsAndNotes?: (gemProgression?: any, notes?: string) => void;
+  onImportCompletePoB?: (pobResult: any) => void;
   onResetGems?: () => void;
 }
 
@@ -24,6 +25,7 @@ export const Header: React.FC<HeaderProps> = ({
   onImportGemLoadouts,
   onImportNotes,
   onImportGemsAndNotes,
+  onImportCompletePoB,
   onResetGems,
 }) => {
   const [showSettings, setShowSettings] = useState(false);
@@ -122,17 +124,26 @@ export const Header: React.FC<HeaderProps> = ({
         console.log('📤 [HEADER] Multiple loadouts path - importing:', {
           loadouts: result.loadouts.length,
           hasNotes: !!result.notes,
-          notesLength: result.notes?.length || 0
+          notesLength: result.notes?.length || 0,
+          hasItems: !!result.itemCheckData,
+          itemsCount: result.itemCheckData?.items?.length || 0
         });
         
-        onImportGemLoadouts(result.loadouts, result.gemProgression);
-        
-        // Also import notes if present
-        if (result.notes && onImportNotes) {
-          console.log('📤 [HEADER] Also importing notes in multiple loadouts path');
-          onImportNotes(result.notes);
+        // If we have complete POB import, use it to get all data including items
+        if (onImportCompletePoB) {
+          console.log('📤 [HEADER] Using complete POB import for multiple loadouts');
+          onImportCompletePoB(result);
         } else {
-          console.log('⚠️ [HEADER] Not importing notes - notes:', !!result.notes, 'onImportNotes:', !!onImportNotes);
+          // Fallback to separate imports
+          onImportGemLoadouts(result.loadouts, result.gemProgression);
+          
+          // Also import notes if present
+          if (result.notes && onImportNotes) {
+            console.log('📤 [HEADER] Also importing notes in multiple loadouts path');
+            onImportNotes(result.notes);
+          } else {
+            console.log('⚠️ [HEADER] Not importing notes - notes:', !!result.notes, 'onImportNotes:', !!onImportNotes);
+          }
         }
         
         setPobCode("");
@@ -150,11 +161,23 @@ export const Header: React.FC<HeaderProps> = ({
         hasNotes: !!notes,
         notesLength: notes?.length || 0,
         notesContent: notes ? notes.substring(0, 100) + '...' : 'No notes',
+        hasItems: !!result.itemCheckData,
+        itemsCount: result.itemCheckData?.items?.length || 0,
+        hasOnImportCompletePoB: !!onImportCompletePoB,
         hasOnImportGemsAndNotes: !!onImportGemsAndNotes,
         hasOnImportNotes: !!onImportNotes
       });
       
-      if (onImportGemsAndNotes) {
+      // Prioritize complete POB import to include all data (gems, notes, items)
+      if (onImportCompletePoB) {
+        console.log('📤 [HEADER] Calling onImportCompletePoB with full result:', {
+          hasGemProgression: !!result.gemProgression,
+          hasNotes: !!result.notes,
+          hasItems: !!result.itemCheckData,
+          itemsCount: result.itemCheckData?.items?.length || 0
+        });
+        onImportCompletePoB(result);
+      } else if (onImportGemsAndNotes) {
         console.log('📤 [HEADER] Calling onImportGemsAndNotes with:', {
           hasGemProgression: !!gemProgression,
           hasNotes: !!notes,

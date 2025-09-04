@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
-import { TrackerData, Act, GemProgression, GemLoadout, RegexFilters, NotesData, CampaignGuide, QuestStep } from "../types";
+import { TrackerData, Act, GemProgression, GemLoadout, RegexFilters, NotesData, CampaignGuide, QuestStep, ItemCheckData } from "../types";
 import { defaultQuestData, availableCampaignGuides, defaultCampaignGuide } from "../data/questData";
-import { migrateGemProgression, PobLoadout } from "../utils/pobParser";
+import { migrateGemProgression, PobLoadout, PobParseResult } from "../utils/pobParser";
 
 const initialData: TrackerData = {
   acts: defaultQuestData,
@@ -30,6 +30,9 @@ const initialData: TrackerData = {
     userNotes: "",
     pobNotes: undefined,
   },
+  itemCheckData: {
+    items: [],
+  },
   settings: {
     alwaysOnTop: true,
     opacity: 0.9,
@@ -40,6 +43,7 @@ const initialData: TrackerData = {
     showGemPanel: false,
     showRegexPanel: false,
     showNotesPanel: false,
+    showItemCheckPanel: false,
     logFilePath: undefined,
     logFileDetected: false,
   },
@@ -113,6 +117,12 @@ export const useTrackerData = () => {
         if (savedNotesData && savedData) {
           savedData.notesData = savedNotesData;
         }
+        
+        // Load item check data separately
+        const savedItemCheckData = await window.electronAPI.loadItemCheckData();
+        if (savedItemCheckData && savedData) {
+          savedData.itemCheckData = savedItemCheckData;
+        }
 
         if (savedData) {
           console.log('🔍 [HOOK] Loading saved data, gem progression info:', {
@@ -140,6 +150,7 @@ export const useTrackerData = () => {
               showGemPanel: savedData.settings.showGemPanel || false,
               showRegexPanel: savedData.settings.showRegexPanel || false,
               showNotesPanel: savedData.settings.showNotesPanel || false,
+              showItemCheckPanel: savedData.settings.showItemCheckPanel || false,
               logFilePath: savedData.settings.logFilePath,
               logFileDetected: savedData.settings.logFileDetected || false,
             },
@@ -148,6 +159,7 @@ export const useTrackerData = () => {
               : initialData.gemProgression,
             regexFilters: savedData.regexFilters || initialData.regexFilters,
             notesData: mergedData.notesData || savedData.notesData || initialData.notesData,
+            itemCheckData: savedData.itemCheckData || initialData.itemCheckData,
           };
           setData(updatedData);
         }
@@ -388,6 +400,21 @@ export const useTrackerData = () => {
     }
   }, []);
 
+  const updateItemCheckData = useCallback(async (itemCheckData: ItemCheckData) => {
+    // Save item check data separately to avoid race conditions
+    try {
+      await window.electronAPI.saveItemCheckData(itemCheckData);
+      
+      // Update local state
+      setData(prev => ({
+        ...prev,
+        itemCheckData,
+      }));
+    } catch (error) {
+      console.error('Failed to save item check data separately:', error);
+    }
+  }, []);
+
   const importGemsAndNotes = useCallback((gemProgression?: GemProgression, notes?: string) => {
     console.log('🎯 [HOOK] importGemsAndNotes called with:', {
       hasGemProgression: !!gemProgression,
@@ -424,6 +451,77 @@ export const useTrackerData = () => {
     
     saveData(newData);
   }, [data, saveData]);
+
+  const importCompletePoB = useCallback(async (pobResult: PobParseResult) => {
+    console.log('🎯 [HOOK] importCompletePoB called with:', {
+      hasGemProgression: !!pobResult.gemProgression,
+      hasLoadouts: !!pobResult.loadouts,
+      loadoutsCount: pobResult.loadouts?.length || 0,
+      hasNotes: !!pobResult.notes,
+      hasItems: !!pobResult.itemCheckData,
+      itemsCount: pobResult.itemCheckData?.items?.length || 0,
+    });
+    
+    let newData = { ...data };
+    
+    // Handle gems and loadouts properly
+    if (pobResult.hasMultipleLoadouts && pobResult.loadouts && pobResult.loadouts.length > 1) {
+      // Use the existing loadout logic
+      const gemLoadouts: GemLoadout[] = pobResult.loadouts.map((pobLoadout, index) => ({
+        id: `loadout-${index}`,
+        name: pobLoadout.name,
+        gemProgression: migrateGemProgression(pobLoadout.gemProgression),
+      }));
+
+      newData = {
+        ...newData,
+        gemProgression: gemLoadouts[0]?.gemProgression || migrateGemProgression(pobResult.gemProgression),
+        gemLoadouts: {
+          loadouts: gemLoadouts,
+          activeLoadoutId: gemLoadouts[0]?.id || '',
+          lastImported: new Date().toISOString(),
+        },
+      };
+    } else if (pobResult.gemProgression) {
+      // Single loadout - clear loadouts
+      newData = {
+        ...newData,
+        gemProgression: migrateGemProgression(pobResult.gemProgression),
+        gemLoadouts: undefined,
+      };
+    }
+    
+    console.log('💾 [HOOK] Saving gem data through saveData:', {
+      hasGemProgression: !!newData.gemProgression,
+      hasGemLoadouts: !!newData.gemLoadouts,
+    });
+    
+    // Save gem data first
+    saveData(newData);
+    
+    // Handle notes separately to ensure they're saved
+    if (pobResult.notes) {
+      const notesData = {
+        userNotes: data.notesData?.userNotes || "",
+        pobNotes: pobResult.notes
+      };
+      console.log('💾 [HOOK] Saving notes data separately:', {
+        notesLength: pobResult.notes.length,
+        preview: pobResult.notes.substring(0, 100) + '...'
+      });
+      await updateNotesData(notesData);
+    }
+    
+    // Handle items separately to ensure they're saved
+    if (pobResult.itemCheckData) {
+      console.log('💾 [HOOK] Saving item data separately:', {
+        itemsCount: pobResult.itemCheckData.items.length
+      });
+      await updateItemCheckData(pobResult.itemCheckData);
+    }
+    
+    console.log('✅ [HOOK] Complete POB import finished');
+  }, [data, saveData, updateNotesData, updateItemCheckData]);
 
   // Campaign Guide Management
   const selectCampaignGuide = useCallback((guideId: string) => {
@@ -807,7 +905,9 @@ export const useTrackerData = () => {
     toggleGem,
     updateRegexFilters,
     updateNotesData,
+    updateItemCheckData,
     importGemsAndNotes,
+    importCompletePoB,
     // Campaign Guide Management (simplified)
     selectCampaignGuide,
   };

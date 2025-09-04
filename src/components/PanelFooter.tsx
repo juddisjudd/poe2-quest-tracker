@@ -17,6 +17,11 @@ interface PanelFooterProps {
   onToggleNotesPanel: () => void;
   hasNotesData: boolean;
   
+  // Item Check Panel
+  itemCheckPanelVisible: boolean;
+  onToggleItemCheckPanel: () => void;
+  hasItemCheckData: boolean;
+  
   // Global state
   settingsOpen: boolean;
 }
@@ -31,6 +36,9 @@ export const PanelFooter: React.FC<PanelFooterProps> = ({
   notesPanelVisible,
   onToggleNotesPanel,
   hasNotesData,
+  itemCheckPanelVisible,
+  onToggleItemCheckPanel,
+  hasItemCheckData,
   settingsOpen,
 }) => {
   return (
@@ -73,6 +81,20 @@ export const PanelFooter: React.FC<PanelFooterProps> = ({
           >
             <span className="toggle-icon">{notesPanelVisible ? "▼" : "▲"}</span>
             <span className="toggle-text">Notes</span>
+          </button>
+        </div>
+      )}
+
+      {/* Item Check Panel Toggle */}
+      {hasItemCheckData && (
+        <div className={`panel-toggle item-check-toggle ${itemCheckPanelVisible ? "panel-open" : ""}`}>
+          <button
+            className="panel-toggle-btn"
+            onClick={onToggleItemCheckPanel}
+            title={itemCheckPanelVisible ? "Hide Item Check" : "Show Item Check"}
+          >
+            <span className="toggle-icon">{itemCheckPanelVisible ? "▼" : "▲"}</span>
+            <span className="toggle-text">Items</span>
           </button>
         </div>
       )}
