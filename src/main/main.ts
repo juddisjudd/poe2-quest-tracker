@@ -25,6 +25,11 @@ let mainWindow: BrowserWindow | null = null;
 let tray: Tray | null = null;
 let currentHotkey = "F9";
 
+// Log monitoring state
+let logWatcher: fs.FSWatcher | null = null;
+let logFilePath: string | null = null;
+let lastLogSize = 0;
+
 autoUpdater.autoDownload = true;
 autoUpdater.autoInstallOnAppQuit = true;
 
@@ -583,3 +588,168 @@ ipcMain.handle("save-file", async (_, content: string, defaultName: string) => {
     return false;
   }
 });
+
+// Log monitoring handlers
+ipcMain.handle("start-log-monitoring", async (_, filePath: string) => {
+  try {
+    // Stop any existing monitoring
+    if (logWatcher) {
+      logWatcher.close();
+      logWatcher = null;
+    }
+
+    logFilePath = filePath;
+    
+    // Get initial file size to only monitor new entries
+    try {
+      const stats = fs.statSync(filePath);
+      lastLogSize = stats.size;
+    } catch (error) {
+      log.warn("Could not get initial log file size:", error);
+      lastLogSize = 0;
+    }
+
+    // Watch for file changes 
+    logWatcher = fs.watch(filePath, { persistent: true }, (eventType, filename) => {
+      log.info(`File watch event: ${eventType} for ${filename || 'unknown'}`);
+      if (eventType === 'change') {
+        handleLogFileChange();
+      }
+    });
+    
+    // Set up smart polling as a backup - only when needed
+    let pollCounter = 0;
+    const pollingInterval = setInterval(() => {
+      pollCounter++;
+      
+      // Only poll every 5 seconds to reduce spam
+      if (pollCounter % 5 !== 0) {
+        return;
+      }
+      
+      // Only poll if file watcher hasn't triggered recently
+      try {
+        const stats = fs.statSync(filePath);
+        if (stats.size !== lastLogSize) {
+          log.info('Polling detected missed file change, processing...');
+          handleLogFileChange();
+        }
+      } catch (error) {
+        // File might not exist or be accessible, skip this poll
+      }
+    }, 1000);
+    
+    // Store polling interval for cleanup
+    (logWatcher as any).pollingInterval = pollingInterval;
+
+    logWatcher.on('error', (error) => {
+      log.error('Log file watcher error:', error);
+    });
+
+    log.info("Started log monitoring for:", filePath);
+  } catch (error) {
+    log.error("Error starting log monitoring:", error);
+    throw error;
+  }
+});
+
+ipcMain.handle("stop-log-monitoring", async () => {
+  try {
+    if (logWatcher) {
+      // Clear polling interval if it exists
+      if ((logWatcher as any).pollingInterval) {
+        clearInterval((logWatcher as any).pollingInterval);
+      }
+      logWatcher.close();
+      logWatcher = null;
+    }
+    logFilePath = null;
+    lastLogSize = 0;
+    log.info("Stopped log monitoring");
+  } catch (error) {
+    log.error("Error stopping log monitoring:", error);
+    throw error;
+  }
+});
+
+function handleLogFileChange() {
+  if (!logFilePath || !mainWindow) return;
+
+  try {
+    const stats = fs.statSync(logFilePath);
+    const currentSize = stats.size;
+
+    log.info(`Log file change detected: current=${currentSize}, last=${lastLogSize}`);
+
+    // Only read new content if file grew significantly (avoid tiny changes)
+    if (currentSize <= lastLogSize) {
+      return; // No logging needed for no changes
+    }
+    
+    // Skip if change is tiny (less than 10 bytes) - might be file system noise
+    if (currentSize - lastLogSize < 10) {
+      return;
+    }
+
+    // Read only the new content
+    const stream = fs.createReadStream(logFilePath, {
+      start: lastLogSize,
+      end: currentSize - 1,
+      encoding: 'utf8'
+    });
+
+    let newContent = '';
+    stream.on('data', (chunk) => {
+      newContent += chunk;
+    });
+
+    stream.on('end', () => {
+      // Update size tracker
+      lastLogSize = currentSize;
+
+      log.info(`Read ${newContent.length} bytes of new content`);
+
+      // Process new lines
+      const lines = newContent.split('\n').filter(line => line.trim());
+      log.info(`Processing ${lines.length} new lines`);
+      
+      for (const line of lines) {
+        // Only log lines that might be rewards to reduce noise
+        const mightBeReward = line.includes('has received');
+        if (mightBeReward) {
+          log.info(`Checking potential reward line: ${line}`);
+        }
+        
+        // Check if line contains reward information
+        if (line.includes('has received') && (
+          line.includes('Resistance') ||
+          line.includes('Spirit') ||
+          line.includes('maximum Life') ||
+          line.includes('Charm') ||
+          line.includes('Intelligence') ||
+          line.includes('Strength') ||
+          line.includes('Dexterity') ||
+          line.includes('Recovery') ||
+          line.includes('Movement Speed') ||
+          line.includes('Cooldown') ||
+          line.includes('Global Defences') ||
+          line.includes('Experience') ||
+          line.includes('Stun Threshold') ||
+          line.includes('Ailment Threshold') ||
+          line.includes('Mana Regeneration')
+        )) {
+          // Send reward to renderer process
+          mainWindow?.webContents.send('log-reward', line);
+          log.info('Detected reward:', line);
+        }
+      }
+    });
+
+    stream.on('error', (error) => {
+      log.error('Error reading log file:', error);
+    });
+
+  } catch (error) {
+    log.error('Error handling log file change:', error);
+  }
+}

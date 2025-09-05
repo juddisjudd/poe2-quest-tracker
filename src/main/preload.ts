@@ -20,6 +20,13 @@ const electronAPI = {
   checkFileExists: (filePath: string) => ipcRenderer.invoke("check-file-exists", filePath),
   selectLogFile: () => ipcRenderer.invoke("select-log-file"),
   saveFile: (content: string, defaultName: string) => ipcRenderer.invoke("save-file", content, defaultName),
+  startLogMonitoring: (filePath: string) => ipcRenderer.invoke("start-log-monitoring", filePath),
+  stopLogMonitoring: () => ipcRenderer.invoke("stop-log-monitoring"),
+  onLogReward: (callback: (rewardText: string) => void) => {
+    const listener = (_: any, rewardText: string) => callback(rewardText);
+    ipcRenderer.on("log-reward", listener);
+    return () => ipcRenderer.removeListener("log-reward", listener);
+  },
   onUpdateAvailable: (callback: () => void) => {
     ipcRenderer.on("update-available", callback);
     return () => ipcRenderer.removeListener("update-available", callback);

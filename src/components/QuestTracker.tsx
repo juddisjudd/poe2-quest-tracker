@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { useTrackerData } from "../hooks/useTrackerData";
+import { useAutoComplete } from "../hooks/useAutoComplete";
 import { ActPanel } from "./ActPanel";
 import { Header } from "./Header";
 import { UpdateNotification } from "./UpdateNotification";
@@ -42,6 +43,25 @@ export const QuestTracker: React.FC = () => {
   const [itemCheckPanelVisible, setItemCheckPanelVisible] = useState(false);
 
   const isElectron = !!window.electronAPI;
+
+  // Auto-completion handler for quest rewards
+  const handleQuestAutoComplete = useCallback((questId: string) => {
+    // Find the act that contains this quest
+    const actWithQuest = data.acts.find(act => 
+      act.quests.some(quest => quest.id === questId)
+    );
+    
+    if (actWithQuest) {
+      toggleQuest(actWithQuest.id, questId);
+    }
+  }, [data.acts, toggleQuest]);
+
+  // Use auto-completion hook
+  useAutoComplete({
+    trackerData: data,
+    onQuestComplete: handleQuestAutoComplete,
+    isElectron
+  });
 
   // Sync panel visibility with settings
   React.useEffect(() => {

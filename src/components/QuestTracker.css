@@ -1303,6 +1303,32 @@ body {
   font-style: italic;
 }
 
+/* Beta Warning Styles */
+.beta-warning {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 8px;
+  padding: 8px 10px;
+  background: rgba(255, 152, 0, 0.1);
+  border-radius: var(--border-radius-sm);
+  border: 1px solid rgba(255, 152, 0, 0.2);
+}
+
+.warning-icon {
+  font-size: 0.8rem;
+  color: #ff9800;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.warning-text {
+  color: #ff9800;
+  font-size: 0.7rem;
+  line-height: 1.4;
+  font-style: italic;
+}
+
 /* Campaign Guide Manager Styles */
 .campaign-guide-manager {
   margin-bottom: 24px;

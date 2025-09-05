@@ -46,6 +46,7 @@ const initialData: TrackerData = {
     showItemCheckPanel: false,
     logFilePath: undefined,
     logFileDetected: false,
+    autoCompleteQuests: false,
   },
 };
 
@@ -129,7 +130,6 @@ export const useTrackerData = () => {
             hasSavedGemProgression: !!savedData.gemProgression,
             savedSocketGroups: savedData.gemProgression?.socketGroups?.length || 0
           });
-          const mergedData = mergeQuestData(savedData, defaultQuestData);
           
           // Ensure built-in guides are always available and merge with any custom guides
           const mergedGuides = [
@@ -137,10 +137,17 @@ export const useTrackerData = () => {
             ...(savedData.campaignGuides || []).filter(guide => guide.custom) // Add custom guides
           ];
           
+          // Determine the active campaign guide ID first
+          const activeCampaignGuideId = savedData.activeCampaignGuideId || defaultCampaignGuide.id;
+          
+          // Find the active guide and use its quest data for merging
+          const activeGuide = mergedGuides.find(g => g.id === activeCampaignGuideId) || defaultCampaignGuide;
+          const mergedData = mergeQuestData(savedData, activeGuide.acts);
+          
           const updatedData: TrackerData = {
             ...mergedData,
             campaignGuides: mergedGuides,
-            activeCampaignGuideId: savedData.activeCampaignGuideId || defaultCampaignGuide.id,
+            activeCampaignGuideId,
             settings: {
               ...savedData.settings,
               fontSize: savedData.settings.fontSize || 1.0,

@@ -682,6 +682,28 @@ export const Header: React.FC<HeaderProps> = ({
                 </div>
               </div>
             )}
+
+            {/* Auto-Complete Quests - Beta Feature */}
+            {isElectron && settings.logFilePath && (
+              <div className="setting-item">
+                <div className="setting-control">
+                  <label className="setting-checkbox">
+                    <input
+                      type="checkbox"
+                      checked={settings.autoCompleteQuests || false}
+                      onChange={(e) => onSettingsChange({ autoCompleteQuests: e.target.checked })}
+                    />
+                    <span style={{ fontSize: '0.85em' }}>AUTO-QUESTS</span>
+                  </label>
+                  <div className="beta-warning">
+                    <span className="warning-icon">⚠️</span>
+                    <span className="warning-text">
+                      Beta feature: Currently only works with "Permanent Buffs Only" guide. Monitors log file for quest reward entries to automatically mark matching quests as complete.
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="support-section">

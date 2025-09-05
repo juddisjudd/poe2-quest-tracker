@@ -170,6 +170,7 @@ export interface TrackerData {
     showItemCheckPanel?: boolean;
     logFilePath?: string;
     logFileDetected?: boolean;
+    autoCompleteQuests?: boolean;
   };
 }
 
@@ -197,6 +198,9 @@ declare global {
       checkFileExists: (filePath: string) => Promise<boolean>;
       selectLogFile: () => Promise<string | null>;
       saveFile: (content: string, defaultName: string) => Promise<boolean>;
+      startLogMonitoring: (filePath: string) => Promise<void>;
+      stopLogMonitoring: () => Promise<void>;
+      onLogReward: (callback: (rewardText: string) => void) => () => void;
     };
   }
 }
