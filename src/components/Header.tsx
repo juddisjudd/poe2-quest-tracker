@@ -16,6 +16,8 @@ interface HeaderProps {
   onResetGems?: () => void;
 }
 
+type SettingsTab = "appearance" | "import" | "detection" | "controls";
+
 export const Header: React.FC<HeaderProps> = ({
   settings,
   onSettingsChange,
@@ -29,6 +31,7 @@ export const Header: React.FC<HeaderProps> = ({
   onResetGems,
 }) => {
   const [showSettings, setShowSettings] = useState(false);
+  const [activeTab, setActiveTab] = useState<SettingsTab>("appearance");
   const [appVersion, setAppVersion] = useState<string>("");
   const [updateChecking, setUpdateChecking] = useState(false);
   const [showResetSuccess, setShowResetSuccess] = useState(false);
@@ -125,8 +128,8 @@ export const Header: React.FC<HeaderProps> = ({
           loadouts: result.loadouts.length,
           hasNotes: !!result.notes,
           notesLength: result.notes?.length || 0,
-          hasItems: !!result.itemCheckData,
-          itemsCount: result.itemCheckData?.items?.length || 0
+          hasItems: !!result.items,
+          itemsCount: result.items?.length || 0
         });
         
         // If we have complete POB import, use it to get all data including items
@@ -161,20 +164,20 @@ export const Header: React.FC<HeaderProps> = ({
         hasNotes: !!notes,
         notesLength: notes?.length || 0,
         notesContent: notes ? notes.substring(0, 100) + '...' : 'No notes',
-        hasItems: !!result.itemCheckData,
-        itemsCount: result.itemCheckData?.items?.length || 0,
+        hasItems: !!result.items,
+        itemsCount: result.items?.length || 0,
         hasOnImportCompletePoB: !!onImportCompletePoB,
         hasOnImportGemsAndNotes: !!onImportGemsAndNotes,
         hasOnImportNotes: !!onImportNotes
       });
-      
+
       // Prioritize complete POB import to include all data (gems, notes, items)
       if (onImportCompletePoB) {
         console.log('📤 [HEADER] Calling onImportCompletePoB with full result:', {
           hasGemProgression: !!result.gemProgression,
           hasNotes: !!result.notes,
-          hasItems: !!result.itemCheckData,
-          itemsCount: result.itemCheckData?.items?.length || 0
+          hasItems: !!result.items,
+          itemsCount: result.items?.length || 0
         });
         onImportCompletePoB(result);
       } else if (onImportGemsAndNotes) {
@@ -345,6 +348,12 @@ export const Header: React.FC<HeaderProps> = ({
       <div className="header">
         <div className="title-bar">
           <div className="title">
+            <div className="app-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z"/>
+                <circle cx="12" cy="12" r="10"/>
+              </svg>
+            </div>
             <span className="title-text">Exile Compass</span>
             {/* Show version next to title in Electron */}
             {isElectron && appVersion && (
@@ -439,50 +448,63 @@ export const Header: React.FC<HeaderProps> = ({
             </div>
           )}
 
-          <div className="settings-grid">
-            {/* Theme and Hotkey side by side */}
-            <div className="setting-row">
-              <div className="setting-item setting-half">
-                <div className="setting-label">THEME</div>
-                <div className="setting-control">
-                  <select
-                    value={(settings as any).theme || "amoled"}
-                    onChange={(e) =>
-                      onSettingsChange({
-                        theme: e.target.value as
-                          | "amoled"
-                          | "amoled-crimson"
-                          | "amoled-yellow",
-                      })
-                    }
-                    className="theme-selector"
-                  >
-                    <option value="amoled">AMOLED</option>
-                    <option value="amoled-crimson">AMOLED CRIMSON</option>
-                    <option value="amoled-yellow">AMOLED YELLOW</option>
-                  </select>
-                </div>
-              </div>
+          {/* Settings Tabs */}
+          <div className="settings-tabs">
+            <button
+              className={`settings-tab ${activeTab === "appearance" ? "active" : ""}`}
+              onClick={() => setActiveTab("appearance")}
+            >
+              Appearance
+            </button>
+            <button
+              className={`settings-tab ${activeTab === "import" ? "active" : ""}`}
+              onClick={() => setActiveTab("import")}
+            >
+              Import/Export
+            </button>
+            {isElectron && (
+              <>
+                <button
+                  className={`settings-tab ${activeTab === "detection" ? "active" : ""}`}
+                  onClick={() => setActiveTab("detection")}
+                >
+                  Auto-Detection
+                </button>
+                <button
+                  className={`settings-tab ${activeTab === "controls" ? "active" : ""}`}
+                  onClick={() => setActiveTab("controls")}
+                >
+                  Controls
+                </button>
+              </>
+            )}
+          </div>
 
-              {/* Only show hotkey in Electron */}
-              {isElectron && (
-                <div className="setting-item setting-half">
-                  <div className="setting-label">SHOW/HIDE HOTKEY</div>
-                  <div className="setting-control">
-                    <select
-                      value={(settings as any).hotkey || "F9"}
-                      onChange={(e) => handleHotkeyChange(e.target.value)}
-                      className="hotkey-selector"
-                    >
-                      {availableHotkeys.map((hotkey) => (
-                        <option key={hotkey} value={hotkey}>
-                          {hotkey}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-              )}
+          <div className="settings-grid">
+            {/* Appearance Tab */}
+            {activeTab === "appearance" && (
+              <>
+            {/* Theme */}
+            <div className="setting-item">
+              <div className="setting-label">THEME</div>
+              <div className="setting-control">
+                <select
+                  value={(settings as any).theme || "amoled"}
+                  onChange={(e) =>
+                    onSettingsChange({
+                      theme: e.target.value as
+                        | "amoled"
+                        | "amoled-crimson"
+                        | "amoled-yellow",
+                    })
+                  }
+                  className="theme-selector"
+                >
+                  <option value="amoled">AMOLED</option>
+                  <option value="amoled-crimson">AMOLED CRIMSON</option>
+                  <option value="amoled-yellow">AMOLED YELLOW</option>
+                </select>
+              </div>
             </div>
 
             {/* Opacity and Font Size side by side */}
@@ -528,41 +550,28 @@ export const Header: React.FC<HeaderProps> = ({
                 </div>
               </div>
             </div>
+              </>
+            )}
 
-            {/* Show Optional and Reset side by side */}
-            <div className="setting-row">
-              <div className="setting-item setting-half">
-                <div className="setting-label">SHOW OPTIONAL</div>
-                <div className="setting-control">
-                  <label className="setting-checkbox">
-                    <input
-                      type="checkbox"
-                      checked={settings.showOptional !== false}
-                      onChange={(e) =>
-                        onSettingsChange({ showOptional: e.target.checked })
-                      }
-                    />
-                    Show Optional Quests
-                  </label>
-                </div>
-              </div>
-
-              <div className="setting-item setting-half">
-                <div className="setting-label">RESET PROGRESS</div>
-                <div className="setting-control">
-                  <div className="reset-control-row">
-                    <button
-                      className="reset-button compact"
-                      onClick={handleResetQuests}
-                    >
-                      Reset All
-                    </button>
-                    {showResetSuccess && (
-                      <span className="reset-success-message">
-                        ✓ Reset Successful
-                      </span>
-                    )}
-                  </div>
+            {/* Import/Export Tab */}
+            {activeTab === "import" && (
+              <>
+            {/* Reset Progress */}
+            <div className="setting-item">
+              <div className="setting-label">RESET PROGRESS</div>
+              <div className="setting-control">
+                <div className="reset-control-row">
+                  <button
+                    className="reset-button compact"
+                    onClick={handleResetQuests}
+                  >
+                    Reset All
+                  </button>
+                  {showResetSuccess && (
+                    <span className="reset-success-message">
+                      ✓ Reset Successful
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
@@ -627,9 +636,13 @@ export const Header: React.FC<HeaderProps> = ({
                 </div>
               </div>
             </div>
+              </>
+            )}
 
-            {/* Log File Detection - Only show in Electron */}
-            {isElectron && (
+            {/* Auto-Detection Tab */}
+            {isElectron && activeTab === "detection" && (
+              <>
+            {/* Log File Detection */}
               <div className="setting-item">
                 <div className="setting-label">LOG FILE DETECTION</div>
                 <div className="setting-control">
@@ -681,10 +694,9 @@ export const Header: React.FC<HeaderProps> = ({
                   </div>
                 </div>
               </div>
-            )}
 
-            {/* Auto-Complete Quests - Beta Feature */}
-            {isElectron && settings.logFilePath && (
+            {/* Auto-Complete Quests via Rewards */}
+            {settings.logFilePath && (
               <div className="setting-item">
                 <div className="setting-control">
                   <label className="setting-checkbox">
@@ -693,16 +705,41 @@ export const Header: React.FC<HeaderProps> = ({
                       checked={settings.autoCompleteQuests || false}
                       onChange={(e) => onSettingsChange({ autoCompleteQuests: e.target.checked })}
                     />
-                    <span style={{ fontSize: '0.85em' }}>AUTO-QUESTS</span>
+                    <span style={{ fontSize: '0.85em' }}>AUTO-DETECT REWARDS</span>
                   </label>
                   <div className="beta-warning">
-                    <span className="warning-icon">⚠️</span>
+                    <span className="warning-icon">ℹ️</span>
                     <span className="warning-text">
-                      Beta feature: Currently only works with "Permanent Buffs Only" guide. Monitors log file for quest reward entries to automatically mark matching quests as complete.
+                      Monitors Client.txt for quest rewards (Spirit, Resistance, Life, Passive Points, etc.) and automatically marks matching quests as complete when you enter new zones.
                     </span>
                   </div>
                 </div>
               </div>
+            )}
+              </>
+            )}
+
+            {/* Controls Tab */}
+            {isElectron && activeTab === "controls" && (
+              <>
+            {/* Hotkey */}
+            <div className="setting-item">
+              <div className="setting-label">SHOW/HIDE HOTKEY</div>
+              <div className="setting-control">
+                <select
+                  value={(settings as any).hotkey || "F9"}
+                  onChange={(e) => handleHotkeyChange(e.target.value)}
+                  className="hotkey-selector"
+                >
+                  {availableHotkeys.map((hotkey) => (
+                    <option key={hotkey} value={hotkey}>
+                      {hotkey}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+              </>
             )}
           </div>
 

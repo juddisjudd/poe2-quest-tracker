@@ -6,22 +6,26 @@ interface PanelFooterProps {
   gemPanelVisible: boolean;
   onToggleGemPanel: () => void;
   hasGemData: boolean;
-  
-  // Regex Panel
-  regexPanelVisible: boolean;
-  onToggleRegexPanel: () => void;
-  hasRegexData: boolean;
-  
+
   // Notes Panel
   notesPanelVisible: boolean;
   onToggleNotesPanel: () => void;
   hasNotesData: boolean;
-  
+
+  // Rewards Panel
+  rewardsPanelVisible: boolean;
+  onToggleRewardsPanel: () => void;
+  hasRewardsData: boolean;
+
+  // Regex Builder Panel
+  regexBuilderVisible: boolean;
+  onToggleRegexBuilder: () => void;
+
   // Item Check Panel
-  itemCheckPanelVisible: boolean;
-  onToggleItemCheckPanel: () => void;
+  itemCheckVisible: boolean;
+  onToggleItemCheck: () => void;
   hasItemCheckData: boolean;
-  
+
   // Global state
   settingsOpen: boolean;
 }
@@ -30,19 +34,24 @@ export const PanelFooter: React.FC<PanelFooterProps> = ({
   gemPanelVisible,
   onToggleGemPanel,
   hasGemData,
-  regexPanelVisible,
-  onToggleRegexPanel,
-  hasRegexData,
   notesPanelVisible,
   onToggleNotesPanel,
   hasNotesData,
-  itemCheckPanelVisible,
-  onToggleItemCheckPanel,
+  rewardsPanelVisible,
+  onToggleRewardsPanel,
+  hasRewardsData,
+  regexBuilderVisible,
+  onToggleRegexBuilder,
+  itemCheckVisible,
+  onToggleItemCheck,
   hasItemCheckData,
   settingsOpen,
 }) => {
+  // Hide footer when any full-screen panel is open
+  const anyPanelOpen = gemPanelVisible || notesPanelVisible || rewardsPanelVisible || regexBuilderVisible || itemCheckVisible;
+
   return (
-    <div className={`panel-footer ${settingsOpen ? "settings-open" : ""}`}>
+    <div className={`panel-footer ${settingsOpen ? "settings-open" : ""} ${anyPanelOpen ? "hidden" : ""}`}>
       {/* Gem Panel Toggle */}
       {hasGemData && (
         <div className={`panel-toggle gem-toggle ${gemPanelVisible ? "panel-open" : ""}`}>
@@ -53,20 +62,6 @@ export const PanelFooter: React.FC<PanelFooterProps> = ({
           >
             <span className="toggle-icon">{gemPanelVisible ? "▼" : "▲"}</span>
             <span className="toggle-text">Gems</span>
-          </button>
-        </div>
-      )}
-
-      {/* Regex Panel Toggle */}
-      {hasRegexData && (
-        <div className={`panel-toggle regex-toggle ${regexPanelVisible ? "panel-open" : ""}`}>
-          <button
-            className="panel-toggle-btn"
-            onClick={onToggleRegexPanel}
-            title={regexPanelVisible ? "Hide Regex Filters" : "Show Regex Filters"}
-          >
-            <span className="toggle-icon">{regexPanelVisible ? "▼" : "▲"}</span>
-            <span className="toggle-text">Regex</span>
           </button>
         </div>
       )}
@@ -85,15 +80,41 @@ export const PanelFooter: React.FC<PanelFooterProps> = ({
         </div>
       )}
 
-      {/* Item Check Panel Toggle */}
-      {hasItemCheckData && (
-        <div className={`panel-toggle item-check-toggle ${itemCheckPanelVisible ? "panel-open" : ""}`}>
+      {/* Rewards Panel Toggle */}
+      {hasRewardsData && (
+        <div className={`panel-toggle rewards-toggle ${rewardsPanelVisible ? "panel-open" : ""}`}>
           <button
             className="panel-toggle-btn"
-            onClick={onToggleItemCheckPanel}
-            title={itemCheckPanelVisible ? "Hide Item Check" : "Show Item Check"}
+            onClick={onToggleRewardsPanel}
+            title={rewardsPanelVisible ? "Hide Rewards Tracker" : "Show Rewards Tracker"}
           >
-            <span className="toggle-icon">{itemCheckPanelVisible ? "▼" : "▲"}</span>
+            <span className="toggle-icon">★</span>
+            <span className="toggle-text">Rewards</span>
+          </button>
+        </div>
+      )}
+
+      {/* Regex Builder Toggle */}
+      <div className={`panel-toggle regex-toggle ${regexBuilderVisible ? "panel-open" : ""}`}>
+        <button
+          className="panel-toggle-btn"
+          onClick={onToggleRegexBuilder}
+          title={regexBuilderVisible ? "Hide Regex Builder" : "Show Regex Builder"}
+        >
+          <span className="toggle-icon">{regexBuilderVisible ? "▼" : "▲"}</span>
+          <span className="toggle-text">Regex</span>
+        </button>
+      </div>
+
+      {/* Item Check Toggle */}
+      {hasItemCheckData && (
+        <div className={`panel-toggle item-check-toggle ${itemCheckVisible ? "panel-open" : ""}`}>
+          <button
+            className="panel-toggle-btn"
+            onClick={onToggleItemCheck}
+            title={itemCheckVisible ? "Hide Item Checker" : "Show Item Checker"}
+          >
+            <span className="toggle-icon">{itemCheckVisible ? "▼" : "▲"}</span>
             <span className="toggle-text">Items</span>
           </button>
         </div>

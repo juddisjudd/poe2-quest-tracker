@@ -1,4 +1,4 @@
-import { GemProgression, GemSocketGroup, GemSlot, ItemData, ItemModifier, ItemCheckData } from "../types";
+import { GemProgression, GemSocketGroup, GemSlot, ItemData, ItemModifier } from "../types";
 import skillGemsData from "../data/skill_gems.json";
 
 export interface PobLoadout {
@@ -11,7 +11,7 @@ export interface PobParseResult {
   notes?: string;
   loadouts?: PobLoadout[];
   hasMultipleLoadouts?: boolean;
-  itemCheckData?: ItemCheckData;
+  items?: ItemData[]; // Items from all loadouts
 }
 
 // Function to get stat requirement from skill_gems.json by name matching
@@ -23,16 +23,16 @@ function getStatRequirementFromData(gemName: string): 'str' | 'dex' | 'int' | nu
     .normalize('NFD') // Normalize Unicode
     .replace(/[\u0300-\u036f]/g, '') // Remove diacritics
     .replace(/\s+/g, ' '); // Normalize whitespace
-  
+
   // Search through the skill gems data for EXACT match only
   for (const [, gemData] of Object.entries(skillGemsData)) {
     const displayName = gemData.display_name
       .toLowerCase()
       .trim()
       .normalize('NFD') // Normalize Unicode
-      .replace(/[\u0300-\u036f]/g, '') // Remove diacritics  
+      .replace(/[\u0300-\u036f]/g, '') // Remove diacritics
       .replace(/\s+/g, ' '); // Normalize whitespace
-    
+
     // Only exact match - no partial matching
     if (displayName === cleanGemName) {
       return determineStatFromRequirements(gemData.requirement_weights);
@@ -44,7 +44,7 @@ function getStatRequirementFromData(gemName: string): 'str' | 'dex' | 'int' | nu
 // Helper function to determine primary stat from requirement weights
 function determineStatFromRequirements(requirements: { strength: number; dexterity: number; intelligence: number }): 'str' | 'dex' | 'int' | null {
   const { strength, dexterity, intelligence } = requirements;
-  
+
   // Only consider stats with exactly 100 as the requirement value
   if (strength === 100) {
     return 'str';
@@ -53,7 +53,7 @@ function determineStatFromRequirements(requirements: { strength: number; dexteri
   } else if (intelligence === 100) {
     return 'int';
   }
-  
+
   // If no stat has exactly 100, return null (white)
   return null;
 }
@@ -182,251 +182,6 @@ async function zlibInflate(compressedData: string): Promise<string> {
     throw new Error('Invalid Path of Building code format');
   }
 }
-
-// Extract items with correct loadout associations via ItemSet->Slot->Item mapping
-function extractItemsFromXML(xmlString: string): ItemData[] {
-  console.log('🔍 [POB] Starting item extraction with ItemSet-Slot mapping...');
-  try {
-    const parser = new DOMParser();
-    const xmlDoc = parser.parseFromString(xmlString, 'text/xml');
-    
-    // Check for parsing errors
-    const parseError = xmlDoc.querySelector('parsererror');
-    if (parseError) {
-      console.error('❌ [POB] XML parsing error:', parseError.textContent);
-      return [];
-    }
-    
-    // Step 1: Parse all items from global Items container
-    const itemsContainer = xmlDoc.querySelector('Items');
-    const globalItems = new Map<string, ItemData>();
-    
-    if (itemsContainer) {
-      const itemElements = itemsContainer.querySelectorAll('Item');
-      console.log('🔍 [POB] Found', itemElements.length, 'Item elements in global Items container');
-      
-      itemElements.forEach((itemElement, index) => {
-        try {
-          const itemId = itemElement.getAttribute('id') || `${index}`;
-          const item = parsePOBItemFromXML(itemElement, itemId);
-          if (item) {
-            globalItems.set(itemId, item);
-            console.log(`✅ [POB] Parsed global item ${itemId}: ${item.name} (${item.itemClass})`);
-          }
-        } catch (error) {
-          console.warn(`Failed to parse global item ${index}:`, error);
-        }
-      });
-    }
-    
-    // Step 2: Parse ItemSets to get loadout->itemId mappings
-    const itemLoadoutMap = new Map<string, string[]>(); // itemId -> [loadoutNames]
-    const itemSets = xmlDoc.querySelectorAll('ItemSet[title]');
-    console.log('🔍 [POB] Found', itemSets.length, 'ItemSet elements with titles');
-    
-    itemSets.forEach((itemSet, setIndex) => {
-      const loadoutName = itemSet.getAttribute('title') || `ItemSet ${setIndex + 1}`;
-      console.log(`🔍 [POB] Processing ItemSet: "${loadoutName}"`);
-      
-      // Look for Slot elements that reference items
-      const slotElements = itemSet.querySelectorAll('Slot[itemId]');
-      console.log(`🔍 [POB] Found ${slotElements.length} Slot elements in ItemSet "${loadoutName}"`);
-      
-      slotElements.forEach(slot => {
-        const itemId = slot.getAttribute('itemId');
-        if (itemId && itemId !== '0' && globalItems.has(itemId)) {
-          // Add this loadout to the item's loadout list
-          const currentLoadouts = itemLoadoutMap.get(itemId) || [];
-          if (!currentLoadouts.includes(loadoutName)) {
-            currentLoadouts.push(loadoutName);
-            itemLoadoutMap.set(itemId, currentLoadouts);
-            console.log(`🔗 [POB] Item ${itemId} associated with loadout "${loadoutName}"`);
-          }
-        }
-      });
-    });
-    
-    // Step 3: Create final items with loadout associations
-    const items: ItemData[] = [];
-    globalItems.forEach((item, itemId) => {
-      const loadoutNames = itemLoadoutMap.get(itemId);
-      if (loadoutNames && loadoutNames.length > 0) {
-        // Item is used in specific loadouts
-        items.push({
-          ...item,
-          loadoutNames: loadoutNames
-        });
-        console.log(`✅ [POB] Item ${item.name} assigned to loadouts: ${loadoutNames.join(', ')}`);
-      } else {
-        // Item not referenced by any ItemSet, assign to default
-        items.push({
-          ...item,
-          loadoutNames: ['Main Build']
-        });
-        console.log(`✅ [POB] Item ${item.name} assigned to default: Main Build`);
-      }
-    });
-    
-    console.log('✅ [POB] Extracted', items.length, 'items total with loadout associations');
-    return items;
-  } catch (error) {
-    console.error('❌ [POB] Error extracting items from XML:', error);
-    return [];
-  }
-}
-
-// Parse a single POB item from XML element (POB format)
-function parsePOBItemFromXML(itemElement: Element, index: string | number): ItemData | null {
-  const id = itemElement.getAttribute('id') || `item-${index}`;
-  const itemText = itemElement.textContent?.trim();
-  
-  if (!itemText) {
-    console.log(`⚠️ [POB] Item ${id} has no text content`);
-    return null;
-  }
-  
-  console.log(`🔍 [POB] Parsing item ${id}:`, itemText.substring(0, 200));
-  
-  const lines = itemText.split('\n').map(line => line.trim()).filter(line => line);
-  if (lines.length < 2) return null;
-  
-  // Parse POB item format:
-  // Rarity: RARE/MAGIC/NORMAL
-  // Item Name
-  // Base Type
-  // Crafted: true/false
-  // Prefix/Suffix lines
-  // Quality: XX
-  // Sockets: S S S
-  // LevelReq: XX
-  // Implicits: X
-  // Modifier lines...
-  
-  let lineIndex = 0;
-  
-  // Parse rarity
-  const rarityLine = lines[lineIndex++];
-  const rarityMatch = rarityLine.match(/^Rarity:\s*(.+)$/);
-  const rarity = rarityMatch ? rarityMatch[1] : 'NORMAL';
-  
-  // Parse name (skip crafted items with apostrophes in names)
-  let name = lines[lineIndex++] || 'Unknown Item';
-  name = name.replace(/&apos;/g, "'"); // Fix XML entities
-  
-  // Parse base type
-  const baseType = lines[lineIndex++] || name;
-  
-  // Skip crafted flag and prefix/suffix lines
-  while (lineIndex < lines.length && (
-    lines[lineIndex].startsWith('Crafted:') ||
-    lines[lineIndex].startsWith('Prefix:') ||
-    lines[lineIndex].startsWith('Suffix:')
-  )) {
-    lineIndex++;
-  }
-  
-  // Parse quality
-  let quality = 0;
-  if (lineIndex < lines.length && lines[lineIndex].startsWith('Quality:')) {
-    const qualityMatch = lines[lineIndex].match(/Quality:\s*(\d+)/);
-    if (qualityMatch) quality = parseInt(qualityMatch[1]);
-    lineIndex++;
-  }
-  
-  // Skip sockets, runes, level req, implicits
-  while (lineIndex < lines.length && (
-    lines[lineIndex].startsWith('Sockets:') ||
-    lines[lineIndex].startsWith('Rune:') ||
-    lines[lineIndex].startsWith('LevelReq:') ||
-    lines[lineIndex].startsWith('Implicits:')
-  )) {
-    lineIndex++;
-  }
-  
-  // Parse modifiers - everything else is modifiers
-  const modifiers: ItemModifier[] = [];
-  while (lineIndex < lines.length) {
-    const line = lines[lineIndex];
-    if (line && !line.startsWith('{') && line !== name && line !== baseType) {
-      const modifier = parsePOBModifier(line);
-      if (modifier) {
-        modifiers.push(modifier);
-      }
-    }
-    lineIndex++;
-  }
-  
-  // Determine item class from base type
-  const itemClass = inferItemClassFromName(baseType);
-  
-  console.log(`✅ [POB] Parsed item: ${name} (${itemClass}) with ${modifiers.length} modifiers`);
-  
-  return {
-    id: `pob-${id}`,
-    name,
-    baseType,
-    itemClass,
-    rarity: rarity.toLowerCase(),
-    level: 1,
-    ilvl: 1,
-    modifiers,
-    quality
-    // loadoutNames will be added later based on ItemSet-Slot associations
-  };
-}
-
-// Parse a POB modifier line
-function parsePOBModifier(line: string): ItemModifier | null {
-  if (!line.trim()) return null;
-  
-  // Remove any tags like {tags:...}
-  const cleanText = line.replace(/\{[^}]*\}/g, '').trim();
-  if (!cleanText) return null;
-  
-  // Determine modifier type - POB doesn't clearly mark prefix/suffix
-  // Most modifiers are either prefix or suffix
-  let type: ItemModifier['type'] = 'prefix';
-  
-  // Common suffix patterns
-  if (cleanText.match(/increased|more|reduced|less/) && cleanText.includes('%')) {
-    type = 'suffix';
-  }
-  
-  return {
-    text: cleanText,
-    type
-  };
-}
-
-
-// Infer item class from item name patterns
-function inferItemClassFromName(name: string): string {
-  const lowerName = name.toLowerCase();
-  
-  // Weapon patterns
-  if (lowerName.includes('sword')) return 'One-Handed Swords';
-  if (lowerName.includes('axe')) return 'One-Handed Axes';
-  if (lowerName.includes('mace')) return 'One-Handed Maces';
-  if (lowerName.includes('bow')) return 'Bows';
-  if (lowerName.includes('staff') || lowerName.includes('stave')) return 'Staves';
-  if (lowerName.includes('wand')) return 'Wands';
-  if (lowerName.includes('crossbow')) return 'Crossbows';
-  
-  // Armor patterns
-  if (lowerName.includes('helmet') || lowerName.includes('hat') || lowerName.includes('crown')) return 'Helmets';
-  if (lowerName.includes('vest') || lowerName.includes('robe') || lowerName.includes('coat') || lowerName.includes('armour')) return 'Body Armour';
-  if (lowerName.includes('gloves') || lowerName.includes('gauntlets')) return 'Gloves';
-  if (lowerName.includes('boots') || lowerName.includes('greaves')) return 'Boots';
-  if (lowerName.includes('belt') || lowerName.includes('sash')) return 'Belts';
-  if (lowerName.includes('shield')) return 'Shields';
-  
-  // Jewelry patterns
-  if (lowerName.includes('ring')) return 'Rings';
-  if (lowerName.includes('amulet') || lowerName.includes('talisman')) return 'Amulets';
-  
-  return 'Unknown';
-}
-
 
 // Extract notes from XML
 function extractNotesFromXML(xmlString: string): string | undefined {
@@ -909,6 +664,211 @@ function extractLoadoutsFromXML(xmlString: string): PobLoadout[] {
   return loadouts;
 }
 
+// Function to extract items from all ItemSet elements in XML
+function extractItemsFromXML(xmlString: string): ItemData[] {
+  console.log('🔧 [POB] Extracting items from XML');
+  const items: ItemData[] = [];
+
+  try {
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(xmlString, 'text/xml');
+
+    // Helper function to find Item element by ID
+    const findItemById = (itemId: number): Element | null => {
+      const itemElements = Array.from(xmlDoc.getElementsByTagName('Item'));
+      return itemElements.find(item => parseInt(item.getAttribute('id') || '0', 10) === itemId) || null;
+    };
+
+    // Find all ItemSet elements
+    const itemSetElements = Array.from(xmlDoc.getElementsByTagName('ItemSet'));
+
+    console.log(`📦 [POB] Found ${itemSetElements.length} ItemSet elements`);
+
+    itemSetElements.forEach((itemSetElement, index) => {
+      const loadoutName = itemSetElement.getAttribute('title') ||
+                          itemSetElement.getAttribute('name') ||
+                          `Loadout ${index + 1}`;
+
+      // Find all Slot elements within this ItemSet
+      const slotElements = Array.from(itemSetElement.getElementsByTagName('Slot'));
+
+      console.log(`  📦 ItemSet "${loadoutName}": ${slotElements.length} slots`);
+
+      slotElements.forEach((slotElement) => {
+        const slotName = slotElement.getAttribute('name') || 'Unknown Slot';
+        const itemIdStr = slotElement.getAttribute('itemId');
+
+        if (!itemIdStr) {
+          // Check if there's text content directly in the slot (old format)
+          const itemText = slotElement.textContent?.trim();
+          if (itemText) {
+            const parsedItem = parseItemFromPobText(itemText, loadoutName, slotName);
+            if (parsedItem) {
+              items.push(parsedItem);
+              console.log(`    ✅ Parsed item (old format): ${parsedItem.name} (${parsedItem.itemClass}) in ${slotName}`);
+            }
+          }
+          return;
+        }
+
+        const itemId = parseInt(itemIdStr, 10);
+        if (!itemId) return;
+
+        // Find the corresponding Item element
+        const itemElement = findItemById(itemId);
+        if (!itemElement) {
+          console.log(`    ⚠️ Item with id ${itemId} not found for slot ${slotName}`);
+          return;
+        }
+
+        const itemText = itemElement.textContent?.trim();
+        if (!itemText) return;
+
+        // Parse the item text
+        const parsedItem = parseItemFromPobText(itemText, loadoutName, slotName);
+        if (parsedItem) {
+          items.push(parsedItem);
+          console.log(`    ✅ Parsed item: ${parsedItem.name} (${parsedItem.itemClass}) in ${slotName}`);
+        }
+      });
+    });
+
+    console.log(`✅ [POB] Successfully extracted ${items.length} items from XML`);
+  } catch (error) {
+    console.error('❌ [POB] Error extracting items:', error);
+  }
+
+  return items;
+}
+
+// Parse item from POB text format (similar to in-game format)
+function parseItemFromPobText(itemText: string, loadoutName: string, slot: string): ItemData | null {
+  const lines = itemText.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+
+  if (lines.length < 4) return null;
+
+  let lineIndex = 0;
+
+  // Parse rarity and name (POB format: "Rarity: RARE\nName\nBase Type")
+  const rarityMatch = lines[lineIndex]?.match(/^Rarity:\s*(.+)$/i);
+  if (!rarityMatch) return null;
+  const rarity = rarityMatch[1];
+  lineIndex++;
+
+  const name = lines[lineIndex++] || 'Unknown';
+  const itemType = lines[lineIndex++] || 'Unknown';
+
+  // Try to determine item class from item type or slot
+  const itemClass = determineItemClass(itemType, slot);
+
+  const implicit: ItemModifier[] = [];
+  const explicit: ItemModifier[] = [];
+  const enchant: ItemModifier[] = [];
+  const rune: ItemModifier[] = [];
+
+  let quality = 0;
+  let ilvl = 1;
+  let level = 1;
+  let sockets = '';
+  const requirements: ItemData['requirements'] = {};
+
+  // Parse remaining lines
+  while (lineIndex < lines.length) {
+    const line = lines[lineIndex];
+
+    // Parse implicits (lines with {tags})
+    if (line.includes('{') && line.includes('}')) {
+      const modText = line.replace(/\{[^}]*\}/g, '').trim();
+      if (modText) {
+        if (line.includes('{tags:enchant}')) {
+          enchant.push({ text: modText, type: 'enchant' });
+        } else if (line.includes('{tags:implicit}')) {
+          implicit.push({ text: modText, type: 'implicit' });
+        } else if (line.includes('{tags:rune}')) {
+          rune.push({ text: modText, type: 'rune' });
+        } else {
+          explicit.push({ text: modText, type: 'explicit' });
+        }
+      }
+    }
+    // Quality
+    else if (line.match(/^Quality:\s*\+?(\d+)/)) {
+      quality = parseInt(line.match(/\d+/)?.[0] || '0');
+    }
+    // Item Level
+    else if (line.match(/^Item Level:\s*(\d+)/)) {
+      ilvl = parseInt(line.match(/\d+/)?.[0] || '1');
+    }
+    // Sockets
+    else if (line.match(/^Sockets:\s*(.+)/)) {
+      sockets = line.replace('Sockets:', '').trim();
+    }
+    // Requirements
+    else if (line.match(/^Requires/)) {
+      const levelMatch = line.match(/Level\s+(\d+)/);
+      if (levelMatch) {
+        level = parseInt(levelMatch[1]);
+        requirements.level = level;
+      }
+    }
+    // Regular explicit mods (no tags)
+    else if (!line.match(/^(Physical|Lightning|Fire|Cold|Chaos) Damage:|^Critical Hit Chance:|^Evasion Rating:|^Armour:|^Energy Shield:|^Attacks per Second:/)) {
+      if (line.length > 0 && !line.startsWith('Requires') && !line.startsWith('Sockets') && !line.startsWith('Quality') && !line.startsWith('Item Level')) {
+        explicit.push({ text: line, type: 'explicit' });
+      }
+    }
+
+    lineIndex++;
+  }
+
+  return {
+    id: `${loadoutName}-${slot}-${name}`.toLowerCase().replace(/[^a-z0-9-]/g, '-'),
+    name,
+    itemType,
+    itemClass,
+    rarity,
+    level,
+    ilvl,
+    implicit,
+    explicit,
+    enchant,
+    rune,
+    requirements,
+    sockets: sockets || undefined,
+    quality: quality || undefined,
+    loadoutName,
+    slot
+  };
+}
+
+// Determine item class from item type or slot name
+function determineItemClass(itemType: string, slot: string): string {
+  const lower = (itemType + ' ' + slot).toLowerCase();
+
+  if (lower.includes('helmet') || lower.includes('cap') || lower.includes('hood') || lower.includes('crown')) return 'Helmets';
+  if (lower.includes('glove') || lower.includes('gauntlet') || lower.includes('mitt')) return 'Gloves';
+  if (lower.includes('boot') || lower.includes('shoe') || lower.includes('greave')) return 'Boots';
+  if (lower.includes('body') || lower.includes('armour') || lower.includes('vest') || lower.includes('robe') || lower.includes('coat')) return 'Body Armours';
+  if (lower.includes('shield')) return 'Shields';
+  if (lower.includes('quiver')) return 'Quivers';
+  if (lower.includes('amulet') || lower.includes('talisman')) return 'Amulets';
+  if (lower.includes('ring')) return 'Rings';
+  if (lower.includes('belt') || lower.includes('sash')) return 'Belts';
+  if (lower.includes('bow')) return 'Bows';
+  if (lower.includes('crossbow')) return 'Crossbows';
+  if (lower.includes('wand')) return 'Wands';
+  if (lower.includes('staff') || lower.includes('stave')) return 'Staves';
+  if (lower.includes('mace')) return lower.includes('two hand') ? 'Two Hand Maces' : 'One Hand Maces';
+  if (lower.includes('sword')) return lower.includes('two hand') ? 'Two Hand Swords' : 'One Hand Swords';
+  if (lower.includes('axe')) return lower.includes('two hand') ? 'Two Hand Axes' : 'One Hand Axes';
+  if (lower.includes('sceptre')) return 'Sceptres';
+  if (lower.includes('dagger')) return 'Daggers';
+  if (lower.includes('claw')) return 'Claws';
+  if (lower.includes('focus') || lower.includes('foci')) return 'Foci';
+
+  return 'Unknown';
+}
+
 // Main function to parse PoB code - returns both gems and notes
 export async function parsePathOfBuildingCodeWithNotes(pobCode: string): Promise<PobParseResult> {
   try {
@@ -933,20 +893,16 @@ export async function parsePathOfBuildingCodeWithNotes(pobCode: string): Promise
     // Extract loadouts from XML
     const loadouts = extractLoadoutsFromXML(xmlString);
     const hasMultipleLoadouts = loadouts.length > 1;
-    
+
     // Parse gems from XML (default/first loadout)
     const gemProgression = parseGemsFromXML(xmlString);
-    
+
     // Extract notes from XML
     const notes = extractNotesFromXML(xmlString);
-    
-    // Extract items directly from ItemSet elements (they already have loadout associations)
+
+    // Extract items from XML (all loadouts)
     const items = extractItemsFromXML(xmlString);
-    const itemCheckData: ItemCheckData | undefined = items.length > 0 ? {
-      items,
-      lastImported: new Date().toISOString()
-    } : undefined;
-    
+
     console.log('🎯 [POB] Parse complete - Final result:', {
       hasGemProgression: !!gemProgression,
       socketGroups: gemProgression?.socketGroups?.length || 0,
@@ -955,16 +911,16 @@ export async function parsePathOfBuildingCodeWithNotes(pobCode: string): Promise
       notesPreview: notes ? notes.substring(0, 100) + '...' : 'No notes',
       hasLoadouts: loadouts.length > 0,
       loadoutsCount: loadouts.length,
-      hasItems: !!itemCheckData,
+      hasItems: items.length > 0,
       itemsCount: items.length
     });
-    
+
     return {
       gemProgression,
       notes,
       loadouts: loadouts.length > 0 ? loadouts : undefined,
       hasMultipleLoadouts,
-      itemCheckData
+      items: items.length > 0 ? items : undefined
     };
   } catch (error) {
     console.error('Error parsing PoB code:', error);

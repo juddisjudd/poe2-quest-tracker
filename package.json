@@ -1,6 +1,6 @@
 {
   "name": "exile-compass",
-  "version": "1.7.5",
+  "version": "1.9.0",
   "description": "Path of Exile 2 Exile Compass Overlay",
   "main": "dist/main/main.js",
   "scripts": {
@@ -25,35 +25,36 @@
   "author": "juddisjudd",
   "license": "MIT",
   "devDependencies": {
-    "@types/node": "^24.3.0",
+    "@types/node": "^24.10.0",
     "@types/pako": "^2.0.4",
-    "@types/react": "^19.1.10",
-    "@types/react-dom": "^19.1.7",
-    "@typescript-eslint/eslint-plugin": "^8.40.0",
-    "@typescript-eslint/parser": "^8.40.0",
-    "@vitejs/plugin-react": "^5.0.0",
-    "concurrently": "^9.2.0",
-    "cross-env": "^10.0.0",
-    "electron": "^37.3.0",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "@typescript-eslint/eslint-plugin": "^8.46.3",
+    "@typescript-eslint/parser": "^8.46.3",
+    "@vitejs/plugin-react": "^5.1.0",
+    "concurrently": "^9.2.1",
+    "cross-env": "^10.1.0",
+    "electron": "^39.0.0",
     "electron-builder": "^26.0.12",
-    "eslint": "^9.33.0",
-    "eslint-plugin-react-hooks": "^5.2.0",
-    "eslint-plugin-react-refresh": "^0.4.20",
-    "rimraf": "^6.0.1",
-    "typescript": "^5.9.2",
-    "vite": "^7.1.2"
+    "eslint": "^9.39.1",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.4.24",
+    "rimraf": "^6.1.0",
+    "typescript": "^5.9.3",
+    "vite": "^7.1.12"
   },
   "dependencies": {
+    "@radix-ui/react-icons": "^1.3.2",
     "@radix-ui/react-select": "^2.2.6",
     "electron-log": "^5.4.3",
     "electron-updater": "^6.6.2",
     "pako": "^2.1.0",
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1"
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
   },
   "build": {
     "appId": "com.juddisjudd.poe2questtracker",
-    "productName": "POE2 Exile Compass",
+    "productName": "Exile Compass",
     "directories": {
       "output": "release"
     },

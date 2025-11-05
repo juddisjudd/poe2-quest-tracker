@@ -15,7 +15,7 @@ import * as fs from "fs";
 import { format as formatUrl } from "url";
 import { isDev } from "./utils";
 import log from "electron-log";
-import { detectPoeLogFile, checkFileExists } from "../utils/processDetection";
+import { detectPoeLogFile, checkFileExists, findPoeProcess } from "../utils/processDetection";
 
 log.transports.file.level = "info";
 log.transports.console.level = "info";
@@ -29,6 +29,7 @@ let currentHotkey = "F9";
 let logWatcher: fs.FSWatcher | null = null;
 let logFilePath: string | null = null;
 let lastLogSize = 0;
+let currentLocation: string | null = null; // Track current player location
 
 autoUpdater.autoDownload = true;
 autoUpdater.autoInstallOnAppQuit = true;
@@ -104,7 +105,8 @@ const createWindow = (): void => {
 
   if (isDevelopment) {
     mainWindow.loadURL("http://localhost:3000");
-    mainWindow.webContents.openDevTools({ mode: "detach" });
+    // Dev tools can be opened with F12 if needed
+    // mainWindow.webContents.openDevTools({ mode: "detach" });
   } else {
     const rendererPath = path.join(__dirname, "../renderer/index.html");
     const url = formatUrl({
@@ -113,6 +115,8 @@ const createWindow = (): void => {
       slashes: true,
     });
     mainWindow.loadURL(url);
+
+    // Dev tools disabled in production (can be opened with F12 if needed)
 
     setTimeout(() => {
       log.info("Checking for updates...");
@@ -137,7 +141,17 @@ const createWindow = (): void => {
   mainWindow.on("ready-to-show", () => {
     setupOverlay();
     mainWindow?.show();
+    console.log("Window ready-to-show event fired");
   });
+
+  // Force show window after 2 seconds if ready-to-show hasn't fired
+  setTimeout(() => {
+    if (mainWindow && !mainWindow.isVisible()) {
+      console.log("Force showing window (ready-to-show didn't fire)");
+      setupOverlay();
+      mainWindow.show();
+    }
+  }, 2000);
 
   if (!isDevelopment) {
     setInterval(() => {
@@ -465,6 +479,16 @@ ipcMain.handle("check-file-exists", async (_, filePath: string) => {
   }
 });
 
+ipcMain.handle("check-game-process", async () => {
+  try {
+    const process = await findPoeProcess();
+    return process !== null; // Return true if game is running, false otherwise
+  } catch (error) {
+    log.error("Error checking game process:", error);
+    return false;
+  }
+});
+
 ipcMain.handle("select-log-file", async () => {
   try {
     const result = await dialog.showOpenDialog(mainWindow!, {
@@ -534,10 +558,15 @@ ipcMain.handle("load-notes-data", async () => {
   }
 });
 
-// Item Check Data handlers
 ipcMain.handle("save-item-check-data", async (_, itemCheckData: any) => {
   try {
     const itemCheckDataPath = getItemCheckDataPath();
+    const itemCheckDataDir = path.dirname(itemCheckDataPath);
+
+    if (!fs.existsSync(itemCheckDataDir)) {
+      fs.mkdirSync(itemCheckDataDir, { recursive: true });
+    }
+
     fs.writeFileSync(itemCheckDataPath, JSON.stringify(itemCheckData, null, 2), "utf8");
     console.log("Item check data saved successfully to:", itemCheckDataPath);
     return { success: true };
@@ -665,6 +694,7 @@ ipcMain.handle("stop-log-monitoring", async () => {
     }
     logFilePath = null;
     lastLogSize = 0;
+    currentLocation = null; // Reset location tracking
     log.info("Stopped log monitoring");
   } catch (error) {
     log.error("Error stopping log monitoring:", error);
@@ -681,11 +711,17 @@ function handleLogFileChange() {
 
     log.info(`Log file change detected: current=${currentSize}, last=${lastLogSize}`);
 
+    // Handle file truncation or rotation (file got smaller)
+    if (currentSize < lastLogSize) {
+      log.info('Client.txt appears truncated or rotated. Resetting read position to 0.');
+      lastLogSize = 0;
+    }
+
     // Only read new content if file grew significantly (avoid tiny changes)
     if (currentSize <= lastLogSize) {
       return; // No logging needed for no changes
     }
-    
+
     // Skip if change is tiny (less than 10 bytes) - might be file system noise
     if (currentSize - lastLogSize < 10) {
       return;
@@ -714,33 +750,75 @@ function handleLogFileChange() {
       log.info(`Processing ${lines.length} new lines`);
       
       for (const line of lines) {
-        // Only log lines that might be rewards to reduce noise
-        const mightBeReward = line.includes('has received');
-        if (mightBeReward) {
-          log.info(`Checking potential reward line: ${line}`);
+        // Check for scene changes first
+        const sceneMatch = line.match(/.*\[INFO Client \d+\] \[SCENE\] Set Source \[(.+?)\]/);
+        if (sceneMatch) {
+          currentLocation = sceneMatch[1];
+          log.info(`Player location changed to: ${currentLocation}`);
+
+          // Detect act number from special act markers
+          let detectedActNumber: number | null = null;
+          const actMatch = currentLocation.match(/^Act (\d+)$/i);
+          if (actMatch) {
+            detectedActNumber = parseInt(actMatch[1], 10);
+            log.info(`Detected Act ${detectedActNumber} from scene marker`);
+          }
+
+          // Send zone change to renderer process with act number if detected
+          mainWindow?.webContents.send('zone-changed', {
+            zoneName: currentLocation,
+            actNumber: detectedActNumber
+          });
+          continue;
         }
-        
-        // Check if line contains reward information
-        if (line.includes('has received') && (
-          line.includes('Resistance') ||
-          line.includes('Spirit') ||
-          line.includes('maximum Life') ||
-          line.includes('Charm') ||
-          line.includes('Intelligence') ||
-          line.includes('Strength') ||
-          line.includes('Dexterity') ||
-          line.includes('Recovery') ||
-          line.includes('Movement Speed') ||
-          line.includes('Cooldown') ||
-          line.includes('Global Defences') ||
-          line.includes('Experience') ||
-          line.includes('Stun Threshold') ||
-          line.includes('Ailment Threshold') ||
-          line.includes('Mana Regeneration')
-        )) {
-          // Send reward to renderer process
+
+        // Check for reward patterns
+        // Matches both "CharName has received X" and "You have received X"
+        const rewardPatterns = [
+          /has received.*Passive Skill Points/i,
+          /have received.*Passive Skill Points/i,
+          /has received.*Resistance/i,
+          /have received.*Resistance/i,
+          /has received.*Spirit/i,
+          /have received.*Spirit/i,
+          /has received.*maximum Life/i,
+          /have received.*maximum Life/i,
+          /has received.*Charm/i,
+          /have received.*Charm/i,
+          /has received.*Intelligence/i,
+          /have received.*Intelligence/i,
+          /has received.*Strength/i,
+          /have received.*Strength/i,
+          /has received.*Dexterity/i,
+          /have received.*Dexterity/i,
+          /has received.*Recovery/i,
+          /have received.*Recovery/i,
+          /has received.*Movement Speed/i,
+          /have received.*Movement Speed/i,
+          /has received.*Cooldown/i,
+          /have received.*Cooldown/i,
+          /has received.*Global Defences/i,
+          /have received.*Global Defences/i,
+          /has received.*Experience/i,
+          /have received.*Experience/i,
+          /has received.*Stun Threshold/i,
+          /have received.*Stun Threshold/i,
+          /has received.*Ailment Threshold/i,
+          /have received.*Ailment Threshold/i,
+          /has received.*Mana Regeneration/i,
+          /have received.*Mana Regeneration/i,
+          /has received.*Flask/i,
+          /have received.*Flask/i,
+          /has received.*Presence/i,
+          /have received.*Presence/i
+        ];
+
+        // Check if line matches any reward pattern
+        const isReward = rewardPatterns.some(pattern => pattern.test(line));
+        if (isReward) {
+          // Send reward to renderer process with current location context
           mainWindow?.webContents.send('log-reward', line);
-          log.info('Detected reward:', line);
+          log.info(`Detected reward: ${line.substring(0, 100)}... at location: ${currentLocation}`);
         }
       }
     });

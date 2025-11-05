@@ -1,256 +1,310 @@
 import React, { useState } from "react";
-import { ItemCheckData, ItemData, ItemCheckResult } from "../types";
-import { parseItemFromText, checkItemAgainstPob } from "../utils/itemParser";
+import { ItemData, ItemMatchResult } from "../types";
+import { parseItemFromText, calculateItemMatch, getMatchColor } from "../utils/itemParser";
 import "./ItemCheckPanel.css";
 
 interface ItemCheckPanelProps {
-  itemCheckData: ItemCheckData | undefined;
   isVisible: boolean;
   settingsOpen: boolean;
-  onUpdateItemData: (data: ItemCheckData) => void;
   onTogglePanel: () => void;
-  showToggleButton?: boolean;
+  pobItems: ItemData[]; // Items from POB loadouts
 }
 
 export const ItemCheckPanel: React.FC<ItemCheckPanelProps> = ({
-  itemCheckData,
   isVisible,
   settingsOpen,
-  onUpdateItemData,
   onTogglePanel,
-  showToggleButton = true,
+  pobItems
 }) => {
-  const [itemText, setItemText] = useState('');
-  const [checkResult, setCheckResult] = useState<ItemCheckResult | null>(null);
-  const [isChecking, setIsChecking] = useState(false);
+  const [itemText, setItemText] = useState("");
+  const [matchResults, setMatchResults] = useState<ItemMatchResult[]>([]);
+  const [selectedMatch, setSelectedMatch] = useState<ItemMatchResult | null>(null);
+  const [pastedItem, setPastedItem] = useState<ItemData | null>(null);
 
-  const handleCheckItem = async () => {
-    if (!itemText.trim()) return;
-
-    setIsChecking(true);
-    try {
-      const parsedItem = parseItemFromText(itemText.trim());
-      if (!parsedItem) {
-        alert('Could not parse item. Please check the format and try again.');
-        return;
-      }
-
-      const pobItems = itemCheckData?.items || [];
-      if (pobItems.length === 0) {
-        alert('No POB items found. Please import a Path of Building code first.');
-        return;
-      }
-
-      const result = checkItemAgainstPob(parsedItem, pobItems);
-      setCheckResult(result);
-    } catch (error) {
-      console.error('Error checking item:', error);
-      alert('Error checking item. Please try again.');
-    } finally {
-      setIsChecking(false);
+  const handleCheckItem = () => {
+    if (!itemText.trim()) {
+      setMatchResults([]);
+      setSelectedMatch(null);
+      setPastedItem(null);
+      return;
     }
+
+    // Parse the pasted item
+    const parsedItem = parseItemFromText(itemText);
+    if (!parsedItem) {
+      alert("Could not parse item. Please make sure you've copied the full item text from the game.");
+      return;
+    }
+
+    setPastedItem(parsedItem);
+
+    // Filter POB items by matching item class
+    const matchingClassItems = pobItems.filter(
+      pobItem => pobItem.itemClass === parsedItem.itemClass
+    );
+
+    if (matchingClassItems.length === 0) {
+      setMatchResults([]);
+      setSelectedMatch(null);
+      return;
+    }
+
+    // Calculate match percentage for each POB item
+    const results: ItemMatchResult[] = matchingClassItems.map(pobItem => {
+      const { matchPercentage, details } = calculateItemMatch(parsedItem, pobItem);
+      return {
+        loadoutName: pobItem.loadoutName || "Unknown Loadout",
+        pobItem,
+        matchPercentage,
+        matchColor: getMatchColor(matchPercentage),
+        details
+      };
+    });
+
+    // Sort by match percentage (highest first)
+    results.sort((a, b) => b.matchPercentage - a.matchPercentage);
+
+    setMatchResults(results);
+    setSelectedMatch(results.length > 0 ? results[0] : null);
   };
 
-  const handleClearItem = () => {
-    setItemText('');
-    setCheckResult(null);
-  };
-
-  const getRecommendationColor = (recommendation: string) => {
-    switch (recommendation) {
-      case 'keep': return '#4CAF50'; // Green
-      case 'consider': return '#FF9800'; // Orange
-      case 'vendor': return '#f44336'; // Red
-      default: return '#666';
-    }
-  };
-
-  const getRecommendationText = (recommendation: string) => {
-    switch (recommendation) {
-      case 'keep': return '🔥 KEEP';
-      case 'consider': return '🤔 CONSIDER';
-      case 'vendor': return '💰 VENDOR';
-      default: return 'UNKNOWN';
-    }
+  const handleClear = () => {
+    setItemText("");
+    setMatchResults([]);
+    setSelectedMatch(null);
+    setPastedItem(null);
   };
 
   return (
-    <>
-      {/* Toggle Button - positioned at bottom */}
-      {showToggleButton && (
-        <div className={`item-check-panel-toggle ${isVisible ? "panel-open" : ""} ${settingsOpen ? "settings-open" : ""}`}>
+    <div className={`item-check-panel ${isVisible ? "visible" : "hidden"}`}>
+        <div className="item-check-header">
+          <h3>Item Checker</h3>
           <button
-            className="item-check-toggle-btn"
+            className="control-btn close-btn"
             onClick={onTogglePanel}
-            title={isVisible ? "Hide Item Check" : "Show Item Check"}
+            title="Close Item Checker"
           >
-            <span className="toggle-icon">{isVisible ? "▼" : "▲"}</span>
-            <span className="toggle-text">Items</span>
+            ×
           </button>
         </div>
-      )}
 
-      {/* Item Check Panel - slides up from bottom */}
-      <div className={`item-check-panel ${isVisible ? "visible" : "hidden"}`}>
-        <div className="item-check-panel-header">
-          <h3>Item Check</h3>
-          <div className="item-check-panel-controls">
-            <button
-              className="control-btn close-btn"
-              onClick={onTogglePanel}
-              title="Close Item Check Panel"
-            >
-              ×
-            </button>
-          </div>
-        </div>
-
-        <div className="item-check-panel-content">
+        <div className="item-check-content">
+          {/* Input Section */}
           <div className="item-input-section">
-            <label htmlFor="item-text">Paste Item Text:</label>
+            <label>Paste Item Text</label>
             <textarea
-              id="item-text"
               className="item-text-input"
+              placeholder="Copy an item from the game and paste it here..."
               value={itemText}
               onChange={(e) => setItemText(e.target.value)}
-              placeholder="Copy item text from Path of Exile 2 and paste here..."
               rows={10}
             />
-            <div className="item-input-controls">
-              <button
-                className="btn-primary"
-                onClick={handleCheckItem}
-                disabled={!itemText.trim() || isChecking}
-              >
-                {isChecking ? 'Checking...' : 'Check Item'}
+            <div className="item-input-actions">
+              <button className="item-action-btn primary" onClick={handleCheckItem}>
+                Check Item
               </button>
-              <button
-                className="btn-secondary"
-                onClick={handleClearItem}
-                disabled={!itemText && !checkResult}
-              >
+              <button className="item-action-btn" onClick={handleClear}>
                 Clear
               </button>
             </div>
           </div>
 
-          {checkResult && (
-            <div className="item-check-results">
-              <div className="checked-item-info">
-                <h4>Checked Item: {checkResult.item.name}</h4>
-                <div className="item-details">
-                  <span className="item-class">{checkResult.item.itemClass}</span>
-                  <span className="item-rarity" data-rarity={checkResult.item.rarity.toLowerCase()}>{checkResult.item.rarity}</span>
-                  <span className="item-level">Level {checkResult.item.level}</span>
-                </div>
-              </div>
-
-              {checkResult.bestMatch ? (
-                <div className="best-match">
-                  <div className="match-summary">
-                    <h5>Best Match: {checkResult.bestMatch.item.baseType} <span className="loadout-badge">({checkResult.bestMatch.item.loadoutNames?.join(", ") || "Unknown Loadout"})</span></h5>
-                    <div className="mod-count-display">
-                      <span className="mod-count-text">
-                        {checkResult.bestMatch.prefixMatches + checkResult.bestMatch.suffixMatches}/{checkResult.item.modifiers.filter(m => m.type === 'prefix' || m.type === 'suffix').length} matching mods
-                      </span>
-                      <span className="mod-breakdown">
-                        ({checkResult.bestMatch.prefixMatches} prefixes, {checkResult.bestMatch.suffixMatches} suffixes)
-                      </span>
-                    </div>
-                  </div>
-                  <div className="match-details">
-                    <div className="match-stats">
-                      <div className="match-stat">
-                        <span className="stat-label">Match Score:</span>
-                        <span className="stat-value">{checkResult.bestMatch.score}%</span>
-                      </div>
-                      <div className="match-stat">
-                        <span className="stat-label">Recommendation:</span>
-                        <span 
-                          className="stat-value recommendation-text"
-                          style={{ color: getRecommendationColor(checkResult.bestMatch.recommendation) }}
-                        >
-                          {getRecommendationText(checkResult.bestMatch.recommendation).replace(/🔥|🤔|💰/g, '').trim()}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <div className="no-matches">
-                  <div className="match-summary">
-                    <h5>No Matching Items</h5>
-                    <div className="mod-count-display">
-                      <span className="mod-count-text">
-                        0/{checkResult.item.modifiers.filter(m => m.type === 'prefix' || m.type === 'suffix').length} matching mods
-                      </span>
-                      <span className="mod-breakdown">(0 prefixes, 0 suffixes)</span>
-                    </div>
-                  </div>
-                  <p>No items of this type found in your POB build.</p>
-                </div>
-              )}
-
-              {checkResult.bestMatch?.matchingModifiers && (
-                <div className="matching-modifiers">
-                  <h5>Matching Modifiers:</h5>
-                  
-                  {checkResult.bestMatch.matchingModifiers.matchingPrefixes.length > 0 && (
-                    <div className="modifier-section">
-                      <h6>Prefixes ({checkResult.bestMatch.matchingModifiers.matchingPrefixes.length}):</h6>
-                      <div className="modifiers-list">
-                        {checkResult.bestMatch.matchingModifiers.matchingPrefixes.map((match, index) => (
-                          <div key={index} className="modifier-match">
-                            <div className="modifier-text source">{match.source.text}</div>
-                            <div className="modifier-arrow">→</div>
-                            <div className="modifier-text target">{match.target.text}</div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {checkResult.bestMatch.matchingModifiers.matchingSuffixes.length > 0 && (
-                    <div className="modifier-section">
-                      <h6>Suffixes ({checkResult.bestMatch.matchingModifiers.matchingSuffixes.length}):</h6>
-                      <div className="modifiers-list">
-                        {checkResult.bestMatch.matchingModifiers.matchingSuffixes.map((match, index) => (
-                          <div key={index} className="modifier-match">
-                            <div className="modifier-text source">{match.source.text}</div>
-                            <div className="modifier-arrow">→</div>
-                            <div className="modifier-text target">{match.target.text}</div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {checkResult.bestMatch.matchingModifiers.matchingPrefixes.length === 0 && 
-                   checkResult.bestMatch.matchingModifiers.matchingSuffixes.length === 0 && (
-                    <div className="no-matching-modifiers">
-                      <p>No matching modifiers found.</p>
-                    </div>
-                  )}
-                </div>
-              )}
+          {/* No POB Items Message */}
+          {pobItems.length === 0 && (
+            <div className="item-check-message">
+              <p>No POB items loaded. Import a Path of Building code to compare items.</p>
             </div>
           )}
 
-          <div className="item-check-status">
-            <div className="pob-items-count">
-              POB Items: {itemCheckData?.items?.length || 0}
-              {!itemCheckData?.items?.length && (
-                <span className="import-hint"> - Import a POB first</span>
+          {/* Match Results */}
+          {matchResults.length > 0 && pastedItem && (
+            <>
+              <div className="match-results-section">
+                <h4>Matching Loadouts ({matchResults.length})</h4>
+                <div className="match-results-list">
+                  {matchResults.map((result, index) => (
+                    <div
+                      key={index}
+                      className={`match-result-item ${selectedMatch === result ? "selected" : ""}`}
+                      onClick={() => setSelectedMatch(result)}
+                    >
+                      <div className="match-result-info">
+                        <div className="match-loadout-name">{result.loadoutName}</div>
+                        <div className="match-slot-name">{result.pobItem.slot}</div>
+                      </div>
+                      <div
+                        className="match-percentage"
+                        style={{ color: result.matchColor }}
+                      >
+                        {result.matchPercentage}%
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Detailed Comparison */}
+              {selectedMatch && (
+                <div className="item-comparison-section">
+                  <h4>Detailed Comparison</h4>
+
+                  {/* Match Summary */}
+                  <div className="match-summary">
+                    <div className="summary-item">
+                      <span className="summary-label">Item Type:</span>
+                      <span className={`summary-value ${selectedMatch.details.itemTypeMatch ? "match" : "no-match"}`}>
+                        {selectedMatch.details.itemTypeMatch ? "✓ Match" : "✗ Different"}
+                      </span>
+                    </div>
+                    <div className="summary-item">
+                      <span className="summary-label">Rarity:</span>
+                      <span className={`summary-value ${selectedMatch.details.rarityMatch ? "match" : "no-match"}`}>
+                        {selectedMatch.details.rarityMatch ? "✓ Match" : "✗ Different"}
+                      </span>
+                    </div>
+                    <div className="summary-item">
+                      <span className="summary-label">Implicit Mods:</span>
+                      <span className="summary-value">
+                        {selectedMatch.details.implicitMatches} / {selectedMatch.details.totalImplicits}
+                      </span>
+                    </div>
+                    <div className="summary-item">
+                      <span className="summary-label">Explicit Mods:</span>
+                      <span className="summary-value">
+                        {selectedMatch.details.explicitMatches} / {selectedMatch.details.totalExplicits}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Side-by-side Comparison */}
+                  <div className="item-mod-comparison">
+                    <div className="comparison-column">
+                      <h5>Your Item</h5>
+                      <div className="item-details">
+                        <div className="item-name">{pastedItem.name}</div>
+                        <div className="item-type">{pastedItem.itemType}</div>
+                        <div className="item-rarity">{pastedItem.rarity}</div>
+
+                        {/* Enchant Mods */}
+                        {pastedItem.enchant.length > 0 && (
+                          <div className="mod-section">
+                            <div className="mod-section-title">Enchant</div>
+                            {pastedItem.enchant.map((mod, i) => (
+                              <div key={i} className="mod-line enchant">{mod.text}</div>
+                            ))}
+                          </div>
+                        )}
+
+                        {/* Implicit Mods */}
+                        {pastedItem.implicit.length > 0 && (
+                          <div className="mod-section">
+                            <div className="mod-section-title">Implicit</div>
+                            {pastedItem.implicit.map((mod, i) => {
+                              const hasMatch = selectedMatch.pobItem.implicit.some(
+                                pobMod => normalizeModText(pobMod.text) === normalizeModText(mod.text)
+                              );
+                              return (
+                                <div key={i} className={`mod-line implicit ${hasMatch ? "match" : "no-match"}`}>
+                                  {hasMatch ? "✓ " : "✗ "}{mod.text}
+                                </div>
+                              );
+                            })}
+                          </div>
+                        )}
+
+                        {/* Explicit Mods */}
+                        {pastedItem.explicit.length > 0 && (
+                          <div className="mod-section">
+                            <div className="mod-section-title">Explicit</div>
+                            {pastedItem.explicit.map((mod, i) => {
+                              const hasMatch = selectedMatch.pobItem.explicit.some(
+                                pobMod => normalizeModText(pobMod.text) === normalizeModText(mod.text)
+                              );
+                              return (
+                                <div key={i} className={`mod-line explicit ${hasMatch ? "match" : "no-match"}`}>
+                                  {hasMatch ? "✓ " : "✗ "}{mod.text}
+                                </div>
+                              );
+                            })}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="comparison-column">
+                      <h5>POB Item ({selectedMatch.loadoutName})</h5>
+                      <div className="item-details">
+                        <div className="item-name">{selectedMatch.pobItem.name}</div>
+                        <div className="item-type">{selectedMatch.pobItem.itemType}</div>
+                        <div className="item-rarity">{selectedMatch.pobItem.rarity}</div>
+
+                        {/* Enchant Mods */}
+                        {selectedMatch.pobItem.enchant.length > 0 && (
+                          <div className="mod-section">
+                            <div className="mod-section-title">Enchant</div>
+                            {selectedMatch.pobItem.enchant.map((mod, i) => (
+                              <div key={i} className="mod-line enchant">{mod.text}</div>
+                            ))}
+                          </div>
+                        )}
+
+                        {/* Implicit Mods */}
+                        {selectedMatch.pobItem.implicit.length > 0 && (
+                          <div className="mod-section">
+                            <div className="mod-section-title">Implicit</div>
+                            {selectedMatch.pobItem.implicit.map((mod, i) => {
+                              const hasMatch = pastedItem.implicit.some(
+                                pastedMod => normalizeModText(pastedMod.text) === normalizeModText(mod.text)
+                              );
+                              return (
+                                <div key={i} className={`mod-line implicit ${hasMatch ? "match" : "pob-only"}`}>
+                                  {hasMatch ? "✓ " : "○ "}{mod.text}
+                                </div>
+                              );
+                            })}
+                          </div>
+                        )}
+
+                        {/* Explicit Mods */}
+                        {selectedMatch.pobItem.explicit.length > 0 && (
+                          <div className="mod-section">
+                            <div className="mod-section-title">Explicit</div>
+                            {selectedMatch.pobItem.explicit.map((mod, i) => {
+                              const hasMatch = pastedItem.explicit.some(
+                                pastedMod => normalizeModText(pastedMod.text) === normalizeModText(mod.text)
+                              );
+                              return (
+                                <div key={i} className={`mod-line explicit ${hasMatch ? "match" : "pob-only"}`}>
+                                  {hasMatch ? "✓ " : "○ "}{mod.text}
+                                </div>
+                              );
+                            })}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
               )}
+            </>
+          )}
+
+          {/* No Matches Message */}
+          {matchResults.length === 0 && pastedItem && pobItems.length > 0 && (
+            <div className="item-check-message">
+              <p>No matching items found in your POB loadouts for {pastedItem.itemClass}.</p>
             </div>
-            <div className="scoring-disclaimer">
-              <span className="disclaimer-text">
-                Scoring is a "best effort" comparison. POB items may not reflect optimal values to target.
-              </span>
-            </div>
-          </div>
+          )}
         </div>
       </div>
-    </>
   );
 };
+
+// Helper function to normalize mod text for comparison (removes numbers)
+function normalizeModText(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/\+?\d+(\.\d+)?/g, 'X')
+    .replace(/\s+/g, ' ')
+    .trim();
+}

@@ -1,0 +1,118 @@
+.global-timer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0.75rem 1rem;
+  background: rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  font-family: 'Courier New', monospace;
+  margin-bottom: 60px; /* Space for footer buttons */
+  transition: all var(--transition-fast);
+}
+
+.global-timer.running {
+  background: rgba(0, 0, 0, 0.35);
+  border-bottom-color: rgba(var(--primary-color-rgb, 138, 43, 226), 0.3);
+}
+
+.global-timer.paused {
+  background: rgba(0, 0, 0, 0.35);
+  border-bottom-color: rgba(251, 191, 36, 0.3);
+}
+
+.global-timer-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.global-timer-display {
+  font-size: 1.1em;
+  font-weight: 600;
+  color: var(--primary-color);
+  letter-spacing: 0.5px;
+  min-width: 80px;
+  text-align: center;
+  flex: 1;
+}
+
+.global-timer.running .global-timer-display {
+  color: var(--primary-color);
+  text-shadow: var(--text-shadow);
+}
+
+.global-timer.paused .global-timer-display {
+  color: #fbbf24;
+  text-shadow: var(--text-shadow);
+}
+
+.global-timer-controls {
+  display: flex;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.global-timer:hover .global-timer-controls {
+  opacity: 1;
+}
+
+.global-timer-btn {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-overlay-2);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--border-radius-sm);
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  font-size: 0.85em;
+  transition: all var(--transition-fast);
+  padding: 0;
+}
+
+.global-timer-btn:hover {
+  background: var(--bg-overlay-4);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: white;
+  transform: scale(1.05);
+}
+
+.global-timer-btn.start:hover,
+.global-timer-btn.resume:hover {
+  background: rgba(74, 222, 128, 0.2);
+  border-color: rgba(74, 222, 128, 0.4);
+  color: #4ade80;
+}
+
+.global-timer-btn.pause:hover {
+  background: rgba(251, 191, 36, 0.2);
+  border-color: rgba(251, 191, 36, 0.4);
+  color: #fbbf24;
+}
+
+.global-timer-btn.reset:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.4);
+  color: #ef4444;
+}
+
+/* Smaller for web mode */
+.web-mode .global-timer {
+  padding: 0.6rem 0.85rem;
+}
+
+.web-mode .global-timer-display {
+  font-size: 1em;
+  min-width: 70px;
+}
+
+.web-mode .global-timer-btn {
+  width: 20px;
+  height: 20px;
+  font-size: 0.8em;
+}

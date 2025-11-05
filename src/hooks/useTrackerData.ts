@@ -1,49 +1,27 @@
 import { useState, useEffect, useCallback } from "react";
-import { TrackerData, Act, GemProgression, GemLoadout, RegexFilters, NotesData, CampaignGuide, QuestStep, ItemCheckData } from "../types";
-import { defaultQuestData, availableCampaignGuides, defaultCampaignGuide } from "../data/questData";
+import { TrackerData, Act, GemProgression, GemLoadout, NotesData, QuestStep, ActTimer, GlobalTimer, ItemCheckData } from "../types";
+import { defaultQuestData } from "../data/questData";
 import { migrateGemProgression, PobLoadout, PobParseResult } from "../utils/pobParser";
 
 const initialData: TrackerData = {
   acts: defaultQuestData,
-  campaignGuides: availableCampaignGuides,
-  activeCampaignGuideId: defaultCampaignGuide.id,
   editMode: false,
   gemProgression: {
     socketGroups: [],
   },
-  regexFilters: {
-    vendor: {
-      weapons: "",
-      body: "",
-      offhandShields: "",
-      belt: "",
-      boots: "",
-      gloves: "",
-      ring: "",
-      amulet: "",
-    },
-    waystones: "",
-    tablets: "",
-    relics: "",
-  },
   notesData: {
     userNotes: "",
     pobNotes: undefined,
-  },
-  itemCheckData: {
-    items: [],
   },
   settings: {
     alwaysOnTop: true,
     opacity: 0.9,
     fontSize: 1.0,
     theme: "amoled",
-    showOptional: true,
     hotkey: "F9",
     showGemPanel: false,
-    showRegexPanel: false,
     showNotesPanel: false,
-    showItemCheckPanel: false,
+    showRegexBuilderPanel: false,
     logFilePath: undefined,
     logFileDetected: false,
     autoCompleteQuests: false,
@@ -55,38 +33,42 @@ const mergeQuestData = (
   newQuestData: Act[]
 ): TrackerData => {
   const mergedActs = newQuestData.map((newAct) => {
-    const savedAct = savedData.acts.find((act) => act.id === newAct.id);
+    const savedAct = savedData.acts.find((act) => act.actNumber === newAct.actNumber);
     if (!savedAct) {
-      return newAct;
+      // Initialize all steps with completed: false
+      return {
+        ...newAct,
+        steps: newAct.steps.map(step => ({ ...step, completed: false })),
+        expanded: newAct.actNumber === 1, // Expand Act 1 by default
+      };
     }
 
-    const mergedQuests = newAct.quests.map((newQuest) => {
-      const savedQuest = savedAct.quests.find(
-        (quest) => quest.id === newQuest.id
+    const mergedSteps = newAct.steps.map((newStep) => {
+      const savedStep = savedAct.steps.find(
+        (step) => step.id === newStep.id
       );
-      if (savedQuest) {
+      if (savedStep) {
         return {
-          ...newQuest,
-          completed: savedQuest.completed,
+          ...newStep,
+          completed: savedStep.completed || false,
         };
       }
-      return newQuest;
+      return {
+        ...newStep,
+        completed: false,
+      };
     });
 
     return {
       ...newAct,
-      quests: mergedQuests,
+      steps: mergedSteps,
       expanded: savedAct.expanded,
     };
   });
 
-  const filteredMergedActs = mergedActs.filter((act) => {
-    return !act.id.includes("-cruel") || newQuestData.some(newAct => newAct.id === act.id);
-  });
-
   return {
     ...savedData,
-    acts: filteredMergedActs,
+    acts: mergedActs,
   };
 };
 
@@ -118,10 +100,14 @@ export const useTrackerData = () => {
         if (savedNotesData && savedData) {
           savedData.notesData = savedNotesData;
         }
-        
+
         // Load item check data separately
         const savedItemCheckData = await window.electronAPI.loadItemCheckData();
         if (savedItemCheckData && savedData) {
+          console.log('🔍 [HOOK] Loading separate item check data:', {
+            hasItemCheckData: !!savedItemCheckData,
+            itemsCount: savedItemCheckData.pobItems?.length || 0
+          });
           savedData.itemCheckData = savedItemCheckData;
         }
 
@@ -130,45 +116,53 @@ export const useTrackerData = () => {
             hasSavedGemProgression: !!savedData.gemProgression,
             savedSocketGroups: savedData.gemProgression?.socketGroups?.length || 0
           });
-          
-          // Ensure built-in guides are always available and merge with any custom guides
-          const mergedGuides = [
-            ...availableCampaignGuides, // Always include built-in guides
-            ...(savedData.campaignGuides || []).filter(guide => guide.custom) // Add custom guides
-          ];
-          
-          // Determine the active campaign guide ID first
-          const activeCampaignGuideId = savedData.activeCampaignGuideId || defaultCampaignGuide.id;
-          
-          // Find the active guide and use its quest data for merging
-          const activeGuide = mergedGuides.find(g => g.id === activeCampaignGuideId) || defaultCampaignGuide;
-          const mergedData = mergeQuestData(savedData, activeGuide.acts);
-          
-          const updatedData: TrackerData = {
-            ...mergedData,
-            campaignGuides: mergedGuides,
-            activeCampaignGuideId,
-            settings: {
-              ...savedData.settings,
-              fontSize: savedData.settings.fontSize || 1.0,
-              theme: savedData.settings.theme || "amoled",
-              showOptional: savedData.settings.showOptional !== false,
-              hotkey: savedData.settings.hotkey || "F9",
-              showGemPanel: savedData.settings.showGemPanel || false,
-              showRegexPanel: savedData.settings.showRegexPanel || false,
-              showNotesPanel: savedData.settings.showNotesPanel || false,
-              showItemCheckPanel: savedData.settings.showItemCheckPanel || false,
-              logFilePath: savedData.settings.logFilePath,
-              logFileDetected: savedData.settings.logFileDetected || false,
-            },
-            gemProgression: savedData.gemProgression 
-              ? migrateGemProgression(savedData.gemProgression)
-              : initialData.gemProgression,
-            regexFilters: savedData.regexFilters || initialData.regexFilters,
-            notesData: mergedData.notesData || savedData.notesData || initialData.notesData,
-            itemCheckData: savedData.itemCheckData || initialData.itemCheckData,
-          };
-          setData(updatedData);
+
+          // Check if saved data has old structure (before restructuring)
+          // If acts don't have actNumber, it's old data - start fresh
+          const hasOldStructure = savedData.acts.some((act: any) =>
+            typeof act.actNumber === 'undefined' && typeof act.id !== 'undefined'
+          );
+
+          if (hasOldStructure) {
+            console.log('⚠️ Old data structure detected - starting fresh with new quest structure');
+            // Keep settings and other data, just reset quest data
+            const freshData: TrackerData = {
+              ...initialData,
+              acts: defaultQuestData,
+              settings: savedData.settings,
+              gemProgression: savedData.gemProgression,
+              gemLoadouts: savedData.gemLoadouts,
+              notesData: savedData.notesData,
+            };
+            setData(freshData);
+          } else {
+            // Merge saved quest progress with latest quest data
+            const mergedData = mergeQuestData(savedData, defaultQuestData);
+
+            const updatedData: TrackerData = {
+              ...mergedData,
+              settings: {
+                alwaysOnTop: savedData.settings.alwaysOnTop !== false,
+                opacity: savedData.settings.opacity || 0.9,
+                fontSize: savedData.settings.fontSize || 1.0,
+                theme: savedData.settings.theme || "amoled",
+                hotkey: savedData.settings.hotkey || "F9",
+                showGemPanel: savedData.settings.showGemPanel || false,
+                showNotesPanel: savedData.settings.showNotesPanel || false,
+                showRewardsPanel: savedData.settings.showRewardsPanel || false,
+                showRegexBuilderPanel: savedData.settings.showRegexBuilderPanel || false,
+                logFilePath: savedData.settings.logFilePath,
+                logFileDetected: savedData.settings.logFileDetected || false,
+                autoCompleteQuests: savedData.settings.autoCompleteQuests || false,
+                activeFilters: savedData.settings.activeFilters || [],
+              },
+              gemProgression: savedData.gemProgression
+                ? migrateGemProgression(savedData.gemProgression)
+                : initialData.gemProgression,
+              notesData: mergedData.notesData || savedData.notesData || initialData.notesData,
+            };
+            setData(updatedData);
+          }
         }
       } catch (error) {
         console.error("Failed to load quest data:", error);
@@ -222,21 +216,17 @@ export const useTrackerData = () => {
   );
 
   const toggleQuest = useCallback(
-    (actId: string, questId: string) => {
+    (questId: string) => {
       const newData = {
         ...data,
-        acts: data.acts.map((act) =>
-          act.id === actId
-            ? {
-                ...act,
-                quests: act.quests.map((quest) =>
-                  quest.id === questId
-                    ? { ...quest, completed: !quest.completed }
-                    : quest
-                ),
-              }
-            : act
-        ),
+        acts: data.acts.map((act) => ({
+          ...act,
+          steps: act.steps.map((quest) =>
+            quest.id === questId
+              ? { ...quest, completed: !quest.completed }
+              : quest
+          ),
+        })),
       };
       saveData(newData);
     },
@@ -244,11 +234,11 @@ export const useTrackerData = () => {
   );
 
   const toggleAct = useCallback(
-    (actId: string) => {
+    (actNumber: number) => {
       const newData = {
         ...data,
         acts: data.acts.map((act) =>
-          act.id === actId ? { ...act, expanded: !act.expanded } : act
+          act.actNumber === actNumber ? { ...act, expanded: !act.expanded } : act
         ),
       };
       saveData(newData);
@@ -275,7 +265,7 @@ export const useTrackerData = () => {
       ...data,
       acts: data.acts.map((act) => ({
         ...act,
-        quests: act.quests.map((quest) => ({
+        quests: act.steps.map((quest) => ({
           ...quest,
           completed: false,
         })),
@@ -384,19 +374,11 @@ export const useTrackerData = () => {
     saveData(newData);
   }, [data, saveData]);
 
-  const updateRegexFilters = useCallback((regexFilters: RegexFilters) => {
-    const newData = {
-      ...data,
-      regexFilters,
-    };
-    saveData(newData);
-  }, [data, saveData]);
-
   const updateNotesData = useCallback(async (notesData: NotesData) => {
     // Save notes separately to avoid race condition with gem data
     try {
       await window.electronAPI.saveNotesData(notesData);
-      
+
       // Update local state
       setData(prev => ({
         ...prev,
@@ -408,10 +390,10 @@ export const useTrackerData = () => {
   }, []);
 
   const updateItemCheckData = useCallback(async (itemCheckData: ItemCheckData) => {
-    // Save item check data separately to avoid race conditions
+    // Save item check data separately to avoid race condition
     try {
       await window.electronAPI.saveItemCheckData(itemCheckData);
-      
+
       // Update local state
       setData(prev => ({
         ...prev,
@@ -465,12 +447,12 @@ export const useTrackerData = () => {
       hasLoadouts: !!pobResult.loadouts,
       loadoutsCount: pobResult.loadouts?.length || 0,
       hasNotes: !!pobResult.notes,
-      hasItems: !!pobResult.itemCheckData,
-      itemsCount: pobResult.itemCheckData?.items?.length || 0,
+      hasItems: !!pobResult.items,
+      itemsCount: pobResult.items?.length || 0,
     });
-    
+
     let newData = { ...data };
-    
+
     // Handle gems and loadouts properly
     if (pobResult.hasMultipleLoadouts && pobResult.loadouts && pobResult.loadouts.length > 1) {
       // Use the existing loadout logic
@@ -497,15 +479,31 @@ export const useTrackerData = () => {
         gemLoadouts: undefined,
       };
     }
-    
+
+    // Handle items
+    if (pobResult.items && pobResult.items.length > 0) {
+      newData = {
+        ...newData,
+        itemCheckData: {
+          pobItems: pobResult.items,
+          lastImported: new Date().toISOString(),
+        },
+      };
+      console.log('💾 [HOOK] Prepared item check data:', {
+        itemCount: pobResult.items.length,
+        itemClasses: [...new Set(pobResult.items.map(i => i.itemClass))],
+      });
+    }
+
     console.log('💾 [HOOK] Saving gem data through saveData:', {
       hasGemProgression: !!newData.gemProgression,
       hasGemLoadouts: !!newData.gemLoadouts,
+      hasItemCheckData: !!newData.itemCheckData,
     });
-    
+
     // Save gem data first
     saveData(newData);
-    
+
     // Handle notes separately to ensure they're saved
     if (pobResult.notes) {
       const notesData = {
@@ -518,15 +516,12 @@ export const useTrackerData = () => {
       });
       await updateNotesData(notesData);
     }
-    
-    // Handle items separately to ensure they're saved
-    if (pobResult.itemCheckData) {
-      console.log('💾 [HOOK] Saving item data separately:', {
-        itemsCount: pobResult.itemCheckData.items.length
-      });
-      await updateItemCheckData(pobResult.itemCheckData);
+
+    // Handle item check data separately to ensure it's saved
+    if (newData.itemCheckData) {
+      await updateItemCheckData(newData.itemCheckData);
     }
-    
+
     console.log('✅ [HOOK] Complete POB import finished');
   }, [data, saveData, updateNotesData, updateItemCheckData]);
 
@@ -544,7 +539,7 @@ export const useTrackerData = () => {
         return {
           ...act,
           expanded: currentAct ? currentAct.expanded : act.expanded, // Preserve user's expansion preference
-          quests: act.quests.map(quest => ({
+          quests: act.steps.map(quest => ({
             ...quest,
             completed: false, // Reset progress when switching guides
           })),
@@ -605,7 +600,7 @@ export const useTrackerData = () => {
       activeCampaignGuideId: newId,
       acts: duplicatedGuide.acts.map(act => ({
         ...act,
-        quests: act.quests.map(quest => ({
+        quests: act.steps.map(quest => ({
           ...quest,
           completed: false,
         })),
@@ -635,8 +630,8 @@ export const useTrackerData = () => {
     const newData = {
       ...data,
       acts: data.acts.map(act => 
-        act.id === actId 
-          ? { ...act, quests: [...act.quests, newQuest] }
+        act.actNumber === actNumber 
+          ? { ...act, quests: [...act.steps, newQuest] }
           : act
       ),
     };
@@ -659,10 +654,10 @@ export const useTrackerData = () => {
     const newData = {
       ...data,
       acts: data.acts.map(act => 
-        act.id === actId 
+        act.actNumber === actNumber 
           ? {
               ...act,
-              quests: act.quests.map(quest =>
+              quests: act.steps.map(quest =>
                 quest.id === questId
                   ? { ...quest, ...questUpdates }
                   : quest
@@ -690,8 +685,8 @@ export const useTrackerData = () => {
     const newData = {
       ...data,
       acts: data.acts.map(act => 
-        act.id === actId 
-          ? { ...act, quests: act.quests.filter(quest => quest.id !== questId) }
+        act.actNumber === actNumber 
+          ? { ...act, quests: act.steps.filter(quest => quest.id !== questId) }
           : act
       ),
     };
@@ -741,7 +736,7 @@ export const useTrackerData = () => {
     const newData = {
       ...data,
       acts: data.acts.map(act => 
-        act.id === actId ? { ...act, ...actUpdates } : act
+        act.actNumber === actNumber ? { ...act, ...actUpdates } : act
       ),
     };
     // Update current campaign guide if it's custom
@@ -785,13 +780,13 @@ export const useTrackerData = () => {
       acts: data.acts.map(act => {
         if (act.id !== actId) return act;
         
-        const questIndex = act.quests.findIndex(q => q.id === questId);
+        const questIndex = act.steps.findIndex(q => q.id === questId);
         if (questIndex === -1) return act;
         
         const newIndex = direction === 'up' ? questIndex - 1 : questIndex + 1;
-        if (newIndex < 0 || newIndex >= act.quests.length) return act;
+        if (newIndex < 0 || newIndex >= act.steps.length) return act;
         
-        const newQuests = [...act.quests];
+        const newQuests = [...act.steps];
         [newQuests[questIndex], newQuests[newIndex]] = [newQuests[newIndex], newQuests[questIndex]];
         
         return { ...act, quests: newQuests };
@@ -813,7 +808,7 @@ export const useTrackerData = () => {
   }, [data, saveData]);
 
   const reorderAct = useCallback((actId: string, direction: 'up' | 'down') => {
-    const actIndex = data.acts.findIndex(act => act.id === actId);
+    const actIndex = data.acts.findIndex(act => act.actNumber === actNumber);
     if (actIndex === -1) return;
     
     const newIndex = direction === 'up' ? actIndex - 1 : actIndex + 1;
@@ -899,6 +894,50 @@ export const useTrackerData = () => {
     }
   }, [data, saveData]);
 
+  // Timer management
+  const updateActTimer = useCallback((actNumber: number, timer: ActTimer) => {
+    const newData = {
+      ...data,
+      actTimers: data.actTimers || [],
+    };
+
+    // Find existing timer or add new one
+    const timerIndex = newData.actTimers.findIndex(t => t.actNumber === actNumber);
+    if (timerIndex >= 0) {
+      newData.actTimers[timerIndex] = timer;
+    } else {
+      newData.actTimers.push(timer);
+    }
+
+    saveData(newData);
+  }, [data, saveData]);
+
+  const updateCurrentAct = useCallback((actNumber: number) => {
+    const newData = {
+      ...data,
+      currentActNumber: actNumber,
+    };
+    saveData(newData);
+  }, [data, saveData]);
+
+  const resetTimers = useCallback(() => {
+    const newData = {
+      ...data,
+      actTimers: [],
+      globalTimer: undefined,
+      currentActNumber: undefined,
+    };
+    saveData(newData);
+  }, [data, saveData]);
+
+  const updateGlobalTimer = useCallback((timer: GlobalTimer) => {
+    const newData = {
+      ...data,
+      globalTimer: timer,
+    };
+    saveData(newData);
+  }, [data, saveData]);
+
   return {
     data,
     loading,
@@ -910,12 +949,12 @@ export const useTrackerData = () => {
     importGemLoadouts,
     switchLoadout,
     toggleGem,
-    updateRegexFilters,
     updateNotesData,
-    updateItemCheckData,
     importGemsAndNotes,
     importCompletePoB,
-    // Campaign Guide Management (simplified)
-    selectCampaignGuide,
+    updateActTimer,
+    updateCurrentAct,
+    resetTimers,
+    updateGlobalTimer,
   };
 };

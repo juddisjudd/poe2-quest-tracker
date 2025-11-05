@@ -57,13 +57,35 @@ export async function findProcessByName(processName: string): Promise<ProcessInf
 }
 
 /**
+ * Find POE2 process if it's running
+ * Returns the process info or null if not found
+ */
+export async function findPoeProcess(): Promise<ProcessInfo | null> {
+  try {
+    const processNames = ['PathOfExile.exe', 'PathOfExileSteam.exe'];
+
+    for (const processName of processNames) {
+      const processes = await findProcessByName(processName);
+      if (processes.length > 0) {
+        return processes[0]; // Return first found process
+      }
+    }
+
+    return null; // No POE2 process found
+  } catch (error) {
+    console.error('Error finding POE process:', error);
+    return null;
+  }
+}
+
+/**
  * Detects Path of Exile 2 log file location by finding the running process
  */
 export async function detectPoeLogFile(): Promise<string | null> {
   try {
     // Look for both regular and Steam versions of Path of Exile 2
     const processNames = ['PathOfExile.exe', 'PathOfExileSteam.exe'];
-    
+
     for (const processName of processNames) {
       const processes = await findProcessByName(processName);
       

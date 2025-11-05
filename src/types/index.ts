@@ -1,20 +1,49 @@
+export type QuestStepType =
+  | 'navigation'      // Zone transitions
+  | 'waypoint'        // Waypoint activation
+  | 'town'            // Town entry
+  | 'npc_quest'       // Quest turn-ins with NPC
+  | 'quest'           // Quest objectives
+  | 'kill_boss'       // Boss fights
+  | 'trial'           // Trial encounters
+  | 'passive'         // Passive point rewards
+  | 'optional';       // Optional content
+
+export type QuestTag =
+  | 'Spirit'
+  | 'Resistance'
+  | 'Life'
+  | 'Mana'
+  | 'Gem'
+  | 'Passive Skill'
+  | 'Boss'
+  | 'Trial'
+  | 'Waypoint'
+  | 'Ritual'
+  | 'Breach'
+  | 'Expedition'
+  | 'Delirium'
+  | 'Essence'
+  | 'Optional';
+
 export interface QuestStep {
   id: string;
-  name: string;
-  description?: string;
-  completed: boolean;
-  optional?: boolean;
-  warning?: string;
-  reward?: string;
-  custom?: boolean; // Indicates if this quest was added by user
+  description: string; // Main description (formerly "name")
+  zone: string; // Zone name
+  type: QuestStepType; // Step type for categorization
+  zoneId: string; // Zone identifier for auto-completion
+  completed?: boolean; // Completion state (set at runtime)
+  reward?: string; // Reward text
+  hint?: string; // Helpful tips for the step
+  layoutTip?: string; // Zone layout guidance
+  tags?: QuestTag[]; // Tags for filtering
 }
 
 export interface Act {
-  id: string;
-  name: string;
-  expanded: boolean;
-  quests: QuestStep[];
-  custom?: boolean; // Indicates if this act was added by user
+  actNumber: number;
+  actName: string;
+  steps: QuestStep[];
+  expanded?: boolean; // UI state (set at runtime)
 }
 
 export interface CampaignGuide {
@@ -35,6 +64,12 @@ export interface GemSlot {
   acquired: boolean;
   socketGroup?: number;
   statRequirement?: 'str' | 'dex' | 'int' | null; // Strength=red, Dexterity=green, Intelligence=blue, null=white
+  questInfo?: {
+    rewardType: 'quest' | 'vendor'; // quest = TAKE, vendor = BUY
+    npc: string;
+    questName: string;
+    act: string;
+  };
 }
 
 export interface GemSocketGroup {
@@ -47,6 +82,8 @@ export interface GemSocketGroup {
 export interface GemProgression {
   socketGroups: GemSocketGroup[];
   lastImported?: string;
+  characterClass?: string; // POE2 character class (Warrior, Ranger, Sorceress, Monk, Mercenary)
+  skillSetName?: string; // Name of the skill set (e.g., "lvl 1-5", "Act 1")
 }
 
 export interface GemLoadout {
@@ -61,42 +98,87 @@ export interface GemProgressionWithLoadouts {
   lastImported?: string;
 }
 
-export interface RegexFilters {
-  vendor: {
-    weapons: string;
-    body: string;
-    offhandShields: string;
-    belt: string;
-    boots: string;
-    gloves: string;
-    ring: string;
-    amulet: string;
-  };
-  waystones: string;
-  tablets: string;
-  relics: string;
-}
-
 export interface NotesData {
   userNotes: string;
   pobNotes?: string;
 }
 
+export interface ZoneInfo {
+  id: string;
+  name: string;
+  normalizedName: string; // Lowercase, trimmed version for matching
+}
+
+export interface ZoneRegistry {
+  version: string;
+  game: string;
+  zonesByAct: Array<{
+    actNumber: number;
+    zones: ZoneInfo[];
+  }>;
+}
+
+export interface ActTimer {
+  actNumber: number;
+  startTime: number | null; // Timestamp when timer started (null if not started)
+  elapsed: number; // Total elapsed time in milliseconds
+  isRunning: boolean;
+  completed: boolean; // Whether this act is finished
+  completionTime?: number; // Final time when act was completed
+}
+
+export interface GlobalTimer {
+  startTime: number | null; // When the speedrun started
+  elapsed: number; // Total elapsed time in milliseconds
+  isRunning: boolean;
+  isPaused: boolean;
+}
+
+export interface TrackerData {
+  acts: Act[];
+  editMode?: boolean;
+  gemProgression?: GemProgression;
+  gemLoadouts?: GemProgressionWithLoadouts;
+  notesData?: NotesData;
+  itemCheckData?: ItemCheckData;
+  actTimers?: ActTimer[]; // Timer state for each act
+  globalTimer?: GlobalTimer; // Total speedrun timer
+  currentActNumber?: number; // Current act player is in (from log detection)
+  settings: {
+    alwaysOnTop: boolean;
+    opacity: number;
+    fontSize?: number;
+    theme?: "amoled" | "amoled-crimson" | "amoled-yellow";
+    hotkey?: string;
+    showGemPanel?: boolean;
+    showNotesPanel?: boolean;
+    showRewardsPanel?: boolean;
+    showRegexBuilderPanel?: boolean;
+    showItemCheckPanel?: boolean;
+    logFilePath?: string;
+    logFileDetected?: boolean;
+    autoCompleteQuests?: boolean;
+    activeFilters?: QuestTag[];
+  };
+}
+
 export interface ItemModifier {
   text: string;
-  tier?: number;
-  type: 'prefix' | 'suffix' | 'implicit' | 'crafted' | 'rune' | 'desecrated';
+  type: 'enchant' | 'implicit' | 'explicit' | 'rune';
 }
 
 export interface ItemData {
   id: string;
   name: string;
-  baseType: string;
-  itemClass: string;
-  rarity: string;
+  itemType: string; // Base type from line 4 (e.g., "Woven Cap", "Zealot Gauntlets")
+  itemClass: string; // Item class (e.g., "Helmets", "Gloves")
+  rarity: string; // "Normal", "Magic", "Rare", "Unique"
   level: number;
   ilvl: number;
-  modifiers: ItemModifier[];
+  implicit: ItemModifier[];
+  explicit: ItemModifier[];
+  enchant: ItemModifier[];
+  rune: ItemModifier[];
   requirements?: {
     level?: number;
     str?: number;
@@ -105,73 +187,28 @@ export interface ItemData {
   };
   sockets?: string;
   quality?: number;
-  loadoutNames?: string[];
+  loadoutName?: string; // Which POB loadout this item belongs to
+  slot?: string; // Item slot (e.g., "Weapon 1", "Helmet", "Ring 1")
+}
+
+export interface ItemMatchResult {
+  loadoutName: string;
+  pobItem: ItemData;
+  matchPercentage: number;
+  matchColor: string;
+  details: {
+    itemTypeMatch: boolean;
+    rarityMatch: boolean;
+    implicitMatches: number;
+    explicitMatches: number;
+    totalImplicits: number;
+    totalExplicits: number;
+  };
 }
 
 export interface ItemCheckData {
-  items: ItemData[];
+  pobItems: ItemData[]; // All items from all POB loadouts
   lastImported?: string;
-}
-
-export interface MatchingModifiers {
-  matchingPrefixes: { source: ItemModifier; target: ItemModifier }[];
-  matchingSuffixes: { source: ItemModifier; target: ItemModifier }[];
-}
-
-export interface BaseTypeMatch {
-  exactMatch: boolean;
-  categoryMatch: boolean;
-}
-
-export interface ItemCheckResult {
-  item: ItemData;
-  matches: {
-    item: ItemData;
-    prefixMatches: number;
-    suffixMatches: number;
-    totalMatches: number;
-    score: number;
-    recommendation: 'keep' | 'vendor' | 'consider';
-    matchingModifiers?: MatchingModifiers;
-    baseTypeMatch?: BaseTypeMatch;
-  }[];
-  bestMatch?: {
-    item: ItemData;
-    prefixMatches: number;
-    suffixMatches: number;
-    totalMatches: number;
-    score: number;
-    recommendation: 'keep' | 'vendor' | 'consider';
-    matchingModifiers?: MatchingModifiers;
-    baseTypeMatch?: BaseTypeMatch;
-  };
-}
-
-export interface TrackerData {
-  acts: Act[];
-  campaignGuides?: CampaignGuide[];
-  activeCampaignGuideId?: string;
-  editMode?: boolean;
-  gemProgression?: GemProgression;
-  gemLoadouts?: GemProgressionWithLoadouts;
-  regexFilters?: RegexFilters;
-  notesData?: NotesData;
-  itemCheckData?: ItemCheckData;
-  settings: {
-    alwaysOnTop: boolean;
-    opacity: number;
-    fontSize?: number;
-    theme?: "amoled" | "amoled-crimson" | "amoled-yellow";
-    showOptional?: boolean;
-    hotkey?: string;
-    showGemPanel?: boolean;
-    showRegexPanel?: boolean;
-    showNotesPanel?: boolean;
-    showItemCheckPanel?: boolean;
-    logFilePath?: string;
-    logFileDetected?: boolean;
-    autoCompleteQuests?: boolean;
-  };
 }
 
 declare global {
@@ -201,6 +238,7 @@ declare global {
       startLogMonitoring: (filePath: string) => Promise<void>;
       stopLogMonitoring: () => Promise<void>;
       onLogReward: (callback: (rewardText: string) => void) => () => void;
+      onZoneChanged: (callback: (zoneName: string) => void) => () => void;
     };
   }
 }

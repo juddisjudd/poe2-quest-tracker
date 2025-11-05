@@ -18,6 +18,7 @@ const electronAPI = {
   reinforceOverlay: () => ipcRenderer.invoke("reinforce-overlay"),
   detectPoeLogFile: () => ipcRenderer.invoke("detect-poe-log-file"),
   checkFileExists: (filePath: string) => ipcRenderer.invoke("check-file-exists", filePath),
+  checkGameProcess: () => ipcRenderer.invoke("check-game-process"),
   selectLogFile: () => ipcRenderer.invoke("select-log-file"),
   saveFile: (content: string, defaultName: string) => ipcRenderer.invoke("save-file", content, defaultName),
   startLogMonitoring: (filePath: string) => ipcRenderer.invoke("start-log-monitoring", filePath),
@@ -26,6 +27,11 @@ const electronAPI = {
     const listener = (_: any, rewardText: string) => callback(rewardText);
     ipcRenderer.on("log-reward", listener);
     return () => ipcRenderer.removeListener("log-reward", listener);
+  },
+  onZoneChanged: (callback: (zoneName: string) => void) => {
+    const listener = (_: any, zoneName: string) => callback(zoneName);
+    ipcRenderer.on("zone-changed", listener);
+    return () => ipcRenderer.removeListener("zone-changed", listener);
   },
   onUpdateAvailable: (callback: () => void) => {
     ipcRenderer.on("update-available", callback);

@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { NotesData } from "../types";
+import { parsePOBColorCodes } from "../utils/pobColorParser";
 import "./NotesPanel.css";
 
 interface NotesPanelProps {
@@ -19,19 +20,11 @@ export const NotesPanel: React.FC<NotesPanelProps> = ({
   onTogglePanel,
   showToggleButton = true,
 }) => {
-  console.log('🎯 [NOTES_PANEL] Rendering with data:', {
-    hasPobNotes: !!notesData.pobNotes,
-    pobNotesLength: notesData.pobNotes?.length || 0,
-    pobNotesContent: notesData.pobNotes ? notesData.pobNotes.substring(0, 100) + '...' : 'No POB notes',
-    userNotesLength: notesData.userNotes?.length || 0,
-    fullNotesData: notesData
-  });
-  const handleUserNotesChange = async (value: string) => {
-    await onUpdateNotes({
-      ...notesData,
-      userNotes: value
-    });
-  };
+  // Parse POB notes with color codes
+  const parsedPobNotes = useMemo(() => {
+    if (!notesData.pobNotes) return null;
+    return parsePOBColorCodes(notesData.pobNotes);
+  }, [notesData.pobNotes]);
 
   const clearPobNotes = async () => {
     await onUpdateNotes({
@@ -72,37 +65,26 @@ export const NotesPanel: React.FC<NotesPanelProps> = ({
         </div>
 
         <div className="notes-panel-content">
-          {/* POB Notes Display - temporarily always show for debugging */}
+          {/* POB Notes Display */}
           <div className="notes-section">
-            <h4>Notes from Path of Building Import</h4>
             <div className="pob-notes-display">
               <div className="pob-notes-header">
-                <label>Imported Notes</label>
-                <button
-                  className="clear-button"
-                  onClick={clearPobNotes}
-                  title="Clear POB notes"
-                >
-                  Clear
-                </button>
+                <label>Path of Building Notes</label>
+                {notesData.pobNotes && (
+                  <button
+                    className="clear-button"
+                    onClick={clearPobNotes}
+                    title="Clear POB notes"
+                  >
+                    Clear
+                  </button>
+                )}
               </div>
-              <div className="pob-notes-content">
-                {notesData.pobNotes || "No POB notes imported yet"}
-              </div>
-            </div>
-          </div>
-
-          {/* Manual Notes Section */}
-          <div className="notes-section">
-            <h4>Manual Notes</h4>
-            <div className="manual-notes-group">
-              <label className="notes-label">Your Notes</label>
-              <textarea
-                className="notes-textarea"
-                value={notesData.userNotes || ""}
-                onChange={(e) => handleUserNotesChange(e.target.value)}
-                placeholder="Enter your notes here... (To import POB notes, use the import function in settings)"
-                rows={notesData.pobNotes ? 8 : 12}
+              <div
+                className="pob-notes-content"
+                dangerouslySetInnerHTML={{
+                  __html: parsedPobNotes || "No notes imported yet. Import your Path of Building code from the settings panel to view leveling notes here."
+                }}
               />
             </div>
           </div>

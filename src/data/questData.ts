@@ -1,5 +1,11 @@
-// Re-export from the new guide loader for backward compatibility
-export { availableCampaignGuides, defaultCampaignGuide, defaultQuestData } from "./guideLoader";
+import { Act } from "../types";
+import defaultQuestDataJson from "./defaultQuestData.json";
+
+/**
+ * Default quest data for Path of Exile 2
+ * Contains all acts with enhanced auto-completion support
+ */
+export const defaultQuestData: Act[] = (defaultQuestDataJson as any).acts as Act[];
 
 // Legacy exports (kept for now but will be deprecated) 
 // Note: defaultActsData is now loaded from standard-guide.json via guideLoader

@@ -14,7 +14,8 @@
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-.panel-footer.settings-open {
+.panel-footer.settings-open,
+.panel-footer.hidden {
   opacity: 0;
   transform: translateY(100%);
   pointer-events: none;
