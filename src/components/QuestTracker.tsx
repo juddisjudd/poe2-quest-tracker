@@ -245,8 +245,22 @@ export const QuestTracker: React.FC = () => {
         onImportGemsAndNotes={importGemsAndNotes}
         onImportCompletePoB={importCompletePoB}
         onResetGems={() => {
+          // Reset gems
           importGemProgression({
             socketGroups: [],
+          });
+          // Reset notes
+          updateNotesData({
+            userNotes: "",
+            pobNotes: undefined,
+          });
+          // Reset items (via importCompletePoB with empty data)
+          importCompletePoB({
+            gemProgression: { socketGroups: [] },
+            notes: "",
+            items: [],
+            loadouts: [],
+            hasMultipleLoadouts: false,
           });
         }}
       />
@@ -375,7 +389,7 @@ export const QuestTracker: React.FC = () => {
             setRewardsPanelVisible(false);
             updateSettings({ showRewardsPanel: false });
           }}
-          onQuestToggle={toggleQuest}
+          onQuestToggle={(actId, questId) => toggleQuest(questId)}
         />
       )}
 

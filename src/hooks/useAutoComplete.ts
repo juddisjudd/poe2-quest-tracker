@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { TrackerData, QuestStep } from '../types';
 import { parseLogLine, findMatchingQuests, isGuideSupported, findQuestsForZone, parseSceneLine } from '../utils/logParser';
 import { getZoneInfo } from '../data/zoneRegistry';
@@ -9,11 +9,15 @@ interface UseAutoCompleteProps {
   isElectron: boolean;
 }
 
-export const useAutoComplete = ({ 
-  trackerData, 
-  onQuestComplete, 
-  isElectron 
+export const useAutoComplete = ({
+  trackerData,
+  onQuestComplete,
+  isElectron
 }: UseAutoCompleteProps) => {
+  // Use ref to store latest tracker data without triggering effect re-runs
+  const trackerDataRef = useRef(trackerData);
+  trackerDataRef.current = trackerData;
+
   useEffect(() => {
     console.log('useAutoComplete effect triggered');
     console.log('isElectron:', isElectron);
@@ -86,9 +90,9 @@ export const useAutoComplete = ({
         console.log(`Dispatched act-change event for Act ${zoneInfo.actNumber} (from zone: ${zoneName})`);
       }
 
-      // Get all quests in sequential order
+      // Get all quests in sequential order (use ref to get latest data)
       const allQuests: QuestStep[] = [];
-      for (const act of trackerData.acts) {
+      for (const act of trackerDataRef.current.acts) {
         allQuests.push(...act.steps);
       }
 
@@ -142,10 +146,10 @@ export const useAutoComplete = ({
 
       console.log('Found matching quests:', matchingQuestIds);
 
-      // Auto-complete the matching quests
+      // Auto-complete the matching quests (use ref to get latest data)
       matchingQuestIds.forEach(questId => {
         // Check if quest exists and is not already completed
-        const quest = findQuestInData(trackerData, questId);
+        const quest = findQuestInData(trackerDataRef.current, questId);
         if (quest && !quest.completed) {
           console.log('Auto-completing quest:', questId, quest.description);
           onQuestComplete(questId);
@@ -159,7 +163,7 @@ export const useAutoComplete = ({
 
     startMonitoring();
 
-    // Cleanup function
+    // Cleanup function - only run when component unmounts or settings change
     return () => {
       if (logRewardCleanup) {
         logRewardCleanup();
@@ -177,9 +181,9 @@ export const useAutoComplete = ({
   }, [
     trackerData.settings.autoCompleteQuests,
     trackerData.settings.logFilePath,
-    isElectron,
-    onQuestComplete,
-    trackerData.acts // Re-run when quest data changes
+    isElectron
+    // NOTE: Removed trackerData.acts from dependencies to prevent monitoring restart on quest changes
+    // The handlers will use the latest data via closure
   ]);
 };
 

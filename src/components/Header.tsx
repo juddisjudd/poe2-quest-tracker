@@ -43,6 +43,8 @@ export const Header: React.FC<HeaderProps> = ({
   const [logFileDetecting, setLogFileDetecting] = useState(false);
   const [logFileMessage, setLogFileMessage] = useState("");
   const [importButtonState, setImportButtonState] = useState<"normal" | "success" | "error">("normal");
+  const [showResetGemsSuccess, setShowResetGemsSuccess] = useState(false);
+  const [importSummary, setImportSummary] = useState<string>("");
 
   const isElectron = !!window.electronAPI;
 
@@ -131,7 +133,7 @@ export const Header: React.FC<HeaderProps> = ({
           hasItems: !!result.items,
           itemsCount: result.items?.length || 0
         });
-        
+
         // If we have complete POB import, use it to get all data including items
         if (onImportCompletePoB) {
           console.log('📤 [HEADER] Using complete POB import for multiple loadouts');
@@ -139,7 +141,7 @@ export const Header: React.FC<HeaderProps> = ({
         } else {
           // Fallback to separate imports
           onImportGemLoadouts(result.loadouts, result.gemProgression);
-          
+
           // Also import notes if present
           if (result.notes && onImportNotes) {
             console.log('📤 [HEADER] Also importing notes in multiple loadouts path');
@@ -148,10 +150,17 @@ export const Header: React.FC<HeaderProps> = ({
             console.log('⚠️ [HEADER] Not importing notes - notes:', !!result.notes, 'onImportNotes:', !!onImportNotes);
           }
         }
-        
+
+        // Generate import summary
+        const gemCount = result.loadouts.reduce((acc: number, loadout: any) =>
+          acc + (loadout.gemProgression?.socketGroups?.length || 0), 0);
+        const summary = `${result.loadouts.length} loadout${result.loadouts.length > 1 ? 's' : ''}, ${gemCount} gem group${gemCount !== 1 ? 's' : ''}${result.items ? `, ${result.items.length} item${result.items.length !== 1 ? 's' : ''}` : ''}`;
+        setImportSummary(summary);
+        setTimeout(() => setImportSummary(""), 5000);
+
         setPobCode("");
         setAvailableLoadouts([]);
-        
+
         setImportButtonState("success");
         setTimeout(() => setImportButtonState("normal"), 2000);
         return;
@@ -197,10 +206,16 @@ export const Header: React.FC<HeaderProps> = ({
           console.log('⚠️ [HEADER] Not calling onImportNotes - notes:', !!notes, 'onImportNotes:', !!onImportNotes);
         }
       }
-      
+
+      // Generate import summary
+      const gemCount = result.gemProgression?.socketGroups?.length || 0;
+      const summary = `1 loadout, ${gemCount} gem group${gemCount !== 1 ? 's' : ''}${result.items ? `, ${result.items.length} item${result.items.length !== 1 ? 's' : ''}` : ''}`;
+      setImportSummary(summary);
+      setTimeout(() => setImportSummary(""), 5000);
+
       setPobCode("");
       setAvailableLoadouts([]);
-      
+
       setImportButtonState("success");
       setTimeout(() => setImportButtonState("normal"), 2000);
     } catch (error) {
@@ -221,6 +236,8 @@ export const Header: React.FC<HeaderProps> = ({
   const handleResetGems = () => {
     if (onResetGems) {
       onResetGems();
+      setShowResetGemsSuccess(true);
+      setTimeout(() => setShowResetGemsSuccess(false), 3000);
     }
   };
 
@@ -578,7 +595,6 @@ export const Header: React.FC<HeaderProps> = ({
 
             {/* Path of Building Import */}
             <div className="setting-item">
-              <div className="setting-label">IMPORT GEMS</div>
               <div className="setting-control">
                 <div className="pob-import-section">
                   <textarea
@@ -594,7 +610,7 @@ export const Header: React.FC<HeaderProps> = ({
                       onClick={handleImportPoBCode}
                       disabled={pobImporting}
                     >
-                      {pobImporting ? "Importing..." : 
+                      {pobImporting ? "Importing..." :
                        importButtonState === "success" ? "✓ Success" :
                        importButtonState === "error" ? "✗ Error" : "Import PoB"}
                     </button>
@@ -602,9 +618,21 @@ export const Header: React.FC<HeaderProps> = ({
                       className="pob-reset-btn"
                       onClick={handleResetGems}
                     >
-                      Reset Gems
+                      Reset Import
                     </button>
                   </div>
+
+                  {/* Success messages */}
+                  {showResetGemsSuccess && (
+                    <div className="pob-success-message">
+                      ✓ Import Data Reset (Gems, Notes, Items)
+                    </div>
+                  )}
+                  {importSummary && (
+                    <div className="pob-import-summary">
+                      ✓ Imported: {importSummary}
+                    </div>
+                  )}
                   
                   {/* Loadout Selection - shown when multiple loadouts are detected */}
                   {availableLoadouts.length > 0 && (
