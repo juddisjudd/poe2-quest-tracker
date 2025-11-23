@@ -24,7 +24,6 @@ export const GlobalTimer: React.FC<GlobalTimerProps> = ({
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Format time as HH:MM:SS
   const formatTime = useCallback((milliseconds: number): string => {
     const totalSeconds = Math.floor(milliseconds / 1000);
     const hours = Math.floor(totalSeconds / 3600);
@@ -37,7 +36,6 @@ export const GlobalTimer: React.FC<GlobalTimerProps> = ({
     return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
   }, []);
 
-  // Update timer state
   const updateTimer = useCallback((updates: Partial<GlobalTimerType>) => {
     setTimer(prev => {
       const newTimer = { ...prev, ...updates };
@@ -46,7 +44,6 @@ export const GlobalTimer: React.FC<GlobalTimerProps> = ({
     });
   }, [onTimerUpdate]);
 
-  // Start the timer
   const startTimer = useCallback(() => {
     if (timer.isRunning && !timer.isPaused) return;
 
@@ -58,7 +55,6 @@ export const GlobalTimer: React.FC<GlobalTimerProps> = ({
     });
   }, [timer.isRunning, timer.isPaused, timer.elapsed, updateTimer]);
 
-  // Pause the timer
   const pauseTimer = useCallback(() => {
     if (!timer.isRunning || timer.isPaused) return;
 
@@ -67,7 +63,6 @@ export const GlobalTimer: React.FC<GlobalTimerProps> = ({
     });
   }, [timer.isRunning, timer.isPaused, updateTimer]);
 
-  // Resume the timer
   const resumeTimer = useCallback(() => {
     if (!timer.isRunning || !timer.isPaused) return;
 
@@ -78,7 +73,6 @@ export const GlobalTimer: React.FC<GlobalTimerProps> = ({
     });
   }, [timer.isRunning, timer.isPaused, timer.elapsed, updateTimer]);
 
-  // Reset the timer
   const resetTimer = useCallback(() => {
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
@@ -93,7 +87,6 @@ export const GlobalTimer: React.FC<GlobalTimerProps> = ({
     });
   }, [updateTimer]);
 
-  // Auto-start when entering Act 1
   useEffect(() => {
     if (currentActNumber === 1 && !timer.isRunning && timer.elapsed === 0) {
       console.log('Auto-starting global speedrun timer (Act 1 detected)');
@@ -101,7 +94,6 @@ export const GlobalTimer: React.FC<GlobalTimerProps> = ({
     }
   }, [currentActNumber, timer.isRunning, timer.elapsed, startTimer]);
 
-  // Update elapsed time every 100ms when running and not paused
   useEffect(() => {
     if (timer.isRunning && !timer.isPaused && timer.startTime !== null) {
       intervalRef.current = setInterval(() => {

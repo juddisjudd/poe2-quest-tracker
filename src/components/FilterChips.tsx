@@ -8,23 +8,22 @@ interface FilterChipsProps {
   questCounts: Record<QuestTag, number>;
 }
 
-// RGB color tuples for each tag type (inspired by XileHUD)
 const TAG_COLORS: Record<QuestTag, [number, number, number]> = {
-  "Spirit": [147, 112, 219], // Purple
-  "Resistance": [100, 149, 237], // Cornflower blue
-  "Life": [220, 53, 69], // Red
-  "Mana": [52, 152, 219], // Blue
-  "Gem": [46, 204, 113], // Green
-  "Passive Skill": [241, 196, 15], // Yellow
-  "Boss": [231, 76, 60], // Dark red
-  "Trial": [155, 89, 182], // Purple
-  "Waypoint": [52, 152, 219], // Blue
-  "Ritual": [142, 68, 173], // Dark purple
-  "Breach": [192, 57, 43], // Dark red
-  "Expedition": [211, 84, 0], // Orange
-  "Delirium": [44, 62, 80], // Dark blue-gray
-  "Essence": [39, 174, 96], // Green
-  "Optional": [149, 165, 166], // Gray
+  "Spirit": [147, 112, 219],
+  "Resistance": [100, 149, 237],
+  "Life": [220, 53, 69],
+  "Mana": [52, 152, 219],
+  "Gem": [46, 204, 113],
+  "Passive Skill": [241, 196, 15],
+  "Boss": [231, 76, 60],
+  "Trial": [155, 89, 182],
+  "Waypoint": [52, 152, 219],
+  "Ritual": [142, 68, 173],
+  "Breach": [192, 57, 43],
+  "Expedition": [211, 84, 0],
+  "Delirium": [44, 62, 80],
+  "Essence": [39, 174, 96],
+  "Optional": [149, 165, 166],
 };
 
 const getChipStyle = (tag: QuestTag, active: boolean) => {
@@ -34,7 +33,6 @@ const getChipStyle = (tag: QuestTag, active: boolean) => {
     : `rgba(${r}, ${g}, ${b}, 0.22)`;
   const border = `1px solid rgba(${r}, ${g}, ${b}, 0.6)`;
 
-  // Calculate luminance to determine text color
   const luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
   const color = active ? (luma > 180 ? "#000" : "#fff") : "var(--text-primary)";
 
@@ -46,7 +44,6 @@ export const FilterChips: React.FC<FilterChipsProps> = ({
   onFilterToggle,
   questCounts,
 }) => {
-  // Only show tags that have quests
   const availableTags = (Object.keys(TAG_COLORS) as QuestTag[]).filter(
     tag => questCounts[tag] > 0
   );

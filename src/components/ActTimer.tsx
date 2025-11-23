@@ -28,25 +28,20 @@ export const ActTimer: React.FC<ActTimerProps> = ({
     onTimerUpdate,
   });
 
-  // Track if this is the initial mount to prevent auto-start on app load
   const isInitialMount = useRef(true);
   const previousIsCurrentAct = useRef(isCurrentAct);
 
-  // Auto-start timer when this becomes the current act (but not on initial load)
   useEffect(() => {
-    // Skip auto-start on initial mount
     if (isInitialMount.current) {
       isInitialMount.current = false;
       previousIsCurrentAct.current = isCurrentAct;
       return;
     }
 
-    // Only auto-start if isCurrentAct changed from false to true (zone change in game)
     if (isCurrentAct && !previousIsCurrentAct.current && !timer.isRunning && !timer.completed) {
       console.log(`Auto-starting timer for Act ${actNumber} (zone change detected)`);
       startTimer();
     } else if (!isCurrentAct && timer.isRunning) {
-      // Pause when no longer current act
       console.log(`Pausing timer for Act ${actNumber} (left act)`);
       pauseTimer();
     }
@@ -54,7 +49,6 @@ export const ActTimer: React.FC<ActTimerProps> = ({
     previousIsCurrentAct.current = isCurrentAct;
   }, [isCurrentAct, timer.isRunning, timer.completed, actNumber, startTimer, pauseTimer]);
 
-  // Don't show timer controls if act is completed
   if (timer.completed) {
     return (
       <div className="act-timer completed">

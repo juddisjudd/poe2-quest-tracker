@@ -33,18 +33,10 @@ const STEP_TYPE_ICONS: Record<string, { icon: React.ComponentType<any>; color: s
 };
 
 const parseQuestText = (text: string) => {
-  // Parse **[location]** as location styling
   text = text.replace(/\*\*\[([^\]]+)\]\*\*/g, '<span class="quest-location">[$1]</span>');
-
-  // Parse **boss/quest item** as boss/item styling
   text = text.replace(/\*\*([^*\[\]]+)\*\*/g, '<span class="quest-boss">$1</span>');
-
-  // Parse ***tip*** as tip styling
   text = text.replace(/\*\*\*([^*]+)\*\*\*/g, '<span class="quest-tip">$1</span>');
-
-  // Apply numeric and keyword highlights
   text = highlightQuestTextHTML(text);
-
   return text;
 };
 

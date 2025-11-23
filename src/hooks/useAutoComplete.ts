@@ -14,7 +14,6 @@ export const useAutoComplete = ({
   onQuestComplete,
   isElectron
 }: UseAutoCompleteProps) => {
-  // Use ref to store latest tracker data without triggering effect re-runs
   const trackerDataRef = useRef(trackerData);
   trackerDataRef.current = trackerData;
 
@@ -34,7 +33,6 @@ export const useAutoComplete = ({
     let zoneChangedCleanup: (() => void) | undefined;
     let currentLocation: string | undefined;
 
-    // Start log monitoring if log file path is available
     const startMonitoring = async () => {
       if (!trackerData.settings.logFilePath) {
         return;
@@ -44,9 +42,7 @@ export const useAutoComplete = ({
         await window.electronAPI.startLogMonitoring(trackerData.settings.logFilePath);
         console.log('Started log monitoring for auto-completion');
 
-        // Listen for zone changes (for auto-completing zone entry/waypoint quests)
         zoneChangedCleanup = window.electronAPI.onZoneChanged((zoneData: any) => {
-          // Handle both old format (string) and new format (object with zoneName and actNumber)
           const zoneName = typeof zoneData === 'string' ? zoneData : zoneData.zoneName;
           const actNumber = typeof zoneData === 'object' ? zoneData.actNumber : null;
 
@@ -55,7 +51,6 @@ export const useAutoComplete = ({
           handleZoneChange(zoneName, actNumber);
         });
 
-        // Listen for log rewards (for reward-based quest completion)
         logRewardCleanup = window.electronAPI.onLogReward((rewardText: string) => {
           console.log('Received log reward:', rewardText);
           handleLogReward(rewardText);
@@ -69,11 +64,9 @@ export const useAutoComplete = ({
     const handleZoneChange = (zoneName: string, actNumber: number | null) => {
       console.log('Handling zone change to:', zoneName, actNumber ? `(Act ${actNumber})` : '');
 
-      // Look up zone info from registry
       const zoneInfo = getZoneInfo(zoneName);
       if (!zoneInfo) {
         console.log('Zone not found in registry:', zoneName);
-        // Still check if this is an act marker even if not in zone registry
         if (actNumber !== null && window.dispatchEvent) {
           window.dispatchEvent(new CustomEvent('act-change', { detail: { actNumber } }));
           console.log(`Dispatched act-change event for Act ${actNumber} (from marker)`);

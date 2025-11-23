@@ -14,26 +14,22 @@ export interface PobParseResult {
   items?: ItemData[]; // Items from all loadouts
 }
 
-// Function to get stat requirement from skill_gems.json by name matching
 function getStatRequirementFromData(gemName: string): 'str' | 'dex' | 'int' | null {
-  // More aggressive string cleaning for better matching
   const cleanGemName = gemName
     .toLowerCase()
     .trim()
-    .normalize('NFD') // Normalize Unicode
-    .replace(/[\u0300-\u036f]/g, '') // Remove diacritics
-    .replace(/\s+/g, ' '); // Normalize whitespace
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/\s+/g, ' ');
 
-  // Search through the skill gems data for EXACT match only
   for (const [, gemData] of Object.entries(skillGemsData)) {
     const displayName = gemData.display_name
       .toLowerCase()
       .trim()
-      .normalize('NFD') // Normalize Unicode
-      .replace(/[\u0300-\u036f]/g, '') // Remove diacritics
-      .replace(/\s+/g, ' '); // Normalize whitespace
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/\s+/g, ' ');
 
-    // Only exact match - no partial matching
     if (displayName === cleanGemName) {
       return determineStatFromRequirements(gemData.requirement_weights);
     }
@@ -41,11 +37,9 @@ function getStatRequirementFromData(gemName: string): 'str' | 'dex' | 'int' | nu
   return null;
 }
 
-// Helper function to determine primary stat from requirement weights
 function determineStatFromRequirements(requirements: { strength: number; dexterity: number; intelligence: number }): 'str' | 'dex' | 'int' | null {
   const { strength, dexterity, intelligence } = requirements;
 
-  // Only consider stats with exactly 100 as the requirement value
   if (strength === 100) {
     return 'str';
   } else if (dexterity === 100) {
@@ -54,20 +48,16 @@ function determineStatFromRequirements(requirements: { strength: number; dexteri
     return 'int';
   }
 
-  // If no stat has exactly 100, return null (white)
   return null;
 }
 
-// Function to determine stat requirement based on gem name (with fallback to data)
 function getStatRequirement(gemName: string): 'str' | 'dex' | 'int' | null {
-  // PRIORITIZE data lookup over keyword matching for better accuracy
   const dataResult = getStatRequirementFromData(gemName);
   if (dataResult) {
     return dataResult;
   }
   const name = gemName.toLowerCase();
-  
-  // Strength-based gems (red) - typically melee, fire, physical
+
   const strGems = [
     'slam', 'strike', 'cleave', 'sweep', 'smash', 'bash', 'crush', 'pound',
     'fire', 'burn', 'ignite', 'blaze', 'inferno', 'flame', 'volcanic', 'molten',
@@ -77,8 +67,7 @@ function getStatRequirement(gemName: string): 'str' | 'dex' | 'int' | null {
     'earthquake', 'sunder', 'tectonic slam', 'consecrated path', 'ice crash',
     'flicker strike', 'cyclone', 'leap slam', 'shield charge', 'vigilant strike'
   ];
-  
-  // Dexterity-based gems (green) - typically ranged, cold, chaos, evasion
+
   const dexGems = [
     'bow', 'arrow', 'shot', 'rain', 'barrage', 'split', 'pierce', 'projectile',
     'cold', 'ice', 'frost', 'freeze', 'chill', 'glacial', 'arctic', 'winter',
@@ -88,8 +77,7 @@ function getStatRequirement(gemName: string): 'str' | 'dex' | 'int' | null {
     'tornado shot', 'blast rain', 'caustic arrow', 'toxic rain', 'scourge arrow',
     'flicker strike', 'whirling blades', 'dash', 'blink arrow', 'mirror arrow'
   ];
-  
-  // Intelligence-based gems (blue) - typically spells, lightning, minions
+
   const intGems = [
     'spell', 'cast', 'magic', 'arcane', 'mystic', 'enchant', 'hex', 'curse',
     'lightning', 'shock', 'spark', 'arc', 'bolt', 'storm', 'thunder', 'tempest',

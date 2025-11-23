@@ -82,8 +82,7 @@ export const useTrackerData = () => {
         let savedData: TrackerData | null = null;
 
         savedData = await window.electronAPI.loadQuestData();
-        
-        // Load gem data separately
+
         const savedGemData = await window.electronAPI.loadGemData();
         if (savedGemData && savedData) {
           console.log('🔍 [HOOK] Loading separate gem data:', {
@@ -94,14 +93,12 @@ export const useTrackerData = () => {
           savedData.gemProgression = savedGemData.gemProgression;
           savedData.gemLoadouts = savedGemData.gemLoadouts;
         }
-        
-        // Load notes data separately
+
         const savedNotesData = await window.electronAPI.loadNotesData();
         if (savedNotesData && savedData) {
           savedData.notesData = savedNotesData;
         }
 
-        // Load item check data separately
         const savedItemCheckData = await window.electronAPI.loadItemCheckData();
         if (savedItemCheckData && savedData) {
           console.log('🔍 [HOOK] Loading separate item check data:', {
@@ -117,15 +114,12 @@ export const useTrackerData = () => {
             savedSocketGroups: savedData.gemProgression?.socketGroups?.length || 0
           });
 
-          // Check if saved data has old structure (before restructuring)
-          // If acts don't have actNumber, it's old data - start fresh
           const hasOldStructure = savedData.acts.some((act: any) =>
             typeof act.actNumber === 'undefined' && typeof act.id !== 'undefined'
           );
 
           if (hasOldStructure) {
             console.log('⚠️ Old data structure detected - starting fresh with new quest structure');
-            // Keep settings and other data, just reset quest data
             const freshData: TrackerData = {
               ...initialData,
               acts: defaultQuestData,
@@ -136,7 +130,6 @@ export const useTrackerData = () => {
             };
             setData(freshData);
           } else {
-            // Merge saved quest progress with latest quest data
             const mergedData = mergeQuestData(savedData, defaultQuestData);
 
             const updatedData: TrackerData = {
