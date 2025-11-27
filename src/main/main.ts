@@ -796,9 +796,12 @@ ipcMain.handle("load-tree-structure", async (_, version: string = '0_3') => {
   try {
     // Try multiple locations for the tree data
     const possiblePaths = [
-      // Production: bundled with app
-      path.join(__dirname, '..', 'data', 'tree', `tree-${version}.min.json`),
+      // Production: packaged app resources
+      path.join(process.resourcesPath, 'app', 'data', 'tree', `tree-${version}.min.json`),
+      path.join(process.resourcesPath, 'data', 'tree', `tree-${version}.min.json`),
+      // Production: bundled with app (asar)
       path.join(__dirname, '..', '..', 'data', 'tree', `tree-${version}.min.json`),
+      path.join(__dirname, '..', 'data', 'tree', `tree-${version}.min.json`),
       // Development: project root
       path.join(process.cwd(), 'data', 'tree', `tree-${version}.min.json`),
       // Also try non-minified version
