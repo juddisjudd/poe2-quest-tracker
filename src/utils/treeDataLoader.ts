@@ -177,6 +177,7 @@ export function computePositionedNodes(treeData: FullTreeData): Map<number, Posi
       group: node.group,
       orbit: node.orbit,
       orbitIndex: node.orbitIndex,
+      icon: node.icon,
       isNotable: node.isNotable,
       isKeystone: node.isKeystone,
       isMastery: node.isMastery,

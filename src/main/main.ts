@@ -241,6 +241,8 @@ const createTreeWindow = (passiveTreeData?: any): void => {
 
   treeWindow.on("ready-to-show", () => {
     treeWindow?.show();
+    // Open devtools for debugging (uncomment when needed)
+    // treeWindow?.webContents.openDevTools({ mode: 'detach' });
     // Send initial tree data if provided
     if (passiveTreeData) {
       treeWindow?.webContents.send('passive-tree-data', passiveTreeData);
@@ -822,6 +824,32 @@ ipcMain.handle("load-tree-structure", async (_, version: string = '0_3') => {
     return null;
   } catch (error) {
     console.error("Failed to load tree structure:", error);
+    return null;
+  }
+});
+
+// Get the base path for assets (used by tree window for loading icons)
+ipcMain.handle("get-assets-path", async () => {
+  const isDevelopment = isDev();
+  
+  if (isDevelopment) {
+    // In development, assets are served by Vite
+    return 'http://localhost:3000/assets';
+  } else {
+    // In production, return the file:// path to assets
+    const possiblePaths = [
+      path.join(process.resourcesPath, 'app', 'assets'),
+      path.join(__dirname, '..', '..', 'assets'),
+    ];
+    
+    for (const assetPath of possiblePaths) {
+      if (fs.existsSync(assetPath)) {
+        // Convert to file:// URL format
+        return 'file://' + assetPath.replace(/\\/g, '/');
+      }
+    }
+    
+    console.warn('Assets path not found');
     return null;
   }
 });

@@ -140,10 +140,20 @@ export interface FullTreeData {
       id: string;
       name: string;
       internalId: string;
+      background?: {
+        x: number;
+        y: number;
+        image?: string;
+        width?: number;
+        height?: number;
+      };
     }>;
     background?: {
       x: number;
       y: number;
+      image?: string;
+      width?: number;
+      height?: number;
     };
   }>;
   groups: Record<string, {
@@ -208,6 +218,7 @@ export interface PositionedNode {
   group: number;
   orbit: number;
   orbitIndex: number;
+  icon?: string;  // Path to the node icon (e.g., "Art/2DArt/SkillIcons/passives/damage.dds")
   isNotable?: boolean;
   isKeystone?: boolean;
   isMastery?: boolean;

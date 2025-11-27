@@ -240,6 +240,7 @@ declare global {
       savePassiveTreeData: (data: any) => Promise<{ success: boolean; error?: string }>;
       loadPassiveTreeData: () => Promise<any>;
       loadTreeStructure: (version?: string) => Promise<any>;
+      getAssetsPath: () => Promise<string | null>;
       loadGemLoadouts: () => Promise<GemProgressionWithLoadouts | null>;
       switchTreeLoadout: (loadoutId: string) => Promise<any>;
       onPassiveTreeData: (callback: (data: any) => void) => () => void;

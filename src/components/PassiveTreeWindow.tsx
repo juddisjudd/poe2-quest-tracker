@@ -16,6 +16,20 @@ interface LoadoutInfo {
   hasTree: boolean;
 }
 
+// Convert icon path from tree data to relative asset path
+// e.g., "Art/2DArt/SkillIcons/passives/damage.dds" -> "tree/passives/damage.webp"
+function iconPathToRelativePath(iconPath: string | undefined): string | null {
+  if (!iconPath) return null;
+  
+  // Extract the path after "passives/"
+  const match = iconPath.match(/passives\/(.+)\.dds$/i);
+  if (!match) return null;
+  
+  // Convert to lowercase and change extension to webp
+  const relativePath = match[1].toLowerCase();
+  return `tree/passives/${relativePath}.webp`;
+}
+
 const PassiveTreeWindow: React.FC = () => {
   const [passiveTreeData, setPassiveTreeData] = useState<PassiveTreeData | null>(null);
   const [treeStructure, setTreeStructure] = useState<FullTreeData | null>(null);
@@ -32,6 +46,15 @@ const PassiveTreeWindow: React.FC = () => {
     offsetX: 0,
     offsetY: 0,
   });
+
+  // Image cache for node icons
+  const imageCache = useRef<Map<string, HTMLImageElement | null>>(new Map());
+  // Image cache for class/ascendancy illustrations
+  const classImageCache = useRef<Map<string, HTMLImageElement | null>>(new Map());
+  const [imagesLoaded, setImagesLoaded] = useState(false);
+  const [classImagesLoaded, setClassImagesLoaded] = useState(false);
+  const [assetsBasePath, setAssetsBasePath] = useState<string | null>(null);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 }); // Track mouse position for tooltip
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -59,6 +82,9 @@ const PassiveTreeWindow: React.FC = () => {
 
         // Load loadouts info first
         const gemLoadouts = await window.electronAPI.loadGemLoadouts();
+        let rawTreeData: any = null;
+        let currentActiveLoadoutId = '';
+        
         if (gemLoadouts && gemLoadouts.loadouts && gemLoadouts.loadouts.length > 1) {
           const loadoutInfos: LoadoutInfo[] = gemLoadouts.loadouts.map((l: any) => ({
             id: l.id,
@@ -66,11 +92,22 @@ const PassiveTreeWindow: React.FC = () => {
             hasTree: !!l.passiveTree,
           }));
           setLoadouts(loadoutInfos);
-          setActiveLoadoutId(gemLoadouts.activeLoadoutId || loadoutInfos[0]?.id || '');
+          currentActiveLoadoutId = gemLoadouts.activeLoadoutId || loadoutInfos[0]?.id || '';
+          setActiveLoadoutId(currentActiveLoadoutId);
+          
+          // Try to load tree from the active loadout first
+          const activeLoadout = gemLoadouts.loadouts.find((l: any) => l.id === currentActiveLoadoutId);
+          if (activeLoadout && activeLoadout.passiveTree) {
+            console.log('Loading tree from active loadout:', currentActiveLoadoutId);
+            rawTreeData = activeLoadout.passiveTree;
+          }
         }
 
-        // Load passive tree data (allocated nodes, class, etc.)
-        const rawTreeData = await window.electronAPI.loadPassiveTreeData();
+        // If no tree from loadout, fall back to standalone passive tree data file
+        if (!rawTreeData) {
+          rawTreeData = await window.electronAPI.loadPassiveTreeData();
+        }
+        
         if (!rawTreeData) {
           setError('No passive tree data found. Import a POB build first.');
           return;
@@ -99,6 +136,11 @@ const PassiveTreeWindow: React.FC = () => {
         setTreeStructure(structure);
         setLoadingStatus('Loading assets & computing positions...');
 
+        // Get the assets base path for icon loading
+        const basePath = await window.electronAPI.getAssetsPath();
+        console.log('Assets base path:', basePath);
+        setAssetsBasePath(basePath);
+
         // Compute positioned nodes
         const positioned = computePositionedNodes(structure);
         setPositionedNodes(positioned);
@@ -126,24 +168,162 @@ const PassiveTreeWindow: React.FC = () => {
     loadData();
   }, []);
 
-  // Handle mouse wheel zoom
-  const handleWheel = useCallback((e: React.WheelEvent) => {
-    e.preventDefault();
-    const zoomFactor = e.deltaY > 0 ? 0.9 : 1.1;
-    const newScale = Math.max(0.01, Math.min(0.5, viewState.scale * zoomFactor));
+  // Preload images for allocated nodes
+  useEffect(() => {
+    if (!positionedNodes || !allocatedNodesSet.size || !assetsBasePath) return;
+    
+    const loadImages = async () => {
+      const iconsToLoad: Map<string, string> = new Map(); // relativePath -> fullPath
+      
+      // Collect all unique icon paths for allocated nodes
+      for (const nodeId of allocatedNodesSet) {
+        const node = positionedNodes.get(nodeId);
+        if (node?.icon) {
+          const relativePath = iconPathToRelativePath(node.icon);
+          if (relativePath && !imageCache.current.has(relativePath)) {
+            const fullPath = `${assetsBasePath}/${relativePath}`;
+            iconsToLoad.set(relativePath, fullPath);
+          }
+        }
+      }
+      
+      console.log(`Loading ${iconsToLoad.size} node icons from ${assetsBasePath}...`);
+      if (iconsToLoad.size > 0) {
+        console.log('Sample icon paths:', Array.from(iconsToLoad.values()).slice(0, 3));
+      }
+      
+      // Load images in parallel
+      let successCount = 0;
+      let failCount = 0;
+      const loadPromises = Array.from(iconsToLoad.entries()).map(([relativePath, fullPath]) => {
+        return new Promise<void>((resolve) => {
+          const img = new Image();
+          img.onload = () => {
+            imageCache.current.set(relativePath, img);
+            successCount++;
+            resolve();
+          };
+          img.onerror = (err) => {
+            // Mark as failed so we don't retry
+            if (failCount < 3) {
+              console.warn(`Failed to load icon: ${fullPath}`, err);
+            }
+            imageCache.current.set(relativePath, null);
+            failCount++;
+            resolve();
+          };
+          img.src = fullPath;
+        });
+      });
+      
+      await Promise.all(loadPromises);
+      console.log(`Icon loading complete: ${successCount} success, ${failCount} failed`);
+      setImagesLoaded(true);
+    };
+    
+    loadImages();
+  }, [positionedNodes, allocatedNodesSet, assetsBasePath]);
 
-    const rect = containerRef.current?.getBoundingClientRect();
-    if (rect) {
-      const mouseX = e.clientX - rect.left;
-      const mouseY = e.clientY - rect.top;
+  // Load class/ascendancy illustrations
+  useEffect(() => {
+    if (!treeStructure || !passiveTreeData || !assetsBasePath) return;
+    
+    const loadClassImages = async () => {
+      const imagesToLoad: Map<string, string> = new Map();
+      
+      // Find the current class
+      const currentClass = treeStructure.classes.find(c => c.name === passiveTreeData.className);
+      if (!currentClass) {
+        console.warn('Could not find class:', passiveTreeData.className);
+        return;
+      }
+      
+      // Add base class illustration
+      if (currentClass.background?.image) {
+        const imageName = currentClass.name.toLowerCase().replace(/\s+/g, '') + 'baseillustration';
+        const relativePath = `tree/classes/${imageName}.webp`;
+        if (!classImageCache.current.has(relativePath)) {
+          imagesToLoad.set(relativePath, `${assetsBasePath}/${relativePath}`);
+        }
+      }
+      
+      // Add ascendancy illustrations
+      for (const asc of currentClass.ascendancies) {
+        if (asc.background?.x !== undefined) {
+          // Try multiple naming patterns
+          const ascName = asc.name.toLowerCase().replace(/\s+/g, '');
+          const patterns = [
+            `${ascName}ascendancy`,
+            `${ascName}ascendency`,
+          ];
+          for (const pattern of patterns) {
+            const relativePath = `tree/classes/${pattern}.webp`;
+            if (!classImageCache.current.has(relativePath)) {
+              imagesToLoad.set(relativePath, `${assetsBasePath}/${relativePath}`);
+            }
+          }
+        }
+      }
+      
+      // Add ascendancy background frame (goes on top of class/ascendancy illustrations)
+      const frameRelPath = 'tree/ascendancy-background_4000_4000_BC7.webp';
+      if (!classImageCache.current.has(frameRelPath)) {
+        imagesToLoad.set(frameRelPath, `${assetsBasePath}/${frameRelPath}`);
+      }
+      
+      console.log(`Loading ${imagesToLoad.size} class/ascendancy illustrations...`);
+      
+      let successCount = 0;
+      const loadPromises = Array.from(imagesToLoad.entries()).map(([relativePath, fullPath]) => {
+        return new Promise<void>((resolve) => {
+          const img = new Image();
+          img.onload = () => {
+            classImageCache.current.set(relativePath, img);
+            successCount++;
+            resolve();
+          };
+          img.onerror = () => {
+            classImageCache.current.set(relativePath, null);
+            resolve();
+          };
+          img.src = fullPath;
+        });
+      });
+      
+      await Promise.all(loadPromises);
+      console.log(`Class illustration loading complete: ${successCount} loaded`);
+      setClassImagesLoaded(true);
+    };
+    
+    loadClassImages();
+  }, [treeStructure, passiveTreeData, assetsBasePath]);
 
-      setViewState(prev => ({
-        scale: newScale,
-        offsetX: mouseX - (mouseX - prev.offsetX) * (newScale / prev.scale),
-        offsetY: mouseY - (mouseY - prev.offsetY) * (newScale / prev.scale),
-      }));
-    }
-  }, [viewState.scale]);
+  // Handle mouse wheel zoom with native event listener (to use passive: false)
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const handleWheelNative = (e: WheelEvent) => {
+      e.preventDefault();
+      const zoomFactor = e.deltaY > 0 ? 0.9 : 1.1;
+      
+      setViewState(prev => {
+        const newScale = Math.max(0.01, Math.min(0.5, prev.scale * zoomFactor));
+        const rect = container.getBoundingClientRect();
+        const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
+
+        return {
+          scale: newScale,
+          offsetX: mouseX - (mouseX - prev.offsetX) * (newScale / prev.scale),
+          offsetY: mouseY - (mouseY - prev.offsetY) * (newScale / prev.scale),
+        };
+      });
+    };
+
+    container.addEventListener('wheel', handleWheelNative, { passive: false });
+    return () => container.removeEventListener('wheel', handleWheelNative);
+  }, [loading]); // Re-run when loading changes to ensure container is mounted
 
   // Handle mouse down for panning
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
@@ -154,8 +334,22 @@ const PassiveTreeWindow: React.FC = () => {
     }
   }, []);
 
+  // Helper to get node display radius (same logic as rendering)
+  const getNodeRadius = useCallback((node: PositionedNode): number => {
+    if (node.isClassStart) return 40;
+    if (node.isKeystone) return 35;
+    if (node.isJewelSocket) return 30;
+    if (node.isMastery) return 32;
+    if (node.ascendancyName) return node.isNotable ? 28 : 22;
+    if (node.isNotable) return 28;
+    return 20; // Normal node
+  }, []);
+
   // Handle mouse move for panning and hover
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
+    // Always update mouse position for tooltip
+    setMousePos({ x: e.clientX, y: e.clientY });
+    
     if (isDragging.current) {
       const deltaX = e.clientX - lastMousePos.current.x;
       const deltaY = e.clientY - lastMousePos.current.y;
@@ -173,23 +367,32 @@ const PassiveTreeWindow: React.FC = () => {
         const worldX = (e.clientX - rect.left - viewState.offsetX) / viewState.scale;
         const worldY = (e.clientY - rect.top - viewState.offsetY) / viewState.scale;
 
-        // Find node under cursor (with hit radius based on zoom)
-        const hitRadius = 30 / viewState.scale;
+        // Find node under cursor using actual node size
         let found: PositionedNode | null = null;
+        let closestDist = Infinity;
 
         for (const node of positionedNodes.values()) {
+          // Skip non-interactive nodes
+          if (node.isOnlyImage) continue;
+          
           const dx = node.x - worldX;
           const dy = node.y - worldY;
-          if (dx * dx + dy * dy < hitRadius * hitRadius) {
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          
+          // Use actual node radius plus a small buffer for easier clicking
+          const nodeRadius = getNodeRadius(node);
+          const hitRadius = nodeRadius * 1.2; // 20% larger hit area
+          
+          if (dist < hitRadius && dist < closestDist) {
             found = node;
-            break;
+            closestDist = dist;
           }
         }
 
         setHoveredNode(found);
       }
     }
-  }, [positionedNodes, viewState]);
+  }, [positionedNodes, viewState, getNodeRadius]);
 
   // Handle mouse up
   const handleMouseUp = useCallback(() => {
@@ -230,6 +433,52 @@ const PassiveTreeWindow: React.FC = () => {
 
     // Get orbit radii from tree structure (or use defaults)
     const orbitRadii = treeStructure?.constants?.orbitRadii || [0, 82, 162, 335, 493, 662, 846, 251, 1080, 1322];
+
+    // Draw class and ascendancy illustrations (behind everything else)
+    if (classImagesLoaded && treeStructure && passiveTreeData) {
+      const currentClass = treeStructure.classes.find(c => c.name === passiveTreeData.className);
+      if (currentClass) {
+        ctx.globalAlpha = 0.6; // Semi-transparent backgrounds
+        
+        // Draw base class illustration at center (0,0)
+        const classImageName = currentClass.name.toLowerCase().replace(/\s+/g, '') + 'baseillustration';
+        const classRelPath = `tree/classes/${classImageName}.webp`;
+        const classImg = classImageCache.current.get(classRelPath);
+        if (classImg) {
+          const size = 2790; // 93% of 3000 for better fit
+          ctx.drawImage(classImg, -size / 2, -size / 2, size, size);
+        }
+        
+        // Draw ascendancy illustrations at their positions
+        for (const asc of currentClass.ascendancies) {
+          if (asc.background?.x !== undefined && asc.background?.y !== undefined) {
+            const ascName = asc.name.toLowerCase().replace(/\\s+/g, '');
+            // Try both naming patterns
+            let ascImg = classImageCache.current.get(`tree/classes/${ascName}ascendancy.webp`);
+            if (!ascImg) {
+              ascImg = classImageCache.current.get(`tree/classes/${ascName}ascendency.webp`);
+            }
+            if (ascImg) {
+              const width = (asc.background.width || 1500) * 2; // Double the size
+              const height = (asc.background.height || 1500) * 2;
+              const x = asc.background.x - width / 2;
+              const y = asc.background.y - height / 2;
+              ctx.drawImage(ascImg, x, y, width, height);
+            }
+          }
+        }
+        
+        // Draw ascendancy background frame on top of class/ascendancy illustrations
+        ctx.globalAlpha = 1.0; // Frame at full opacity
+        const frameImg = classImageCache.current.get('tree/ascendancy-background_4000_4000_BC7.webp');
+        if (frameImg) {
+          const frameSize = 3720; // 93% of 4000 for better fit
+          ctx.drawImage(frameImg, -frameSize / 2, -frameSize / 2, frameSize, frameSize);
+        }
+        
+        ctx.globalAlpha = 1.0; // Reset alpha
+      }
+    }
 
     // Draw connections first (paths between nodes)
     ctx.lineCap = 'round';
@@ -383,13 +632,12 @@ const PassiveTreeWindow: React.FC = () => {
       const radius = getNodeRadius(node);
       const displayRadius = isHovered ? radius * 1.15 : radius;
 
-      // Determine node colors
+      // Determine node colors (for fallback and borders)
       let fillColor = '#2a2a3a';
       let strokeColor = '#4a4a5a';
       let glowColor = '';
 
       if (node.isClassStart) {
-        // Class start nodes - show as allocated if class matches or always slightly visible
         fillColor = isAllocated ? '#1a5a1a' : '#0a2a0a';
         strokeColor = isAllocated ? '#3a9a3a' : '#1a4a1a';
         glowColor = isAllocated ? 'rgba(100, 200, 100, 0.5)' : '';
@@ -414,7 +662,6 @@ const PassiveTreeWindow: React.FC = () => {
         strokeColor = isAllocated ? '#cd853f' : '#4a3a2a';
         glowColor = isAllocated ? 'rgba(205, 133, 63, 0.5)' : '';
       } else {
-        // Normal node
         fillColor = isAllocated ? '#4a3a10' : '#1a1a1a';
         strokeColor = isAllocated ? '#a08020' : '#3a3a3a';
         glowColor = isAllocated ? 'rgba(160, 128, 32, 0.4)' : '';
@@ -432,11 +679,45 @@ const PassiveTreeWindow: React.FC = () => {
         ctx.restore();
       }
 
-      // Draw node circle
+      // Try to draw icon for allocated nodes
+      let drewIcon = false;
+      if (isAllocated && node.icon) {
+        const relativePath = iconPathToRelativePath(node.icon);
+        if (relativePath) {
+          const img = imageCache.current.get(relativePath);
+          if (img) {
+            // Draw circular clip with icon
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(node.x, node.y, displayRadius, 0, Math.PI * 2);
+            ctx.clip();
+            
+            // Draw icon centered and scaled
+            const iconSize = displayRadius * 2.2; // Slightly larger than circle to fill it
+            ctx.drawImage(
+              img,
+              node.x - iconSize / 2,
+              node.y - iconSize / 2,
+              iconSize,
+              iconSize
+            );
+            ctx.restore();
+            drewIcon = true;
+          }
+        }
+      }
+
+      // Draw fallback circle if no icon
+      if (!drewIcon) {
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, displayRadius, 0, Math.PI * 2);
+        ctx.fillStyle = fillColor;
+        ctx.fill();
+      }
+      
+      // Draw border
       ctx.beginPath();
       ctx.arc(node.x, node.y, displayRadius, 0, Math.PI * 2);
-      ctx.fillStyle = fillColor;
-      ctx.fill();
       ctx.strokeStyle = strokeColor;
       ctx.lineWidth = isHovered ? 3 : 2;
       ctx.stroke();
@@ -453,7 +734,7 @@ const PassiveTreeWindow: React.FC = () => {
 
     ctx.restore();
 
-  }, [positionedNodes, viewState, allocatedNodesSet, hoveredNode, renderKey]);
+  }, [positionedNodes, viewState, allocatedNodesSet, hoveredNode, renderKey, imagesLoaded, classImagesLoaded, treeStructure, passiveTreeData]);
 
   // Handle window resize
   useEffect(() => {
@@ -630,7 +911,6 @@ const PassiveTreeWindow: React.FC = () => {
       <div
         ref={containerRef}
         className="tree-canvas-container"
-        onWheel={handleWheel}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
@@ -638,9 +918,16 @@ const PassiveTreeWindow: React.FC = () => {
       >
         <canvas ref={canvasRef} className="tree-canvas" />
 
-        {/* Node tooltip */}
+        {/* Node tooltip - follows mouse cursor */}
         {hoveredNode && (
-          <div className="node-tooltip">
+          <div 
+            className="node-tooltip"
+            style={{
+              left: mousePos.x + 15,
+              top: mousePos.y + 15,
+              right: 'auto',
+            }}
+          >
             <div className="tooltip-name">{hoveredNode.name}</div>
             {hoveredNode.stats.length > 0 && (
               <div className="tooltip-stats">
