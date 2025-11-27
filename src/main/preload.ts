@@ -12,6 +12,27 @@ const electronAPI = {
   loadNotesData: () => ipcRenderer.invoke("load-notes-data"),
   saveItemCheckData: (data: any) => ipcRenderer.invoke("save-item-check-data", data),
   loadItemCheckData: () => ipcRenderer.invoke("load-item-check-data"),
+  // Passive Tree Window APIs
+  openTreeWindow: (passiveTreeData: any) => ipcRenderer.invoke("open-tree-window", passiveTreeData),
+  closeTreeWindow: () => ipcRenderer.invoke("close-tree-window"),
+  minimizeTreeWindow: () => ipcRenderer.invoke("minimize-tree-window"),
+  isTreeWindowOpen: () => ipcRenderer.invoke("is-tree-window-open"),
+  sendTreeData: (passiveTreeData: any) => ipcRenderer.invoke("send-tree-data", passiveTreeData),
+  savePassiveTreeData: (data: any) => ipcRenderer.invoke("save-passive-tree-data", data),
+  loadPassiveTreeData: () => ipcRenderer.invoke("load-passive-tree-data"),
+  loadTreeStructure: (version: string = '0_3') => ipcRenderer.invoke("load-tree-structure", version),
+  loadGemLoadouts: () => ipcRenderer.invoke("load-gem-loadouts"),
+  switchTreeLoadout: (loadoutId: string) => ipcRenderer.invoke("switch-tree-loadout", loadoutId),
+  onPassiveTreeData: (callback: (data: any) => void) => {
+    const listener = (_: any, data: any) => callback(data);
+    ipcRenderer.on("passive-tree-data", listener);
+    return () => ipcRenderer.removeListener("passive-tree-data", listener);
+  },
+  onTreeWindowClosed: (callback: () => void) => {
+    const listener = () => callback();
+    ipcRenderer.on("tree-window-closed", listener);
+    return () => ipcRenderer.removeListener("tree-window-closed", listener);
+  },
   checkForUpdates: () => ipcRenderer.invoke("check-for-updates"),
   updateHotkey: (hotkey: string) => ipcRenderer.invoke("update-hotkey", hotkey),
   openExternal: (url: string) => ipcRenderer.invoke("open-external", url),

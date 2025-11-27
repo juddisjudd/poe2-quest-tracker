@@ -39,6 +39,7 @@ export const QuestTracker: React.FC = () => {
     updateCurrentAct,
     resetTimers,
     updateGlobalTimer,
+    clearPassiveTreeData,
   } = useTrackerData();
 
   console.log('QuestTracker render:', { loading, actsCount: data.acts.length, firstAct: data.acts[0] });
@@ -49,6 +50,7 @@ export const QuestTracker: React.FC = () => {
   const [rewardsPanelVisible, setRewardsPanelVisible] = useState(false);
   const [regexBuilderVisible, setRegexBuilderVisible] = useState(false);
   const [itemCheckVisible, setItemCheckVisible] = useState(false);
+  const [treePanelVisible, setTreePanelVisible] = useState(false);
   const [filtersCollapsed, setFiltersCollapsed] = useState(false);
   const [timersPausedByProcess, setTimersPausedByProcess] = useState(false);
 
@@ -102,6 +104,21 @@ export const QuestTracker: React.FC = () => {
     onQuestComplete: handleQuestAutoComplete,
     isElectron
   });
+
+  // Listen for tree window closed event from main process
+  useEffect(() => {
+    if (!isElectron || !window.electronAPI?.onTreeWindowClosed) return;
+
+    const unsubscribe = window.electronAPI.onTreeWindowClosed(() => {
+      console.log('🌳 Tree window closed externally');
+      setTreePanelVisible(false);
+      updateSettings({ showTreePanel: false });
+    });
+
+    return () => {
+      unsubscribe?.();
+    };
+  }, [isElectron, updateSettings]);
 
   // Listen for act changes from log file
   useEffect(() => {
@@ -244,7 +261,11 @@ export const QuestTracker: React.FC = () => {
         }}
         onImportGemsAndNotes={importGemsAndNotes}
         onImportCompletePoB={importCompletePoB}
-        onResetGems={() => {
+        onResetGems={async () => {
+          // Reset passive tree data FIRST to clear from memory
+          await clearPassiveTreeData();
+          // Close tree panel if open
+          setTreePanelVisible(false);
           // Reset gems
           importGemProgression({
             socketGroups: [],
@@ -255,12 +276,14 @@ export const QuestTracker: React.FC = () => {
             pobNotes: undefined,
           });
           // Reset items (via importCompletePoB with empty data)
+          // passiveTree is explicitly undefined so it won't pick up old data
           importCompletePoB({
             gemProgression: { socketGroups: [] },
             notes: "",
             items: [],
             loadouts: [],
             hasMultipleLoadouts: false,
+            passiveTree: undefined,
           });
         }}
       />
@@ -435,6 +458,35 @@ export const QuestTracker: React.FC = () => {
           updateSettings({ showNotesPanel: newVisibility });
         }}
         hasNotesData={!!data.notesData}
+        treePanelVisible={treePanelVisible}
+        onToggleTreePanel={async () => {
+          const newVisibility = !treePanelVisible;
+          setTreePanelVisible(newVisibility);
+          updateSettings({ showTreePanel: newVisibility });
+          
+          // Handle tree window open/close in Electron
+          if (isElectron && window.electronAPI) {
+            if (newVisibility) {
+              // Always open the tree window - it will show a message if no data
+              if (data.passiveTreeData) {
+                // Convert Maps to serializable format for IPC
+                const serializableData = {
+                  ...data.passiveTreeData,
+                  masterySelections: Array.from(data.passiveTreeData.masterySelections.entries()),
+                  jewelSockets: data.passiveTreeData.jewelSockets 
+                    ? Array.from(data.passiveTreeData.jewelSockets.entries()) 
+                    : undefined,
+                };
+                await window.electronAPI.openTreeWindow?.(serializableData);
+              } else {
+                // Open window with null data - will show "Import POB" message
+                await window.electronAPI.openTreeWindow?.(null);
+              }
+            } else {
+              await window.electronAPI.closeTreeWindow?.();
+            }
+          }
+        }}
         rewardsPanelVisible={rewardsPanelVisible}
         onToggleRewardsPanel={() => {
           const newVisibility = !rewardsPanelVisible;

@@ -43,7 +43,6 @@ export const Header: React.FC<HeaderProps> = ({
   const [logFileDetecting, setLogFileDetecting] = useState(false);
   const [logFileMessage, setLogFileMessage] = useState("");
   const [importButtonState, setImportButtonState] = useState<"normal" | "success" | "error">("normal");
-  const [showResetGemsSuccess, setShowResetGemsSuccess] = useState(false);
   const [importSummary, setImportSummary] = useState<string>("");
 
   const isElectron = !!window.electronAPI;
@@ -209,7 +208,8 @@ export const Header: React.FC<HeaderProps> = ({
 
       // Generate import summary
       const gemCount = result.gemProgression?.socketGroups?.length || 0;
-      const summary = `1 loadout, ${gemCount} gem group${gemCount !== 1 ? 's' : ''}${result.items ? `, ${result.items.length} item${result.items.length !== 1 ? 's' : ''}` : ''}`;
+      const hasTree = !!result.passiveTree;
+      const summary = `${gemCount} gem group${gemCount !== 1 ? 's' : ''}${result.items ? `, ${result.items.length} item${result.items.length !== 1 ? 's' : ''}` : ''}${hasTree ? ', tree' : ''}`;
       setImportSummary(summary);
       setTimeout(() => setImportSummary(""), 5000);
 
@@ -227,18 +227,15 @@ export const Header: React.FC<HeaderProps> = ({
     }
   };
 
-  const handleResetQuests = () => {
+  const handleMasterReset = () => {
+    // Reset quest progress
     onResetQuests();
-    setShowResetSuccess(true);
-    setTimeout(() => setShowResetSuccess(false), 3000);
-  };
-
-  const handleResetGems = () => {
+    // Reset imported data (gems, notes, items, tree)
     if (onResetGems) {
       onResetGems();
-      setShowResetGemsSuccess(true);
-      setTimeout(() => setShowResetGemsSuccess(false), 3000);
     }
+    setShowResetSuccess(true);
+    setTimeout(() => setShowResetSuccess(false), 3000);
   };
 
   const handleImportSelectedLoadout = () => {
@@ -573,26 +570,6 @@ export const Header: React.FC<HeaderProps> = ({
             {/* Import/Export Tab */}
             {activeTab === "import" && (
               <>
-            {/* Reset Progress */}
-            <div className="setting-item">
-              <div className="setting-label">RESET PROGRESS</div>
-              <div className="setting-control">
-                <div className="reset-control-row">
-                  <button
-                    className="reset-button compact"
-                    onClick={handleResetQuests}
-                  >
-                    Reset All
-                  </button>
-                  {showResetSuccess && (
-                    <span className="reset-success-message">
-                      ✓ Reset Successful
-                    </span>
-                  )}
-                </div>
-              </div>
-            </div>
-
             {/* Path of Building Import */}
             <div className="setting-item">
               <div className="setting-control">
@@ -614,20 +591,9 @@ export const Header: React.FC<HeaderProps> = ({
                        importButtonState === "success" ? "✓ Success" :
                        importButtonState === "error" ? "✗ Error" : "Import PoB"}
                     </button>
-                    <button
-                      className="pob-reset-btn"
-                      onClick={handleResetGems}
-                    >
-                      Reset Import
-                    </button>
                   </div>
 
                   {/* Success messages */}
-                  {showResetGemsSuccess && (
-                    <div className="pob-success-message">
-                      ✓ Import Data Reset (Gems, Notes, Items)
-                    </div>
-                  )}
                   {importSummary && (
                     <div className="pob-import-summary">
                       ✓ Imported: {importSummary}
@@ -661,6 +627,29 @@ export const Header: React.FC<HeaderProps> = ({
                       </div>
                     </div>
                   )}
+                </div>
+              </div>
+            </div>
+
+            {/* Master Reset */}
+            <div className="setting-item">
+              <div className="setting-label">RESET ALL DATA</div>
+              <div className="setting-control">
+                <div className="reset-control-row">
+                  <button
+                    className="reset-button compact"
+                    onClick={handleMasterReset}
+                  >
+                    Reset All
+                  </button>
+                  {showResetSuccess && (
+                    <span className="reset-success-message">
+                      ✓ All Data Reset
+                    </span>
+                  )}
+                </div>
+                <div className="log-help-text">
+                  Clears quest progress, gems, notes, items, and passive tree data.
                 </div>
               </div>
             </div>

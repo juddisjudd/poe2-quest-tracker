@@ -26,6 +26,10 @@ interface PanelFooterProps {
   onToggleItemCheck: () => void;
   hasItemCheckData: boolean;
 
+  // Passive Tree Panel
+  treePanelVisible: boolean;
+  onToggleTreePanel: () => void;
+
   // Global state
   settingsOpen: boolean;
 }
@@ -45,6 +49,8 @@ export const PanelFooter: React.FC<PanelFooterProps> = ({
   itemCheckVisible,
   onToggleItemCheck,
   hasItemCheckData,
+  treePanelVisible,
+  onToggleTreePanel,
   settingsOpen,
 }) => {
   // Hide footer when any full-screen panel is open
@@ -79,6 +85,18 @@ export const PanelFooter: React.FC<PanelFooterProps> = ({
           </button>
         </div>
       )}
+
+      {/* Passive Tree Toggle */}
+      <div className={`panel-toggle ${treePanelVisible ? "panel-open" : ""}`}>
+        <button
+          className="panel-toggle-btn"
+          onClick={onToggleTreePanel}
+          title={treePanelVisible ? "Close Passive Tree Viewer" : "Open Passive Tree Viewer"}
+        >
+          <span className="toggle-icon">{treePanelVisible ? "▼" : "▲"}</span>
+          <span className="toggle-text">Tree</span>
+        </button>
+      </div>
 
       {/* Rewards Panel Toggle */}
       {hasRewardsData && (

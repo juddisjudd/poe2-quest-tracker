@@ -90,6 +90,7 @@ export interface GemLoadout {
   id: string;
   name: string;
   gemProgression: GemProgression;
+  passiveTree?: import('./passiveTree').PassiveTreeData; // Each loadout can have different tree allocations
 }
 
 export interface GemProgressionWithLoadouts {
@@ -134,6 +135,9 @@ export interface GlobalTimer {
   isPaused: boolean;
 }
 
+// Import passive tree types
+import { PassiveTreeData } from "./passiveTree";
+
 export interface TrackerData {
   acts: Act[];
   editMode?: boolean;
@@ -141,6 +145,7 @@ export interface TrackerData {
   gemLoadouts?: GemProgressionWithLoadouts;
   notesData?: NotesData;
   itemCheckData?: ItemCheckData;
+  passiveTreeData?: PassiveTreeData;
   actTimers?: ActTimer[]; // Timer state for each act
   globalTimer?: GlobalTimer; // Total speedrun timer
   currentActNumber?: number; // Current act player is in (from log detection)
@@ -155,6 +160,7 @@ export interface TrackerData {
     showRewardsPanel?: boolean;
     showRegexBuilderPanel?: boolean;
     showItemCheckPanel?: boolean;
+    showTreePanel?: boolean;
     logFilePath?: string;
     logFileDetected?: boolean;
     autoCompleteQuests?: boolean;
@@ -225,6 +231,19 @@ declare global {
       loadNotesData: () => Promise<NotesData | null>;
       saveItemCheckData: (data: ItemCheckData) => Promise<{ success: boolean; error?: string }>;
       loadItemCheckData: () => Promise<ItemCheckData | null>;
+      // Passive Tree Window APIs
+      openTreeWindow: (passiveTreeData: any) => Promise<void>;
+      closeTreeWindow: () => Promise<void>;
+      minimizeTreeWindow: () => Promise<void>;
+      isTreeWindowOpen: () => Promise<boolean>;
+      sendTreeData: (passiveTreeData: any) => Promise<void>;
+      savePassiveTreeData: (data: any) => Promise<{ success: boolean; error?: string }>;
+      loadPassiveTreeData: () => Promise<any>;
+      loadTreeStructure: (version?: string) => Promise<any>;
+      loadGemLoadouts: () => Promise<GemProgressionWithLoadouts | null>;
+      switchTreeLoadout: (loadoutId: string) => Promise<any>;
+      onPassiveTreeData: (callback: (data: any) => void) => () => void;
+      onTreeWindowClosed: (callback: () => void) => () => void;
       checkForUpdates: () => Promise<void>;
       updateHotkey: (hotkey: string) => Promise<void>;
       openExternal: (url: string) => Promise<void>;

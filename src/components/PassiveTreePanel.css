@@ -1,0 +1,176 @@
+/* Passive Tree Panel Styles */
+
+.tree-panel-toggle {
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.tree-panel-toggle.settings-open {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.tree-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(139, 90, 43, 0.4);
+  border-radius: 6px;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.tree-toggle-btn:hover {
+  background: rgba(139, 90, 43, 0.2);
+  border-color: rgba(139, 90, 43, 0.6);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.tree-toggle-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.tree-panel-toggle.panel-open .tree-toggle-btn {
+  background: rgba(139, 90, 43, 0.3);
+  border-color: rgba(139, 90, 43, 0.8);
+  color: #ffd700;
+}
+
+.tree-panel-toggle.panel-open .tree-toggle-btn:hover {
+  background: rgba(139, 90, 43, 0.4);
+}
+
+.tree-toggle-btn .toggle-icon {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.tree-toggle-btn .toggle-text {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.tree-points-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  background: rgba(139, 90, 43, 0.5);
+  border-radius: 9px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #ffd700;
+}
+
+/* Info tooltip (shows on hover) */
+.tree-info-tooltip {
+  display: none;
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 8px;
+  padding: 8px 12px;
+  background: rgba(0, 0, 0, 0.95);
+  border: 1px solid rgba(139, 90, 43, 0.5);
+  border-radius: 6px;
+  white-space: nowrap;
+  z-index: 1000;
+}
+
+.tree-panel-toggle:hover .tree-info-tooltip {
+  display: block;
+}
+
+.tree-info-header {
+  display: flex;
+  gap: 6px;
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+
+.tree-info-header .class-name {
+  color: #ffd700;
+  font-weight: 600;
+}
+
+.tree-info-header .ascendancy-name {
+  color: #8b5a2b;
+}
+
+.tree-info-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 11px;
+  color: #888;
+}
+
+/* Theme support */
+[data-theme="amoled-crimson"] .tree-toggle-btn {
+  border-color: rgba(220, 38, 127, 0.3);
+}
+
+[data-theme="amoled-crimson"] .tree-panel-toggle.panel-open .tree-toggle-btn {
+  background: rgba(220, 38, 127, 0.2);
+  border-color: rgba(220, 38, 127, 0.6);
+}
+
+[data-theme="amoled-crimson"] .tree-points-badge {
+  background: rgba(220, 38, 127, 0.4);
+  color: #ff69b4;
+}
+
+[data-theme="amoled-crimson"] .tree-info-tooltip {
+  border-color: rgba(220, 38, 127, 0.5);
+}
+
+[data-theme="amoled-yellow"] .tree-toggle-btn {
+  border-color: rgba(255, 193, 7, 0.3);
+}
+
+[data-theme="amoled-yellow"] .tree-panel-toggle.panel-open .tree-toggle-btn {
+  background: rgba(255, 193, 7, 0.2);
+  border-color: rgba(255, 193, 7, 0.6);
+}
+
+[data-theme="amoled-yellow"] .tree-points-badge {
+  background: rgba(255, 193, 7, 0.4);
+  color: #ffc107;
+}
+
+[data-theme="amoled-yellow"] .tree-info-tooltip {
+  border-color: rgba(255, 193, 7, 0.5);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .tree-toggle-btn {
+    padding: 6px 8px;
+    font-size: 11px;
+    gap: 4px;
+  }
+  
+  .tree-toggle-btn .toggle-text {
+    font-size: 10px;
+  }
+  
+  .tree-points-badge {
+    min-width: 16px;
+    height: 16px;
+    font-size: 9px;
+  }
+}

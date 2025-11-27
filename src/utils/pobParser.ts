@@ -1,9 +1,11 @@
 import { GemProgression, GemSocketGroup, GemSlot, ItemData, ItemModifier } from "../types";
+import { PassiveTreeData, getClassName, getAscendancyName } from "../types/passiveTree";
 import skillGemsData from "../data/skill_gems.json";
 
 export interface PobLoadout {
   name: string;
   gemProgression: GemProgression;
+  passiveTree?: PassiveTreeData; // Each loadout can have different tree allocations
 }
 
 export interface PobParseResult {
@@ -12,6 +14,7 @@ export interface PobParseResult {
   loadouts?: PobLoadout[];
   hasMultipleLoadouts?: boolean;
   items?: ItemData[]; // Items from all loadouts
+  passiveTree?: PassiveTreeData; // Active/default passive tree allocations
 }
 
 function getStatRequirementFromData(gemName: string): 'str' | 'dex' | 'int' | null {
@@ -542,6 +545,10 @@ function extractLoadoutsFromXML(xmlString: string): PobLoadout[] {
   const xmlDoc = parser.parseFromString(xmlString, 'text/xml');
   const loadouts: PobLoadout[] = [];
   
+  // Extract all passive tree specs
+  const { trees: passiveTrees, activeIndex: activeTreeIndex } = extractAllPassiveTreesFromXML(xmlString);
+  console.log(`🌳 [POB] Found ${passiveTrees.length} passive tree specs, active index: ${activeTreeIndex}`);
+  
   // Check for SkillSet elements (these contain the actual loadouts like "lvl 1-5", "lvl 6-14")
   const skillSets = Array.from(xmlDoc.querySelectorAll('SkillSet[title]'));
   console.log(`Found ${skillSets.length} SkillSet elements with titles`);
@@ -561,9 +568,29 @@ function extractLoadoutsFromXML(xmlString: string): PobLoadout[] {
         // Parse gems specifically from this SkillSet
         const gemProgression = parseGemsFromSkillSet(skillSet);
         
+        // Associate with corresponding passive tree spec if available
+        // Try to match by index or by title
+        let passiveTree: PassiveTreeData | undefined;
+        if (passiveTrees.length > 0) {
+          // First try to find a tree with matching title
+          const matchingTree = passiveTrees.find(t => 
+            t.title?.toLowerCase() === skillSetName.toLowerCase()
+          );
+          if (matchingTree) {
+            passiveTree = matchingTree;
+          } else if (index < passiveTrees.length) {
+            // Fall back to index-based matching
+            passiveTree = passiveTrees[index];
+          } else {
+            // Use the last tree if we have more skillsets than trees
+            passiveTree = passiveTrees[passiveTrees.length - 1];
+          }
+        }
+        
         loadouts.push({
           name: skillSetName,
-          gemProgression: gemProgression
+          gemProgression: gemProgression,
+          passiveTree
         });
       } catch (error) {
         console.warn(`Failed to parse SkillSet "${skillSetName}":`, error);
@@ -593,9 +620,13 @@ function extractLoadoutsFromXML(xmlString: string): PobLoadout[] {
         // Create filtered gem progression based on loadout name/level
         const filteredGemProgression = filterGemsForLoadout(allGemProgression, specName, index);
         
+        // Use corresponding passive tree
+        const passiveTree = index < passiveTrees.length ? passiveTrees[index] : undefined;
+        
         loadouts.push({
           name: specName,
-          gemProgression: filteredGemProgression
+          gemProgression: filteredGemProgression,
+          passiveTree
         });
       } catch (error) {
         console.warn(`Failed to parse TreeSpec "${specName}":`, error);
@@ -614,9 +645,12 @@ function extractLoadoutsFromXML(xmlString: string): PobLoadout[] {
                        
       try {
         const gemProgression = parseGemsFromXML(xmlString, build);
+        const passiveTree = index < passiveTrees.length ? passiveTrees[index] : undefined;
+        
         loadouts.push({
           name: buildName,
-          gemProgression
+          gemProgression,
+          passiveTree
         });
       } catch (error) {
         console.warn(`Failed to parse build "${buildName}":`, error);
@@ -637,13 +671,32 @@ function extractLoadoutsFromXML(xmlString: string): PobLoadout[] {
       try {
         // For trees, we still parse gems from the whole document but associate with tree name
         const gemProgression = parseGemsFromXML(xmlString);
+        const passiveTree = index < passiveTrees.length ? passiveTrees[index] : undefined;
+        
         loadouts.push({
           name: treeName,
-          gemProgression
+          gemProgression,
+          passiveTree
         });
       } catch (error) {
         console.warn(`Failed to parse tree "${treeName}":`, error);
       }
+    });
+    return loadouts;
+  }
+  
+  // No multiple loadouts but we have passive trees - create loadouts from trees
+  if (passiveTrees.length > 1) {
+    console.log('Creating loadouts from passive tree specs');
+    const allGemProgression = parseGemsFromXML(xmlString);
+    
+    passiveTrees.forEach((tree, index) => {
+      const treeName = tree.title || `Build ${index + 1}`;
+      loadouts.push({
+        name: treeName,
+        gemProgression: allGemProgression, // Same gems for all (would need filtering in real scenario)
+        passiveTree: tree
+      });
     });
     return loadouts;
   }
@@ -857,6 +910,324 @@ function determineItemClass(itemType: string, slot: string): string {
   return 'Unknown';
 }
 
+/**
+ * Decode class information from a passive tree URL
+ * URL format: base64 encoded binary where byte 5 is classId, byte 6 contains ascendClassId
+ */
+function decodeClassFromTreeUrl(urlContent: string): { classId: number; ascendClassId: number } | null {
+  try {
+    // Extract the base64 part (after the last slash)
+    const base64Part = urlContent.split('/').pop() || urlContent;
+    // Convert URL-safe base64 to standard base64
+    const standardBase64 = base64Part.replace(/-/g, '+').replace(/_/g, '/');
+    
+    // Decode base64
+    const binaryStr = atob(standardBase64);
+    
+    if (binaryStr.length < 6) {
+      return null;
+    }
+    
+    // Version is first 4 bytes (big-endian)
+    const ver = binaryStr.charCodeAt(0) * 16777216 + 
+                binaryStr.charCodeAt(1) * 65536 + 
+                binaryStr.charCodeAt(2) * 256 + 
+                binaryStr.charCodeAt(3);
+    
+    // Class ID is byte 5 (index 4)
+    const classId = binaryStr.charCodeAt(4);
+    
+    // Ascendancy ID is byte 6 (index 5), only lower 2 bits for primary ascendancy
+    const ascendancyByte = ver >= 4 ? binaryStr.charCodeAt(5) : 0;
+    const ascendClassId = ascendancyByte & 3;
+    
+    console.log('🌳 [POB] Decoded from URL: classId=', classId, 'ascendClassId=', ascendClassId);
+    
+    return { classId, ascendClassId };
+  } catch (error) {
+    console.warn('Failed to decode class from tree URL:', error);
+    return null;
+  }
+}
+
+/**
+ * Parse a single Spec element into PassiveTreeData
+ */
+function parseSpecElement(spec: Element): PassiveTreeData | undefined {
+  try {
+    // Extract class and ascendancy IDs
+    // Debug: log all attributes on the Spec element
+    const attrs: string[] = [];
+    for (let i = 0; i < spec.attributes.length; i++) {
+      const attr = spec.attributes[i];
+      attrs.push(`${attr.name}="${attr.value}"`);
+    }
+    console.log('🌳 [POB] Spec attributes:', attrs.join(', '));
+    
+    let classId = parseInt(spec.getAttribute('classId') || '0', 10);
+    let ascendClassId = parseInt(spec.getAttribute('ascendClassId') || '0', 10);
+    
+    // If classId is 0 or missing, try to decode from URL element (legacy format)
+    if (classId === 0) {
+      const urlElement = spec.querySelector('URL');
+      if (urlElement && urlElement.textContent) {
+        console.log('🌳 [POB] classId is 0, trying to decode from URL element');
+        const decoded = decodeClassFromTreeUrl(urlElement.textContent.trim());
+        if (decoded) {
+          classId = decoded.classId;
+          ascendClassId = decoded.ascendClassId;
+        }
+      }
+    }
+    
+    console.log('🌳 [POB] Final classId:', classId, 'ascendClassId:', ascendClassId);
+    const secondaryAscendClassId = parseInt(spec.getAttribute('secondaryAscendClassId') || '0', 10);
+    const treeVersion = spec.getAttribute('treeVersion') || '0_3';
+    const title = spec.getAttribute('title') || undefined;
+
+    // Extract allocated node IDs
+    const nodesAttr = spec.getAttribute('nodes') || '';
+    const allocatedNodes = nodesAttr
+      .split(',')
+      .map(s => s.trim())
+      .filter(s => s.length > 0)
+      .map(s => parseInt(s, 10))
+      .filter(n => !isNaN(n));
+
+    // Extract mastery selections: format is {nodeId,effectId},{nodeId,effectId},...
+    const masteryEffectsAttr = spec.getAttribute('masteryEffects') || '';
+    const masterySelections = new Map<number, number>();
+    const masteryPattern = /\{(\d+),(\d+)\}/g;
+    let masteryMatch;
+    while ((masteryMatch = masteryPattern.exec(masteryEffectsAttr)) !== null) {
+      const nodeId = parseInt(masteryMatch[1], 10);
+      const effectId = parseInt(masteryMatch[2], 10);
+      if (!isNaN(nodeId) && !isNaN(effectId)) {
+        masterySelections.set(nodeId, effectId);
+      }
+    }
+
+    // Extract jewel socket allocations
+    const jewelSockets = new Map<number, number>();
+    const socketsElement = spec.querySelector('Sockets');
+    if (socketsElement) {
+      const socketElements = socketsElement.querySelectorAll('Socket');
+      socketElements.forEach(socket => {
+        const nodeId = parseInt(socket.getAttribute('nodeId') || '0', 10);
+        const itemId = parseInt(socket.getAttribute('itemId') || '0', 10);
+        if (nodeId > 0 && itemId > 0) {
+          jewelSockets.set(nodeId, itemId);
+        }
+      });
+    }
+
+    return {
+      classId,
+      className: getClassName(classId),
+      ascendClassId,
+      ascendClassName: getAscendancyName(classId, ascendClassId),
+      secondaryAscendClassId: secondaryAscendClassId > 0 ? secondaryAscendClassId : undefined,
+      secondaryAscendClassName: secondaryAscendClassId > 0 
+        ? getAscendancyName(classId, secondaryAscendClassId) 
+        : undefined,
+      allocatedNodes,
+      masterySelections,
+      treeVersion,
+      jewelSockets: jewelSockets.size > 0 ? jewelSockets : undefined,
+      title,
+    };
+  } catch (error) {
+    console.error('❌ [POB] Error parsing Spec element:', error);
+    return undefined;
+  }
+}
+
+/**
+ * Extract ALL passive tree specs from POB XML
+ * Returns an array of PassiveTreeData, one for each spec/loadout
+ */
+function extractAllPassiveTreesFromXML(xmlString: string): { trees: PassiveTreeData[], activeIndex: number } {
+  console.log('🌳 [POB] Extracting all passive tree specs...');
+  const trees: PassiveTreeData[] = [];
+  let activeIndex = 0;
+  
+  try {
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(xmlString, 'text/xml');
+    
+    // Check for parsing errors
+    const parseError = xmlDoc.querySelector('parsererror');
+    if (parseError) {
+      console.error('❌ [POB] XML parsing error:', parseError.textContent);
+      return { trees: [], activeIndex: 0 };
+    }
+
+    // Find the Tree element
+    const treeElement = xmlDoc.querySelector('Tree');
+    if (!treeElement) {
+      console.log('⚠️ [POB] No Tree element found in XML');
+      return { trees: [], activeIndex: 0 };
+    }
+
+    // Get the active spec (default to 1 if not specified)
+    activeIndex = parseInt(treeElement.getAttribute('activeSpec') || '1', 10) - 1; // Convert to 0-indexed
+    console.log('🌳 [POB] Active spec index:', activeIndex);
+
+    // Find all Spec elements
+    const specs = treeElement.querySelectorAll('Spec');
+    if (specs.length === 0) {
+      console.log('⚠️ [POB] No Spec elements found in Tree');
+      return { trees: [], activeIndex: 0 };
+    }
+
+    console.log(`🌳 [POB] Found ${specs.length} Spec elements`);
+
+    // Parse each spec
+    specs.forEach((spec, index) => {
+      const treeData = parseSpecElement(spec);
+      if (treeData) {
+        console.log(`🌳 [POB] Spec ${index}: ${treeData.className} / ${treeData.ascendClassName} - ${treeData.allocatedNodes.length} nodes - "${treeData.title || 'untitled'}"`);
+        trees.push(treeData);
+      }
+    });
+
+    return { trees, activeIndex: Math.min(activeIndex, trees.length - 1) };
+  } catch (error) {
+    console.error('❌ [POB] Error extracting passive trees:', error);
+    return { trees: [], activeIndex: 0 };
+  }
+}
+
+/**
+ * Extract passive tree data from POB XML
+ * Parses the <Tree> section to get allocated nodes, class, ascendancy, and mastery selections
+ */
+function extractPassiveTreeFromXML(xmlString: string): PassiveTreeData | undefined {
+  console.log('🌳 [POB] Starting passive tree extraction...');
+  try {
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(xmlString, 'text/xml');
+    
+    // Check for parsing errors
+    const parseError = xmlDoc.querySelector('parsererror');
+    if (parseError) {
+      console.error('❌ [POB] XML parsing error:', parseError.textContent);
+      return undefined;
+    }
+
+    // Find the Tree element
+    const treeElement = xmlDoc.querySelector('Tree');
+    if (!treeElement) {
+      console.log('⚠️ [POB] No Tree element found in XML');
+      return undefined;
+    }
+
+    // Get the active spec (default to 1 if not specified)
+    const activeSpec = parseInt(treeElement.getAttribute('activeSpec') || '1', 10);
+    console.log('🌳 [POB] Active spec:', activeSpec);
+
+    // Find all Spec elements
+    const specs = treeElement.querySelectorAll('Spec');
+    if (specs.length === 0) {
+      console.log('⚠️ [POB] No Spec elements found in Tree');
+      return undefined;
+    }
+
+    // Get the active spec (1-indexed in POB)
+    const spec = specs[activeSpec - 1] || specs[0];
+    
+    // Extract class and ascendancy IDs
+    let classId = parseInt(spec.getAttribute('classId') || '0', 10);
+    let ascendClassId = parseInt(spec.getAttribute('ascendClassId') || '0', 10);
+    
+    // If classId is 0, try to decode from URL element (legacy format)
+    if (classId === 0) {
+      const urlElement = spec.querySelector('URL');
+      if (urlElement && urlElement.textContent) {
+        console.log('🌳 [POB] classId is 0, trying to decode from URL');
+        const decoded = decodeClassFromTreeUrl(urlElement.textContent.trim());
+        if (decoded) {
+          classId = decoded.classId;
+          ascendClassId = decoded.ascendClassId;
+        }
+      }
+    }
+    
+    const secondaryAscendClassId = parseInt(spec.getAttribute('secondaryAscendClassId') || '0', 10);
+    const treeVersion = spec.getAttribute('treeVersion') || '0_3';
+
+    // Extract allocated node IDs
+    const nodesAttr = spec.getAttribute('nodes') || '';
+    const allocatedNodes = nodesAttr
+      .split(',')
+      .map(s => s.trim())
+      .filter(s => s.length > 0)
+      .map(s => parseInt(s, 10))
+      .filter(n => !isNaN(n));
+
+    console.log('🌳 [POB] Allocated nodes count:', allocatedNodes.length);
+
+    // Extract mastery selections: format is {nodeId,effectId},{nodeId,effectId},...
+    const masteryEffectsAttr = spec.getAttribute('masteryEffects') || '';
+    const masterySelections = new Map<number, number>();
+    const masteryPattern = /\{(\d+),(\d+)\}/g;
+    let masteryMatch;
+    while ((masteryMatch = masteryPattern.exec(masteryEffectsAttr)) !== null) {
+      const nodeId = parseInt(masteryMatch[1], 10);
+      const effectId = parseInt(masteryMatch[2], 10);
+      if (!isNaN(nodeId) && !isNaN(effectId)) {
+        masterySelections.set(nodeId, effectId);
+      }
+    }
+
+    console.log('🌳 [POB] Mastery selections count:', masterySelections.size);
+
+    // Extract jewel socket allocations
+    const jewelSockets = new Map<number, number>();
+    const socketsElement = spec.querySelector('Sockets');
+    if (socketsElement) {
+      const socketElements = socketsElement.querySelectorAll('Socket');
+      socketElements.forEach(socket => {
+        const nodeId = parseInt(socket.getAttribute('nodeId') || '0', 10);
+        const itemId = parseInt(socket.getAttribute('itemId') || '0', 10);
+        if (nodeId > 0 && itemId > 0) {
+          jewelSockets.set(nodeId, itemId);
+        }
+      });
+    }
+
+    console.log('🌳 [POB] Jewel sockets count:', jewelSockets.size);
+
+    const result: PassiveTreeData = {
+      classId,
+      className: getClassName(classId),
+      ascendClassId,
+      ascendClassName: getAscendancyName(classId, ascendClassId),
+      secondaryAscendClassId: secondaryAscendClassId > 0 ? secondaryAscendClassId : undefined,
+      secondaryAscendClassName: secondaryAscendClassId > 0 
+        ? getAscendancyName(classId, secondaryAscendClassId) 
+        : undefined,
+      allocatedNodes,
+      masterySelections,
+      treeVersion,
+      jewelSockets: jewelSockets.size > 0 ? jewelSockets : undefined,
+    };
+
+    console.log('🌳 [POB] Passive tree extraction complete:', {
+      class: result.className,
+      ascendancy: result.ascendClassName,
+      allocatedNodes: result.allocatedNodes.length,
+      masteryCount: result.masterySelections.size,
+      treeVersion: result.treeVersion,
+    });
+
+    return result;
+  } catch (error) {
+    console.error('❌ [POB] Error extracting passive tree:', error);
+    return undefined;
+  }
+}
+
 // Main function to parse PoB code - returns both gems and notes
 export async function parsePathOfBuildingCodeWithNotes(pobCode: string): Promise<PobParseResult> {
   try {
@@ -891,6 +1262,9 @@ export async function parsePathOfBuildingCodeWithNotes(pobCode: string): Promise
     // Extract items from XML (all loadouts)
     const items = extractItemsFromXML(xmlString);
 
+    // Extract passive tree data from XML
+    const passiveTree = extractPassiveTreeFromXML(xmlString);
+
     console.log('🎯 [POB] Parse complete - Final result:', {
       hasGemProgression: !!gemProgression,
       socketGroups: gemProgression?.socketGroups?.length || 0,
@@ -900,7 +1274,9 @@ export async function parsePathOfBuildingCodeWithNotes(pobCode: string): Promise
       hasLoadouts: loadouts.length > 0,
       loadoutsCount: loadouts.length,
       hasItems: items.length > 0,
-      itemsCount: items.length
+      itemsCount: items.length,
+      hasPassiveTree: !!passiveTree,
+      allocatedNodes: passiveTree?.allocatedNodes?.length || 0,
     });
 
     return {
@@ -908,7 +1284,8 @@ export async function parsePathOfBuildingCodeWithNotes(pobCode: string): Promise
       notes,
       loadouts: loadouts.length > 0 ? loadouts : undefined,
       hasMultipleLoadouts,
-      items: items.length > 0 ? items : undefined
+      items: items.length > 0 ? items : undefined,
+      passiveTree,
     };
   } catch (error) {
     console.error('Error parsing PoB code:', error);

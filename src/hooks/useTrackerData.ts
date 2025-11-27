@@ -108,6 +108,25 @@ export const useTrackerData = () => {
           savedData.itemCheckData = savedItemCheckData;
         }
 
+        const savedPassiveTreeData = await window.electronAPI.loadPassiveTreeData();
+        if (savedPassiveTreeData && savedData) {
+          console.log('🔍 [HOOK] Loading separate passive tree data:', {
+            hasPassiveTreeData: !!savedPassiveTreeData,
+            allocatedNodes: savedPassiveTreeData.allocatedNodes?.length || 0,
+            className: savedPassiveTreeData.className
+          });
+          
+          // Convert serialized arrays back to Maps
+          const restoredTreeData = {
+            ...savedPassiveTreeData,
+            masterySelections: new Map(savedPassiveTreeData.masterySelections || []),
+            jewelSockets: savedPassiveTreeData.jewelSockets 
+              ? new Map(savedPassiveTreeData.jewelSockets) 
+              : undefined,
+          };
+          savedData.passiveTreeData = restoredTreeData;
+        }
+
         if (savedData) {
           console.log('🔍 [HOOK] Loading saved data, gem progression info:', {
             hasSavedGemProgression: !!savedData.gemProgression,
@@ -127,6 +146,7 @@ export const useTrackerData = () => {
               gemProgression: savedData.gemProgression,
               gemLoadouts: savedData.gemLoadouts,
               notesData: savedData.notesData,
+              passiveTreeData: savedData.passiveTreeData,
             };
             setData(freshData);
           } else {
@@ -153,6 +173,7 @@ export const useTrackerData = () => {
                 ? migrateGemProgression(savedData.gemProgression)
                 : initialData.gemProgression,
               notesData: mergedData.notesData || savedData.notesData || initialData.notesData,
+              passiveTreeData: savedData.passiveTreeData,
             };
             setData(updatedData);
           }
@@ -178,7 +199,9 @@ export const useTrackerData = () => {
         stackTrace: new Error().stack?.split('\n').slice(1, 3).join(' -> ') || 'no stack'
       });
       try {
-        await window.electronAPI.saveQuestData(newData);
+        // Exclude passiveTreeData from quest-data.json since it's saved separately
+        const { passiveTreeData, ...dataWithoutTree } = newData;
+        await window.electronAPI.saveQuestData(dataWithoutTree as TrackerData);
         
         // Save gem data separately if it exists
         if (newData.gemProgression || newData.gemLoadouts) {
@@ -258,8 +281,8 @@ export const useTrackerData = () => {
       ...data,
       acts: data.acts.map((act) => ({
         ...act,
-        quests: act.steps.map((quest) => ({
-          ...quest,
+        steps: act.steps.map((step) => ({
+          ...step,
           completed: false,
         })),
       })),
@@ -326,8 +349,62 @@ export const useTrackerData = () => {
     saveData(newData);
   }, [data, saveData]);
 
+  // Move these before switchLoadout since switchLoadout depends on updatePassiveTreeData
+  const updatePassiveTreeData = useCallback(async (passiveTreeData: import("../types/passiveTree").PassiveTreeData) => {
+    // Save passive tree data separately
+    try {
+      // Convert Maps to serializable format for storage
+      const serializableData = {
+        ...passiveTreeData,
+        masterySelections: Array.from(passiveTreeData.masterySelections.entries()),
+        jewelSockets: passiveTreeData.jewelSockets 
+          ? Array.from(passiveTreeData.jewelSockets.entries()) 
+          : undefined,
+      };
+      
+      await window.electronAPI.savePassiveTreeData(serializableData);
+
+      // Update local state
+      setData(prev => ({
+        ...prev,
+        passiveTreeData,
+      }));
+      
+      console.log('🌳 [HOOK] Passive tree data saved:', {
+        className: passiveTreeData.className,
+        allocatedNodes: passiveTreeData.allocatedNodes.length,
+      });
+    } catch (error) {
+      console.error('Failed to save passive tree data separately:', error);
+    }
+  }, []);
+
+  const clearPassiveTreeData = useCallback(async () => {
+    try {
+      // Save null/empty data to clear the separate file
+      await window.electronAPI.savePassiveTreeData(null);
+
+      // Update local state and also save quest data without passiveTreeData
+      setData(prev => {
+        const updatedData = {
+          ...prev,
+          passiveTreeData: undefined,
+        };
+        // Also update quest-data.json to remove passiveTreeData
+        window.electronAPI.saveQuestData(updatedData).catch(err => 
+          console.error('Failed to save quest data after clearing tree:', err)
+        );
+        return updatedData;
+      });
+      
+      console.log('🌳 [HOOK] Passive tree data cleared from both files');
+    } catch (error) {
+      console.error('Failed to clear passive tree data:', error);
+    }
+  }, []);
+
   // Switch active loadout
-  const switchLoadout = useCallback((loadoutId: string) => {
+  const switchLoadout = useCallback(async (loadoutId: string) => {
     if (!data.gemLoadouts) return;
 
     const selectedLoadout = data.gemLoadouts.loadouts.find(l => l.id === loadoutId);
@@ -340,9 +417,17 @@ export const useTrackerData = () => {
         ...data.gemLoadouts,
         activeLoadoutId: loadoutId,
       },
+      // Update passive tree data if the loadout has one
+      passiveTreeData: selectedLoadout.passiveTree || data.passiveTreeData,
     };
+    
+    // Save the new passive tree data separately if loadout has one
+    if (selectedLoadout.passiveTree) {
+      await updatePassiveTreeData(selectedLoadout.passiveTree);
+    }
+    
     saveData(newData);
-  }, [data, saveData]);
+  }, [data, saveData, updatePassiveTreeData]);
 
   const toggleGem = useCallback((gemId: string) => {
     if (!data.gemProgression) return;
@@ -442,18 +527,24 @@ export const useTrackerData = () => {
       hasNotes: !!pobResult.notes,
       hasItems: !!pobResult.items,
       itemsCount: pobResult.items?.length || 0,
+      hasPassiveTree: !!pobResult.passiveTree,
+      allocatedNodes: pobResult.passiveTree?.allocatedNodes?.length || 0,
     });
 
     let newData = { ...data };
 
     // Handle gems and loadouts properly
     if (pobResult.hasMultipleLoadouts && pobResult.loadouts && pobResult.loadouts.length > 1) {
-      // Use the existing loadout logic
+      // Use the existing loadout logic - include passiveTree from each loadout
       const gemLoadouts: GemLoadout[] = pobResult.loadouts.map((pobLoadout, index) => ({
         id: `loadout-${index}`,
         name: pobLoadout.name,
         gemProgression: migrateGemProgression(pobLoadout.gemProgression),
+        passiveTree: pobLoadout.passiveTree, // Include passive tree for this loadout
       }));
+
+      // Use passive tree from first loadout or the default passiveTree
+      const firstLoadoutTree = gemLoadouts[0]?.passiveTree || pobResult.passiveTree;
 
       newData = {
         ...newData,
@@ -463,6 +554,7 @@ export const useTrackerData = () => {
           activeLoadoutId: gemLoadouts[0]?.id || '',
           lastImported: new Date().toISOString(),
         },
+        passiveTreeData: firstLoadoutTree, // Set initial passive tree from first loadout
       };
     } else if (pobResult.gemProgression) {
       // Single loadout - clear loadouts
@@ -488,10 +580,40 @@ export const useTrackerData = () => {
       });
     }
 
+    // Handle passive tree data - only set if we don't already have loadout-specific trees
+    // When there are multiple loadouts, the tree data is already set from first loadout above
+    if (!newData.gemLoadouts && pobResult.passiveTree) {
+      // Single loadout case - use the default passiveTree
+      newData = {
+        ...newData,
+        passiveTreeData: pobResult.passiveTree,
+      };
+      console.log('🌳 [HOOK] Prepared passive tree data (single loadout):', {
+        className: pobResult.passiveTree.className,
+        ascendancy: pobResult.passiveTree.ascendClassName,
+        allocatedNodes: pobResult.passiveTree.allocatedNodes.length,
+        masteries: pobResult.passiveTree.masterySelections.size,
+      });
+    } else if (!newData.gemLoadouts && !pobResult.passiveTree) {
+      // Single loadout with no tree data - clear old data
+      newData = {
+        ...newData,
+        passiveTreeData: undefined,
+      };
+      console.log('🌳 [HOOK] Clearing passive tree data (new import has none)');
+    } else if (newData.gemLoadouts) {
+      // Multiple loadouts - tree data already set from first loadout
+      console.log('🌳 [HOOK] Using loadout-specific passive tree data:', {
+        className: newData.passiveTreeData?.className,
+        allocatedNodes: newData.passiveTreeData?.allocatedNodes?.length || 0,
+      });
+    }
+
     console.log('💾 [HOOK] Saving gem data through saveData:', {
       hasGemProgression: !!newData.gemProgression,
       hasGemLoadouts: !!newData.gemLoadouts,
       hasItemCheckData: !!newData.itemCheckData,
+      hasPassiveTreeData: !!newData.passiveTreeData,
     });
 
     // Save gem data first
@@ -515,8 +637,16 @@ export const useTrackerData = () => {
       await updateItemCheckData(newData.itemCheckData);
     }
 
+    // Handle passive tree data separately to ensure it's saved or cleared
+    if (newData.passiveTreeData) {
+      await updatePassiveTreeData(newData.passiveTreeData);
+    } else {
+      // Clear the tree data file if new import has no tree data
+      await clearPassiveTreeData();
+    }
+
     console.log('✅ [HOOK] Complete POB import finished');
-  }, [data, saveData, updateNotesData, updateItemCheckData]);
+  }, [data, saveData, updateNotesData, updateItemCheckData, updatePassiveTreeData, clearPassiveTreeData]);
 
   // Campaign Guide Management
   const selectCampaignGuide = useCallback((guideId: string) => {
@@ -949,5 +1079,8 @@ export const useTrackerData = () => {
     updateCurrentAct,
     resetTimers,
     updateGlobalTimer,
+    passiveTreeData: data.passiveTreeData,
+    updatePassiveTreeData,
+    clearPassiveTreeData,
   };
 };

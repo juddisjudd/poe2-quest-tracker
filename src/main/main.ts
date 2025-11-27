@@ -22,6 +22,7 @@ log.transports.console.level = "info";
 autoUpdater.logger = log;
 
 let mainWindow: BrowserWindow | null = null;
+let treeWindow: BrowserWindow | null = null; // Passive tree viewer window
 let tray: Tray | null = null;
 let currentHotkey = "F9";
 
@@ -54,6 +55,11 @@ const getItemCheckDataPath = () => {
   return path.join(userDataPath, "item-check-data.json");
 };
 
+const getPassiveTreeDataPath = () => {
+  const userDataPath = app.getPath("userData");
+  return path.join(userDataPath, "passive-tree-data.json");
+};
+
 const registerHotkey = (hotkey: string): boolean => {
   globalShortcut.unregisterAll();
 
@@ -75,14 +81,23 @@ const registerHotkey = (hotkey: string): boolean => {
 
 const createWindow = (): void => {
   const primaryDisplay = screen.getPrimaryDisplay();
-  const { width } = primaryDisplay.workAreaSize;
+  const { width, height } = primaryDisplay.workAreaSize;
   const iconPath = path.join(__dirname, "../../assets/icon.png");
+  
+  // Calculate window position, ensuring it's on-screen
+  const windowWidth = 550;
+  const windowHeight = 817;
+  const xPos = Math.max(0, Math.min(width - windowWidth - 20, width - 570));
+  const yPos = 20;
+  
+  console.log("Primary display workArea:", { width, height });
+  console.log("Window position:", { x: xPos, y: yPos, width: windowWidth, height: windowHeight });
 
   mainWindow = new BrowserWindow({
-    width: 550,
-    height: 817,
-    x: width - 570,
-    y: 20,
+    width: windowWidth,
+    height: windowHeight,
+    x: xPos,
+    y: yPos,
     frame: false,
     transparent: true,
     alwaysOnTop: false,
@@ -142,6 +157,9 @@ const createWindow = (): void => {
     setupOverlay();
     mainWindow?.show();
     console.log("Window ready-to-show event fired");
+    const bounds = mainWindow?.getBounds();
+    console.log("Window bounds:", bounds);
+    console.log("Window visible:", mainWindow?.isVisible());
   });
 
   // Force show window after 2 seconds if ready-to-show hasn't fired
@@ -163,6 +181,89 @@ const createWindow = (): void => {
   setInterval(() => {
     reinforceOverlaySettings();
   }, 60 * 1000);
+};
+
+// Create a detached window for the passive tree viewer
+const createTreeWindow = (passiveTreeData?: any): void => {
+  // If tree window already exists, just focus it
+  if (treeWindow && !treeWindow.isDestroyed()) {
+    treeWindow.focus();
+    // Send updated tree data if provided
+    if (passiveTreeData) {
+      treeWindow.webContents.send('passive-tree-data', passiveTreeData);
+    }
+    return;
+  }
+
+  const primaryDisplay = screen.getPrimaryDisplay();
+  const { width, height } = primaryDisplay.workAreaSize;
+  const iconPath = path.join(__dirname, "../../assets/icon.png");
+
+  treeWindow = new BrowserWindow({
+    width: Math.min(1200, width - 100),
+    height: Math.min(900, height - 100),
+    x: Math.floor((width - Math.min(1200, width - 100)) / 2),
+    y: Math.floor((height - Math.min(900, height - 100)) / 2),
+    frame: false,
+    transparent: true,
+    alwaysOnTop: false,
+    skipTaskbar: false,
+    resizable: true,
+    show: false,
+    icon: iconPath,
+    title: "Passive Tree Viewer - Exile Compass",
+    titleBarStyle: "hidden",
+    hasShadow: false,
+    thickFrame: false,
+    webPreferences: {
+      nodeIntegration: false,
+      contextIsolation: true,
+      preload: path.join(__dirname, "preload.js"),
+      backgroundThrottling: false,
+    },
+  });
+
+  const isDevelopment = isDev();
+
+  if (isDevelopment) {
+    // Load a special route for the tree viewer
+    treeWindow.loadURL("http://localhost:3000/#/passive-tree");
+  } else {
+    const rendererPath = path.join(__dirname, "../renderer/index.html");
+    const url = formatUrl({
+      pathname: rendererPath,
+      protocol: "file",
+      slashes: true,
+      hash: "/passive-tree",
+    });
+    treeWindow.loadURL(url);
+  }
+
+  treeWindow.on("ready-to-show", () => {
+    treeWindow?.show();
+    // Send initial tree data if provided
+    if (passiveTreeData) {
+      treeWindow?.webContents.send('passive-tree-data', passiveTreeData);
+    }
+    log.info("Tree window ready-to-show event fired");
+  });
+
+  treeWindow.on("closed", () => {
+    treeWindow = null;
+    // Notify main window that tree window was closed
+    mainWindow?.webContents.send('tree-window-closed');
+    log.info("Tree window closed");
+  });
+
+  log.info("Passive tree window created");
+};
+
+// Close the tree window if it exists
+const closeTreeWindow = (): void => {
+  if (treeWindow && !treeWindow.isDestroyed()) {
+    treeWindow.close();
+    treeWindow = null;
+  }
 };
 
 const createTray = (): void => {
@@ -590,6 +691,205 @@ ipcMain.handle("load-item-check-data", async () => {
     return data;
   } catch (error) {
     console.error("Failed to load item check data:", error);
+    return null;
+  }
+});
+
+// Passive Tree Window IPC handlers
+ipcMain.handle("open-tree-window", async (_, passiveTreeData: any) => {
+  try {
+    createTreeWindow(passiveTreeData);
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to open tree window:", error);
+    return { success: false, error: (error as Error).message };
+  }
+});
+
+ipcMain.handle("close-tree-window", async () => {
+  try {
+    closeTreeWindow();
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to close tree window:", error);
+    return { success: false, error: (error as Error).message };
+  }
+});
+
+ipcMain.handle("minimize-tree-window", async () => {
+  try {
+    if (treeWindow && !treeWindow.isDestroyed()) {
+      treeWindow.minimize();
+    }
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to minimize tree window:", error);
+    return { success: false, error: (error as Error).message };
+  }
+});
+
+ipcMain.handle("is-tree-window-open", async () => {
+  return treeWindow !== null && !treeWindow.isDestroyed();
+});
+
+ipcMain.handle("send-tree-data", async (_, passiveTreeData: any) => {
+  try {
+    if (treeWindow && !treeWindow.isDestroyed()) {
+      treeWindow.webContents.send('passive-tree-data', passiveTreeData);
+      return { success: true };
+    }
+    return { success: false, error: "Tree window not open" };
+  } catch (error) {
+    console.error("Failed to send tree data:", error);
+    return { success: false, error: (error as Error).message };
+  }
+});
+
+ipcMain.handle("save-passive-tree-data", async (_, data: any) => {
+  try {
+    const dataPath = getPassiveTreeDataPath();
+
+    // If data is null/undefined, delete the file to clear tree data
+    if (data === null || data === undefined) {
+      if (fs.existsSync(dataPath)) {
+        fs.unlinkSync(dataPath);
+        console.log("Passive tree data file deleted:", dataPath);
+      }
+      return { success: true };
+    }
+
+    const dataDir = path.dirname(dataPath);
+
+    if (!fs.existsSync(dataDir)) {
+      fs.mkdirSync(dataDir, { recursive: true });
+    }
+
+    fs.writeFileSync(dataPath, JSON.stringify(data, null, 2), "utf8");
+    console.log("Passive tree data saved successfully to:", dataPath);
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to save passive tree data:", error);
+    return { success: false, error: (error as Error).message };
+  }
+});
+
+ipcMain.handle("load-passive-tree-data", async () => {
+  try {
+    const dataPath = getPassiveTreeDataPath();
+    if (!fs.existsSync(dataPath)) {
+      console.log("No saved passive tree data found");
+      return null;
+    }
+
+    const rawData = fs.readFileSync(dataPath, "utf8");
+    const data = JSON.parse(rawData);
+    console.log("Passive tree data loaded successfully from:", dataPath);
+    return data;
+  } catch (error) {
+    console.error("Failed to load passive tree data:", error);
+    return null;
+  }
+});
+
+// Load tree structure JSON (the full tree data from PathOfBuilding)
+ipcMain.handle("load-tree-structure", async (_, version: string = '0_3') => {
+  try {
+    // Try multiple locations for the tree data
+    const possiblePaths = [
+      // Production: bundled with app
+      path.join(__dirname, '..', 'data', 'tree', `tree-${version}.min.json`),
+      path.join(__dirname, '..', '..', 'data', 'tree', `tree-${version}.min.json`),
+      // Development: project root
+      path.join(process.cwd(), 'data', 'tree', `tree-${version}.min.json`),
+      // Also try non-minified version
+      path.join(process.cwd(), 'data', 'tree', `tree-${version}.json`),
+    ];
+
+    for (const treePath of possiblePaths) {
+      if (fs.existsSync(treePath)) {
+        console.log(`Loading tree structure from: ${treePath}`);
+        const rawData = fs.readFileSync(treePath, "utf8");
+        const data = JSON.parse(rawData);
+        console.log(`Tree structure loaded: ${Object.keys(data.nodes || {}).length} nodes`);
+        return data;
+      }
+    }
+
+    console.warn(`Tree structure file not found for version ${version}`);
+    return null;
+  } catch (error) {
+    console.error("Failed to load tree structure:", error);
+    return null;
+  }
+});
+
+// Load gem loadouts for the tree window
+ipcMain.handle("load-gem-loadouts", async () => {
+  try {
+    const dataPath = getGemDataPath();
+    if (!fs.existsSync(dataPath)) {
+      console.log("No gem data found for loadouts");
+      return null;
+    }
+
+    const rawData = fs.readFileSync(dataPath, "utf8");
+    const data = JSON.parse(rawData);
+    
+    if (data.gemLoadouts) {
+      console.log("Gem loadouts loaded:", data.gemLoadouts.loadouts?.length || 0, "loadouts");
+      return data.gemLoadouts;
+    }
+    
+    return null;
+  } catch (error) {
+    console.error("Failed to load gem loadouts:", error);
+    return null;
+  }
+});
+
+// Switch to a different loadout's passive tree
+ipcMain.handle("switch-tree-loadout", async (_, loadoutId: string) => {
+  try {
+    const dataPath = getGemDataPath();
+    if (!fs.existsSync(dataPath)) {
+      console.log("No gem data found");
+      return null;
+    }
+
+    const rawData = fs.readFileSync(dataPath, "utf8");
+    const data = JSON.parse(rawData);
+    
+    if (!data.gemLoadouts) {
+      console.log("No loadouts found");
+      return null;
+    }
+    
+    const loadout = data.gemLoadouts.loadouts?.find((l: any) => l.id === loadoutId);
+    if (!loadout) {
+      console.log("Loadout not found:", loadoutId);
+      return null;
+    }
+    
+    if (!loadout.passiveTree) {
+      console.log("Loadout has no passive tree:", loadoutId);
+      return null;
+    }
+    
+    // Update the active loadout
+    data.gemLoadouts.activeLoadoutId = loadoutId;
+    
+    // Save the updated gem data
+    fs.writeFileSync(dataPath, JSON.stringify(data, null, 2), "utf8");
+    
+    // Also save the passive tree data separately
+    const treeDataPath = getPassiveTreeDataPath();
+    fs.writeFileSync(treeDataPath, JSON.stringify(loadout.passiveTree, null, 2), "utf8");
+    
+    console.log("Switched to loadout:", loadout.name, "with", loadout.passiveTree.allocatedNodes?.length || 0, "nodes");
+    
+    return loadout.passiveTree;
+  } catch (error) {
+    console.error("Failed to switch tree loadout:", error);
     return null;
   }
 });

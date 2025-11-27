@@ -1,0 +1,329 @@
+.passive-tree-window {
+  width: 100vw;
+  height: 100vh;
+  background: #000000;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: #ffffff;
+}
+
+/* Header */
+.tree-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  background: rgba(0, 0, 0, 0.6);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  -webkit-app-region: drag;
+  z-index: 10;
+}
+
+.tree-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.tree-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.tree-class {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.tree-points {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+  padding: 2px 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+
+/* Loadout Selector */
+.tree-loadout-selector {
+  margin-left: 12px;
+  -webkit-app-region: no-drag;
+}
+
+.loadout-dropdown {
+  padding: 4px 8px;
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  color: #ffffff;
+  font-size: 13px;
+  cursor: pointer;
+  min-width: 120px;
+  outline: none;
+  transition: all 0.15s ease;
+}
+
+.loadout-dropdown:hover {
+  background: rgba(0, 0, 0, 0.9);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.loadout-dropdown:focus {
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.loadout-dropdown option {
+  background: #000000;
+  color: #ffffff;
+  padding: 4px 8px;
+}
+
+.loadout-dropdown option:disabled {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.tree-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  -webkit-app-region: no-drag;
+}
+
+.zoom-level {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  min-width: 40px;
+  text-align: right;
+}
+
+.zoom-btn, .reset-btn {
+  padding: 4px 10px;
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.15s ease;
+}
+
+.zoom-btn:hover, .reset-btn:hover {
+  background: rgba(0, 0, 0, 0.9);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.close-btn {
+  padding: 4px 12px;
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+  transition: all 0.15s ease;
+  margin-left: 4px;
+}
+
+.close-btn:hover {
+  background: rgba(255, 50, 50, 0.3);
+  border-color: rgba(255, 50, 50, 0.5);
+}
+
+.minimize-btn {
+  padding: 4px 12px;
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+  transition: all 0.15s ease;
+  margin-left: 8px;
+}
+
+.minimize-btn:hover {
+  background: rgba(0, 0, 0, 0.9);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Canvas Container */
+.tree-canvas-container {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  cursor: grab;
+}
+
+.tree-canvas-container:active {
+  cursor: grabbing;
+}
+
+.tree-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Node Tooltip */
+.node-tooltip {
+  position: fixed;
+  top: 60px;
+  right: 16px;
+  background: rgba(0, 0, 0, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 12px 16px;
+  max-width: 300px;
+  z-index: 100;
+  pointer-events: none;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.tooltip-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 6px;
+}
+
+.tooltip-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.tooltip-stat {
+  font-size: 12px;
+  color: #4ade80;
+  line-height: 1.4;
+}
+
+.tooltip-ascendancy {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+  font-style: italic;
+  margin-bottom: 6px;
+}
+
+.tooltip-allocated {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+  padding-top: 6px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Legend */
+.tree-legend {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  display: flex;
+  gap: 16px;
+  background: rgba(0, 0, 0, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  padding: 8px 16px;
+  z-index: 10;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid;
+}
+
+.legend-dot.allocated {
+  background: #a08020;
+  border-color: #ffd700;
+}
+
+.legend-dot.notable {
+  background: #333344;
+  border-color: rgba(255, 255, 255, 0.4);
+  width: 14px;
+  height: 14px;
+}
+
+.legend-dot.keystone {
+  background: #333344;
+  border-color: rgba(255, 255, 255, 0.4);
+  width: 16px;
+  height: 16px;
+}
+
+/* Loading State */
+.tree-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 16px;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.tree-loading p {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 14px;
+}
+
+/* Error State */
+.tree-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 16px;
+}
+
+.tree-error p {
+  color: rgba(255, 100, 100, 0.9);
+  font-size: 14px;
+  text-align: center;
+  max-width: 400px;
+  line-height: 1.5;
+}
+
+.tree-error button {
+  padding: 8px 24px;
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.tree-error button:hover {
+  background: rgba(0, 0, 0, 0.9);
+  border-color: rgba(255, 255, 255, 0.3);
+}
