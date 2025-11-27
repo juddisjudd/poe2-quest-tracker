@@ -116,11 +116,13 @@ export const useTrackerData = () => {
             className: savedPassiveTreeData.className
           });
           
-          // Convert serialized arrays back to Maps
+          // Convert serialized arrays back to Maps (handle various saved formats)
           const restoredTreeData = {
             ...savedPassiveTreeData,
-            masterySelections: new Map(savedPassiveTreeData.masterySelections || []),
-            jewelSockets: savedPassiveTreeData.jewelSockets 
+            masterySelections: Array.isArray(savedPassiveTreeData.masterySelections) 
+              ? new Map(savedPassiveTreeData.masterySelections) 
+              : new Map(),
+            jewelSockets: Array.isArray(savedPassiveTreeData.jewelSockets) 
               ? new Map(savedPassiveTreeData.jewelSockets) 
               : undefined,
           };

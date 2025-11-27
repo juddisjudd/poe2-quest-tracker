@@ -76,11 +76,13 @@ const PassiveTreeWindow: React.FC = () => {
           return;
         }
         
-        // Convert serialized arrays back to Maps
+        // Convert serialized arrays back to Maps (handle various saved formats)
         const treeData = {
           ...rawTreeData,
-          masterySelections: new Map(rawTreeData.masterySelections || []),
-          jewelSockets: rawTreeData.jewelSockets 
+          masterySelections: Array.isArray(rawTreeData.masterySelections) 
+            ? new Map(rawTreeData.masterySelections) 
+            : new Map(),
+          jewelSockets: Array.isArray(rawTreeData.jewelSockets) 
             ? new Map(rawTreeData.jewelSockets) 
             : undefined,
         };
