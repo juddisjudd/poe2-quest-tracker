@@ -84,13 +84,13 @@
     ],
     "win": {
       "target": [
-        "nsis",
-        "portable"
+        "nsis"
       ],
       "icon": "assets/icon.ico"
     },
     "linux": {
-      "target": "AppImage",
+      "target": ["AppImage", "deb", "rpm", "snap"],
+      "category": "Utility",
       "icon": "assets/icon.png"
     }
   }
