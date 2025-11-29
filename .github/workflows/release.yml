@@ -28,9 +28,7 @@ jobs:
         if: matrix.platform == 'linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y rpm snapd
-          sudo systemctl start snapd
-          sudo snap install snapcraft --classic
+          sudo apt-get install -y dpkg fakeroot
 
       - name: Install dependencies
         run: bun install

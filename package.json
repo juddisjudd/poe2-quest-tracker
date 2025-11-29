@@ -22,7 +22,10 @@
     "overlay",
     "electron"
   ],
-  "author": "juddisjudd",
+  "author": {
+    "name": "juddisjudd",
+    "email": "juddisjudd@users.noreply.github.com"
+  },
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^24.10.1",
@@ -89,7 +92,7 @@
       "icon": "assets/icon.ico"
     },
     "linux": {
-      "target": ["AppImage", "deb", "rpm", "snap"],
+      "target": ["AppImage", "deb"],
       "category": "Utility",
       "icon": "assets/icon.png"
     }
