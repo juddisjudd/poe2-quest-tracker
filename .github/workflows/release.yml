@@ -28,7 +28,9 @@ jobs:
         if: matrix.platform == 'linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y rpm snapcraft
+          sudo apt-get install -y rpm snapd
+          sudo systemctl start snapd
+          sudo snap install snapcraft --classic
 
       - name: Install dependencies
         run: bun install
