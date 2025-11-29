@@ -7,7 +7,15 @@ on:
 
 jobs:
   release:
-    runs-on: windows-latest
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            platform: win
+          - os: ubuntu-latest
+            platform: linux
+
+    runs-on: ${{ matrix.os }}
 
     steps:
       - name: Checkout code
