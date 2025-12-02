@@ -16,8 +16,7 @@ Get the latest release from the [Releases page](https://github.com/juddisjudd/po
 ### Quest Tracking
 - Detailed quest information with rewards, warnings, and strategic advice
 - Quests organized by act with collapsible sections
-- Toggle optional quests on or off
-- Multiple community-created campaign guides to choose from
+- Filter quests by type (Spirit, Passive, Boss, etc.)
 
 ### Gem Progression
 - Import gem builds directly from Path of Building codes or pobb.in links
@@ -72,12 +71,9 @@ Get the latest release from the [Releases page](https://github.com/juddisjudd/po
 2. Build your regex patterns for item filtering
 3. Click the copy button to copy the pattern to your clipboard
 
-### Choosing a Campaign Guide
-Use the guide dropdown in the header to select from available community guides. Each guide provides quest-by-quest progression tailored to different playstyles.
-
 ## Contributing
 
-Campaign guides can be contributed by creating a JSON file and submitting a pull request. See the existing guides in `src/data/guides/` for the format.
+Contributions are welcome! Feel free to submit pull requests for bug fixes or new features.
 
 ## License
 
