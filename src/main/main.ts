@@ -407,7 +407,6 @@ ipcMain.handle("save-quest-data", async (_, data: any) => {
     }
 
     fs.writeFileSync(dataPath, JSON.stringify(data, null, 2), "utf8");
-    console.log("Quest data saved successfully to:", dataPath);
     return { success: true };
   } catch (error) {
     console.error("Failed to save quest data:", error);
@@ -443,7 +442,6 @@ ipcMain.handle("save-gem-data", async (_, gemData: any) => {
     }
 
     fs.writeFileSync(gemDataPath, JSON.stringify(gemData, null, 2), "utf8");
-    console.log("Gem data saved successfully to:", gemDataPath);
     return { success: true };
   } catch (error) {
     console.error("Failed to save gem data:", error);

@@ -40,19 +40,22 @@ export const QuestTracker: React.FC = () => {
     resetTimers,
     updateGlobalTimer,
     clearPassiveTreeData,
+    resetAllData,
   } = useTrackerData();
 
   console.log('QuestTracker render:', { loading, actsCount: data.acts.length, firstAct: data.acts[0] });
 
   const [settingsOpen, setSettingsOpen] = useState(false);
-  const [gemPanelVisible, setGemPanelVisible] = useState(false);
-  const [notesPanelVisible, setNotesPanelVisible] = useState(false);
-  const [rewardsPanelVisible, setRewardsPanelVisible] = useState(false);
-  const [regexBuilderVisible, setRegexBuilderVisible] = useState(false);
-  const [itemCheckVisible, setItemCheckVisible] = useState(false);
   const [treePanelVisible, setTreePanelVisible] = useState(false);
   const [filtersCollapsed, setFiltersCollapsed] = useState(false);
   const [timersPausedByProcess, setTimersPausedByProcess] = useState(false);
+
+  // Derive panel visibility directly from settings (no duplicate state)
+  const gemPanelVisible = data.settings.showGemPanel !== false;
+  const notesPanelVisible = data.settings.showNotesPanel !== false;
+  const rewardsPanelVisible = data.settings.showRewardsPanel === true;
+  const regexBuilderVisible = data.settings.showRegexBuilderPanel === true;
+  const itemCheckVisible = data.settings.showItemCheckPanel === true;
 
   const isElectron = !!window.electronAPI;
 
@@ -180,20 +183,22 @@ export const QuestTracker: React.FC = () => {
     return counts;
   }, [data.acts]);
 
-  // Filter acts based on active filters
+  // Filter acts based on active filters (show-only mode)
   const filteredActs = useMemo(() => {
+    // No filters selected = show all quests
     if (activeFilters.length === 0) {
       return data.acts;
     }
 
+    // Show only quests that have ANY of the selected filter tags
     return data.acts.map(act => ({
       ...act,
       steps: act.steps.filter(quest => {
         if (!quest.tags || quest.tags.length === 0) {
-          return true; // Show quests without tags when filtering
+          return false; // Hide quests without tags when filtering
         }
-        // Hide quest if it has ANY of the active filter tags
-        return !quest.tags.some(tag => activeFilters.includes(tag));
+        // Show quest if it has ANY of the selected filter tags
+        return quest.tags.some(tag => activeFilters.includes(tag));
       })
     })).filter(act => act.steps.length > 0); // Hide acts with no remaining quests
   }, [data.acts, activeFilters]);
@@ -211,15 +216,6 @@ export const QuestTracker: React.FC = () => {
       percentage: Math.round(percentage)
     };
   }, [data.acts]);
-
-  // Sync panel visibility with settings
-  React.useEffect(() => {
-    setGemPanelVisible(data.settings.showGemPanel !== false);
-    setNotesPanelVisible(data.settings.showNotesPanel !== false);
-    setRewardsPanelVisible(data.settings.showRewardsPanel === true); // Only show if explicitly set to true
-    setRegexBuilderVisible(data.settings.showRegexBuilderPanel === true); // Only show if explicitly set to true
-    setItemCheckVisible(data.settings.showItemCheckPanel === true); // Only show if explicitly set to true
-  }, [data.settings.showGemPanel, data.settings.showNotesPanel, data.settings.showRewardsPanel, data.settings.showRegexBuilderPanel, data.settings.showItemCheckPanel]);
 
   if (loading) {
     return (
@@ -245,6 +241,12 @@ export const QuestTracker: React.FC = () => {
         onSettingsChange={updateSettings}
         onSettingsToggle={setSettingsOpen}
         onResetQuests={resetAllQuests}
+        onResetTimers={resetTimers}
+        onResetAllData={async () => {
+          // Close tree panel if open before reset
+          setTreePanelVisible(false);
+          await resetAllData();
+        }}
         onImportGems={importGemProgression}
         onImportGemLoadouts={importGemLoadouts}
         onImportNotes={async (notes) => {
@@ -286,6 +288,9 @@ export const QuestTracker: React.FC = () => {
             passiveTree: undefined,
           });
         }}
+        activeFilters={activeFilters}
+        onFilterToggle={handleFilterToggle}
+        questCounts={questCounts}
       />
 
       {/* Overall Progress */}
@@ -318,31 +323,10 @@ export const QuestTracker: React.FC = () => {
               actTimer={actTimer}
               isCurrentAct={isCurrentAct}
               onTimerUpdate={(timer: ActTimerType) => updateActTimer(act.actNumber, timer)}
+              autoStartTimer={data.settings.autoActTimers !== false}
             />
           );
         })}
-      </div>
-
-      {/* Filter Chips with collapse toggle */}
-      <div className="filter-section">
-        <button
-          className="filter-toggle-btn"
-          onClick={() => setFiltersCollapsed(!filtersCollapsed)}
-          title={filtersCollapsed ? "Show filters" : "Hide filters"}
-        >
-          <span className={`filter-toggle-icon ${filtersCollapsed ? 'collapsed' : ''}`}>▼</span>
-          <span className="filter-toggle-text">Filters</span>
-          {activeFilters.length > 0 && (
-            <span className="filter-active-count">({activeFilters.length})</span>
-          )}
-        </button>
-        {!filtersCollapsed && (
-          <FilterChips
-            activeFilters={activeFilters}
-            onFilterToggle={handleFilterToggle}
-            questCounts={questCounts}
-          />
-        )}
       </div>
 
       {/* Global Timer */}
@@ -350,6 +334,7 @@ export const QuestTracker: React.FC = () => {
         initialTimer={data.globalTimer}
         onTimerUpdate={(timer: GlobalTimerType) => updateGlobalTimer(timer)}
         currentActNumber={data.currentActNumber}
+        autoStart={data.settings.autoGlobalTimer !== false}
       />
 
       {/* Gem Progression Panel */}
@@ -369,9 +354,7 @@ export const QuestTracker: React.FC = () => {
           onToggleGem={toggleGem}
           onSwitchLoadout={switchLoadout}
           onTogglePanel={() => {
-            const newVisibility = !gemPanelVisible;
-            setGemPanelVisible(newVisibility);
-            updateSettings({ showGemPanel: newVisibility });
+            updateSettings({ showGemPanel: !gemPanelVisible });
           }}
           showToggleButton={false}
         />
@@ -396,9 +379,7 @@ export const QuestTracker: React.FC = () => {
           settingsOpen={settingsOpen}
           onUpdateNotes={updateNotesData}
           onTogglePanel={() => {
-            const newVisibility = !notesPanelVisible;
-            setNotesPanelVisible(newVisibility);
-            updateSettings({ showNotesPanel: newVisibility });
+            updateSettings({ showNotesPanel: !notesPanelVisible });
           }}
           showToggleButton={false}
         />
@@ -409,7 +390,6 @@ export const QuestTracker: React.FC = () => {
         <PermanentRewardsPanel
           acts={data.acts}
           onClose={() => {
-            setRewardsPanelVisible(false);
             updateSettings({ showRewardsPanel: false });
           }}
           onQuestToggle={(actId, questId) => toggleQuest(questId)}
@@ -421,9 +401,7 @@ export const QuestTracker: React.FC = () => {
         isVisible={regexBuilderVisible}
         settingsOpen={settingsOpen}
         onTogglePanel={() => {
-          const newVisibility = !regexBuilderVisible;
-          setRegexBuilderVisible(newVisibility);
-          updateSettings({ showRegexBuilderPanel: newVisibility });
+          updateSettings({ showRegexBuilderPanel: !regexBuilderVisible });
         }}
         showToggleButton={false}
       />
@@ -435,9 +413,7 @@ export const QuestTracker: React.FC = () => {
           isVisible={itemCheckVisible}
           settingsOpen={settingsOpen}
           onTogglePanel={() => {
-            const newVisibility = !itemCheckVisible;
-            setItemCheckVisible(newVisibility);
-            updateSettings({ showItemCheckPanel: newVisibility });
+            updateSettings({ showItemCheckPanel: !itemCheckVisible });
           }}
         />
       )}
@@ -446,16 +422,12 @@ export const QuestTracker: React.FC = () => {
       <PanelFooter
         gemPanelVisible={gemPanelVisible}
         onToggleGemPanel={() => {
-          const newVisibility = !gemPanelVisible;
-          setGemPanelVisible(newVisibility);
-          updateSettings({ showGemPanel: newVisibility });
+          updateSettings({ showGemPanel: !gemPanelVisible });
         }}
         hasGemData={true}
         notesPanelVisible={notesPanelVisible}
         onToggleNotesPanel={() => {
-          const newVisibility = !notesPanelVisible;
-          setNotesPanelVisible(newVisibility);
-          updateSettings({ showNotesPanel: newVisibility });
+          updateSettings({ showNotesPanel: !notesPanelVisible });
         }}
         hasNotesData={!!data.notesData}
         treePanelVisible={treePanelVisible}
@@ -489,22 +461,16 @@ export const QuestTracker: React.FC = () => {
         }}
         rewardsPanelVisible={rewardsPanelVisible}
         onToggleRewardsPanel={() => {
-          const newVisibility = !rewardsPanelVisible;
-          setRewardsPanelVisible(newVisibility);
-          updateSettings({ showRewardsPanel: newVisibility });
+          updateSettings({ showRewardsPanel: !rewardsPanelVisible });
         }}
         hasRewardsData={true}
         regexBuilderVisible={regexBuilderVisible}
         onToggleRegexBuilder={() => {
-          const newVisibility = !regexBuilderVisible;
-          setRegexBuilderVisible(newVisibility);
-          updateSettings({ showRegexBuilderPanel: newVisibility });
+          updateSettings({ showRegexBuilderPanel: !regexBuilderVisible });
         }}
         itemCheckVisible={itemCheckVisible}
         onToggleItemCheck={() => {
-          const newVisibility = !itemCheckVisible;
-          setItemCheckVisible(newVisibility);
-          updateSettings({ showItemCheckPanel: newVisibility });
+          updateSettings({ showItemCheckPanel: !itemCheckVisible });
         }}
         hasItemCheckData={!!data.itemCheckData}
         settingsOpen={settingsOpen}

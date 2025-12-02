@@ -6,12 +6,14 @@ interface GlobalTimerProps {
   initialTimer?: GlobalTimerType;
   onTimerUpdate: (timer: GlobalTimerType) => void;
   currentActNumber?: number;
+  autoStart?: boolean;
 }
 
 export const GlobalTimer: React.FC<GlobalTimerProps> = ({
   initialTimer,
   onTimerUpdate,
   currentActNumber,
+  autoStart = true,
 }) => {
   const [timer, setTimer] = useState<GlobalTimerType>(
     initialTimer || {
@@ -88,11 +90,11 @@ export const GlobalTimer: React.FC<GlobalTimerProps> = ({
   }, [updateTimer]);
 
   useEffect(() => {
-    if (currentActNumber === 1 && !timer.isRunning && timer.elapsed === 0) {
+    if (autoStart && currentActNumber === 1 && !timer.isRunning && timer.elapsed === 0) {
       console.log('Auto-starting global speedrun timer (Act 1 detected)');
       startTimer();
     }
-  }, [currentActNumber, timer.isRunning, timer.elapsed, startTimer]);
+  }, [autoStart, currentActNumber, timer.isRunning, timer.elapsed, startTimer]);
 
   useEffect(() => {
     if (timer.isRunning && !timer.isPaused && timer.startTime !== null) {

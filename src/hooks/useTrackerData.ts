@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { TrackerData, Act, GemProgression, GemLoadout, NotesData, QuestStep, ActTimer, GlobalTimer, ItemCheckData } from "../types";
 import { defaultQuestData } from "../data/questData";
 import { migrateGemProgression, PobLoadout, PobParseResult } from "../utils/pobParser";
@@ -75,6 +75,11 @@ const mergeQuestData = (
 export const useTrackerData = () => {
   const [data, setData] = useState<TrackerData>(initialData);
   const [loading, setLoading] = useState(true);
+  
+  // Track last saved data to avoid unnecessary saves
+  const lastSavedDataRef = useRef<string>('');
+  const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const pendingDataRef = useRef<TrackerData | null>(null);
 
   useEffect(() => {
     const loadData = async () => {
@@ -85,11 +90,6 @@ export const useTrackerData = () => {
 
         const savedGemData = await window.electronAPI.loadGemData();
         if (savedGemData && savedData) {
-          console.log('🔍 [HOOK] Loading separate gem data:', {
-            hasGemProgression: !!savedGemData.gemProgression,
-            socketGroups: savedGemData.gemProgression?.socketGroups?.length || 0,
-            hasGemLoadouts: !!savedGemData.gemLoadouts
-          });
           savedData.gemProgression = savedGemData.gemProgression;
           savedData.gemLoadouts = savedGemData.gemLoadouts;
         }
@@ -101,21 +101,11 @@ export const useTrackerData = () => {
 
         const savedItemCheckData = await window.electronAPI.loadItemCheckData();
         if (savedItemCheckData && savedData) {
-          console.log('🔍 [HOOK] Loading separate item check data:', {
-            hasItemCheckData: !!savedItemCheckData,
-            itemsCount: savedItemCheckData.pobItems?.length || 0
-          });
           savedData.itemCheckData = savedItemCheckData;
         }
 
         const savedPassiveTreeData = await window.electronAPI.loadPassiveTreeData();
         if (savedPassiveTreeData && savedData) {
-          console.log('🔍 [HOOK] Loading separate passive tree data:', {
-            hasPassiveTreeData: !!savedPassiveTreeData,
-            allocatedNodes: savedPassiveTreeData.allocatedNodes?.length || 0,
-            className: savedPassiveTreeData.className
-          });
-          
           // Convert serialized arrays back to Maps (handle various saved formats)
           const restoredTreeData = {
             ...savedPassiveTreeData,
@@ -130,17 +120,11 @@ export const useTrackerData = () => {
         }
 
         if (savedData) {
-          console.log('🔍 [HOOK] Loading saved data, gem progression info:', {
-            hasSavedGemProgression: !!savedData.gemProgression,
-            savedSocketGroups: savedData.gemProgression?.socketGroups?.length || 0
-          });
-
           const hasOldStructure = savedData.acts.some((act: any) =>
             typeof act.actNumber === 'undefined' && typeof act.id !== 'undefined'
           );
 
           if (hasOldStructure) {
-            console.log('⚠️ Old data structure detected - starting fresh with new quest structure');
             const freshData: TrackerData = {
               ...initialData,
               acts: defaultQuestData,
@@ -190,47 +174,71 @@ export const useTrackerData = () => {
     loadData();
   }, []);
 
+  // Perform the actual save operation
+  const performSave = useCallback(async (newData: TrackerData) => {
+    try {
+      // Exclude passiveTreeData from quest-data.json since it's saved separately
+      const { passiveTreeData, ...dataWithoutTree } = newData;
+      
+      // Create a hash of the data to compare (excluding volatile fields)
+      const dataToHash = {
+        acts: dataWithoutTree.acts,
+        gemProgression: dataWithoutTree.gemProgression,
+        gemLoadouts: dataWithoutTree.gemLoadouts,
+        settings: dataWithoutTree.settings,
+      };
+      const dataHash = JSON.stringify(dataToHash);
+      
+      // Skip save if data hasn't changed
+      if (dataHash === lastSavedDataRef.current) {
+        return;
+      }
+      
+      await window.electronAPI.saveQuestData(dataWithoutTree as TrackerData);
+      
+      // Save gem data separately if it exists
+      if (newData.gemProgression || newData.gemLoadouts) {
+        const gemData = {
+          gemProgression: newData.gemProgression,
+          gemLoadouts: newData.gemLoadouts,
+        };
+        await window.electronAPI.saveGemData(gemData);
+      }
+      
+      // Update the last saved hash
+      lastSavedDataRef.current = dataHash;
+      
+    } catch (error) {
+      console.error("Failed to save data:", error);
+    }
+  }, []);
+
   const saveData = useCallback(
     async (newData: TrackerData) => {
-      // Add stack trace to see what's calling saveData
-      console.log('📍 [HOOK] saveData called with gem info:', {
-        hasGemProgression: !!newData.gemProgression,
-        socketGroups: newData.gemProgression?.socketGroups?.length || 0,
-        firstSkillName: newData.gemProgression?.socketGroups?.[0]?.skillName,
-        firstMainGem: newData.gemProgression?.socketGroups?.[0]?.mainGem?.name,
-        stackTrace: new Error().stack?.split('\n').slice(1, 3).join(' -> ') || 'no stack'
-      });
-      try {
-        // Exclude passiveTreeData from quest-data.json since it's saved separately
-        const { passiveTreeData, ...dataWithoutTree } = newData;
-        await window.electronAPI.saveQuestData(dataWithoutTree as TrackerData);
-        
-        // Save gem data separately if it exists
-        if (newData.gemProgression || newData.gemLoadouts) {
-          const gemData = {
-            gemProgression: newData.gemProgression,
-            gemLoadouts: newData.gemLoadouts,
-          };
-          console.log('💾 [HOOK] Saving gem data separately:', {
-            hasGemProgression: !!gemData.gemProgression,
-            socketGroups: gemData.gemProgression?.socketGroups?.length || 0,
-            hasGemLoadouts: !!gemData.gemLoadouts,
-            firstSkillName: gemData.gemProgression?.socketGroups?.[0]?.skillName || 'none',
-            actualGemData: gemData
-          });
-          await window.electronAPI.saveGemData(gemData);
-        }
-        
-        // Preserve current notes data when updating state since notes are saved separately
-        setData(prev => ({
-          ...newData,
-          notesData: prev.notesData, // Keep the current notes data
-        }));
-      } catch (error) {
-        console.error("Failed to save quest data:", error);
+      // Update state immediately
+      // If newData explicitly includes notesData, use it; otherwise preserve previous
+      setData(prev => ({
+        ...newData,
+        notesData: 'notesData' in newData ? newData.notesData : prev.notesData,
+      }));
+      
+      // Store pending data for debounced save
+      pendingDataRef.current = newData;
+      
+      // Clear existing timeout
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
       }
+      
+      // Debounce the actual save by 500ms
+      saveTimeoutRef.current = setTimeout(() => {
+        if (pendingDataRef.current) {
+          performSave(pendingDataRef.current);
+          pendingDataRef.current = null;
+        }
+      }, 500);
     },
-    []
+    [performSave]
   );
 
   const toggleQuest = useCallback(
@@ -288,6 +296,10 @@ export const useTrackerData = () => {
           completed: false,
         })),
       })),
+      // Also reset timers in the same atomic operation to avoid race conditions
+      actTimers: [],
+      globalTimer: undefined,
+      currentActNumber: undefined,
     };
     saveData(newData);
   }, [data, saveData]);
@@ -302,14 +314,8 @@ export const useTrackerData = () => {
   }, [data, saveData]);
 
   const importGemLoadouts = useCallback((pobLoadouts: PobLoadout[], defaultGemProgression: GemProgression) => {
-    console.log('🎯 [HOOK] importGemLoadouts called with:', {
-      loadoutsCount: pobLoadouts.length,
-      defaultSocketGroups: defaultGemProgression?.socketGroups?.length || 0
-    });
-    
     if (pobLoadouts.length <= 1) {
       const gemProgression = pobLoadouts[0]?.gemProgression || defaultGemProgression;
-      console.log('🎯 [HOOK] Single loadout path, socketGroups:', gemProgression?.socketGroups?.length || 0);
       const newData = {
         ...data,
         gemProgression: migrateGemProgression(gemProgression),
@@ -325,12 +331,6 @@ export const useTrackerData = () => {
       gemProgression: migrateGemProgression(pobLoadout.gemProgression),
     }));
 
-    console.log('🎯 [HOOK] Multiple loadouts path:', {
-      loadoutsCount: gemLoadouts.length,
-      firstLoadoutSocketGroups: gemLoadouts[0]?.gemProgression?.socketGroups?.length || 0,
-      firstLoadoutName: gemLoadouts[0]?.name
-    });
-
     const newData = {
       ...data,
       gemProgression: gemLoadouts[0]?.gemProgression || migrateGemProgression(defaultGemProgression),
@@ -341,13 +341,6 @@ export const useTrackerData = () => {
       },
     };
     
-    console.log('🎯 [HOOK] Final gem progression socketGroups:', newData.gemProgression?.socketGroups?.length || 0);
-    console.log('🔍 [HOOK] About to save data with gem progression:', {
-      hasGemProgression: !!newData.gemProgression,
-      socketGroups: newData.gemProgression?.socketGroups?.length || 0,
-      firstGroupName: newData.gemProgression?.socketGroups?.[0]?.skillName || 'none',
-      actualSocketGroups: newData.gemProgression?.socketGroups?.slice(0, 2) // Show first 2 groups
-    });
     saveData(newData);
   }, [data, saveData]);
 
@@ -371,11 +364,6 @@ export const useTrackerData = () => {
         ...prev,
         passiveTreeData,
       }));
-      
-      console.log('🌳 [HOOK] Passive tree data saved:', {
-        className: passiveTreeData.className,
-        allocatedNodes: passiveTreeData.allocatedNodes.length,
-      });
     } catch (error) {
       console.error('Failed to save passive tree data separately:', error);
     }
@@ -398,8 +386,6 @@ export const useTrackerData = () => {
         );
         return updatedData;
       });
-      
-      console.log('🌳 [HOOK] Passive tree data cleared from both files');
     } catch (error) {
       console.error('Failed to clear passive tree data:', error);
     }
@@ -485,20 +471,6 @@ export const useTrackerData = () => {
   }, []);
 
   const importGemsAndNotes = useCallback((gemProgression?: GemProgression, notes?: string) => {
-    console.log('🎯 [HOOK] importGemsAndNotes called with:', {
-      hasGemProgression: !!gemProgression,
-      socketGroups: gemProgression?.socketGroups?.length || 0,
-      hasNotes: !!notes,
-      notesLength: notes?.length || 0,
-      notesPreview: notes ? notes.substring(0, 100) + '...' : 'No notes'
-    });
-    
-    console.log('🔍 [HOOK] Current data.notesData:', {
-      hasNotesData: !!data.notesData,
-      userNotes: data.notesData?.userNotes?.length || 0,
-      pobNotes: data.notesData?.pobNotes?.length || 0
-    });
-    
     const newData = {
       ...data,
       ...(gemProgression && { gemProgression: migrateGemProgression(gemProgression) }),
@@ -511,28 +483,10 @@ export const useTrackerData = () => {
       })
     };
     
-    console.log('💾 [HOOK] New data notesData:', {
-      hasNotesData: !!newData.notesData,
-      userNotes: newData.notesData?.userNotes?.length || 0,
-      pobNotes: newData.notesData?.pobNotes?.length || 0,
-      notesWillBeAdded: !!notes
-    });
-    
     saveData(newData);
   }, [data, saveData]);
 
   const importCompletePoB = useCallback(async (pobResult: PobParseResult) => {
-    console.log('🎯 [HOOK] importCompletePoB called with:', {
-      hasGemProgression: !!pobResult.gemProgression,
-      hasLoadouts: !!pobResult.loadouts,
-      loadoutsCount: pobResult.loadouts?.length || 0,
-      hasNotes: !!pobResult.notes,
-      hasItems: !!pobResult.items,
-      itemsCount: pobResult.items?.length || 0,
-      hasPassiveTree: !!pobResult.passiveTree,
-      allocatedNodes: pobResult.passiveTree?.allocatedNodes?.length || 0,
-    });
-
     let newData = { ...data };
 
     // Handle gems and loadouts properly
@@ -576,10 +530,6 @@ export const useTrackerData = () => {
           lastImported: new Date().toISOString(),
         },
       };
-      console.log('💾 [HOOK] Prepared item check data:', {
-        itemCount: pobResult.items.length,
-        itemClasses: [...new Set(pobResult.items.map(i => i.itemClass))],
-      });
     }
 
     // Handle passive tree data - only set if we don't already have loadout-specific trees
@@ -590,33 +540,14 @@ export const useTrackerData = () => {
         ...newData,
         passiveTreeData: pobResult.passiveTree,
       };
-      console.log('🌳 [HOOK] Prepared passive tree data (single loadout):', {
-        className: pobResult.passiveTree.className,
-        ascendancy: pobResult.passiveTree.ascendClassName,
-        allocatedNodes: pobResult.passiveTree.allocatedNodes.length,
-        masteries: pobResult.passiveTree.masterySelections.size,
-      });
     } else if (!newData.gemLoadouts && !pobResult.passiveTree) {
       // Single loadout with no tree data - clear old data
       newData = {
         ...newData,
         passiveTreeData: undefined,
       };
-      console.log('🌳 [HOOK] Clearing passive tree data (new import has none)');
-    } else if (newData.gemLoadouts) {
-      // Multiple loadouts - tree data already set from first loadout
-      console.log('🌳 [HOOK] Using loadout-specific passive tree data:', {
-        className: newData.passiveTreeData?.className,
-        allocatedNodes: newData.passiveTreeData?.allocatedNodes?.length || 0,
-      });
     }
-
-    console.log('💾 [HOOK] Saving gem data through saveData:', {
-      hasGemProgression: !!newData.gemProgression,
-      hasGemLoadouts: !!newData.gemLoadouts,
-      hasItemCheckData: !!newData.itemCheckData,
-      hasPassiveTreeData: !!newData.passiveTreeData,
-    });
+    // Multiple loadouts case - tree data already set from first loadout (no action needed)
 
     // Save gem data first
     saveData(newData);
@@ -627,10 +558,6 @@ export const useTrackerData = () => {
         userNotes: data.notesData?.userNotes || "",
         pobNotes: pobResult.notes
       };
-      console.log('💾 [HOOK] Saving notes data separately:', {
-        notesLength: pobResult.notes.length,
-        preview: pobResult.notes.substring(0, 100) + '...'
-      });
       await updateNotesData(notesData);
     }
 
@@ -1063,6 +990,50 @@ export const useTrackerData = () => {
     saveData(newData);
   }, [data, saveData]);
 
+  // Atomic reset of ALL data - quests, timers, gems, notes, tree, items
+  const resetAllData = useCallback(async () => {
+    // Clear passive tree data from separate storage first
+    await window.electronAPI.savePassiveTreeData(null);
+    
+    // Reset all data in one atomic operation
+    const newData: TrackerData = {
+      ...data,
+      // Reset quest completion
+      acts: data.acts.map((act) => ({
+        ...act,
+        steps: act.steps.map((step) => ({
+          ...step,
+          completed: false,
+        })),
+      })),
+      // Reset timers
+      actTimers: [],
+      globalTimer: undefined,
+      currentActNumber: undefined,
+      // Reset gems
+      gemProgression: {
+        socketGroups: [],
+      },
+      gemLoadouts: undefined,
+      // Reset notes
+      notesData: {
+        userNotes: "",
+        pobNotes: undefined,
+      },
+      // Reset passive tree
+      passiveTreeData: undefined,
+      // Reset item check data
+      itemCheckData: undefined,
+    };
+    
+    saveData(newData);
+    
+    // Also clear separate data files
+    await window.electronAPI.saveGemData({ gemProgression: { socketGroups: [] } });
+    await window.electronAPI.saveNotesData({ userNotes: "", pobNotes: undefined });
+    await window.electronAPI.saveItemCheckData(undefined);
+  }, [data, saveData]);
+
   return {
     data,
     loading,
@@ -1084,5 +1055,6 @@ export const useTrackerData = () => {
     passiveTreeData: data.passiveTreeData,
     updatePassiveTreeData,
     clearPassiveTreeData,
+    resetAllData,
   };
 };

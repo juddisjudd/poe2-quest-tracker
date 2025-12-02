@@ -8,6 +8,7 @@ interface ActTimerProps {
   initialTimer?: ActTimerType;
   isCurrentAct: boolean;
   onTimerUpdate: (timer: ActTimerType) => void;
+  autoStart?: boolean;
 }
 
 export const ActTimer: React.FC<ActTimerProps> = ({
@@ -15,6 +16,7 @@ export const ActTimer: React.FC<ActTimerProps> = ({
   initialTimer,
   isCurrentAct,
   onTimerUpdate,
+  autoStart = true,
 }) => {
   const {
     timer,
@@ -38,6 +40,11 @@ export const ActTimer: React.FC<ActTimerProps> = ({
       return;
     }
 
+    if (!autoStart) {
+      previousIsCurrentAct.current = isCurrentAct;
+      return;
+    }
+
     if (isCurrentAct && !previousIsCurrentAct.current && !timer.isRunning && !timer.completed) {
       console.log(`Auto-starting timer for Act ${actNumber} (zone change detected)`);
       startTimer();
@@ -47,7 +54,7 @@ export const ActTimer: React.FC<ActTimerProps> = ({
     }
 
     previousIsCurrentAct.current = isCurrentAct;
-  }, [isCurrentAct, timer.isRunning, timer.completed, actNumber, startTimer, pauseTimer]);
+  }, [autoStart, isCurrentAct, timer.isRunning, timer.completed, actNumber, startTimer, pauseTimer]);
 
   if (timer.completed) {
     return (

@@ -1,94 +1,83 @@
 # Exile Compass
 
-A desktop overlay application for tracking quests, gems, storing regex filters, and notes in Path of Exile 2.
+A desktop overlay companion app for Path of Exile 2. Track quests, follow your gem progression, view your passive tree, create regex filters, and keep notes - all in one place.
 
 [![GitHub Downloads (all assets, latest release)](https://img.shields.io/github/downloads/juddisjudd/poe2-quest-tracker/latest/total)](https://github.com/juddisjudd/poe2-quest-tracker/releases) [![GitHub Release](https://img.shields.io/github/v/release/juddisjudd/poe2-quest-tracker)](https://github.com/juddisjudd/poe2-quest-tracker/releases)
 
+## Download
 
-https://github.com/user-attachments/assets/94a43925-20e8-4eb1-88fd-7cd2393f3d73
+Get the latest release from the [Releases page](https://github.com/juddisjudd/poe2-quest-tracker/releases).
+
+- **Windows**: Download the `.exe` installer
+- **Linux**: Download the `.AppImage` or `.deb` package
 
 ## Features
 
 ### Quest Tracking
-- 🎯 **Detailed Quest Information** - Complete reward descriptions, warnings, and strategic advice
-- 📁 **Collapsible Acts** - Organize quests by act with expandable/collapsible sections
-- 👁️ **Optional Quest Toggle** - Show/hide optional quests
-- 📚 **Community Guides** - Easy contribution system for community-created guides
+- Detailed quest information with rewards, warnings, and strategic advice
+- Quests organized by act with collapsible sections
+- Toggle optional quests on or off
+- Multiple community-created campaign guides to choose from
 
 ### Gem Progression
-- Import gem builds directly from POB codes or pobb.in links
-- Track acquired gems with visual indicators
-- View gems organized by socket groups with main and support gems
-- See completion progress for your build
+- Import gem builds directly from Path of Building codes or pobb.in links
+- Track which gems you've acquired with visual progress indicators
+- View gems organized by socket groups with main and support gems clearly labeled
+- Support for multiple loadouts from your POB build
 
-### Regex Filters
-- Store your various regex patterns
-- One-click copying of regex patterns for in-game use
+### Passive Tree Viewer
+- View your imported passive tree in a dedicated window
+- See allocated nodes with full skill icons
+- Switch between loadouts to compare different tree configurations
+- Hover over nodes to see detailed stat information
 
-### Notes System
-- 📝 **Manual Notes** - Create and edit your own notes
-- 🔄 **POB Notes Import** - Automatically import notes from Path of Building codes
-- 📂 **Dual Note Types** - Separate user notes and imported POB notes
+### Regex Creator
+- Build custom regex search patterns for in-game item filtering
+- One-click copy to clipboard for quick use
 
-### Customization & Settings
-- ⚙️ **Multiple Themes**
-- 🎚️ **Adjustable Opacity**
-- 🔤 **Font Scaling**
-- ⌨️ **Global Hotkeys** - Configurable show/hide hotkey (desktop only)
-- 🖥️ **Overlay Mode**
-- 💾 **Persistent State** - All progress and settings automatically saved
-
-## Usage
-
-### Basic Quest Tracking
-1. Start the application
-2. Use the checkboxes to mark quests as completed
-3. Click on act headers to expand/collapse quest lists
-4. Toggle optional quests visibility in settings
-
-### Importing Gem Builds
-1. Click the settings gear icon
-2. Paste your Path of Building code or pobb.in link in the "Import Gems" section
-3. Click "Import PoB" to load your gem progression
-4. Use the GEMS button to view and track your imported build
-5. Click on gem slots to mark them as acquired
-
-### Selecting Campaign Guides
-1. Use the guide selector dropdown in the top-right to choose your preferred campaign guide
-2. Guides include author information and detailed quest progression
-3. Community contributors can easily add new guides by submitting JSON files
-
-### Using Regex Filters
-1. Click the REGEX button at the bottom
-2. Enter regex patterns for different item categories
-3. Use the copy buttons to copy patterns to clipboard
-
-### Managing Notes
-1. Click the NOTES button at the bottom
-2. Add manual notes in the user notes section
-3. POB notes are automatically imported when using POB codes with notes
-4. Clear POB notes separately from user notes if needed
+### Notes
+- Create and edit your own notes
+- Automatically import notes from Path of Building
+- Keep POB notes and personal notes separate
 
 ### Customization
-1. Access settings via the gear icon in the header
-2. Choose from multiple themes (AMOLED variants)
-3. Adjust opacity and font size for optimal overlay experience
-4. Set global hotkey for quick show/hide (desktop version)
-5. All settings and progress are automatically saved
+- Multiple themes including AMOLED dark variants
+- Adjustable window opacity for overlay use
+- Scalable font size
+- Configurable global hotkey to show/hide the overlay
+- All settings and progress saved automatically
 
-### Community Guide System
-Contributors can easily add new campaign guides by:
-1. Creating a JSON file following the guide format
-2. Adding it to `src/data/guides/`
-3. Submitting a pull request
-4. The guide will automatically appear in the dropdown after merging
+## How to Use
 
-Each quest entry includes:
-- Quest name, giver, and location details
-- Complete reward descriptions with strategic value
-- Completion tracking with persistent state
-- Optional/main quest classification
-- Author attribution for community guides
+### Getting Started
+1. Download and install Exile Compass
+2. Launch the application - it will appear as an overlay on your screen
+3. Use the checkboxes to track quest completion as you play
+4. Click act headers to expand or collapse quest lists
+
+### Importing Your Build
+1. Open Path of Building and copy your build code (or use a pobb.in link)
+2. Click the settings icon in Exile Compass
+3. Paste your code in the "Import Gems" section and click "Import PoB"
+4. Your gem progression and passive tree will be loaded
+
+### Viewing Your Passive Tree
+1. After importing a POB build, click the "Tree" button
+2. A separate window opens showing your allocated passive nodes
+3. Use the mouse wheel to zoom and drag to pan around the tree
+4. If your build has multiple loadouts, use the dropdown to switch between them
+
+### Using the Regex Creator
+1. Click the "Regex" button at the bottom of the overlay
+2. Build your regex patterns for item filtering
+3. Click the copy button to copy the pattern to your clipboard
+
+### Choosing a Campaign Guide
+Use the guide dropdown in the header to select from available community guides. Each guide provides quest-by-quest progression tailored to different playstyles.
+
+## Contributing
+
+Campaign guides can be contributed by creating a JSON file and submitting a pull request. See the existing guides in `src/data/guides/` for the format.
 
 ## License
 
@@ -96,6 +85,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**Note**: This is a community tool and is not affiliated with or endorsed by Grinding Gear Games.
+This is a community tool and is not affiliated with or endorsed by Grinding Gear Games.
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/ohitsjudd)

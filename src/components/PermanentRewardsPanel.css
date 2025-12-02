@@ -107,25 +107,12 @@
   flex: 1;
   overflow-y: auto;
   padding: 20px;
-  scrollbar-width: thin;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 .rewards-content::-webkit-scrollbar {
-  width: 8px;
-}
-
-.rewards-content::-webkit-scrollbar-track {
-  background: var(--bg-overlay-2);
-  border-radius: 4px;
-}
-
-.rewards-content::-webkit-scrollbar-thumb {
-  background: var(--bg-overlay-4);
-  border-radius: 4px;
-}
-
-.rewards-content::-webkit-scrollbar-thumb:hover {
-  background: var(--primary-color);
+  display: none;
 }
 
 .reward-section {

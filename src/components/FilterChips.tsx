@@ -26,17 +26,20 @@ const TAG_COLORS: Record<QuestTag, [number, number, number]> = {
   "Optional": [149, 165, 166],
 };
 
-const getChipStyle = (tag: QuestTag, active: boolean) => {
+const getChipStyle = (tag: QuestTag, selected: boolean) => {
   const [r, g, b] = TAG_COLORS[tag];
-  const background = active
+  // Selected = bright/active, unselected = dim/off
+  const background = selected
     ? `rgba(${r}, ${g}, ${b}, 0.9)`
-    : `rgba(${r}, ${g}, ${b}, 0.22)`;
-  const border = `1px solid rgba(${r}, ${g}, ${b}, 0.6)`;
+    : `rgba(${r}, ${g}, ${b}, 0.15)`;
+  const border = selected
+    ? `1px solid rgba(${r}, ${g}, ${b}, 0.9)`
+    : `1px solid rgba(${r}, ${g}, ${b}, 0.3)`;
 
   const luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
-  const color = active ? (luma > 180 ? "#000" : "#fff") : "var(--text-primary)";
+  const color = selected ? (luma > 180 ? "#000" : "#fff") : `rgba(${r}, ${g}, ${b}, 0.6)`;
 
-  return { background, border, color };
+  return { background, border, color, opacity: selected ? 1 : 0.7 };
 };
 
 export const FilterChips: React.FC<FilterChipsProps> = ({
@@ -52,35 +55,21 @@ export const FilterChips: React.FC<FilterChipsProps> = ({
     return null;
   }
 
-  const hasActiveFilters = activeFilters.length > 0;
-
   return (
     <div className="filter-chips-container">
-      <div className="filter-chips-header">
-        <span className="filter-label">Filter by:</span>
-        {hasActiveFilters && (
-          <button
-            className="filter-clear-btn"
-            onClick={() => activeFilters.forEach(tag => onFilterToggle(tag))}
-            title="Clear all filters"
-          >
-            Clear All
-          </button>
-        )}
-      </div>
       <div className="filter-chips">
         {availableTags.map((tag) => {
-          const isActive = activeFilters.includes(tag);
-          const style = getChipStyle(tag, isActive);
+          const isSelected = activeFilters.includes(tag);
+          const style = getChipStyle(tag, isSelected);
           const count = questCounts[tag];
 
           return (
             <button
               key={tag}
-              className={`filter-chip ${isActive ? "active" : ""}`}
+              className={`filter-chip ${isSelected ? "selected" : ""}`}
               style={style}
               onClick={() => onFilterToggle(tag)}
-              title={`Filter by ${tag} (${count} quest${count !== 1 ? 's' : ''})`}
+              title={isSelected ? `Hide ${tag} quests` : `Show only ${tag} quests (${count})`}
             >
               {tag} <span className="chip-count">({count})</span>
             </button>

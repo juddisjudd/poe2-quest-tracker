@@ -10,6 +10,7 @@ interface ActPanelProps {
   actTimer?: ActTimerType;
   isCurrentAct?: boolean;
   onTimerUpdate?: (timer: ActTimerType) => void;
+  autoStartTimer?: boolean;
 }
 
 export const ActPanel: React.FC<ActPanelProps> = ({
@@ -19,6 +20,7 @@ export const ActPanel: React.FC<ActPanelProps> = ({
   actTimer,
   isCurrentAct = false,
   onTimerUpdate,
+  autoStartTimer = true,
 }) => {
   const completedQuests = act.steps.filter((q) => q.completed).length;
   const totalQuests = act.steps.length;
@@ -62,6 +64,7 @@ export const ActPanel: React.FC<ActPanelProps> = ({
                 initialTimer={actTimer}
                 isCurrentAct={isCurrentAct}
                 onTimerUpdate={onTimerUpdate}
+                autoStart={autoStartTimer}
               />
             </div>
           )}

@@ -165,6 +165,8 @@ export interface TrackerData {
     logFileDetected?: boolean;
     autoCompleteQuests?: boolean;
     activeFilters?: QuestTag[];
+    autoActTimers?: boolean; // Auto-start act timers when entering acts
+    autoGlobalTimer?: boolean; // Auto-start global timer when entering Act 1
   };
 }
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { TrackerData } from "../types";
+import { TrackerData, QuestTag } from "../types";
 import { parsePathOfBuildingCodeWithNotes } from "../utils/pobParser";
+import { FilterChips } from "./FilterChips";
 import type { ElectronAPI } from "../main/preload";
 
 interface HeaderProps {
@@ -14,9 +15,14 @@ interface HeaderProps {
   onImportGemsAndNotes?: (gemProgression?: any, notes?: string) => void;
   onImportCompletePoB?: (pobResult: any) => void;
   onResetGems?: () => void;
+  onResetTimers?: () => void;
+  onResetAllData?: () => Promise<void>;
+  activeFilters?: QuestTag[];
+  onFilterToggle?: (tag: QuestTag) => void;
+  questCounts?: Record<QuestTag, number>;
 }
 
-type SettingsTab = "appearance" | "import" | "detection" | "controls";
+type SettingsTab = "appearance" | "import" | "detection" | "filters";
 
 export const Header: React.FC<HeaderProps> = ({
   settings,
@@ -29,6 +35,11 @@ export const Header: React.FC<HeaderProps> = ({
   onImportGemsAndNotes,
   onImportCompletePoB,
   onResetGems,
+  onResetTimers,
+  onResetAllData,
+  activeFilters = [],
+  onFilterToggle,
+  questCounts = {} as Record<QuestTag, number>,
 }) => {
   const [showSettings, setShowSettings] = useState(false);
   const [activeTab, setActiveTab] = useState<SettingsTab>("appearance");
@@ -227,13 +238,18 @@ export const Header: React.FC<HeaderProps> = ({
     }
   };
 
-  const handleMasterReset = () => {
-    // Reset quest progress
-    onResetQuests();
-    // Reset imported data (gems, notes, items, tree)
-    if (onResetGems) {
-      onResetGems();
+  const handleMasterReset = async () => {
+    // Use the atomic reset function if available
+    if (onResetAllData) {
+      await onResetAllData();
+    } else {
+      // Fallback to individual resets (kept for backwards compatibility)
+      onResetQuests();
+      if (onResetGems) {
+        onResetGems();
+      }
     }
+    
     setShowResetSuccess(true);
     setTimeout(() => setShowResetSuccess(false), 3000);
   };
@@ -477,21 +493,19 @@ export const Header: React.FC<HeaderProps> = ({
               Import/Export
             </button>
             {isElectron && (
-              <>
-                <button
-                  className={`settings-tab ${activeTab === "detection" ? "active" : ""}`}
-                  onClick={() => setActiveTab("detection")}
-                >
-                  Auto-Detection
-                </button>
-                <button
-                  className={`settings-tab ${activeTab === "controls" ? "active" : ""}`}
-                  onClick={() => setActiveTab("controls")}
-                >
-                  Controls
-                </button>
-              </>
+              <button
+                className={`settings-tab ${activeTab === "detection" ? "active" : ""}`}
+                onClick={() => setActiveTab("detection")}
+              >
+                Auto-Detection
+              </button>
             )}
+            <button
+              className={`settings-tab ${activeTab === "filters" ? "active" : ""}`}
+              onClick={() => setActiveTab("filters")}
+            >
+              Filters & Timers
+            </button>
           </div>
 
           <div className="settings-grid">
@@ -564,6 +578,26 @@ export const Header: React.FC<HeaderProps> = ({
                 </div>
               </div>
             </div>
+
+            {/* Hotkey - only in Electron */}
+            {isElectron && (
+              <div className="setting-item">
+                <div className="setting-label">SHOW/HIDE HOTKEY</div>
+                <div className="setting-control">
+                  <select
+                    value={(settings as any).hotkey || "F9"}
+                    onChange={(e) => handleHotkeyChange(e.target.value)}
+                    className="hotkey-selector"
+                  >
+                    {availableHotkeys.map((hotkey) => (
+                      <option key={hotkey} value={hotkey}>
+                        {hotkey}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            )}
               </>
             )}
 
@@ -736,24 +770,58 @@ export const Header: React.FC<HeaderProps> = ({
               </>
             )}
 
-            {/* Controls Tab */}
-            {isElectron && activeTab === "controls" && (
+            {/* Filters & Timers Tab */}
+            {activeTab === "filters" && (
               <>
-            {/* Hotkey */}
+            {/* Quest Filters */}
             <div className="setting-item">
-              <div className="setting-label">SHOW/HIDE HOTKEY</div>
-              <div className="setting-control">
-                <select
-                  value={(settings as any).hotkey || "F9"}
-                  onChange={(e) => handleHotkeyChange(e.target.value)}
-                  className="hotkey-selector"
-                >
-                  {availableHotkeys.map((hotkey) => (
-                    <option key={hotkey} value={hotkey}>
-                      {hotkey}
-                    </option>
-                  ))}
-                </select>
+              <div className="setting-label">QUEST FILTERS</div>
+              <div className="setting-control" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '0' }}>
+                {onFilterToggle && (
+                  <FilterChips
+                    activeFilters={activeFilters}
+                    onFilterToggle={onFilterToggle}
+                    questCounts={questCounts}
+                  />
+                )}
+                <div className="log-help-text" style={{ marginTop: '12px' }}>
+                  {activeFilters.length > 0 
+                    ? `Showing only: ${activeFilters.join(', ')}` 
+                    : 'Click tags to show only those quest types. No selection shows all quests.'}
+                </div>
+              </div>
+            </div>
+
+            {/* Timer Settings */}
+            <div className="setting-item">
+              <div className="setting-label">TIMER SETTINGS</div>
+              <div className="setting-control" style={{ display: 'flex', flexDirection: 'column', gap: '12px', alignItems: 'flex-start' }}>
+                <div style={{ width: '100%' }}>
+                  <label className="setting-checkbox" style={{ justifyContent: 'flex-start' }}>
+                    <input
+                      type="checkbox"
+                      checked={settings.autoActTimers !== false}
+                      onChange={(e) => onSettingsChange({ autoActTimers: e.target.checked })}
+                    />
+                    <span>Auto-start act timers</span>
+                  </label>
+                  <div className="log-help-text" style={{ marginTop: '4px' }}>
+                    Automatically start/pause act timers when you enter or leave an act zone.
+                  </div>
+                </div>
+                <div style={{ width: '100%' }}>
+                  <label className="setting-checkbox" style={{ justifyContent: 'flex-start' }}>
+                    <input
+                      type="checkbox"
+                      checked={settings.autoGlobalTimer !== false}
+                      onChange={(e) => onSettingsChange({ autoGlobalTimer: e.target.checked })}
+                    />
+                    <span>Auto-start total timer</span>
+                  </label>
+                  <div className="log-help-text" style={{ marginTop: '4px' }}>
+                    Automatically start the total speedrun timer when entering Act 1.
+                  </div>
+                </div>
               </div>
             </div>
               </>
