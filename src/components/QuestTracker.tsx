@@ -49,6 +49,15 @@ export const QuestTracker: React.FC = () => {
   const [treePanelVisible, setTreePanelVisible] = useState(false);
   const [filtersCollapsed, setFiltersCollapsed] = useState(false);
   const [timersPausedByProcess, setTimersPausedByProcess] = useState(false);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  // Auto-hide toast after 3 seconds
+  useEffect(() => {
+    if (toastMessage) {
+      const timer = setTimeout(() => setToastMessage(null), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [toastMessage]);
 
   // Derive panel visibility directly from settings (no duplicate state)
   const gemPanelVisible = data.settings.showGemPanel !== false;
@@ -439,7 +448,6 @@ export const QuestTracker: React.FC = () => {
           // Handle tree window open/close in Electron
           if (isElectron && window.electronAPI) {
             if (newVisibility) {
-              // Always open the tree window - it will show a message if no data
               if (data.passiveTreeData) {
                 // Convert Maps to serializable format for IPC
                 const serializableData = {
@@ -451,8 +459,10 @@ export const QuestTracker: React.FC = () => {
                 };
                 await window.electronAPI.openTreeWindow?.(serializableData);
               } else {
-                // Open window with null data - will show "Import POB" message
-                await window.electronAPI.openTreeWindow?.(null);
+                // Show toast instead of opening empty window
+                setToastMessage('No passive tree data. Import a POB build first.');
+                setTreePanelVisible(false);
+                return;
               }
             } else {
               await window.electronAPI.closeTreeWindow?.();
@@ -477,6 +487,14 @@ export const QuestTracker: React.FC = () => {
       />
       
       {isElectron && <UpdateNotification />}
+      
+      {/* Toast notification */}
+      {toastMessage && (
+        <div className="toast-notification">
+          <span className="toast-message">{toastMessage}</span>
+          <button className="toast-close" onClick={() => setToastMessage(null)}>×</button>
+        </div>
+      )}
     </div>
   );
 };
