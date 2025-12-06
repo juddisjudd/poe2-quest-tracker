@@ -14,7 +14,8 @@
     "electron:prod": "cross-env NODE_ENV=production electron .",
     "pack": "electron-builder --dir",
     "dist": "electron-builder --publish always",
-    "clean": "rimraf dist"
+    "clean": "rimraf dist",
+    "update-tree": "bun run scripts/update-tree-data.ts"
   },
   "keywords": [
     "path-of-exile",

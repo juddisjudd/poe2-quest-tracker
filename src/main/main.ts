@@ -162,6 +162,14 @@ const createWindow = (): void => {
     console.log("Window visible:", mainWindow?.isVisible());
   });
 
+  // Close tree window when main window closes
+  mainWindow.on("close", () => {
+    if (treeWindow && !treeWindow.isDestroyed()) {
+      treeWindow.close();
+      treeWindow = null;
+    }
+  });
+
   // Force show window after 2 seconds if ready-to-show hasn't fired
   setTimeout(() => {
     if (mainWindow && !mainWindow.isVisible()) {
@@ -204,6 +212,8 @@ const createTreeWindow = (passiveTreeData?: any): void => {
     height: Math.min(900, height - 100),
     x: Math.floor((width - Math.min(1200, width - 100)) / 2),
     y: Math.floor((height - Math.min(900, height - 100)) / 2),
+    minWidth: 800,
+    minHeight: 600,
     frame: false,
     transparent: true,
     alwaysOnTop: false,
@@ -724,6 +734,75 @@ ipcMain.handle("minimize-tree-window", async () => {
     return { success: true };
   } catch (error) {
     console.error("Failed to minimize tree window:", error);
+    return { success: false, error: (error as Error).message };
+  }
+});
+
+ipcMain.handle("start-tree-window-resize", async (_, direction: string) => {
+  try {
+    if (treeWindow && !treeWindow.isDestroyed()) {
+      const { screen } = require('electron');
+      const point = screen.getCursorScreenPoint();
+      const currentBounds = treeWindow.getBounds();
+
+      // Store initial state for resize
+      (treeWindow as any)._resizeState = {
+        direction,
+        startPoint: point,
+        startBounds: currentBounds,
+      };
+    }
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to start tree window resize:", error);
+    return { success: false, error: (error as Error).message };
+  }
+});
+
+ipcMain.handle("resize-tree-window", async (_, mouseX: number, mouseY: number) => {
+  try {
+    if (treeWindow && !treeWindow.isDestroyed() && (treeWindow as any)._resizeState) {
+      const { direction, startPoint, startBounds } = (treeWindow as any)._resizeState;
+      const deltaX = mouseX - startPoint.x;
+      const deltaY = mouseY - startPoint.y;
+
+      let newBounds = { ...startBounds };
+
+      // Calculate new bounds based on resize direction
+      if (direction.includes('right')) {
+        newBounds.width = Math.max(800, startBounds.width + deltaX);
+      }
+      if (direction.includes('left')) {
+        const newWidth = Math.max(800, startBounds.width - deltaX);
+        newBounds.x = startBounds.x + (startBounds.width - newWidth);
+        newBounds.width = newWidth;
+      }
+      if (direction.includes('bottom')) {
+        newBounds.height = Math.max(600, startBounds.height + deltaY);
+      }
+      if (direction.includes('top')) {
+        const newHeight = Math.max(600, startBounds.height - deltaY);
+        newBounds.y = startBounds.y + (startBounds.height - newHeight);
+        newBounds.height = newHeight;
+      }
+
+      treeWindow.setBounds(newBounds);
+    }
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to resize tree window:", error);
+    return { success: false, error: (error as Error).message };
+  }
+});
+
+ipcMain.handle("end-tree-window-resize", async () => {
+  try {
+    if (treeWindow && !treeWindow.isDestroyed()) {
+      delete (treeWindow as any)._resizeState;
+    }
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to end tree window resize:", error);
     return { success: false, error: (error as Error).message };
   }
 });

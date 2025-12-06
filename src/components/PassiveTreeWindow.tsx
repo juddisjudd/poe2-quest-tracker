@@ -239,7 +239,7 @@ const PassiveTreeWindow: React.FC = () => {
       }
       
       // Add base class illustration
-      if (currentClass.background?.image) {
+      if (currentClass.background) {
         const imageName = currentClass.name.toLowerCase().replace(/\s+/g, '') + 'baseillustration';
         const relativePath = `tree/classes/${imageName}.webp`;
         if (!classImageCache.current.has(relativePath)) {
@@ -249,7 +249,7 @@ const PassiveTreeWindow: React.FC = () => {
       
       // Add ascendancy illustrations
       for (const asc of currentClass.ascendancies) {
-        if (asc.background?.x !== undefined) {
+        if (asc.name) {  // Load all ascendancy images (positions are hardcoded)
           // Try multiple naming patterns
           const ascName = asc.name.toLowerCase().replace(/\s+/g, '');
           const patterns = [
@@ -336,13 +336,13 @@ const PassiveTreeWindow: React.FC = () => {
 
   // Helper to get node display radius (same logic as rendering)
   const getNodeRadius = useCallback((node: PositionedNode): number => {
-    if (node.isClassStart) return 40;
-    if (node.isKeystone) return 35;
-    if (node.isJewelSocket) return 30;
-    if (node.isMastery) return 32;
-    if (node.ascendancyName) return node.isNotable ? 28 : 22;
-    if (node.isNotable) return 28;
-    return 20; // Normal node
+    if (node.isClassStart) return 50;    // Increased from 40
+    if (node.isKeystone) return 44;      // Increased from 35
+    if (node.isJewelSocket) return 38;   // Increased from 30
+    if (node.isMastery) return 40;       // Increased from 32
+    if (node.ascendancyName) return node.isNotable ? 35 : 28; // Increased
+    if (node.isNotable) return 35;       // Increased from 28
+    return 25; // Normal node - increased from 20
   }, []);
 
   // Handle mouse move for panning and hover
@@ -439,7 +439,7 @@ const PassiveTreeWindow: React.FC = () => {
       const currentClass = treeStructure.classes.find(c => c.name === passiveTreeData.className);
       if (currentClass) {
         ctx.globalAlpha = 0.6; // Semi-transparent backgrounds
-        
+
         // Draw base class illustration at center (0,0)
         const classImageName = currentClass.name.toLowerCase().replace(/\s+/g, '') + 'baseillustration';
         const classRelPath = `tree/classes/${classImageName}.webp`;
@@ -448,26 +448,58 @@ const PassiveTreeWindow: React.FC = () => {
           const size = 2790; // 93% of 3000 for better fit
           ctx.drawImage(classImg, -size / 2, -size / 2, size, size);
         }
-        
+
         // Draw ascendancy illustrations at their positions
-        for (const asc of currentClass.ascendancies) {
-          if (asc.background?.x !== undefined && asc.background?.y !== undefined) {
-            const ascName = asc.name.toLowerCase().replace(/\\s+/g, '');
-            // Try both naming patterns
-            let ascImg = classImageCache.current.get(`tree/classes/${ascName}ascendancy.webp`);
-            if (!ascImg) {
-              ascImg = classImageCache.current.get(`tree/classes/${ascName}ascendency.webp`);
-            }
-            if (ascImg) {
-              const width = (asc.background.width || 1500) * 2; // Double the size
-              const height = (asc.background.height || 1500) * 2;
-              const x = asc.background.x - width / 2;
-              const y = asc.background.y - height / 2;
-              ctx.drawImage(ascImg, x, y, width, height);
+        // Hardcoded positions from group data since tree.json doesn't include them in ascendancy objects
+        // CORRECT positions from PathOfBuilding tree.lua ascendancy backgrounds
+        const ascendancyPositions: Record<string, { x: number; y: number }> = {
+          "Pathfinder": { x: 13751.674845732, y: 6121.7981672774 },
+          "Deadeye": { x: 14723.961164228, y: 3128.8882207467 },
+          "Lich": { x: -1573.4397536271, y: -14970.27926277 },
+          "Abyssal Lich": { x: -1573.4397536271, y: -14970.27926277 },
+          "Acolyte of Chayula": { x: 13768.118885853, y: -6084.7248260421 },
+          "Smith of Kitava": { x: -14318.260769023, y: 4644.607885912 },
+          "Amazon": { x: 12178.374348621, y: 8847.1561582513 },
+          "Tactician": { x: 3149.1717656234, y: 14719.636240554 },
+          "Infernalist": { x: -7526.3698730469, y: -13036.055016673 },
+          "Gemling Legionnaire": { x: -3110.1038699583, y: 14727.940378128 },
+          "Chronomancer": { x: 4651.5523934462, y: -14316.006223618 },
+          "Warbringer": { x: -13039.704139156, y: 7520.0458660114 },
+          "Stormweaver": { x: 1573.4397536271, y: -14970.27926277 },
+          "Blood Mage": { x: -4651.5523934462, y: -14316.006223618 },
+          "Ritualist": { x: 10072.820454151, y: 11185.850971744 },
+          "Witchhunter": { x: 19.970347847175, y: 15052.726498839 },
+          "Titan": { x: -11191.249866964, y: 10066.821756582 },
+          "Invoker": { x: 12202.167028072, y: -8814.3118666561 }
+        };
+
+        // Draw ascendancy illustrations at their node positions (only if selected)
+        if (passiveTreeData.ascendClassName) {
+          const selectedAsc = currentClass.ascendancies.find(a => a.name === passiveTreeData.ascendClassName);
+          if (selectedAsc) {
+            const ascPos = ascendancyPositions[selectedAsc.name];
+            if (ascPos) {
+              const ascName = selectedAsc.name.toLowerCase().replace(/\s+/g, '');
+              // Try both naming patterns
+              let ascImg = classImageCache.current.get(`tree/classes/${ascName}ascendancy.webp`);
+              if (!ascImg) {
+                ascImg = classImageCache.current.get(`tree/classes/${ascName}ascendency.webp`);
+              }
+              if (ascImg) {
+                // Full opacity for ascendancy (override the 0.6 from class background)
+                ctx.globalAlpha = 1.0;
+                const width = 1500 * 2; // POB formula: (width || 1500) * 2
+                const height = 1500 * 2;
+                const x = ascPos.x - width / 2;  // POB formula: x - width/2
+                const y = ascPos.y - height / 2; // POB formula: y - height/2
+                ctx.drawImage(ascImg, x, y, width, height);
+                // Reset alpha back to 0.6 for remaining backgrounds
+                ctx.globalAlpha = 0.6;
+              }
             }
           }
         }
-        
+
         // Draw ascendancy background frame on top of class/ascendancy illustrations
         ctx.globalAlpha = 1.0; // Frame at full opacity
         const frameImg = classImageCache.current.get('tree/ascendancy-background_4000_4000_BC7.webp');
@@ -475,7 +507,7 @@ const PassiveTreeWindow: React.FC = () => {
           const frameSize = 3720; // 93% of 4000 for better fit
           ctx.drawImage(frameImg, -frameSize / 2, -frameSize / 2, frameSize, frameSize);
         }
-        
+
         ctx.globalAlpha = 1.0; // Reset alpha
       }
     }
@@ -487,133 +519,191 @@ const PassiveTreeWindow: React.FC = () => {
     // Track which connections we've already drawn to avoid duplicates
     const drawnConnections = new Set<string>();
 
+    // Helper function to draw a connection (arc or line)
+    const drawConnection = (node: PositionedNode, target: PositionedNode, conn: { id: number; orbit?: number }, isAllocated: boolean) => {
+      // Set line style based on allocation - PathOfBuilding approach: full opacity, color/size distinction
+      if (isAllocated) {
+        // Allocated path - bright golden, thick
+        ctx.strokeStyle = '#c9a032';
+        ctx.lineWidth = 8;
+        ctx.globalAlpha = 1.0;
+      } else {
+        // Unallocated - light gray, thin (PathOfBuilding uses white but textures provide visual weight)
+        ctx.strokeStyle = '#666666';
+        ctx.lineWidth = 2;
+        ctx.globalAlpha = 1.0; // Full opacity like PathOfBuilding
+      }
+
+      ctx.beginPath();
+
+      // Determine if we should draw a curved arc or straight line
+      // Case 1: connection.orbit !== 0 - curved arc based on orbit radius
+      // Case 2: nodes in same group AND same orbit AND connection.orbit === 0 - arc along orbit
+      let drewArc = false;
+
+      if (conn.orbit !== undefined && conn.orbit !== 0 && orbitRadii[Math.abs(conn.orbit)] !== undefined) {
+        // Curved arc connection using POB's algorithm
+        const orbit = Math.abs(conn.orbit);
+        const r = orbitRadii[orbit];
+
+        const dx = target.x - node.x;
+        const dy = target.y - node.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        if (dist < r * 2 && dist > 0) {
+          // Calculate the center of the arc circle
+          // The arc passes through both nodes with radius r
+          const perp = Math.sqrt(r * r - (dist * dist) / 4) * (conn.orbit > 0 ? 1 : -1);
+          const cx = node.x + dx / 2 + perp * (dy / dist);
+          const cy = node.y + dy / 2 - perp * (dx / dist);
+
+          // Calculate angles from center to each node
+          const angle1 = Math.atan2(node.y - cy, node.x - cx);
+          const angle2 = Math.atan2(target.y - cy, target.x - cx);
+
+          // Determine arc direction (clockwise vs counterclockwise)
+          // We want the shorter arc
+          let startAngle = angle1;
+          let endAngle = angle2;
+
+          // Normalize angle difference
+          let angleDiff = endAngle - startAngle;
+          while (angleDiff > Math.PI) angleDiff -= 2 * Math.PI;
+          while (angleDiff < -Math.PI) angleDiff += 2 * Math.PI;
+
+          // Draw the arc - counterclockwise if angleDiff is negative
+          ctx.arc(cx, cy, r, startAngle, endAngle, angleDiff < 0);
+          drewArc = true;
+        }
+      } else if (node.group === target.group && node.orbit === target.orbit && (conn.orbit === 0 || conn.orbit === undefined)) {
+        // Nodes are in the same orbit of the same group - draw arc along orbit
+        const group = treeStructure?.groups[node.group.toString()];
+        if (group) {
+          const orbitRadius = orbitRadii[node.orbit] || 0;
+
+          if (orbitRadius > 0) {
+            // Use node angles to draw arc
+            let startAngle = node.angle;
+            let endAngle = target.angle;
+
+            // Ensure we draw the shorter arc
+            let angleDiff = endAngle - startAngle;
+            while (angleDiff > Math.PI) angleDiff -= 2 * Math.PI;
+            while (angleDiff < -Math.PI) angleDiff += 2 * Math.PI;
+
+            // Convert from POB angle system (0 = up) to canvas angle system (0 = right)
+            // POB: x = cx + sin(angle) * r, y = cy - cos(angle) * r
+            // This means POB angle 0 = up = canvas angle -π/2
+            const canvasStartAngle = startAngle - Math.PI / 2;
+            const canvasEndAngle = endAngle - Math.PI / 2;
+
+            ctx.arc(group.x, group.y, orbitRadius, canvasStartAngle, canvasEndAngle, angleDiff < 0);
+            drewArc = true;
+          }
+        }
+      }
+
+      if (!drewArc) {
+        // Draw straight line
+        ctx.moveTo(node.x, node.y);
+        ctx.lineTo(target.x, target.y);
+      }
+
+      ctx.stroke();
+      ctx.globalAlpha = 1.0; // Reset alpha
+    };
+
+    // PASS 1: Draw ALL unallocated connections (dim, thin)
     for (const node of positionedNodes.values()) {
       // Skip isOnlyImage nodes (mastery display nodes)
       if (node.isOnlyImage) continue;
-      
+
       // Skip class start nodes - POB doesn't draw connectors to/from these
       if (node.isClassStart) continue;
-      
-      // Only draw connections for allocated nodes
-      if (!allocatedNodesSet.has(node.id)) continue;
-      
+
       // Cull nodes outside view
-      if (node.x < visibleLeft || node.x > visibleRight || 
+      if (node.x < visibleLeft || node.x > visibleRight ||
           node.y < visibleTop || node.y > visibleBottom) continue;
 
       for (const conn of node.connections) {
         const target = positionedNodes.get(conn.id);
         if (!target) continue;
-        
+
         // Skip connections to isOnlyImage nodes
         if (target.isOnlyImage) continue;
-        
+
         // Skip connections to class start nodes
         if (target.isClassStart) continue;
-        
+
         // Skip cross-ascendancy connections (different ascendancy names)
         if (node.ascendancyName !== target.ascendancyName) continue;
-        
-        // Only draw connections to other allocated nodes
-        if (!allocatedNodesSet.has(conn.id)) continue;
-        
+
         // Create a unique key for this connection (sorted IDs to ensure consistency)
         const connKey = node.id < conn.id ? `${node.id}-${conn.id}` : `${conn.id}-${node.id}`;
         if (drawnConnections.has(connKey)) continue;
         drawnConnections.add(connKey);
 
-        // Set line style for allocated path - bright golden
-        ctx.strokeStyle = '#c9a032';
-        ctx.lineWidth = 8;
+        // Check if BOTH nodes are allocated
+        const bothAllocated = allocatedNodesSet.has(node.id) && allocatedNodesSet.has(conn.id);
 
-        ctx.beginPath();
-
-        // Determine if we should draw a curved arc or straight line
-        // Case 1: connection.orbit !== 0 - curved arc based on orbit radius
-        // Case 2: nodes in same group AND same orbit AND connection.orbit === 0 - arc along orbit
-        let drewArc = false;
-
-        if (conn.orbit !== 0 && orbitRadii[Math.abs(conn.orbit)] !== undefined) {
-          // Curved arc connection using POB's algorithm
-          const orbit = Math.abs(conn.orbit);
-          const r = orbitRadii[orbit];
-          
-          const dx = target.x - node.x;
-          const dy = target.y - node.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          
-          if (dist < r * 2 && dist > 0) {
-            // Calculate the center of the arc circle
-            // The arc passes through both nodes with radius r
-            const perp = Math.sqrt(r * r - (dist * dist) / 4) * (conn.orbit > 0 ? 1 : -1);
-            const cx = node.x + dx / 2 + perp * (dy / dist);
-            const cy = node.y + dy / 2 - perp * (dx / dist);
-            
-            // Calculate angles from center to each node
-            const angle1 = Math.atan2(node.y - cy, node.x - cx);
-            const angle2 = Math.atan2(target.y - cy, target.x - cx);
-            
-            // Determine arc direction (clockwise vs counterclockwise)
-            // We want the shorter arc
-            let startAngle = angle1;
-            let endAngle = angle2;
-            
-            // Normalize angle difference
-            let angleDiff = endAngle - startAngle;
-            while (angleDiff > Math.PI) angleDiff -= 2 * Math.PI;
-            while (angleDiff < -Math.PI) angleDiff += 2 * Math.PI;
-            
-            // Draw the arc - counterclockwise if angleDiff is negative
-            ctx.arc(cx, cy, r, startAngle, endAngle, angleDiff < 0);
-            drewArc = true;
-          }
-        } else if (node.group === target.group && node.orbit === target.orbit && conn.orbit === 0) {
-          // Nodes are in the same orbit of the same group - draw arc along orbit
-          const group = treeStructure?.groups[node.group.toString()];
-          if (group) {
-            const orbitRadius = orbitRadii[node.orbit] || 0;
-            
-            if (orbitRadius > 0) {
-              // Use node angles to draw arc
-              let startAngle = node.angle;
-              let endAngle = target.angle;
-              
-              // Ensure we draw the shorter arc
-              let angleDiff = endAngle - startAngle;
-              while (angleDiff > Math.PI) angleDiff -= 2 * Math.PI;
-              while (angleDiff < -Math.PI) angleDiff += 2 * Math.PI;
-              
-              // Convert from POB angle system (0 = up) to canvas angle system (0 = right)
-              // POB: x = cx + sin(angle) * r, y = cy - cos(angle) * r
-              // This means POB angle 0 = up = canvas angle -π/2
-              const canvasStartAngle = startAngle - Math.PI / 2;
-              const canvasEndAngle = endAngle - Math.PI / 2;
-              
-              ctx.arc(group.x, group.y, orbitRadius, canvasStartAngle, canvasEndAngle, angleDiff < 0);
-              drewArc = true;
-            }
-          }
+        // Only draw unallocated connections in this pass
+        if (!bothAllocated) {
+          drawConnection(node, target, conn, false);
         }
-        
-        if (!drewArc) {
-          // Draw straight line
-          ctx.moveTo(node.x, node.y);
-          ctx.lineTo(target.x, target.y);
-        }
-        
-        ctx.stroke();
+      }
+    }
+
+    // PASS 2: Draw allocated connections (bright, thick) - on top
+    drawnConnections.clear(); // Reset for second pass
+    for (const node of positionedNodes.values()) {
+      // Skip isOnlyImage nodes (mastery display nodes)
+      if (node.isOnlyImage) continue;
+
+      // Skip class start nodes - POB doesn't draw connectors to/from these
+      if (node.isClassStart) continue;
+
+      // Only process allocated nodes in this pass
+      if (!allocatedNodesSet.has(node.id)) continue;
+
+      // Cull nodes outside view
+      if (node.x < visibleLeft || node.x > visibleRight ||
+          node.y < visibleTop || node.y > visibleBottom) continue;
+
+      for (const conn of node.connections) {
+        const target = positionedNodes.get(conn.id);
+        if (!target) continue;
+
+        // Skip connections to isOnlyImage nodes
+        if (target.isOnlyImage) continue;
+
+        // Skip connections to class start nodes
+        if (target.isClassStart) continue;
+
+        // Skip cross-ascendancy connections (different ascendancy names)
+        if (node.ascendancyName !== target.ascendancyName) continue;
+
+        // Only draw connections to other allocated nodes
+        if (!allocatedNodesSet.has(conn.id)) continue;
+
+        // Create a unique key for this connection (sorted IDs to ensure consistency)
+        const connKey = node.id < conn.id ? `${node.id}-${conn.id}` : `${conn.id}-${node.id}`;
+        if (drawnConnections.has(connKey)) continue;
+        drawnConnections.add(connKey);
+
+        // Draw allocated connection
+        drawConnection(node, target, conn, true);
       }
     }
 
     // Helper function to get node radius based on type
     const getNodeRadius = (node: PositionedNode): number => {
-      if (node.isClassStart) return 40;  // Class start nodes (e.g., RANGER)
-      if (node.isKeystone) return 35;
-      if (node.isNotable) return 28;
-      if (node.isMastery) return 30;
-      if (node.isJewelSocket) return 25;
-      if (node.ascendancyName) return node.isNotable ? 28 : 22;
-      return 18; // Normal small passives
+      if (node.isClassStart) return 50;  // Class start nodes - increased from 40
+      if (node.isKeystone) return 44;    // Keystones - increased from 35
+      if (node.isNotable) return 35;     // Notables - increased from 28
+      if (node.isMastery) return 38;     // Masteries - increased from 30
+      if (node.isJewelSocket) return 32; // Jewel sockets - increased from 25
+      if (node.ascendancyName) return node.isNotable ? 35 : 28; // Ascendancy nodes - increased
+      return 23; // Normal small passives - increased from 18
     };
 
     // Draw nodes
@@ -667,6 +757,10 @@ const PassiveTreeWindow: React.FC = () => {
         glowColor = isAllocated ? 'rgba(160, 128, 32, 0.4)' : '';
       }
 
+      // PathOfBuilding approach: No opacity dimming, use color distinction only
+      // Unallocated nodes are darker colored but still at full opacity
+      ctx.globalAlpha = 1.0;
+
       // Draw glow for allocated nodes
       if (glowColor && isAllocated) {
         ctx.save();
@@ -691,7 +785,7 @@ const PassiveTreeWindow: React.FC = () => {
             ctx.beginPath();
             ctx.arc(node.x, node.y, displayRadius, 0, Math.PI * 2);
             ctx.clip();
-            
+
             // Draw icon centered and scaled
             const iconSize = displayRadius * 2.2; // Slightly larger than circle to fill it
             ctx.drawImage(
@@ -714,7 +808,7 @@ const PassiveTreeWindow: React.FC = () => {
         ctx.fillStyle = fillColor;
         ctx.fill();
       }
-      
+
       // Draw border
       ctx.beginPath();
       ctx.arc(node.x, node.y, displayRadius, 0, Math.PI * 2);
@@ -730,6 +824,9 @@ const PassiveTreeWindow: React.FC = () => {
         ctx.lineWidth = 3;
         ctx.stroke();
       }
+
+      // Reset opacity
+      ctx.globalAlpha = 1.0;
     }
 
     ctx.restore();
@@ -751,6 +848,33 @@ const PassiveTreeWindow: React.FC = () => {
     if (window.electronAPI?.closeTreeWindow) {
       await window.electronAPI.closeTreeWindow();
     }
+  }, []);
+
+  // Handle window resize
+  const handleResizeStart = useCallback((direction: string) => {
+    return async (e: React.MouseEvent) => {
+      e.preventDefault();
+      if (window.electronAPI?.startTreeWindowResize) {
+        await window.electronAPI.startTreeWindowResize(direction);
+
+        const handleMouseMove = async (moveEvent: MouseEvent) => {
+          if (window.electronAPI?.resizeTreeWindow) {
+            await window.electronAPI.resizeTreeWindow(moveEvent.screenX, moveEvent.screenY);
+          }
+        };
+
+        const handleMouseUp = async () => {
+          if (window.electronAPI?.endTreeWindowResize) {
+            await window.electronAPI.endTreeWindowResize();
+          }
+          document.removeEventListener('mousemove', handleMouseMove);
+          document.removeEventListener('mouseup', handleMouseUp);
+        };
+
+        document.addEventListener('mousemove', handleMouseMove);
+        document.addEventListener('mouseup', handleMouseUp);
+      }
+    };
   }, []);
 
   // Reset view
@@ -835,6 +959,16 @@ const PassiveTreeWindow: React.FC = () => {
 
   return (
     <div className="passive-tree-window">
+      {/* Resize handles */}
+      <div className="resize-handle resize-top" onMouseDown={handleResizeStart('top')}></div>
+      <div className="resize-handle resize-right" onMouseDown={handleResizeStart('right')}></div>
+      <div className="resize-handle resize-bottom" onMouseDown={handleResizeStart('bottom')}></div>
+      <div className="resize-handle resize-left" onMouseDown={handleResizeStart('left')}></div>
+      <div className="resize-handle resize-top-left" onMouseDown={handleResizeStart('top-left')}></div>
+      <div className="resize-handle resize-top-right" onMouseDown={handleResizeStart('top-right')}></div>
+      <div className="resize-handle resize-bottom-left" onMouseDown={handleResizeStart('bottom-left')}></div>
+      <div className="resize-handle resize-bottom-right" onMouseDown={handleResizeStart('bottom-right')}></div>
+
       <div className="tree-header">
         <div className="tree-info">
           <span className="tree-title">Passive Tree</span>
@@ -966,3 +1100,4 @@ const PassiveTreeWindow: React.FC = () => {
 };
 
 export default PassiveTreeWindow;
+

@@ -237,6 +237,9 @@ declare global {
       openTreeWindow: (passiveTreeData: any) => Promise<void>;
       closeTreeWindow: () => Promise<void>;
       minimizeTreeWindow: () => Promise<void>;
+      startTreeWindowResize: (direction: string) => Promise<{ success: boolean; error?: string }>;
+      resizeTreeWindow: (mouseX: number, mouseY: number) => Promise<{ success: boolean; error?: string }>;
+      endTreeWindowResize: () => Promise<{ success: boolean; error?: string }>;
       isTreeWindowOpen: () => Promise<boolean>;
       sendTreeData: (passiveTreeData: any) => Promise<void>;
       savePassiveTreeData: (data: any) => Promise<{ success: boolean; error?: string }>;
