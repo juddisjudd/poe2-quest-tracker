@@ -16,7 +16,7 @@ export const useGameProcessMonitor = ({
   enabled,
   onGameClosed,
   onGameResumed,
-  pollInterval = 5000, // Check every 5 seconds
+  pollInterval = 10000, // Check every 10 seconds (native process checking, no WMI overhead)
 }: UseGameProcessMonitorProps) => {
   const [isGameRunning, setIsGameRunning] = useState<boolean | null>(null); // null = unknown
   const [lastCheckTime, setLastCheckTime] = useState<Date | null>(null);

@@ -1,10 +1,7 @@
-import { exec } from 'child_process';
-import { promisify } from 'util';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as os from 'os';
-
-const execAsync = promisify(exec);
+import find from 'find-process';
 
 export interface ProcessInfo {
   name: string;
@@ -24,115 +21,47 @@ export function getPlatform(): 'windows' | 'linux' | 'mac' | 'unknown' {
 }
 
 /**
- * Finds running processes by name on Windows
+ * Finds running processes by name using native Node.js (cross-platform)
+ * Uses find-process library which doesn't rely on WMI/WMIC on Windows
  */
-async function findProcessByNameWindows(processName: string): Promise<ProcessInfo[]> {
+async function findProcessByNameNative(processName: string): Promise<ProcessInfo[]> {
   try {
-    const { stdout } = await execAsync(
-      `wmic process where "name='${processName}'" get Name,ProcessId,ExecutablePath /format:csv`
-    );
-    
-    const processes: ProcessInfo[] = [];
-    const lines = stdout.trim().split('\n');
-    
-    for (let i = 1; i < lines.length; i++) {
-      const line = lines[i].trim();
-      if (!line) continue;
-      
-      const parts = line.split(',');
-      if (parts.length >= 4) {
-        const executablePath = parts[1]?.trim();
-        const name = parts[2]?.trim();
-        const pidStr = parts[3]?.trim();
-        
-        if (executablePath && name && pidStr) {
-          const pid = parseInt(pidStr, 10);
-          if (!isNaN(pid)) {
-            processes.push({ name, pid, executablePath });
-          }
-        }
-      }
-    }
-    
-    return processes;
-  } catch (error) {
-    console.error('Error finding processes on Windows:', error);
-    return [];
-  }
-}
+    // find-process uses native bindings, not WMIC on Windows
+    // This eliminates WMI Provider Host CPU usage
+    const processList = await find('name', processName, true); // strict match
 
-/**
- * Finds running processes by name on Linux
- */
-async function findProcessByNameLinux(processName: string): Promise<ProcessInfo[]> {
-  try {
-    // Use pgrep and readlink to find process info on Linux
-    const { stdout } = await execAsync(`pgrep -f "${processName}" 2>/dev/null || true`);
-    
-    const processes: ProcessInfo[] = [];
-    const pids = stdout.trim().split('\n').filter(p => p);
-    
-    for (const pidStr of pids) {
-      const pid = parseInt(pidStr, 10);
-      if (isNaN(pid)) continue;
-      
-      try {
-        // Get the executable path from /proc
-        const exePath = await fs.promises.readlink(`/proc/${pid}/exe`);
-        if (exePath && exePath.toLowerCase().includes('pathofexile')) {
-          processes.push({
-            name: path.basename(exePath),
-            pid,
-            executablePath: exePath
-          });
-        }
-      } catch {
-        // Process may have exited or we don't have permission
-        continue;
-      }
-    }
-    
+    const processes: ProcessInfo[] = processList.map(p => ({
+      name: p.name || processName,
+      pid: p.pid,
+      executablePath: p.bin || '', // Binary path
+    }));
+
     return processes;
   } catch (error) {
-    console.error('Error finding processes on Linux:', error);
+    console.error(`Error finding process "${processName}" with native method:`, error);
     return [];
   }
 }
 
 /**
  * Finds running processes by name (cross-platform)
+ * Now uses native Node.js process checking instead of WMIC/pgrep
  */
 export async function findProcessByName(processName: string): Promise<ProcessInfo[]> {
-  const platform = getPlatform();
-  
-  if (platform === 'windows') {
-    return findProcessByNameWindows(processName);
-  } else if (platform === 'linux') {
-    return findProcessByNameLinux(processName);
-  }
-  
-  console.log(`Process detection not supported on platform: ${platform}`);
-  return [];
+  return findProcessByNameNative(processName);
 }
 
 /**
  * Find POE2 process if it's running (cross-platform)
+ * Now uses native process checking for all platforms
  */
 export async function findPoeProcess(): Promise<ProcessInfo | null> {
-  const platform = getPlatform();
-  
   try {
-    if (platform === 'windows') {
-      const processNames = ['PathOfExile.exe', 'PathOfExileSteam.exe'];
-      for (const processName of processNames) {
-        const processes = await findProcessByName(processName);
-        if (processes.length > 0) {
-          return processes[0];
-        }
-      }
-    } else if (platform === 'linux') {
-      // On Linux, search for any PathOfExile process
-      const processes = await findProcessByNameLinux('PathOfExile');
+    // Check for both standalone and Steam versions
+    const processNames = ['PathOfExile.exe', 'PathOfExileSteam.exe', 'PathOfExile'];
+
+    for (const processName of processNames) {
+      const processes = await findProcessByName(processName);
       if (processes.length > 0) {
         return processes[0];
       }
@@ -188,28 +117,29 @@ export async function detectPoeLogFile(): Promise<string | null> {
 
 /**
  * Detects POE2 log file on Windows by finding the running process
+ * Now uses native process checking instead of WMIC
  */
 async function detectPoeLogFileWindows(): Promise<string | null> {
   try {
     const processNames = ['PathOfExile.exe', 'PathOfExileSteam.exe'];
 
     for (const processName of processNames) {
-      const processes = await findProcessByNameWindows(processName);
-      
+      const processes = await findProcessByName(processName);
+
       if (processes.length > 0) {
         console.log(`Found ${processName} process`);
-        
+
         const process = processes[0];
         const executablePath = process.executablePath;
-        
+
         if (!executablePath || !fs.existsSync(executablePath)) {
           console.log('Executable path not found or invalid:', executablePath);
           continue;
         }
-        
+
         const gameDirectory = path.dirname(executablePath);
         const logFilePath = path.join(gameDirectory, 'logs', 'Client.txt');
-        
+
         if (fs.existsSync(logFilePath)) {
           console.log(`Found POE2 log file for ${processName}:`, logFilePath);
           return logFilePath;
@@ -218,7 +148,7 @@ async function detectPoeLogFileWindows(): Promise<string | null> {
         }
       }
     }
-    
+
     console.log('Path of Exile 2 process not found (checked both regular and Steam versions)');
     return null;
   } catch (error) {
