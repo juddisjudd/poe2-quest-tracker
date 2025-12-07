@@ -976,15 +976,20 @@ ipcMain.handle("switch-tree-loadout", async (_, loadoutId: string) => {
     // Update the active loadout
     data.gemLoadouts.activeLoadoutId = loadoutId;
 
-    // Save the updated gem data (debounced)
-    await debouncedWriter.write(dataPath, data);
+    // Save the updated gem data (debounced, non-blocking for faster UX)
+    debouncedWriter.write(dataPath, data).catch(err =>
+      log.error("Failed to save gem data after loadout switch:", err)
+    );
 
-    // Also save the passive tree data separately (debounced)
+    // Also save the passive tree data separately (debounced, non-blocking)
     const treeDataPath = getPassiveTreeDataPath();
-    await debouncedWriter.write(treeDataPath, loadout.passiveTree);
+    debouncedWriter.write(treeDataPath, loadout.passiveTree).catch(err =>
+      log.error("Failed to save tree data after loadout switch:", err)
+    );
 
     console.log("Switched to loadout:", loadout.name, "with", loadout.passiveTree.allocatedNodes?.length || 0, "nodes");
 
+    // Return immediately for faster UI response (writes happen in background)
     return loadout.passiveTree;
   } catch (error) {
     console.error("Failed to switch tree loadout:", error);

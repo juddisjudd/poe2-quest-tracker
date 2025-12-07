@@ -41,6 +41,7 @@ const PassiveTreeWindow: React.FC = () => {
   const [loadouts, setLoadouts] = useState<LoadoutInfo[]>([]);
   const [activeLoadoutId, setActiveLoadoutId] = useState<string>('');
   const [renderKey, setRenderKey] = useState(0); // Force re-render when switching loadouts
+  const [switchingLoadout, setSwitchingLoadout] = useState(false); // Loading state for loadout switch
   const [viewState, setViewState] = useState<ViewState>({
     scale: 0.08,
     offsetX: 0,
@@ -898,13 +899,14 @@ const PassiveTreeWindow: React.FC = () => {
       console.log('Cannot switch: missing API or tree structure');
       return;
     }
-    
+
     console.log('Switching to loadout:', loadoutId, 'from:', activeLoadoutId);
-    
+    setSwitchingLoadout(true); // Show loading indicator
+
     try {
       const newTreeData = await window.electronAPI.switchTreeLoadout(loadoutId);
       console.log('Received tree data:', newTreeData);
-      
+
       if (newTreeData) {
         // Convert serialized data back to proper format
         const treeData: PassiveTreeData = {
@@ -912,20 +914,22 @@ const PassiveTreeWindow: React.FC = () => {
           masterySelections: new Map(Object.entries(newTreeData.masterySelections || {})),
           jewelSockets: newTreeData.jewelSockets ? new Map(Object.entries(newTreeData.jewelSockets)) : undefined,
         };
-        
+
         console.log('Setting new tree data with', treeData.allocatedNodes?.length, 'nodes, class:', treeData.className);
-        
+
         // Update state - use functional updates to ensure React sees the changes
         setPassiveTreeData(treeData);
         setActiveLoadoutId(loadoutId);
         setRenderKey(k => k + 1); // Force canvas re-render
-        
+
         console.log('State updated, activeLoadoutId should now be:', loadoutId);
       } else {
         console.log('No tree data received from switch');
       }
     } catch (error) {
       console.error('Failed to switch loadout:', error);
+    } finally {
+      setSwitchingLoadout(false); // Hide loading indicator
     }
   }, [treeStructure, activeLoadoutId]);
 
@@ -996,10 +1000,11 @@ const PassiveTreeWindow: React.FC = () => {
                   handleLoadoutSwitch(newId);
                 }}
                 className="loadout-dropdown"
+                disabled={switchingLoadout}
               >
                 {loadouts.map((loadout) => (
-                  <option 
-                    key={loadout.id} 
+                  <option
+                    key={loadout.id}
                     value={loadout.id}
                     disabled={!loadout.hasTree}
                   >
@@ -1007,6 +1012,9 @@ const PassiveTreeWindow: React.FC = () => {
                   </option>
                 ))}
               </select>
+              {switchingLoadout && (
+                <span className="loadout-loading-indicator">Loading...</span>
+              )}
             </div>
           )}
         </div>

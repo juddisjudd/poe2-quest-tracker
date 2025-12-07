@@ -50,6 +50,9 @@
 .tree-loadout-selector {
   margin-left: 12px;
   -webkit-app-region: no-drag;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .loadout-dropdown {
@@ -65,13 +68,18 @@
   transition: all 0.15s ease;
 }
 
-.loadout-dropdown:hover {
+.loadout-dropdown:hover:not(:disabled) {
   background: rgba(0, 0, 0, 0.9);
   border-color: rgba(255, 255, 255, 0.3);
 }
 
 .loadout-dropdown:focus {
   border-color: rgba(255, 255, 255, 0.5);
+}
+
+.loadout-dropdown:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .loadout-dropdown option {
@@ -82,6 +90,21 @@
 
 .loadout-dropdown option:disabled {
   color: rgba(255, 255, 255, 0.4);
+}
+
+.loadout-loading-indicator {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
 }
 
 .tree-controls {
