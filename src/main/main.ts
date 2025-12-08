@@ -330,8 +330,16 @@ const toggleVisibility = (): void => {
 
   if (mainWindow.isVisible() && !mainWindow.isMinimized()) {
     mainWindow.hide();
+    // Also hide tree window if it's open
+    if (treeWindow && !treeWindow.isDestroyed()) {
+      treeWindow.hide();
+    }
   } else {
     mainWindow.show();
+    // Also show tree window if it exists
+    if (treeWindow && !treeWindow.isDestroyed()) {
+      treeWindow.show();
+    }
   }
 };
 
