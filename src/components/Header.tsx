@@ -3,6 +3,8 @@ import { TrackerData, QuestTag } from "../types";
 import { parsePathOfBuildingCodeWithNotes } from "../utils/pobParser";
 import { FilterChips } from "./FilterChips";
 import type { ElectronAPI } from "../main/preload";
+import { FaDiscord } from "react-icons/fa";
+import { SiKofi } from "react-icons/si";
 
 interface HeaderProps {
   settings: TrackerData["settings"];
@@ -119,6 +121,14 @@ export const Header: React.FC<HeaderProps> = ({
       window.electronAPI.openExternal("https://ko-fi.com/ohitsjudd");
     } else {
       window.open("https://ko-fi.com/ohitsjudd", "_blank");
+    }
+  };
+
+  const handleDiscordClick = () => {
+    if (isElectron) {
+      window.electronAPI.openExternal("https://discord.exilecompass.com");
+    } else {
+      window.open("https://discord.exilecompass.com", "_blank");
     }
   };
 
@@ -408,11 +418,18 @@ export const Header: React.FC<HeaderProps> = ({
           <div className="window-controls">
             {/* Support, Edit, and Settings buttons for ALL versions */}
             <button
+              className="control-btn discord-btn"
+              onClick={handleDiscordClick}
+              title="Join Discord Community"
+            >
+              <FaDiscord />
+            </button>
+            <button
               className="control-btn support-btn"
               onClick={handleSupportClick}
               title="Support This Project"
             >
-              ☕
+              <SiKofi />
             </button>
             <button
               className="control-btn settings-btn"
@@ -830,6 +847,7 @@ export const Header: React.FC<HeaderProps> = ({
 
           <div className="support-section">
             <button className="support-button" onClick={handleSupportClick}>
+              <SiKofi style={{ marginRight: '8px' }} />
               Support This Project
             </button>
             <p className="support-text">

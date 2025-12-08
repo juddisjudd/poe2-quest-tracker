@@ -50,12 +50,6 @@ export const ActPanel: React.FC<ActPanelProps> = ({
             <span className="progress-text">
               {completedQuests}/{totalQuests} ({Math.round(progressPercentage)}%)
             </span>
-            <div className="progress-bar">
-              <div
-                className="progress-fill"
-                style={{ width: `${progressPercentage}%` }}
-              />
-            </div>
           </div>
           {onTimerUpdate && (
             <div onClick={(e) => e.stopPropagation()}>

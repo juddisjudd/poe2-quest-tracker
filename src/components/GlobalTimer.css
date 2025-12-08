@@ -6,7 +6,7 @@
   background: rgba(0, 0, 0, 0.3);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   font-family: 'Courier New', monospace;
-  margin-bottom: 60px; /* Space for footer buttons */
+  margin-bottom: 0.5rem;
   transition: all var(--transition-fast);
 }
 

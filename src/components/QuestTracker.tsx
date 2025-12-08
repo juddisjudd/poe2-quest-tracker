@@ -302,6 +302,14 @@ export const QuestTracker: React.FC = () => {
         questCounts={questCounts}
       />
 
+      {/* Global Timer */}
+      <GlobalTimer
+        initialTimer={data.globalTimer}
+        onTimerUpdate={(timer: GlobalTimerType) => updateGlobalTimer(timer)}
+        currentActNumber={data.currentActNumber}
+        autoStart={data.settings.autoGlobalTimer !== false}
+      />
+
       {/* Overall Progress */}
       <div className="overall-progress-container">
         <div className="overall-progress-header">
@@ -337,14 +345,6 @@ export const QuestTracker: React.FC = () => {
           );
         })}
       </div>
-
-      {/* Global Timer */}
-      <GlobalTimer
-        initialTimer={data.globalTimer}
-        onTimerUpdate={(timer: GlobalTimerType) => updateGlobalTimer(timer)}
-        currentActNumber={data.currentActNumber}
-        autoStart={data.settings.autoGlobalTimer !== false}
-      />
 
       {/* Gem Progression Panel */}
       {data.gemProgression && (() => {

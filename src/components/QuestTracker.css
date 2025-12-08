@@ -185,6 +185,16 @@ body {
   color: #ff6b6b;
 }
 
+.discord-btn {
+  color: #5865f2;
+  font-size: 1rem;
+}
+
+.discord-btn:hover {
+  background: rgba(88, 101, 242, 0.2);
+  color: #5865f2;
+}
+
 .support-btn {
   color: #5fb3a3;
   font-size: 1rem;
@@ -507,12 +517,6 @@ body {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(95, 179, 163, 0.4);
   background: linear-gradient(135deg, #6bc5b4, #5fb3a3);
-}
-
-.support-button::before {
-  content: "☕";
-  font-size: 1.1em;
-  margin-right: 4px;
 }
 
 .support-text {
