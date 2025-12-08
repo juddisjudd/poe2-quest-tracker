@@ -52,8 +52,11 @@ const PassiveTreeWindow: React.FC = () => {
   const imageCache = useRef<Map<string, HTMLImageElement | null>>(new Map());
   // Image cache for class/ascendancy illustrations
   const classImageCache = useRef<Map<string, HTMLImageElement | null>>(new Map());
+  // Image cache for node frames
+  const frameImageCache = useRef<Map<string, HTMLImageElement | null>>(new Map());
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const [classImagesLoaded, setClassImagesLoaded] = useState(false);
+  const [frameImagesLoaded, setFrameImagesLoaded] = useState(false);
   const [assetsBasePath, setAssetsBasePath] = useState<string | null>(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 }); // Track mouse position for tooltip
 
@@ -169,34 +172,38 @@ const PassiveTreeWindow: React.FC = () => {
     loadData();
   }, []);
 
-  // Preload images for allocated nodes
+  // Preload images: Allocated nodes first (priority), then unallocated nodes (lazy)
   useEffect(() => {
-    if (!positionedNodes || !allocatedNodesSet.size || !assetsBasePath) return;
-    
+    if (!positionedNodes || !assetsBasePath) return;
+
     const loadImages = async () => {
-      const iconsToLoad: Map<string, string> = new Map(); // relativePath -> fullPath
-      
-      // Collect all unique icon paths for allocated nodes
-      for (const nodeId of allocatedNodesSet) {
-        const node = positionedNodes.get(nodeId);
+      const allocatedIcons: Map<string, string> = new Map();
+      const unallocatedIcons: Map<string, string> = new Map();
+
+      // Separate allocated and unallocated node icons
+      for (const [nodeId, node] of positionedNodes) {
         if (node?.icon) {
           const relativePath = iconPathToRelativePath(node.icon);
           if (relativePath && !imageCache.current.has(relativePath)) {
             const fullPath = `${assetsBasePath}/${relativePath}`;
-            iconsToLoad.set(relativePath, fullPath);
+            const isAllocated = allocatedNodesSet.has(nodeId);
+
+            if (isAllocated) {
+              allocatedIcons.set(relativePath, fullPath);
+            } else {
+              unallocatedIcons.set(relativePath, fullPath);
+            }
           }
         }
       }
-      
-      console.log(`Loading ${iconsToLoad.size} node icons from ${assetsBasePath}...`);
-      if (iconsToLoad.size > 0) {
-        console.log('Sample icon paths:', Array.from(iconsToLoad.values()).slice(0, 3));
-      }
-      
-      // Load images in parallel
+
+      console.log(`Loading ${allocatedIcons.size} allocated icons, ${unallocatedIcons.size} unallocated icons...`);
+
+      // Load allocated node icons first (priority)
       let successCount = 0;
       let failCount = 0;
-      const loadPromises = Array.from(iconsToLoad.entries()).map(([relativePath, fullPath]) => {
+
+      const loadAllocatedPromises = Array.from(allocatedIcons.entries()).map(([relativePath, fullPath]) => {
         return new Promise<void>((resolve) => {
           const img = new Image();
           img.onload = () => {
@@ -205,10 +212,7 @@ const PassiveTreeWindow: React.FC = () => {
             resolve();
           };
           img.onerror = (err) => {
-            // Mark as failed so we don't retry
-            if (failCount < 3) {
-              console.warn(`Failed to load icon: ${fullPath}`, err);
-            }
+            if (failCount < 3) console.warn(`Failed to load icon: ${fullPath}`, err);
             imageCache.current.set(relativePath, null);
             failCount++;
             resolve();
@@ -216,14 +220,44 @@ const PassiveTreeWindow: React.FC = () => {
           img.src = fullPath;
         });
       });
-      
-      await Promise.all(loadPromises);
-      console.log(`Icon loading complete: ${successCount} success, ${failCount} failed`);
-      setImagesLoaded(true);
+
+      await Promise.all(loadAllocatedPromises);
+      console.log(`Allocated icons loaded: ${successCount} success, ${failCount} failed`);
+      setImagesLoaded(true); // Trigger render with allocated nodes
+
+      // Load unallocated icons in background (non-blocking, batched)
+      const batchSize = 50; // Load 50 at a time to avoid overwhelming
+      const unallocatedArray = Array.from(unallocatedIcons.entries());
+
+      for (let i = 0; i < unallocatedArray.length; i += batchSize) {
+        const batch = unallocatedArray.slice(i, i + batchSize);
+        const batchPromises = batch.map(([relativePath, fullPath]) => {
+          return new Promise<void>((resolve) => {
+            const img = new Image();
+            img.onload = () => {
+              imageCache.current.set(relativePath, img);
+              resolve();
+            };
+            img.onerror = () => {
+              imageCache.current.set(relativePath, null);
+              resolve();
+            };
+            img.src = fullPath;
+          });
+        });
+
+        await Promise.all(batchPromises);
+        // Trigger re-render after each batch to progressively show icons
+        if (i % (batchSize * 2) === 0) {
+          setImagesLoaded(prev => !prev); // Toggle to force re-render
+        }
+      }
+
+      console.log(`All icons loaded`);
     };
-    
+
     loadImages();
-  }, [positionedNodes, allocatedNodesSet, assetsBasePath]);
+  }, [positionedNodes, assetsBasePath, allocatedNodesSet]);
 
   // Load class/ascendancy illustrations
   useEffect(() => {
@@ -298,6 +332,46 @@ const PassiveTreeWindow: React.FC = () => {
     
     loadClassImages();
   }, [treeStructure, passiveTreeData, assetsBasePath]);
+
+  // Preload node frame images
+  useEffect(() => {
+    if (!assetsBasePath) return;
+
+    const loadFrameImages = async () => {
+      const framesToLoad = [
+        'tree/passiveskillscreenpassiveframenormal.webp',
+        'tree/passiveskillscreenpassiveframeactive.webp',
+        'tree/passiveskillscreennotableframenormal.webp',
+        'tree/passiveskillscreennotableframeactive.webp',
+        'tree/passiveskillscreenkeystoneframenormal.webp',
+        'tree/passiveskillscreenkeystoneframeactive.webp',
+      ];
+
+      console.log(`Loading ${framesToLoad.length} node frame images...`);
+
+      const loadPromises = framesToLoad.map((relativePath) => {
+        return new Promise<void>((resolve) => {
+          const img = new Image();
+          img.onload = () => {
+            frameImageCache.current.set(relativePath, img);
+            resolve();
+          };
+          img.onerror = (err) => {
+            console.warn(`Failed to load frame: ${assetsBasePath}/${relativePath}`, err);
+            frameImageCache.current.set(relativePath, null);
+            resolve();
+          };
+          img.src = `${assetsBasePath}/${relativePath}`;
+        });
+      });
+
+      await Promise.all(loadPromises);
+      console.log(`Frame loading complete: ${frameImageCache.current.size} frames loaded`);
+      setFrameImagesLoaded(true);
+    };
+
+    loadFrameImages();
+  }, [assetsBasePath]);
 
   // Handle mouse wheel zoom with native event listener (to use passive: false)
   useEffect(() => {
@@ -762,6 +836,18 @@ const PassiveTreeWindow: React.FC = () => {
       // Unallocated nodes are darker colored but still at full opacity
       ctx.globalAlpha = 1.0;
 
+      // Determine which frame to use based on node type and allocation state
+      let frameKey = '';
+      if (node.isKeystone) {
+        frameKey = isAllocated ? 'tree/passiveskillscreenkeystoneframeactive.webp' : 'tree/passiveskillscreenkeystoneframenormal.webp';
+      } else if (node.isNotable) {
+        frameKey = isAllocated ? 'tree/passiveskillscreennotableframeactive.webp' : 'tree/passiveskillscreennotableframenormal.webp';
+      } else {
+        frameKey = isAllocated ? 'tree/passiveskillscreenpassiveframeactive.webp' : 'tree/passiveskillscreenpassiveframenormal.webp';
+      }
+
+      const frameImg = frameImageCache.current.get(frameKey);
+
       // Draw glow for allocated nodes
       if (glowColor && isAllocated) {
         ctx.save();
@@ -774,9 +860,21 @@ const PassiveTreeWindow: React.FC = () => {
         ctx.restore();
       }
 
-      // Try to draw icon for allocated nodes
+      // Draw the frame image as background
+      if (frameImg) {
+        const frameSize = displayRadius * 2.5; // Frame is larger than the node
+        ctx.drawImage(
+          frameImg,
+          node.x - frameSize / 2,
+          node.y - frameSize / 2,
+          frameSize,
+          frameSize
+        );
+      }
+
+      // Try to draw icon for ALL nodes (allocated and unallocated)
       let drewIcon = false;
-      if (isAllocated && node.icon) {
+      if (node.icon) {
         const relativePath = iconPathToRelativePath(node.icon);
         if (relativePath) {
           const img = imageCache.current.get(relativePath);
@@ -784,11 +882,16 @@ const PassiveTreeWindow: React.FC = () => {
             // Draw circular clip with icon
             ctx.save();
             ctx.beginPath();
-            ctx.arc(node.x, node.y, displayRadius, 0, Math.PI * 2);
+            ctx.arc(node.x, node.y, displayRadius * 0.85, 0, Math.PI * 2);
             ctx.clip();
 
+            // Apply desaturation/dimming for unallocated nodes
+            if (!isAllocated) {
+              ctx.filter = 'grayscale(70%) brightness(0.6) contrast(0.8)';
+            }
+
             // Draw icon centered and scaled
-            const iconSize = displayRadius * 2.2; // Slightly larger than circle to fill it
+            const iconSize = displayRadius * 2.0; // Slightly smaller to fit within frame
             ctx.drawImage(
               img,
               node.x - iconSize / 2,
@@ -802,25 +905,23 @@ const PassiveTreeWindow: React.FC = () => {
         }
       }
 
-      // Draw fallback circle if no icon
-      if (!drewIcon) {
+      // Draw fallback circle if no icon and no frame
+      if (!drewIcon && !frameImg) {
         ctx.beginPath();
         ctx.arc(node.x, node.y, displayRadius, 0, Math.PI * 2);
         ctx.fillStyle = fillColor;
         ctx.fill();
-      }
 
-      // Draw border
-      ctx.beginPath();
-      ctx.arc(node.x, node.y, displayRadius, 0, Math.PI * 2);
-      ctx.strokeStyle = strokeColor;
-      ctx.lineWidth = isHovered ? 3 : 2;
-      ctx.stroke();
+        // Draw border for fallback
+        ctx.strokeStyle = strokeColor;
+        ctx.lineWidth = isHovered ? 3 : 2;
+        ctx.stroke();
+      }
 
       // Hover highlight ring
       if (isHovered) {
         ctx.beginPath();
-        ctx.arc(node.x, node.y, displayRadius * 1.1, 0, Math.PI * 2);
+        ctx.arc(node.x, node.y, displayRadius * 1.3, 0, Math.PI * 2);
         ctx.strokeStyle = '#ffffff';
         ctx.lineWidth = 3;
         ctx.stroke();
@@ -832,7 +933,7 @@ const PassiveTreeWindow: React.FC = () => {
 
     ctx.restore();
 
-  }, [positionedNodes, viewState, allocatedNodesSet, hoveredNode, renderKey, imagesLoaded, classImagesLoaded, treeStructure, passiveTreeData]);
+  }, [positionedNodes, viewState, allocatedNodesSet, hoveredNode, renderKey, imagesLoaded, classImagesLoaded, frameImagesLoaded, treeStructure, passiveTreeData]);
 
   // Handle window resize
   useEffect(() => {
