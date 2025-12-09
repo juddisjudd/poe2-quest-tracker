@@ -1,0 +1,439 @@
+{
+  "version": "1.0",
+  "source": "poe2-research regex_patterns + manual curation",
+  "lastUpdated": "2025-12-08",
+  "mods": [
+    {
+      "id": "magic_ignited",
+      "name": "Magic Monsters | Ignited Ground",
+      "category": "Magic+",
+      "regex": "ign",
+      "isPositive": true,
+      "difficulty": "easy",
+      "rewardImpact": "low"
+    },
+    {
+      "id": "magic_fire",
+      "name": "Magic Monsters | Extra Fire Damage",
+      "category": "Magic+",
+      "regex": "fire$",
+      "isPositive": true,
+      "difficulty": "medium",
+      "rewardImpact": "low"
+    },
+    {
+      "id": "magic_bleeding",
+      "name": "Magic Monsters | Bleeding on Hit",
+      "category": "Magic+",
+      "regex": "blee",
+      "isPositive": true,
+      "difficulty": "medium",
+      "rewardImpact": "low"
+    },
+    {
+      "id": "magic_ailment",
+      "name": "Magic Monsters | Increased Ailment/Stun Threshold",
+      "category": "Magic+",
+      "regex": "lm",
+      "isPositive": true,
+      "difficulty": "easy",
+      "rewardImpact": "low"
+    },
+    {
+      "id": "magic_stun_buildup",
+      "name": "Magic Monsters | Increased Stun Buildup",
+      "category": "Magic+",
+      "regex": "un b",
+      "isPositive": true,
+      "difficulty": "easy",
+      "rewardImpact": "low"
+    },
+    {
+      "id": "magic_vaal",
+      "name": "Magic Monsters | Vaal Packs",
+      "category": "Magic+",
+      "regex": "aa",
+      "isPositive": true,
+      "difficulty": "medium",
+      "rewardImpact": "medium"
+    },
+    {
+      "id": "rare_damage",
+      "name": "Rare Monsters | Increased Monster Damage",
+      "category": "Rare+",
+      "regex": "mage$",
+      "isPositive": true,
+      "difficulty": "hard",
+      "rewardImpact": "medium"
+    },
+    {
+      "id": "rare_life",
+      "name": "Rare Monsters | More Monster Life",
+      "category": "Rare+",
+      "regex": "fe$",
+      "isPositive": true,
+      "difficulty": "medium",
+      "rewardImpact": "low"
+    },
+    {
+      "id": "rare_armoured",
+      "name": "Rare Monsters | Monsters Armoured",
+      "category": "Rare+",
+      "regex": "oure",
+      "isPositive": true,
+      "difficulty": "medium",
+      "rewardImpact": "low"
+    },
+    {
+      "id": "rare_modifier",
+      "name": "Rare Monsters | Additional Modifier",
+      "category": "Rare+",
+      "regex": "mod",
+      "isPositive": true,
+      "difficulty": "hard",
+      "rewardImpact": "medium"
+    },
+    {
+      "id": "rare_iron_guards",
+      "name": "Rare Monsters | Iron Guards Packs",
+      "category": "Rare+",
+      "regex": "ds",
+      "isPositive": true,
+      "difficulty": "medium",
+      "rewardImpact": "medium"
+    },
+    {
+      "id": "rare_transcended",
+      "name": "Rare Monsters | Transcended Packs",
+      "category": "Rare+",
+      "regex": "ans",
+      "isPositive": true,
+      "difficulty": "hard",
+      "rewardImpact": "medium"
+    },
+    {
+      "id": "pack_beasts",
+      "name": "Additional Beast Packs",
+      "category": "Packs",
+      "regex": "sts",
+      "isPositive": true,
+      "difficulty": "medium",
+      "rewardImpact": "medium"
+    },
+    {
+      "id": "pack_bramble",
+      "name": "Additional Bramble Packs",
+      "category": "Packs",
+      "regex": "f br",
+      "isPositive": true,
+      "difficulty": "easy",
+      "rewardImpact": "medium"
+    },
+    {
+      "id": "pack_ezomyte",
+      "name": "Additional Ezomyte Packs",
+      "category": "Packs",
+      "regex": "yt",
+      "isPositive": true,
+      "difficulty": "medium",
+      "rewardImpact": "medium"
+    },
+    {
+      "id": "pack_faridun",
+      "name": "Additional Faridun Packs",
+      "category": "Packs",
+      "regex": "un m",
+      "isPositive": true,
+      "difficulty": "medium",
+      "rewardImpact": "medium"
+    },
+    {
+      "id": "pack_plagued",
+      "name": "Additional Plagued Packs",
+      "category": "Packs",
+      "regex": "agu",
+      "isPositive": true,
+      "difficulty": "medium",
+      "rewardImpact": "medium"
+    },
+    {
+      "id": "pack_undead",
+      "name": "Additional Undead Packs",
+      "category": "Packs",
+      "regex": "ndea",
+      "isPositive": true,
+      "difficulty": "easy",
+      "rewardImpact": "medium"
+    },
+    {
+      "id": "rarity_curses",
+      "name": "Item Rarity | Less Curse Effect",
+      "category": "Rarity+",
+      "regex": "rses",
+      "isPositive": true,
+      "difficulty": "easy",
+      "rewardImpact": "high"
+    },
+    {
+      "id": "rarity_ele_res",
+      "name": "Item Rarity | Monster Ele Res",
+      "category": "Rarity+",
+      "regex": "r el",
+      "isPositive": true,
+      "difficulty": "easy",
+      "rewardImpact": "high"
+    },
+    {
+      "id": "rarity_chilled",
+      "name": "Item Rarity | Chilled Ground",
+      "category": "Rarity+",
+      "regex": "chi",
+      "isPositive": true,
+      "difficulty": "easy",
+      "rewardImpact": "high"
+    },
+    {
+      "id": "rarity_penetration",
+      "name": "Item Rarity | Damage Penetrates Res",
+      "category": "Rarity+",
+      "regex": "tes",
+      "isPositive": true,
+      "difficulty": "medium",
+      "rewardImpact": "high"
+    },
+    {
+      "id": "rarity_chaos",
+      "name": "Item Rarity | Extra Chaos Damage",
+      "category": "Rarity+",
+      "regex": "ra ch",
+      "isPositive": true,
+      "difficulty": "hard",
+      "rewardImpact": "high"
+    },
+    {
+      "id": "rarity_cold",
+      "name": "Item Rarity | Extra Cold Damage",
+      "category": "Rarity+",
+      "regex": "col",
+      "isPositive": true,
+      "difficulty": "medium",
+      "rewardImpact": "high"
+    },
+    {
+      "id": "rarity_energy_shield",
+      "name": "Item Rarity | Monster Energy Shield",
+      "category": "Rarity+",
+      "regex": "f m",
+      "isPositive": true,
+      "difficulty": "easy",
+      "rewardImpact": "high"
+    },
+    {
+      "id": "rarity_freeze",
+      "name": "Item Rarity | Increased Freeze/Shock/Flammability",
+      "category": "Rarity+",
+      "regex": "mm",
+      "isPositive": true,
+      "difficulty": "medium",
+      "rewardImpact": "high"
+    },
+    {
+      "id": "rarity_eleweakness",
+      "name": "Item Rarity | Cursed with Ele Weakness",
+      "category": "Rarity+",
+      "regex": "kn",
+      "isPositive": true,
+      "difficulty": "medium",
+      "rewardImpact": "high"
+    },
+    {
+      "id": "rarity_recovery",
+      "name": "Item Rarity | Less Recovery Rate",
+      "category": "Rarity+",
+      "regex": "f l",
+      "isPositive": true,
+      "difficulty": "medium",
+      "rewardImpact": "high"
+    },
+    {
+      "id": "rarity_cooldown",
+      "name": "Item Rarity | Less Cooldown Recovery",
+      "category": "Rarity+",
+      "regex": "wn",
+      "isPositive": true,
+      "difficulty": "easy",
+      "rewardImpact": "high"
+    },
+    {
+      "id": "pack_max_res",
+      "name": "Pack Size | Reduced Max Resistances",
+      "category": "Pack+",
+      "regex": "% ma",
+      "isPositive": true,
+      "difficulty": "hard",
+      "rewardImpact": "high"
+    },
+    {
+      "id": "pack_shocked",
+      "name": "Pack Size | Shocked Ground",
+      "category": "Pack+",
+      "regex": "cke",
+      "isPositive": true,
+      "difficulty": "easy",
+      "rewardImpact": "high"
+    },
+    {
+      "id": "pack_evasive",
+      "name": "Pack Size | Monsters Evasive",
+      "category": "Pack+",
+      "regex": "e eva",
+      "isPositive": true,
+      "difficulty": "easy",
+      "rewardImpact": "high"
+    },
+    {
+      "id": "pack_lightning",
+      "name": "Pack Size | Extra Lightning Damage",
+      "category": "Pack+",
+      "regex": "tn",
+      "isPositive": true,
+      "difficulty": "medium",
+      "rewardImpact": "high"
+    },
+    {
+      "id": "pack_projectiles",
+      "name": "Pack Size | Additional Projectiles",
+      "category": "Pack+",
+      "regex": "oj",
+      "isPositive": true,
+      "difficulty": "medium",
+      "rewardImpact": "high"
+    },
+    {
+      "id": "pack_poison",
+      "name": "Pack Size | Poison on Hit",
+      "category": "Pack+",
+      "regex": "ois",
+      "isPositive": true,
+      "difficulty": "medium",
+      "rewardImpact": "high"
+    },
+    {
+      "id": "pack_charges",
+      "name": "Pack Size | Steal Charges",
+      "category": "Pack+",
+      "regex": "r,",
+      "isPositive": true,
+      "difficulty": "medium",
+      "rewardImpact": "high"
+    },
+    {
+      "id": "pack_accuracy",
+      "name": "Pack Size | Increased Accuracy",
+      "category": "Pack+",
+      "regex": "cc",
+      "isPositive": true,
+      "difficulty": "easy",
+      "rewardImpact": "high"
+    },
+    {
+      "id": "pack_crit",
+      "name": "Pack Size | Increased Crit Chance/Bonus",
+      "category": "Pack+",
+      "regex": "bon",
+      "isPositive": true,
+      "difficulty": "hard",
+      "rewardImpact": "high"
+    },
+    {
+      "id": "pack_temporal",
+      "name": "Pack Size | Cursed with Temporal Chains",
+      "category": "Pack+",
+      "regex": "emp",
+      "isPositive": true,
+      "difficulty": "medium",
+      "rewardImpact": "high"
+    },
+    {
+      "id": "pack_flask",
+      "name": "Pack Size | Reduced Flask Charges",
+      "category": "Pack+",
+      "regex": "sk",
+      "isPositive": true,
+      "difficulty": "medium",
+      "rewardImpact": "high"
+    },
+    {
+      "id": "enfeeble",
+      "name": "Cursed with Enfeeble",
+      "category": "Avoid",
+      "regex": "eble",
+      "isPositive": false,
+      "difficulty": "hard",
+      "rewardImpact": "none"
+    },
+    {
+      "id": "break_armour",
+      "name": "Monsters Break Armour",
+      "category": "Avoid",
+      "regex": "eq",
+      "isPositive": false,
+      "difficulty": "deadly",
+      "rewardImpact": "none"
+    },
+    {
+      "id": "reduced_crit_extra",
+      "name": "Monsters Reduced Crit Extra Damage",
+      "category": "Avoid",
+      "regex": "tak",
+      "isPositive": false,
+      "difficulty": "deadly",
+      "rewardImpact": "none"
+    },
+    {
+      "id": "aoe",
+      "name": "Monsters Increased Area of Effect",
+      "category": "Avoid",
+      "regex": "ect$",
+      "isPositive": false,
+      "difficulty": "medium",
+      "rewardImpact": "none"
+    },
+    {
+      "id": "attack_speed",
+      "name": "Monster Attack/Cast/Movement Speed",
+      "category": "Avoid",
+      "regex": "tta",
+      "isPositive": false,
+      "difficulty": "hard",
+      "rewardImpact": "none"
+    },
+    {
+      "id": "item_quantity",
+      "name": "Increased Item Quantity",
+      "category": "Rewards",
+      "regex": "quant",
+      "isPositive": true,
+      "difficulty": "easy",
+      "rewardImpact": "high"
+    },
+    {
+      "id": "item_rarity_general",
+      "name": "Increased Item Rarity",
+      "category": "Rewards",
+      "regex": "rar",
+      "isPositive": true,
+      "difficulty": "easy",
+      "rewardImpact": "high"
+    },
+    {
+      "id": "pack_size_general",
+      "name": "Increased Pack Size",
+      "category": "Rewards",
+      "regex": "pack",
+      "isPositive": true,
+      "difficulty": "easy",
+      "rewardImpact": "high"
+    }
+  ]
+}

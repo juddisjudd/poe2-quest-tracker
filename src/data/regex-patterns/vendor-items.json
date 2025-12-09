@@ -1,0 +1,553 @@
+{
+  "version": "2.0",
+  "source": "Based on actual POE2 item text format (Ctrl+C)",
+  "lastUpdated": "2025-12-09",
+  "items": [
+    {
+      "id": "rings",
+      "name": "Rings",
+      "category": "Item Type",
+      "regex": "class.*ring",
+      "isPositive": true
+    },
+    {
+      "id": "amulets",
+      "name": "Amulets",
+      "category": "Item Type",
+      "regex": "class.*amul",
+      "isPositive": true
+    },
+    {
+      "id": "belts",
+      "name": "Belts",
+      "category": "Item Type",
+      "regex": "class.*belt",
+      "isPositive": true
+    },
+    {
+      "id": "boots",
+      "name": "Boots",
+      "category": "Item Type",
+      "regex": "class.*boot",
+      "isPositive": true
+    },
+    {
+      "id": "gloves",
+      "name": "Gloves",
+      "category": "Item Type",
+      "regex": "class.*glov",
+      "isPositive": true
+    },
+    {
+      "id": "helmets",
+      "name": "Helmets",
+      "category": "Item Type",
+      "regex": "class.*helm",
+      "isPositive": true
+    },
+    {
+      "id": "body_armours",
+      "name": "Body Armours",
+      "category": "Item Type",
+      "regex": "class.*body",
+      "isPositive": true
+    },
+    {
+      "id": "bows",
+      "name": "Bows",
+      "category": "Item Type",
+      "regex": "class.*bow",
+      "isPositive": true
+    },
+    {
+      "id": "wands",
+      "name": "Wands",
+      "category": "Item Type",
+      "regex": "class.*wand",
+      "isPositive": true
+    },
+    {
+      "id": "staves",
+      "name": "Staves",
+      "category": "Item Type",
+      "regex": "class.*sta",
+      "isPositive": true
+    },
+    {
+      "id": "sceptres",
+      "name": "Sceptres",
+      "category": "Item Type",
+      "regex": "class.*scep",
+      "isPositive": true
+    },
+    {
+      "id": "daggers",
+      "name": "Daggers",
+      "category": "Item Type",
+      "regex": "class.*dagg",
+      "isPositive": true
+    },
+    {
+      "id": "claws",
+      "name": "Claws",
+      "category": "Item Type",
+      "regex": "class.*claw",
+      "isPositive": true
+    },
+    {
+      "id": "maces",
+      "name": "Maces",
+      "category": "Item Type",
+      "regex": "class.*mace",
+      "isPositive": true
+    },
+    {
+      "id": "swords",
+      "name": "Swords",
+      "category": "Item Type",
+      "regex": "class.*sword",
+      "isPositive": true
+    },
+    {
+      "id": "axes",
+      "name": "Axes",
+      "category": "Item Type",
+      "regex": "class.*axe",
+      "isPositive": true
+    },
+    {
+      "id": "quarterstaves",
+      "name": "Quarterstaves",
+      "category": "Item Type",
+      "regex": "class.*quart",
+      "isPositive": true
+    },
+    {
+      "id": "crossbows",
+      "name": "Crossbows",
+      "category": "Item Type",
+      "regex": "class.*cross",
+      "isPositive": true
+    },
+    {
+      "id": "spears",
+      "name": "Spears",
+      "category": "Item Type",
+      "regex": "class.*spear",
+      "isPositive": true
+    },
+    {
+      "id": "flails",
+      "name": "Flails",
+      "category": "Item Type",
+      "regex": "class.*flail",
+      "isPositive": true
+    },
+    {
+      "id": "shields",
+      "name": "Shields",
+      "category": "Item Type",
+      "regex": "class.*shield",
+      "isPositive": true
+    },
+    {
+      "id": "quivers",
+      "name": "Quivers",
+      "category": "Item Type",
+      "regex": "class.*quiv",
+      "isPositive": true
+    },
+    {
+      "id": "foci",
+      "name": "Foci",
+      "category": "Item Type",
+      "regex": "class.*foc",
+      "isPositive": true
+    },
+    {
+      "id": "fire_res",
+      "name": "Fire Resistance",
+      "category": "Resistances",
+      "regex": "fi.+res",
+      "isPositive": true
+    },
+    {
+      "id": "fire_res_30",
+      "name": "Fire Res 30%+",
+      "category": "Resistances",
+      "regex": "\\+[34]\\d.+fi",
+      "isPositive": true
+    },
+    {
+      "id": "fire_res_40",
+      "name": "Fire Res 40%+",
+      "category": "Resistances",
+      "regex": "\\+[456]\\d.+fi",
+      "isPositive": true
+    },
+    {
+      "id": "cold_res",
+      "name": "Cold Resistance",
+      "category": "Resistances",
+      "regex": "co.+res",
+      "isPositive": true
+    },
+    {
+      "id": "cold_res_30",
+      "name": "Cold Res 30%+",
+      "category": "Resistances",
+      "regex": "\\+[34]\\d.+co",
+      "isPositive": true
+    },
+    {
+      "id": "cold_res_40",
+      "name": "Cold Res 40%+",
+      "category": "Resistances",
+      "regex": "\\+[456]\\d.+co",
+      "isPositive": true
+    },
+    {
+      "id": "lightning_res",
+      "name": "Lightning Resistance",
+      "category": "Resistances",
+      "regex": "li.+res",
+      "isPositive": true
+    },
+    {
+      "id": "lightning_res_30",
+      "name": "Lightning Res 30%+",
+      "category": "Resistances",
+      "regex": "\\+[34]\\d.+li",
+      "isPositive": true
+    },
+    {
+      "id": "lightning_res_40",
+      "name": "Lightning Res 40%+",
+      "category": "Resistances",
+      "regex": "\\+[456]\\d.+li",
+      "isPositive": true
+    },
+    {
+      "id": "chaos_res",
+      "name": "Chaos Resistance",
+      "category": "Resistances",
+      "regex": "ch.+res",
+      "isPositive": true
+    },
+    {
+      "id": "chaos_res_20",
+      "name": "Chaos Res 20%+",
+      "category": "Resistances",
+      "regex": "\\+[234]\\d.+ch",
+      "isPositive": true
+    },
+    {
+      "id": "all_ele_res",
+      "name": "All Elemental Res",
+      "category": "Resistances",
+      "regex": "all.+el",
+      "isPositive": true
+    },
+    {
+      "id": "max_life",
+      "name": "Maximum Life",
+      "category": "Defences",
+      "regex": "max.+li",
+      "isPositive": true
+    },
+    {
+      "id": "max_life_70",
+      "name": "Max Life 70+",
+      "category": "Defences",
+      "regex": "\\+[7-9]\\d.+li",
+      "isPositive": true
+    },
+    {
+      "id": "max_life_100",
+      "name": "Max Life 100+",
+      "category": "Defences",
+      "regex": "\\+1\\d{2}.+li",
+      "isPositive": true
+    },
+    {
+      "id": "max_mana",
+      "name": "Maximum Mana",
+      "category": "Defences",
+      "regex": "max.+ma",
+      "isPositive": true
+    },
+    {
+      "id": "max_es",
+      "name": "Maximum Energy Shield",
+      "category": "Defences",
+      "regex": "max.+en",
+      "isPositive": true
+    },
+    {
+      "id": "inc_evasion",
+      "name": "Increased Evasion",
+      "category": "Defences",
+      "regex": "evas",
+      "isPositive": true
+    },
+    {
+      "id": "inc_armour",
+      "name": "Increased Armour",
+      "category": "Defences",
+      "regex": "armo",
+      "isPositive": true
+    },
+    {
+      "id": "inc_es",
+      "name": "Increased Energy Shield",
+      "category": "Defences",
+      "regex": "ener.+sh",
+      "isPositive": true
+    },
+    {
+      "id": "strength",
+      "name": "Strength",
+      "category": "Attributes",
+      "regex": "to str",
+      "isPositive": true
+    },
+    {
+      "id": "strength_30",
+      "name": "Strength 30+",
+      "category": "Attributes",
+      "regex": "\\+[34]\\d.+str",
+      "isPositive": true
+    },
+    {
+      "id": "dexterity",
+      "name": "Dexterity",
+      "category": "Attributes",
+      "regex": "to dex",
+      "isPositive": true
+    },
+    {
+      "id": "dexterity_30",
+      "name": "Dexterity 30+",
+      "category": "Attributes",
+      "regex": "\\+[34]\\d.+dex",
+      "isPositive": true
+    },
+    {
+      "id": "intelligence",
+      "name": "Intelligence",
+      "category": "Attributes",
+      "regex": "to int",
+      "isPositive": true
+    },
+    {
+      "id": "intelligence_30",
+      "name": "Intelligence 30+",
+      "category": "Attributes",
+      "regex": "\\+[34]\\d.+int",
+      "isPositive": true
+    },
+    {
+      "id": "all_attributes",
+      "name": "All Attributes",
+      "category": "Attributes",
+      "regex": "all.+at",
+      "isPositive": true
+    },
+    {
+      "id": "move_speed",
+      "name": "Movement Speed",
+      "category": "Movement",
+      "regex": "move",
+      "isPositive": true
+    },
+    {
+      "id": "move_30",
+      "name": "Movement 30%",
+      "category": "Movement",
+      "regex": "30.+mov",
+      "isPositive": true
+    },
+    {
+      "id": "move_25",
+      "name": "Movement 25%",
+      "category": "Movement",
+      "regex": "25.+mov",
+      "isPositive": true
+    },
+    {
+      "id": "move_20",
+      "name": "Movement 20%",
+      "category": "Movement",
+      "regex": "20.+mov",
+      "isPositive": true
+    },
+    {
+      "id": "move_15",
+      "name": "Movement 15%",
+      "category": "Movement",
+      "regex": "15.+mov",
+      "isPositive": true
+    },
+    {
+      "id": "move_10",
+      "name": "Movement 10%",
+      "category": "Movement",
+      "regex": "10.+mov",
+      "isPositive": true
+    },
+    {
+      "id": "phys_damage",
+      "name": "Physical Damage",
+      "category": "Damage",
+      "regex": "phy.+dam",
+      "isPositive": true
+    },
+    {
+      "id": "cold_damage",
+      "name": "Cold Damage",
+      "category": "Damage",
+      "regex": "col.+dam",
+      "isPositive": true
+    },
+    {
+      "id": "fire_damage",
+      "name": "Fire Damage",
+      "category": "Damage",
+      "regex": "fir.+dam",
+      "isPositive": true
+    },
+    {
+      "id": "lightning_damage",
+      "name": "Lightning Damage",
+      "category": "Damage",
+      "regex": "lig.+dam",
+      "isPositive": true
+    },
+    {
+      "id": "chaos_damage",
+      "name": "Chaos Damage",
+      "category": "Damage",
+      "regex": "cha.+dam",
+      "isPositive": true
+    },
+    {
+      "id": "ele_damage",
+      "name": "Elemental Damage",
+      "category": "Damage",
+      "regex": "ele.+dam",
+      "isPositive": true
+    },
+    {
+      "id": "attack_speed",
+      "name": "Attack Speed",
+      "category": "Speed",
+      "regex": "atta.+sp",
+      "isPositive": true
+    },
+    {
+      "id": "cast_speed",
+      "name": "Cast Speed",
+      "category": "Speed",
+      "regex": "cast.+sp",
+      "isPositive": true
+    },
+    {
+      "id": "skill_level",
+      "name": "+Level to Skills",
+      "category": "Special",
+      "regex": "lev.+ski",
+      "isPositive": true
+    },
+    {
+      "id": "spirit",
+      "name": "Spirit",
+      "category": "Special",
+      "regex": "spir",
+      "isPositive": true
+    },
+    {
+      "id": "rarity",
+      "name": "Item Rarity",
+      "category": "Special",
+      "regex": "rar.+ite",
+      "isPositive": true
+    },
+    {
+      "id": "quality",
+      "name": "Quality",
+      "category": "Properties",
+      "regex": "qual",
+      "isPositive": true
+    },
+    {
+      "id": "sockets",
+      "name": "Has Sockets",
+      "category": "Properties",
+      "regex": "sock",
+      "isPositive": true
+    },
+    {
+      "id": "jewels",
+      "name": "Jewels",
+      "category": "Jewels",
+      "regex": "jew",
+      "isPositive": true
+    },
+    {
+      "id": "crimson_jewel",
+      "name": "Crimson Jewel",
+      "category": "Jewels",
+      "regex": "crim",
+      "isPositive": true
+    },
+    {
+      "id": "viridian_jewel",
+      "name": "Viridian Jewel",
+      "category": "Jewels",
+      "regex": "viri",
+      "isPositive": true
+    },
+    {
+      "id": "cobalt_jewel",
+      "name": "Cobalt Jewel",
+      "category": "Jewels",
+      "regex": "coba",
+      "isPositive": true
+    },
+    {
+      "id": "prismatic_jewel",
+      "name": "Prismatic Jewel",
+      "category": "Jewels",
+      "regex": "pris",
+      "isPositive": true
+    },
+    {
+      "id": "abyss_jewel",
+      "name": "Abyss Jewels",
+      "category": "Jewels",
+      "regex": "eye.+jew",
+      "isPositive": true
+    },
+    {
+      "id": "flasks",
+      "name": "Flasks",
+      "category": "Flasks",
+      "regex": "flask",
+      "isPositive": true
+    },
+    {
+      "id": "life_flasks",
+      "name": "Life Flasks",
+      "category": "Flasks",
+      "regex": "lif.+fla",
+      "isPositive": true
+    },
+    {
+      "id": "mana_flasks",
+      "name": "Mana Flasks",
+      "category": "Flasks",
+      "regex": "man.+fla",
+      "isPositive": true
+    }
+  ]
+}
