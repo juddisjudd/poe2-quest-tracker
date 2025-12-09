@@ -25,6 +25,7 @@ const initialData: TrackerData = {
     logFilePath: undefined,
     logFileDetected: false,
     autoCompleteQuests: false,
+    autoCompleteOnZoneEntry: false, // OFF by default - must opt-in
   },
 };
 
@@ -153,6 +154,7 @@ export const useTrackerData = () => {
                 logFilePath: savedData.settings.logFilePath,
                 logFileDetected: savedData.settings.logFileDetected || false,
                 autoCompleteQuests: savedData.settings.autoCompleteQuests || false,
+                autoCompleteOnZoneEntry: savedData.settings.autoCompleteOnZoneEntry || false,
                 activeFilters: savedData.settings.activeFilters || [],
               },
               gemProgression: savedData.gemProgression

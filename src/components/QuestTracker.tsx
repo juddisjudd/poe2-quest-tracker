@@ -70,7 +70,7 @@ export const QuestTracker: React.FC = () => {
 
   // Monitor game process to auto-pause timers when game is not running
   const { isGameRunning } = useGameProcessMonitor({
-    enabled: isElectron && (data.settings.autoCompleteQuests || false), // Only monitor if auto-complete is enabled
+    enabled: isElectron && (data.settings.autoCompleteQuests || data.settings.autoCompleteOnZoneEntry || false), // Only monitor if any auto-complete is enabled
     onGameClosed: () => {
       console.log('🎮 Game closed - auto-pausing timers');
       setTimersPausedByProcess(true);

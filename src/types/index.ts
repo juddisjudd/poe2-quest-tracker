@@ -163,7 +163,8 @@ export interface TrackerData {
     showTreePanel?: boolean;
     logFilePath?: string;
     logFileDetected?: boolean;
-    autoCompleteQuests?: boolean;
+    autoCompleteQuests?: boolean; // Auto-complete when receiving rewards (Spirit, Resistance, etc.)
+    autoCompleteOnZoneEntry?: boolean; // Auto-complete previous quests when entering new zones
     activeFilters?: QuestTag[];
     autoActTimers?: boolean; // Auto-start act timers when entering acts
     autoGlobalTimer?: boolean; // Auto-start global timer when entering Act 1

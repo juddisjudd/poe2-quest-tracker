@@ -763,26 +763,49 @@ export const Header: React.FC<HeaderProps> = ({
                 </div>
               </div>
 
-            {/* Auto-Complete Quests via Rewards */}
+            {/* Auto-Complete Options */}
             {settings.logFilePath && (
-              <div className="setting-item">
-                <div className="setting-control">
-                  <label className="setting-checkbox">
-                    <input
-                      type="checkbox"
-                      checked={settings.autoCompleteQuests || false}
-                      onChange={(e) => onSettingsChange({ autoCompleteQuests: e.target.checked })}
-                    />
-                    <span style={{ fontSize: '0.85em' }}>AUTO-DETECT REWARDS</span>
-                  </label>
-                  <div className="beta-warning">
-                    <span className="warning-icon">ℹ️</span>
-                    <span className="warning-text">
-                      Monitors Client.txt for quest rewards (Spirit, Resistance, Life, Passive Points, etc.) and automatically marks matching quests as complete when you enter new zones.
-                    </span>
+              <>
+                <div className="setting-item">
+                  <div className="setting-control">
+                    <label className="setting-checkbox">
+                      <input
+                        type="checkbox"
+                        checked={settings.autoCompleteQuests || false}
+                        onChange={(e) => onSettingsChange({ autoCompleteQuests: e.target.checked })}
+                      />
+                      <span style={{ fontSize: '0.85em' }}>AUTO-COMPLETE ON REWARDS</span>
+                    </label>
+                    <div className="log-help-text" style={{ marginTop: '4px', marginLeft: '22px', fontSize: '0.75em' }}>
+                      Marks quests as complete when you receive rewards (Spirit, Resistance, Life, Passive Points, etc.).
+                    </div>
                   </div>
                 </div>
-              </div>
+
+                <div className="setting-item">
+                  <div className="setting-control">
+                    <label className="setting-checkbox">
+                      <input
+                        type="checkbox"
+                        checked={settings.autoCompleteOnZoneEntry || false}
+                        onChange={(e) => onSettingsChange({ autoCompleteOnZoneEntry: e.target.checked })}
+                      />
+                      <span style={{ fontSize: '0.85em' }}>AUTO-COMPLETE ON ZONE ENTRY</span>
+                    </label>
+                    <div className="log-help-text" style={{ marginTop: '4px', marginLeft: '22px', fontSize: '0.75em' }}>
+                      ⚠️ Marks ALL previous uncompleted quests as complete when entering a new zone. Use with caution.
+                    </div>
+                  </div>
+                </div>
+
+                {/* Shared best-effort disclaimer */}
+                <div className="beta-warning" style={{ marginTop: '8px' }}>
+                  <span className="warning-icon">ℹ️</span>
+                  <span className="warning-text">
+                    These are "best-effort" settings and may not always be accurate as they rely on logic parsing the game's log file.
+                  </span>
+                </div>
+              </>
             )}
               </>
             )}

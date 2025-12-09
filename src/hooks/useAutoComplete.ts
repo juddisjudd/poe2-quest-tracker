@@ -21,13 +21,17 @@ export const useAutoComplete = ({
     console.log('useAutoComplete effect triggered');
     console.log('isElectron:', isElectron);
     console.log('autoCompleteQuests:', trackerData.settings.autoCompleteQuests);
+    console.log('autoCompleteOnZoneEntry:', trackerData.settings.autoCompleteOnZoneEntry);
 
-    if (!isElectron || !trackerData.settings.autoCompleteQuests) {
-      console.log('Auto-completion disabled: electron=' + isElectron + ', autoComplete=' + trackerData.settings.autoCompleteQuests);
+    // Need at least one auto-complete option enabled to start monitoring
+    const anyAutoCompleteEnabled = trackerData.settings.autoCompleteQuests || trackerData.settings.autoCompleteOnZoneEntry;
+
+    if (!isElectron || !anyAutoCompleteEnabled) {
+      console.log('Auto-completion disabled: electron=' + isElectron + ', anyAutoComplete=' + anyAutoCompleteEnabled);
       return;
     }
 
-    console.log('Auto-completion enabled');
+    console.log('Auto-completion enabled (rewards:' + trackerData.settings.autoCompleteQuests + ', zones:' + trackerData.settings.autoCompleteOnZoneEntry + ')');
 
     let logRewardCleanup: (() => void) | undefined;
     let zoneChangedCleanup: (() => void) | undefined;
@@ -83,6 +87,12 @@ export const useAutoComplete = ({
         console.log(`Dispatched act-change event for Act ${zoneInfo.actNumber} (from zone: ${zoneName})`);
       }
 
+      // Only auto-complete previous quests if zone entry auto-completion is enabled
+      if (!trackerDataRef.current.settings.autoCompleteOnZoneEntry) {
+        console.log('Zone-based auto-completion disabled, skipping quest completion');
+        return;
+      }
+
       // Get all quests in sequential order (use ref to get latest data)
       const allQuests: QuestStep[] = [];
       for (const act of trackerDataRef.current.acts) {
@@ -120,6 +130,12 @@ export const useAutoComplete = ({
     };
 
     const handleLogReward = (rewardText: string) => {
+      // Only auto-complete quests for rewards if reward-based auto-completion is enabled
+      if (!trackerDataRef.current.settings.autoCompleteQuests) {
+        console.log('Reward-based auto-completion disabled, skipping quest completion');
+        return;
+      }
+
       // Parse the log line with location context
       const reward = parseLogLine(rewardText, currentLocation);
       if (!reward) {
@@ -173,6 +189,7 @@ export const useAutoComplete = ({
     };
   }, [
     trackerData.settings.autoCompleteQuests,
+    trackerData.settings.autoCompleteOnZoneEntry,
     trackerData.settings.logFilePath,
     isElectron
     // NOTE: Removed trackerData.acts from dependencies to prevent monitoring restart on quest changes
