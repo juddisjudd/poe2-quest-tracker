@@ -1,6 +1,6 @@
 {
   "name": "exile-compass",
-  "version": "1.9.26",
+  "version": "1.9.27",
   "description": "Path of Exile 2 Exile Compass Overlay",
   "main": "dist/main/main.js",
   "scripts": {

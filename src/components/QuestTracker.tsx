@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useMemo, useEffect } from "react";
 import { useTrackerData } from "../hooks/useTrackerData";
 import { useAutoComplete } from "../hooks/useAutoComplete";
-import { useGameProcessMonitor } from "../hooks/useGameProcessMonitor";
 import { ActPanel } from "./ActPanel";
 import { Header } from "./Header";
 import { UpdateNotification } from "./UpdateNotification";
@@ -48,7 +47,6 @@ export const QuestTracker: React.FC = () => {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [treePanelVisible, setTreePanelVisible] = useState(false);
   const [filtersCollapsed, setFiltersCollapsed] = useState(false);
-  const [timersPausedByProcess, setTimersPausedByProcess] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   // Auto-hide toast after 3 seconds
@@ -67,36 +65,6 @@ export const QuestTracker: React.FC = () => {
   const itemCheckVisible = data.settings.showItemCheckPanel === true;
 
   const isElectron = !!window.electronAPI;
-
-  // Monitor game process to auto-pause timers when game is not running
-  const { isGameRunning } = useGameProcessMonitor({
-    enabled: isElectron && (data.settings.autoCompleteQuests || data.settings.autoCompleteOnZoneEntry || false), // Only monitor if any auto-complete is enabled
-    onGameClosed: () => {
-      console.log('🎮 Game closed - auto-pausing timers');
-      setTimersPausedByProcess(true);
-      // Pause global timer
-      if (data.globalTimer?.isRunning) {
-        updateGlobalTimer({
-          ...data.globalTimer,
-          isRunning: false,
-        });
-      }
-      // Pause all act timers
-      data.actTimers?.forEach(timer => {
-        if (timer.isRunning) {
-          updateActTimer({
-            ...timer,
-            isRunning: false,
-          });
-        }
-      });
-    },
-    onGameResumed: () => {
-      console.log('🎮 Game resumed - you can manually resume timers if needed');
-      setTimersPausedByProcess(false);
-      // Note: We don't auto-resume timers, user should manually resume if they want
-    },
-  });
 
   // Auto-completion handler for quest rewards
   const handleQuestAutoComplete = useCallback((questId: string) => {

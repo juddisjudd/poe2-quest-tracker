@@ -15,7 +15,7 @@ import * as fs from "fs";
 import { format as formatUrl } from "url";
 import { isDev } from "./utils";
 import log from "electron-log";
-import { detectPoeLogFile, checkFileExists, findPoeProcess } from "../utils/processDetection";
+import { detectPoeLogFile, checkFileExists } from "../utils/processDetection";
 import { debouncedWriter } from "./utils/debouncedWrite";
 
 log.transports.file.level = "info";
@@ -598,16 +598,6 @@ ipcMain.handle("check-file-exists", async (_, filePath: string) => {
     return exists;
   } catch (error) {
     log.error("Error checking file existence:", error);
-    return false;
-  }
-});
-
-ipcMain.handle("check-game-process", async () => {
-  try {
-    const process = await findPoeProcess();
-    return process !== null; // Return true if game is running, false otherwise
-  } catch (error) {
-    log.error("Error checking game process:", error);
     return false;
   }
 });

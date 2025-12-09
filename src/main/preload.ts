@@ -43,7 +43,6 @@ const electronAPI = {
   reinforceOverlay: () => ipcRenderer.invoke("reinforce-overlay"),
   detectPoeLogFile: () => ipcRenderer.invoke("detect-poe-log-file"),
   checkFileExists: (filePath: string) => ipcRenderer.invoke("check-file-exists", filePath),
-  checkGameProcess: () => ipcRenderer.invoke("check-game-process"),
   selectLogFile: () => ipcRenderer.invoke("select-log-file"),
   saveFile: (content: string, defaultName: string) => ipcRenderer.invoke("save-file", content, defaultName),
   startLogMonitoring: (filePath: string) => ipcRenderer.invoke("start-log-monitoring", filePath),
