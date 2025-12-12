@@ -79,7 +79,7 @@ export const QuestTracker: React.FC = () => {
   }, [data.acts, toggleQuest]);
 
   // Use auto-completion hook
-  useAutoComplete({
+  const { isMonitoring, recentRewards } = useAutoComplete({
     trackerData: data,
     onQuestComplete: handleQuestAutoComplete,
     isElectron
@@ -370,6 +370,9 @@ export const QuestTracker: React.FC = () => {
             updateSettings({ showRewardsPanel: false });
           }}
           onQuestToggle={(actId, questId) => toggleQuest(questId)}
+          isMonitoring={isMonitoring}
+          logFilePath={data.settings.logFilePath}
+          recentRewards={recentRewards}
         />
       )}
 

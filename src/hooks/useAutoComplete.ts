@@ -1,7 +1,14 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { TrackerData, QuestStep } from '../types';
 import { parseLogLine, findMatchingQuests, isGuideSupported, findQuestsForZone, parseSceneLine } from '../utils/logParser';
 import { getZoneInfo } from '../data/zoneRegistry';
+
+export interface RewardDetection {
+  timestamp: string;
+  rewardText: string;
+  location: string;
+  questsCompleted: string[];
+}
 
 interface UseAutoCompleteProps {
   trackerData: TrackerData;
@@ -9,13 +16,21 @@ interface UseAutoCompleteProps {
   isElectron: boolean;
 }
 
+interface UseAutoCompleteReturn {
+  isMonitoring: boolean;
+  recentRewards: RewardDetection[];
+}
+
 export const useAutoComplete = ({
   trackerData,
   onQuestComplete,
   isElectron
-}: UseAutoCompleteProps) => {
+}: UseAutoCompleteProps): UseAutoCompleteReturn => {
   const trackerDataRef = useRef(trackerData);
   trackerDataRef.current = trackerData;
+
+  const [isMonitoring, setIsMonitoring] = useState(false);
+  const [recentRewards, setRecentRewards] = useState<RewardDetection[]>([]);
 
   useEffect(() => {
     console.log('useAutoComplete effect triggered');
@@ -28,6 +43,7 @@ export const useAutoComplete = ({
 
     if (!isElectron || !anyAutoCompleteEnabled) {
       console.log('Auto-completion disabled: electron=' + isElectron + ', anyAutoComplete=' + anyAutoCompleteEnabled);
+      setIsMonitoring(false);
       return;
     }
 
@@ -45,6 +61,7 @@ export const useAutoComplete = ({
       try {
         await window.electronAPI.startLogMonitoring(trackerData.settings.logFilePath);
         console.log('Started log monitoring for auto-completion');
+        setIsMonitoring(true);
 
         zoneChangedCleanup = window.electronAPI.onZoneChanged((zoneData: any) => {
           const zoneName = typeof zoneData === 'string' ? zoneData : zoneData.zoneName;
@@ -155,6 +172,9 @@ export const useAutoComplete = ({
 
       console.log('Found matching quests:', matchingQuestIds);
 
+      // Track which quests were actually completed
+      const completedQuestIds: string[] = [];
+
       // Auto-complete the matching quests (use ref to get latest data)
       matchingQuestIds.forEach(questId => {
         // Check if quest exists and is not already completed
@@ -162,12 +182,23 @@ export const useAutoComplete = ({
         if (quest && !quest.completed) {
           console.log('Auto-completing quest:', questId, quest.description);
           onQuestComplete(questId);
+          completedQuestIds.push(questId);
         } else if (quest?.completed) {
           console.log('Quest already completed:', questId, quest.description);
         } else {
           console.log('Quest not found in tracker data:', questId);
         }
       });
+
+      // Add to recent rewards list
+      const rewardDetection: RewardDetection = {
+        timestamp: new Date().toISOString(),
+        rewardText: reward.rewardText,
+        location: reward.location || 'Unknown',
+        questsCompleted: completedQuestIds
+      };
+
+      setRecentRewards(prev => [rewardDetection, ...prev].slice(0, 10)); // Keep last 10
     };
 
     startMonitoring();
@@ -186,15 +217,23 @@ export const useAutoComplete = ({
           console.error('Error stopping log monitoring:', error);
         });
       }
+
+      setIsMonitoring(false);
     };
   }, [
     trackerData.settings.autoCompleteQuests,
     trackerData.settings.autoCompleteOnZoneEntry,
     trackerData.settings.logFilePath,
-    isElectron
+    isElectron,
+    onQuestComplete
     // NOTE: Removed trackerData.acts from dependencies to prevent monitoring restart on quest changes
     // The handlers will use the latest data via closure
   ]);
+
+  return {
+    isMonitoring,
+    recentRewards
+  };
 };
 
 // Helper function to find a quest in tracker data

@@ -145,41 +145,51 @@ export function parseSceneLine(line: string): LogScene | null {
 
 /**
  * Parse a log line to extract reward information
+ * POE2 Format: Primarily uses "You have received X"
  */
 export function parseLogLine(line: string, currentLocation?: string): LogReward | null {
-  // Pattern 1: Character received reward - e.g., "FlaskFlicker has received +10% to [Resistances|Cold Resistance]."
-  const characterRewardPattern = /.*\[INFO Client \d+\] : (.+?) has received (.+?)\.?\s*$/;
-  // Pattern 2: You received reward - e.g., "You have received 2 Passive Skill Points."
+  // Pattern 1: "You have received" (PRIMARY POE2 format - 260+ instances in logs)
   const youRewardPattern = /.*\[INFO Client \d+\] : You have received (.+?)\.?\s*$/;
-  
-  let match = line.match(characterRewardPattern);
-  let characterName = '';
+  // Pattern 2: Character received reward (LEGACY - may not be used in POE2)
+  const characterRewardPattern = /.*\[INFO Client \d+\] : (.+?) has received (.+?)\.?\s*$/;
+
+  let match = line.match(youRewardPattern);
+  let characterName = 'You';
   let rewardText = '';
-  
+
   if (match) {
-    [, characterName, rewardText] = match;
+    // Primary format: "You have received X"
+    rewardText = match[1];
   } else {
-    match = line.match(youRewardPattern);
+    // Try legacy format: "CharacterName has received X"
+    match = line.match(characterRewardPattern);
     if (match) {
-      characterName = 'You';
-      rewardText = match[1];
+      characterName = match[1];
+      rewardText = match[2];
     }
   }
-  
+
   if (!match) {
     return null;
   }
-  
-  console.log('Parsed log line - Character:', characterName, 'Reward:', rewardText, 'Location:', currentLocation);
-  
+
+  console.log('[POE2-PARSER] Parsed reward - Character:', characterName, 'Reward:', rewardText, 'Location:', currentLocation);
+
   // Extract timestamp from the beginning if it exists
   const timestamp = new Date().toISOString();
-  
-  // Determine reward type
+
+  // Determine reward type (enhanced for POE2)
   let rewardType: LogReward['rewardType'] = 'other';
-  
+
   if (rewardText.includes('Passive Skill Points')) {
-    rewardType = 'passive';
+    // Check if it's weapon set, atlas, or regular passive points
+    if (rewardText.includes('Weapon Set')) {
+      rewardType = 'passive'; // Weapon Set Passive Points
+    } else if (rewardText.includes('Atlas')) {
+      rewardType = 'passive'; // Atlas Skill Points (endgame)
+    } else {
+      rewardType = 'passive'; // Regular Passive Points
+    }
   } else if (rewardText.includes('Resistance') || rewardText.includes('[Resistances|')) {
     rewardType = 'resistance';
   } else if (rewardText.includes('Spirit') || rewardText.includes('[Spirit|')) {
@@ -191,7 +201,7 @@ export function parseLogLine(line: string, currentLocation?: string): LogReward 
   } else if (rewardText.includes('Intelligence') || rewardText.includes('Strength') || rewardText.includes('Dexterity')) {
     rewardType = 'attributes';
   }
-  
+
   return {
     timestamp,
     characterName,

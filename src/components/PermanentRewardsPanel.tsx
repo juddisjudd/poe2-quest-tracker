@@ -2,10 +2,20 @@ import React, { useMemo } from "react";
 import { Act, QuestStep, QuestTag } from "../types";
 import "./PermanentRewardsPanel.css";
 
+export interface RewardDetection {
+  timestamp: string;
+  rewardText: string;
+  location: string;
+  questsCompleted: string[];
+}
+
 interface PermanentRewardsPanelProps {
   acts: Act[];
   onClose: () => void;
   onQuestToggle: (actId: string, questId: string) => void;
+  isMonitoring?: boolean;
+  logFilePath?: string | null;
+  recentRewards?: RewardDetection[];
 }
 
 interface RewardQuest {
@@ -18,6 +28,9 @@ export const PermanentRewardsPanel: React.FC<PermanentRewardsPanelProps> = ({
   acts,
   onClose,
   onQuestToggle,
+  isMonitoring = false,
+  logFilePath = null,
+  recentRewards = [],
 }) => {
   // Filter quests by reward type
   const rewardsByType = useMemo(() => {
@@ -153,6 +166,49 @@ export const PermanentRewardsPanel: React.FC<PermanentRewardsPanelProps> = ({
         <button className="rewards-close-btn" onClick={onClose}>
           ✕
         </button>
+      </div>
+
+      {/* Auto-Tracking Status */}
+      <div className="auto-track-status">
+        <div className="status-row">
+          <span className="status-label">Auto-Tracking:</span>
+          <span className={`status-indicator ${isMonitoring ? 'active' : 'inactive'}`}>
+            {isMonitoring ? '● ACTIVE' : '○ INACTIVE'}
+          </span>
+        </div>
+        {isMonitoring && logFilePath && (
+          <div className="status-row log-path">
+            <span className="status-label">Monitoring:</span>
+            <span className="status-value" title={logFilePath}>
+              {logFilePath.split(/[/\\]/).pop()}
+            </span>
+          </div>
+        )}
+        {recentRewards.length > 0 && (
+          <div className="recent-rewards">
+            <div className="recent-rewards-header">Recent Detections ({recentRewards.length})</div>
+            <div className="recent-rewards-list">
+              {recentRewards.slice(0, 5).map((reward, index) => (
+                <div key={index} className="recent-reward-item">
+                  <div className="reward-time">
+                    {new Date(reward.timestamp).toLocaleTimeString()}
+                  </div>
+                  <div className="reward-details">
+                    <div className="reward-text">{reward.rewardText}</div>
+                    <div className="reward-location">
+                      📍 {reward.location}
+                      {reward.questsCompleted.length > 0 && (
+                        <span className="quests-completed">
+                          {' '}→ ✓ {reward.questsCompleted.length} quest{reward.questsCompleted.length > 1 ? 's' : ''}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="rewards-summary">

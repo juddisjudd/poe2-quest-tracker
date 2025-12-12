@@ -1076,7 +1076,9 @@ ipcMain.handle("start-log-monitoring", async (_, filePath: string) => {
       log.error('Log file watcher error:', error);
     });
 
-    log.info("Started log monitoring for:", filePath);
+    log.info("[POE2-AUTO-TRACK] Started log monitoring for:", filePath);
+    log.info("[POE2-AUTO-TRACK] Initial file size:", lastLogSize, "bytes");
+    log.info("[POE2-AUTO-TRACK] File watcher active, polling backup every 5 seconds");
   } catch (error) {
     log.error("Error starting log monitoring:", error);
     throw error;
@@ -1096,7 +1098,7 @@ ipcMain.handle("stop-log-monitoring", async () => {
     logFilePath = null;
     lastLogSize = 0;
     currentLocation = null; // Reset location tracking
-    log.info("Stopped log monitoring");
+    log.info("[POE2-AUTO-TRACK] Stopped log monitoring");
   } catch (error) {
     log.error("Error stopping log monitoring:", error);
     throw error;
@@ -1110,11 +1112,11 @@ function handleLogFileChange() {
     const stats = fs.statSync(logFilePath);
     const currentSize = stats.size;
 
-    log.info(`Log file change detected: current=${currentSize}, last=${lastLogSize}`);
+    log.info(`[POE2-AUTO-TRACK] Log file change detected: current=${currentSize}, last=${lastLogSize}`);
 
     // Handle file truncation or rotation (file got smaller)
     if (currentSize < lastLogSize) {
-      log.info('Client.txt appears truncated or rotated. Resetting read position to 0.');
+      log.info('[POE2-AUTO-TRACK] Client.txt appears truncated or rotated. Resetting read position to 0.');
       lastLogSize = 0;
     }
 
@@ -1144,25 +1146,26 @@ function handleLogFileChange() {
       // Update size tracker
       lastLogSize = currentSize;
 
-      log.info(`Read ${newContent.length} bytes of new content`);
+      log.info(`[POE2-AUTO-TRACK] Read ${newContent.length} bytes of new content`);
 
       // Process new lines
       const lines = newContent.split('\n').filter(line => line.trim());
-      log.info(`Processing ${lines.length} new lines`);
+      log.info(`[POE2-AUTO-TRACK] Processing ${lines.length} new lines from Client.txt`);
       
       for (const line of lines) {
         // Check for scene changes first
         const sceneMatch = line.match(/.*\[INFO Client \d+\] \[SCENE\] Set Source \[(.+?)\]/);
         if (sceneMatch) {
+          const previousLocation = currentLocation;
           currentLocation = sceneMatch[1];
-          log.info(`Player location changed to: ${currentLocation}`);
+          log.info(`[POE2-AUTO-TRACK] 🗺️  Player location changed: "${previousLocation || 'Unknown'}" → "${currentLocation}"`);
 
           // Detect act number from special act markers
           let detectedActNumber: number | null = null;
           const actMatch = currentLocation.match(/^Act (\d+)$/i);
           if (actMatch) {
             detectedActNumber = parseInt(actMatch[1], 10);
-            log.info(`Detected Act ${detectedActNumber} from scene marker`);
+            log.info(`[POE2-AUTO-TRACK] 📍 Detected Act ${detectedActNumber} from scene marker`);
           }
 
           // Send zone change to renderer process with act number if detected
@@ -1170,56 +1173,93 @@ function handleLogFileChange() {
             zoneName: currentLocation,
             actNumber: detectedActNumber
           });
+
+          log.info(`[POE2-AUTO-TRACK] ✉️  Sent 'zone-changed' event to renderer process`);
           continue;
         }
 
-        // Check for reward patterns
-        // Matches both "CharName has received X" and "You have received X"
+        // POE2 Reward Patterns - Based on actual log file analysis
+        // PRIMARY FORMAT: "You have received X" (confirmed in 260+ log entries)
         const rewardPatterns = [
-          /has received.*Passive Skill Points/i,
-          /have received.*Passive Skill Points/i,
-          /has received.*Resistance/i,
-          /have received.*Resistance/i,
-          /has received.*Spirit/i,
-          /have received.*Spirit/i,
-          /has received.*maximum Life/i,
-          /have received.*maximum Life/i,
-          /has received.*Charm/i,
-          /have received.*Charm/i,
-          /has received.*Intelligence/i,
-          /have received.*Intelligence/i,
-          /has received.*Strength/i,
-          /have received.*Strength/i,
-          /has received.*Dexterity/i,
-          /have received.*Dexterity/i,
-          /has received.*Recovery/i,
-          /have received.*Recovery/i,
-          /has received.*Movement Speed/i,
-          /have received.*Movement Speed/i,
-          /has received.*Cooldown/i,
-          /have received.*Cooldown/i,
-          /has received.*Global Defences/i,
-          /have received.*Global Defences/i,
-          /has received.*Experience/i,
-          /have received.*Experience/i,
-          /has received.*Stun Threshold/i,
-          /have received.*Stun Threshold/i,
-          /has received.*Ailment Threshold/i,
-          /have received.*Ailment Threshold/i,
-          /has received.*Mana Regeneration/i,
-          /have received.*Mana Regeneration/i,
-          /has received.*Flask/i,
-          /have received.*Flask/i,
-          /has received.*Presence/i,
-          /have received.*Presence/i
+          // Passive Skill Points (campaign quest rewards)
+          /You have received \d+\s*Passive Skill Points?/i,
+          /You have received Passive Skill Points?/i,
+
+          // Weapon Set Passive Skill Points (POE2 dual-wield feature)
+          /You have received \d+\s*Weapon Set Passive Skill Points?/i,
+
+          // Atlas Skill Points (endgame mapping system)
+          /You have received \d+\s*Atlas Skill Points?/i,
+
+          // League-specific Atlas Skill Points
+          /You have received \d+\s*Breach Atlas Skill Points?/i,
+          /You have received \d+\s*Delirium Atlas Skill Points?/i,
+          /You have received \d+\s*Expedition Atlas Skill Points?/i,
+          /You have received \d+\s*Ritual Atlas Skill Points?/i,
+          /You have received \d+\s*Map Boss Atlas Skill Points?/i,
+
+          // Campaign Permanent Rewards (Spirit, Resistance, Life)
+          // These use [Type|Specific] bracket format
+          /You have received.*\[Resistances?\|/i,
+          /You have received.*\[Spirit\|/i,
+          /You have received.*maximum Life/i,
+          /You have received.*Life Recovery/i,
+
+          // Charm (POE2 feature)
+          /You have received.*Charm/i,
+
+          // Attributes
+          /You have received.*\[(?:Strength|Dexterity|Intelligence)\|/i,
+
+          // Other campaign rewards
+          /You have received.*Recovery/i,
+          /You have received.*Movement Speed/i,
+          /You have received.*Cooldown/i,
+          /You have received.*Global Defences/i,
+          /You have received.*Experience/i,
+          /You have received.*Stun Threshold/i,
+          /You have received.*Ailment Threshold/i,
+          /You have received.*Mana Regeneration/i,
+          /You have received.*Flask/i,
+          /You have received.*Presence/i,
+
+          // Generic catch-all for bracket format
+          /You have received.*\[.+?\|.+?\]/i,
+
+          // Generic catch-all for any "You have received"
+          /You have received/i
         ];
 
-        // Check if line matches any reward pattern
-        const isReward = rewardPatterns.some(pattern => pattern.test(line));
-        if (isReward) {
+        // Check if line matches any reward pattern and find which one
+        let matchedPattern: RegExp | null = null;
+        let matchedPatternIndex = -1;
+
+        for (let i = 0; i < rewardPatterns.length; i++) {
+          if (rewardPatterns[i].test(line)) {
+            matchedPattern = rewardPatterns[i];
+            matchedPatternIndex = i;
+            break;
+          }
+        }
+
+        if (matchedPattern) {
+          // Extract the actual reward text from the log line
+          const rewardMatch = line.match(/: (.+)$/);
+          const rewardText = rewardMatch ? rewardMatch[1] : line.substring(0, 100);
+
+          log.info(`[POE2-AUTO-TRACK] 🎁 Reward detected!`);
+          log.info(`[POE2-AUTO-TRACK]    Text: "${rewardText}"`);
+          log.info(`[POE2-AUTO-TRACK]    Location: "${currentLocation || 'Unknown'}"`);
+          log.info(`[POE2-AUTO-TRACK]    Pattern #${matchedPatternIndex + 1}: ${matchedPattern.source.substring(0, 80)}...`);
+
           // Send reward to renderer process with current location context
           mainWindow?.webContents.send('log-reward', line);
-          log.info(`Detected reward: ${line.substring(0, 100)}... at location: ${currentLocation}`);
+          log.info(`[POE2-AUTO-TRACK] ✉️  Sent 'log-reward' event to renderer process`);
+
+          // Early access warning for generic catch-all patterns
+          if (matchedPatternIndex >= rewardPatterns.length - 2) {
+            log.warn(`[POE2-AUTO-TRACK] ⚠️  Matched by generic catch-all pattern - may need specific pattern in future POE2 updates`);
+          }
         }
       }
     });

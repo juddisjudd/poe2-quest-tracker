@@ -20,14 +20,44 @@ interface LoadoutInfo {
 // e.g., "Art/2DArt/SkillIcons/passives/damage.dds" -> "tree/passives/damage.webp"
 function iconPathToRelativePath(iconPath: string | undefined): string | null {
   if (!iconPath) return null;
-  
+
   // Extract the path after "passives/"
   const match = iconPath.match(/passives\/(.+)\.dds$/i);
   if (!match) return null;
-  
+
   // Convert to lowercase and change extension to webp
   const relativePath = match[1].toLowerCase();
   return `tree/passives/${relativePath}.webp`;
+}
+
+/**
+ * Map POE1 class names in tree data to POE2 class names
+ * These legacy names appear on class starting nodes from the POE1 tree structure
+ *
+ * For shared starting positions (Ranger/Huntress, Witch/Sorceress), this function
+ * returns the actual class name from the imported POB build.
+ */
+function translatePOE1NodeName(nodeName: string, node?: PositionedNode, currentClassName?: string): string {
+  // If this is a class start node and we know which classes use it, show the current class name
+  if (node?.isClassStart && node.classesStart && currentClassName) {
+    // Check if the current class is one of the classes that start here
+    if (node.classesStart.includes(currentClassName)) {
+      return currentClassName;
+    }
+  }
+
+  // Otherwise, use the static mapping for legacy POE1 names
+  const nameMap: Record<string, string> = {
+    'SIX': 'Monk',
+    'SEVEN': 'Shadow', // Legacy POE1 name (not used in POE2)
+    'MARAUDER': 'Warrior',
+    'DUELIST': 'Mercenary',
+    'TEMPLAR': 'Druid', // Future POE2 class
+    'RANGER': 'Ranger',
+    'WITCH': 'Witch',
+  };
+
+  return nameMap[nodeName] || nodeName;
 }
 
 const PassiveTreeWindow: React.FC = () => {
@@ -1163,7 +1193,7 @@ const PassiveTreeWindow: React.FC = () => {
 
         {/* Node tooltip - follows mouse cursor */}
         {hoveredNode && (
-          <div 
+          <div
             className="node-tooltip"
             style={{
               left: mousePos.x + 15,
@@ -1171,7 +1201,7 @@ const PassiveTreeWindow: React.FC = () => {
               right: 'auto',
             }}
           >
-            <div className="tooltip-name">{hoveredNode.name}</div>
+            <div className="tooltip-name">{translatePOE1NodeName(hoveredNode.name, hoveredNode, passiveTreeData?.className)}</div>
             {hoveredNode.stats.length > 0 && (
               <div className="tooltip-stats">
                 {hoveredNode.stats.map((stat, i) => (
