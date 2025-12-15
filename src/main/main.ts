@@ -433,6 +433,12 @@ ipcMain.handle("reinforce-overlay", () => {
 
 ipcMain.handle("save-quest-data", async (_, data: any) => {
   try {
+    // Guard against undefined/null data
+    if (data === undefined || data === null) {
+      console.warn("Attempted to save undefined/null quest data, using empty object");
+      data = {};
+    }
+
     const dataPath = getDataPath();
     // Use debounced write - batches writes within 2 seconds
     // Reduces I/O frequency by 80-90% and antimalware false positives
@@ -463,6 +469,12 @@ ipcMain.handle("load-quest-data", async () => {
 
 ipcMain.handle("save-gem-data", async (_, gemData: any) => {
   try {
+    // Guard against undefined/null data
+    if (gemData === undefined || gemData === null) {
+      console.warn("Attempted to save undefined/null gem data, using empty object");
+      gemData = {};
+    }
+
     const gemDataPath = getGemDataPath();
     return await debouncedWriter.write(gemDataPath, gemData);
   } catch (error) {
@@ -637,6 +649,12 @@ ipcMain.handle("select-log-file", async () => {
 
 ipcMain.handle("save-notes-data", async (_, notesData: any) => {
   try {
+    // Guard against undefined/null data
+    if (notesData === undefined || notesData === null) {
+      console.warn("Attempted to save undefined/null notes data, using empty object");
+      notesData = {};
+    }
+
     const notesDataPath = getNotesDataPath();
     const result = await debouncedWriter.write(notesDataPath, notesData);
     if (result.success) {
@@ -669,6 +687,12 @@ ipcMain.handle("load-notes-data", async () => {
 
 ipcMain.handle("save-item-check-data", async (_, itemCheckData: any) => {
   try {
+    // Guard against undefined/null data
+    if (itemCheckData === undefined || itemCheckData === null) {
+      console.warn("Attempted to save undefined/null item check data, using empty object");
+      itemCheckData = {};
+    }
+
     const itemCheckDataPath = getItemCheckDataPath();
     const result = await debouncedWriter.write(itemCheckDataPath, itemCheckData);
     if (result.success) {
@@ -859,7 +883,7 @@ ipcMain.handle("load-passive-tree-data", async () => {
 });
 
 // Load tree structure JSON (the full tree data from PathOfBuilding)
-ipcMain.handle("load-tree-structure", async (_, version: string = '0_3') => {
+ipcMain.handle("load-tree-structure", async (_, version: string = '0_4') => {
   try {
     // Try multiple locations for the tree data
     const possiblePaths = [

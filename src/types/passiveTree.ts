@@ -313,9 +313,10 @@ export const CLASS_NAMES: Record<number, string> = {
   1: 'Huntress',
   2: 'Warrior',
   3: 'Mercenary',
-  4: 'Witch',
-  5: 'Sorceress',
-  6: 'Monk',
+  4: 'Druid',
+  5: 'Witch',
+  6: 'Sorceress',
+  7: 'Monk',
 };
 
 /**
@@ -344,20 +345,26 @@ export const ASCENDANCY_NAMES: Record<number, Record<number, string>> = {
     2: 'Witchhunter',
     3: 'Gemling Legionnaire',
   },
-  // Witch (class 4)
+  // Druid (class 4)
   4: {
+    1: 'Oracle',
+    2: 'Shaman',
+  },
+  // Witch (class 5)
+  5: {
     1: 'Infernalist',
     2: 'Blood Mage',
     3: 'Lich',
     4: 'Abyssal Lich',
   },
-  // Sorceress (class 5)
-  5: {
+  // Sorceress (class 6)
+  6: {
     1: 'Stormweaver',
     2: 'Chronomancer',
+    3: 'Disciple of Varashta',
   },
-  // Monk (class 6)
-  6: {
+  // Monk (class 7)
+  7: {
     1: 'Invoker',
     2: 'Acolyte of Chayula',
   },

@@ -161,7 +161,7 @@ const PassiveTreeWindow: React.FC = () => {
         setLoadingStatus('Loading tree structure...');
 
         // Load the full tree structure
-        const version = treeData.treeVersion || '0_3';
+        const version = treeData.treeVersion || '0_4';
         const structure = await window.electronAPI.loadTreeStructure(version);
         if (!structure) {
           setError(`Tree structure for version ${version} not found. Run the tree conversion script first.`);
@@ -441,13 +441,13 @@ const PassiveTreeWindow: React.FC = () => {
 
   // Helper to get node display radius (same logic as rendering)
   const getNodeRadius = useCallback((node: PositionedNode): number => {
-    if (node.isClassStart) return 50;    // Increased from 40
-    if (node.isKeystone) return 44;      // Increased from 35
-    if (node.isJewelSocket) return 38;   // Increased from 30
-    if (node.isMastery) return 40;       // Increased from 32
-    if (node.ascendancyName) return node.isNotable ? 35 : 28; // Increased
-    if (node.isNotable) return 35;       // Increased from 28
-    return 25; // Normal node - increased from 20
+    if (node.isClassStart) return 53;    // +6% from 50 (51 * 1.04 = 53.04)
+    if (node.isKeystone) return 47;      // +6% from 44 (45 * 1.04 = 46.8 rounded)
+    if (node.isJewelSocket) return 41;   // +6% from 38 (39 * 1.04 = 40.56 rounded)
+    if (node.isMastery) return 43;       // +6% from 40 (41 * 1.04 = 42.64 rounded)
+    if (node.ascendancyName) return node.isNotable ? 37 : 30; // +6% from 35/28 (36 * 1.04 = 37.44, 29 * 1.04 = 30.16)
+    if (node.isNotable) return 37;       // +6% from 35 (36 * 1.04 = 37.44 rounded)
+    return 27; // Normal node - +6% from 25 (26 * 1.04 = 27.04 rounded)
   }, []);
 
   // Handle mouse move for panning and hover
@@ -550,7 +550,7 @@ const PassiveTreeWindow: React.FC = () => {
         const classRelPath = `tree/classes/${classImageName}.webp`;
         const classImg = classImageCache.current.get(classRelPath);
         if (classImg) {
-          const size = 2790; // 93% of 3000 for better fit
+          const size = 3000; // 100% - full original size
           ctx.drawImage(classImg, -size / 2, -size / 2, size, size);
         }
 
@@ -558,24 +558,28 @@ const PassiveTreeWindow: React.FC = () => {
         // Hardcoded positions from group data since tree.json doesn't include them in ascendancy objects
         // CORRECT positions from PathOfBuilding tree.lua ascendancy backgrounds
         const ascendancyPositions: Record<string, { x: number; y: number }> = {
-          "Pathfinder": { x: 13751.674845732, y: 6121.7981672774 },
-          "Deadeye": { x: 14723.961164228, y: 3128.8882207467 },
-          "Lich": { x: -1573.4397536271, y: -14970.27926277 },
-          "Abyssal Lich": { x: -1573.4397536271, y: -14970.27926277 },
-          "Acolyte of Chayula": { x: 13768.118885853, y: -6084.7248260421 },
-          "Smith of Kitava": { x: -14318.260769023, y: 4644.607885912 },
-          "Amazon": { x: 12178.374348621, y: 8847.1561582513 },
-          "Tactician": { x: 3149.1717656234, y: 14719.636240554 },
-          "Infernalist": { x: -7526.3698730469, y: -13036.055016673 },
-          "Gemling Legionnaire": { x: -3110.1038699583, y: 14727.940378128 },
-          "Chronomancer": { x: 4651.5523934462, y: -14316.006223618 },
-          "Warbringer": { x: -13039.704139156, y: 7520.0458660114 },
-          "Stormweaver": { x: 1573.4397536271, y: -14970.27926277 },
-          "Blood Mage": { x: -4651.5523934462, y: -14316.006223618 },
-          "Ritualist": { x: 10072.820454151, y: 11185.850971744 },
-          "Witchhunter": { x: 19.970347847175, y: 15052.726498839 },
-          "Titan": { x: -11191.249866964, y: 10066.821756582 },
-          "Invoker": { x: 12202.167028072, y: -8814.3118666561 }
+          // Updated positions from PathOfBuilding tree.lua 0_4
+          "Deadeye": { x: 15197.414580302, y: 3229.498566027 },
+          "Pathfinder": { x: 14193.864101724, y: 6318.6464353817 },
+          "Amazon": { x: 12569.973652183, y: 9131.6391352807 },
+          "Ritualist": { x: 10396.715036616, y: 11545.535386502 },
+          "Titan": { x: -11551.107884827, y: 10390.523449116 },
+          "Warbringer": { x: -13458.999762149, y: 7761.8552109686 },
+          "Smith of Kitava": { x: -14778.668766418, y: 4793.956654588 },
+          "Tactician": { x: 3250.4343344123, y: 15192.950587402 },
+          "Witchhunter": { x: 20.612500410808, y: 15536.751463494 },
+          "Gemling Legionnaire": { x: -3210.1101987684, y: 15201.521747027 },
+          "Oracle": { x: -14155.374312805, y: -6404.4085580119 },
+          "Shaman": { x: -12514.494009575, y: -9207.524672672 },
+          "Infernalist": { x: -9132.2814156951, y: -12569.507033218 },
+          "Blood Mage": { x: -6319.3716959661, y: -14193.541217109 },
+          "Lich": { x: -3230.2751094136, y: -15197.249541646 },
+          "Abyssal Lich": { x: -3230.2751094136, y: -15197.249541646 },
+          "Stormweaver": { x: 0, y: -15536.765136719 },
+          "Chronomancer": { x: 3230.2751094136, y: -15197.249541646 },
+          "Disciple of Varashta": { x: 6319.3716959661, y: -14193.541217109 },
+          "Invoker": { x: 12594.531392424, y: -9097.7387255743 },
+          "Acolyte of Chayula": { x: 14210.836904918, y: -6280.3809896674 }
         };
 
         // Draw ascendancy illustrations at their node positions (only if selected)
@@ -609,7 +613,7 @@ const PassiveTreeWindow: React.FC = () => {
         ctx.globalAlpha = 1.0; // Frame at full opacity
         const frameImg = classImageCache.current.get('tree/ascendancy-background_4000_4000_BC7.webp');
         if (frameImg) {
-          const frameSize = 3720; // 93% of 4000 for better fit
+          const frameSize = 4000; // 100% - full original size
           ctx.drawImage(frameImg, -frameSize / 2, -frameSize / 2, frameSize, frameSize);
         }
 
@@ -802,22 +806,25 @@ const PassiveTreeWindow: React.FC = () => {
 
     // Helper function to get node radius based on type
     const getNodeRadius = (node: PositionedNode): number => {
-      if (node.isClassStart) return 50;  // Class start nodes - increased from 40
-      if (node.isKeystone) return 44;    // Keystones - increased from 35
-      if (node.isNotable) return 35;     // Notables - increased from 28
-      if (node.isMastery) return 38;     // Masteries - increased from 30
-      if (node.isJewelSocket) return 32; // Jewel sockets - increased from 25
-      if (node.ascendancyName) return node.isNotable ? 35 : 28; // Ascendancy nodes - increased
-      return 23; // Normal small passives - increased from 18
+      if (node.isClassStart) return 53;  // Class start nodes - +6% from 50 (51 * 1.04 = 53.04)
+      if (node.isKeystone) return 47;    // Keystones - +6% from 44 (45 * 1.04 = 46.8 rounded)
+      if (node.isNotable) return 37;     // Notables - +6% from 35 (36 * 1.04 = 37.44 rounded)
+      if (node.isMastery) return 41;     // Masteries - +6% from 38 (39 * 1.04 = 40.56 rounded)
+      if (node.isJewelSocket) return 34; // Jewel sockets - +6% from 32 (33 * 1.04 = 34.32 rounded)
+      if (node.ascendancyName) return node.isNotable ? 37 : 30; // Ascendancy nodes - +6% from 35/28 (36 * 1.04 = 37.44, 29 * 1.04 = 30.16)
+      return 24; // Normal small passives - +6% from 23 (23 * 1.04 = 23.92 rounded)
     };
 
     // Draw nodes
     for (const node of positionedNodes.values()) {
       // Skip isOnlyImage nodes (mastery display nodes that shouldn't be rendered)
       if (node.isOnlyImage) continue;
-      
+
+      // Skip class start nodes - they're already shown in the center class illustration
+      if (node.isClassStart) continue;
+
       // Cull nodes outside view
-      if (node.x < visibleLeft || node.x > visibleRight || 
+      if (node.x < visibleLeft || node.x > visibleRight ||
           node.y < visibleTop || node.y > visibleBottom) continue;
 
       const isAllocated = allocatedNodesSet.has(node.id);

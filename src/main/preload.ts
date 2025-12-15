@@ -23,7 +23,7 @@ const electronAPI = {
   sendTreeData: (passiveTreeData: any) => ipcRenderer.invoke("send-tree-data", passiveTreeData),
   savePassiveTreeData: (data: any) => ipcRenderer.invoke("save-passive-tree-data", data),
   loadPassiveTreeData: () => ipcRenderer.invoke("load-passive-tree-data"),
-  loadTreeStructure: (version: string = '0_3') => ipcRenderer.invoke("load-tree-structure", version),
+  loadTreeStructure: (version: string = '0_4') => ipcRenderer.invoke("load-tree-structure", version),
   getAssetsPath: () => ipcRenderer.invoke("get-assets-path"),
   loadGemLoadouts: () => ipcRenderer.invoke("load-gem-loadouts"),
   switchTreeLoadout: (loadoutId: string) => ipcRenderer.invoke("switch-tree-loadout", loadoutId),

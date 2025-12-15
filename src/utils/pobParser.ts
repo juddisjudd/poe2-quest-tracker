@@ -982,7 +982,7 @@ function parseSpecElement(spec: Element): PassiveTreeData | undefined {
     
     console.log('🌳 [POB] Final classId:', classId, 'ascendClassId:', ascendClassId);
     const secondaryAscendClassId = parseInt(spec.getAttribute('secondaryAscendClassId') || '0', 10);
-    const treeVersion = spec.getAttribute('treeVersion') || '0_3';
+    const treeVersion = spec.getAttribute('treeVersion') || '0_4';
     const title = spec.getAttribute('title') || undefined;
 
     // Extract allocated node IDs
@@ -1154,7 +1154,7 @@ function extractPassiveTreeFromXML(xmlString: string): PassiveTreeData | undefin
     }
     
     const secondaryAscendClassId = parseInt(spec.getAttribute('secondaryAscendClassId') || '0', 10);
-    const treeVersion = spec.getAttribute('treeVersion') || '0_3';
+    const treeVersion = spec.getAttribute('treeVersion') || '0_4';
 
     // Extract allocated node IDs
     const nodesAttr = spec.getAttribute('nodes') || '';

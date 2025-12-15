@@ -100,7 +100,7 @@ function calculateNodePosition(
  * Load tree data from JSON file
  * In production, this will be bundled or loaded from assets
  */
-export async function loadTreeData(version: string = '0_3'): Promise<FullTreeData | null> {
+export async function loadTreeData(version: string = '0_4'): Promise<FullTreeData | null> {
   // Check cache first
   if (treeDataCache.has(version)) {
     return treeDataCache.get(version)!;
@@ -305,5 +305,5 @@ export function clearTreeCache(): void {
  * Get the tree version from POB tree data
  */
 export function getTreeVersion(passiveTreeData: PassiveTreeData): string {
-  return passiveTreeData.treeVersion || '0_3';
+  return passiveTreeData.treeVersion || '0_4';
 }
