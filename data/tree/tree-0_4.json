@@ -23284,7 +23284,7 @@
     },
     "1878": {
       "id": 1878,
-      "name": "Energy Shield and Armour applies to Elemental Resistance",
+      "name": "Energy Shield and Armour applies to Elemental Damage Hits",
       "icon": "Art/2DArt/SkillIcons/passives/ArmourAndEnergyShieldNode.dds",
       "stats": [
         "12% increased maximum Energy Shield",
@@ -33570,7 +33570,7 @@
       "name": "Craving Slaughter",
       "icon": "Art/2DArt/SkillIcons/passives/IncreasedPhysicalDamage.dds",
       "stats": [
-        "+8 maximum Rage for each time you've used a Skill that Requires Glory in the past 6 seconds"
+        "+8 maximum Rage for each time you've used a Skill that Requires Glory in the past 6 seconds, up to 5 times"
       ],
       "group": 106,
       "orbit": 2,
@@ -35561,7 +35561,7 @@
       "name": "Navira's Fracturing",
       "icon": "Art/2DArt/SkillIcons/passives/DiscipleoftheDjinn/WaterDjinnChiilldedGroundBurst.dds",
       "stats": [
-        "Grants Skill: Command: {0} "
+        "Grants Skill: Navira's Fracturing"
       ],
       "group": 593,
       "orbit": 7,
@@ -40522,7 +40522,7 @@
       "name": "Ruzhan's Fury",
       "icon": "Art/2DArt/SkillIcons/passives/DiscipleoftheDjinn/FireDjinnEmberSlash.dds",
       "stats": [
-        "Grants Skill: Command: {0} "
+        "Grants Skill: Ruzhan's Fury"
       ],
       "group": 593,
       "orbit": 8,
@@ -40749,7 +40749,7 @@
     },
     "14328": {
       "id": 14328,
-      "name": "Energy Shield and Armour applies to Elemental Resistance",
+      "name": "Energy Shield and Armour applies to Elemental Damage Hits",
       "icon": "Art/2DArt/SkillIcons/passives/ArmourAndEnergyShieldNode.dds",
       "stats": [
         "12% increased maximum Energy Shield",
@@ -51379,7 +51379,7 @@
       "name": "Heat of the Forge",
       "icon": "Art/2DArt/SkillIcons/passives/SmithofKitava/SmithofKitavaTriggerFireSpellsMeleeWeapon.dds",
       "stats": [
-        "Grants Skill: Fire Spell on Melee Hit"
+        "Grants Skill: Fire Spell on Hit"
       ],
       "group": 5,
       "orbit": 0,
@@ -52323,7 +52323,7 @@
       "name": "Kelari's Deception",
       "icon": "Art/2DArt/SkillIcons/passives/DiscipleoftheDjinn/SandDjinnExplosiveTeleport.dds",
       "stats": [
-        "Grants Skill: Command: {0} "
+        "Grants Skill: Kelari's Deception"
       ],
       "group": 593,
       "orbit": 9,
@@ -55600,7 +55600,7 @@
       "name": "Kelari's Judgment",
       "icon": "Art/2DArt/SkillIcons/passives/DiscipleoftheDjinn/SandDjinnDaggerslamSkill.dds",
       "stats": [
-        "Grants Skill: Command: {0} "
+        "Grants Skill: Kelari's Judgment"
       ],
       "group": 593,
       "orbit": 8,
@@ -55640,7 +55640,7 @@
       "name": "Ruzhan's Reckoning",
       "icon": "Art/2DArt/SkillIcons/passives/DiscipleoftheDjinn/FireDjinnMeteoricSlam.dds",
       "stats": [
-        "Grants Skill: Command: {0} "
+        "Grants Skill: Ruzhan's Reckoning"
       ],
       "group": 593,
       "orbit": 6,
@@ -75498,7 +75498,7 @@
       "icon": "Art/2DArt/SkillIcons/passives/firedamagestr.dds",
       "stats": [
         "100% increased Flammability Magnitude",
-        "8% reduced Skill Effect Duration"
+        "Ignites you inflict deal Damage 10% faster"
       ],
       "group": 957,
       "orbit": 7,
@@ -77086,7 +77086,7 @@
     },
     "41338": {
       "id": 41338,
-      "name": "Shapeshifting Armour applies to Elemental Resistance",
+      "name": "Shapeshifting Armour applies to Elemental Damage Hits",
       "icon": "Art/2DArt/SkillIcons/passives/DruidGenericShapeshiftNode.dds",
       "stats": [
         "+8% of Armour also applies to Elemental Damage while Shapeshifted"
@@ -79973,7 +79973,7 @@
       "name": "Navira's Well",
       "icon": "Art/2DArt/SkillIcons/passives/DiscipleoftheDjinn/WaterDjinnESRechargeCommand.dds",
       "stats": [
-        "Grants Skill: Command: {0} "
+        "Grants Skill: Navira's Well"
       ],
       "group": 593,
       "orbit": 2,
@@ -83470,7 +83470,7 @@
       "name": "Navira's Oasis",
       "icon": "Art/2DArt/SkillIcons/passives/DiscipleoftheDjinn/WaterDjinnCommandOasis.dds",
       "stats": [
-        "Grants Skill: Command: {0} "
+        "Grants Skill: Navira's Oasis"
       ],
       "group": 593,
       "orbit": 7,
@@ -85119,9 +85119,9 @@
       "name": "Elemental Equilibrium",
       "icon": "Art/2DArt/SkillIcons/passives/KeystoneElementalEquilibrium.dds",
       "stats": [
-        "Create Cold Infusion Remnants instead of Fire Infusion Remnants",
-        "Create Fire Infusion Remnants instead of Lightning Infusion Remnants",
-        "Create Lightning Infusion Remnants instead of Cold Infusion Remnants"
+        "Create Lightning Infusion Remnants instead of Fire",
+        "Create Cold Infusion Remnants instead of Lightning",
+        "Create Fire Infusion Remnants instead of Cold"
       ],
       "group": 479,
       "orbit": 0,
@@ -101673,7 +101673,7 @@
       "stats": [
         "10% less Elemental Damage taken",
         "Adapt to the highest Elemental Damage Type of each Hit you take",
-        "Each Adaptation grants 10% less Damage taken of that Adaptation's type"
+        "10% less Damage taken of each Elemental Damage Type per matching Adaptation"
       ],
       "group": 65,
       "orbit": 6,
@@ -102037,7 +102037,7 @@
       "stats": [
         "Sacrificing Energy Shield does not interrupt Recharge",
         "Sacrifice 5% of maximum Energy Shield when you Cast a Spell",
-        "Spells for which this Sacrifice was fully made deal 5% more Damage"
+        "Spells for which this Sacrifice was fully made deal 30% more Damage"
       ],
       "group": 1069,
       "orbit": 0,
@@ -109606,7 +109606,7 @@
       "name": "Ruzhan's Trap",
       "icon": "Art/2DArt/SkillIcons/passives/DiscipleoftheDjinn/FireDjinnFlameRunes.dds",
       "stats": [
-        "Grants Skill: Command: {0} "
+        "Grants Skill: Ruzhan's Trap"
       ],
       "group": 593,
       "orbit": 9,

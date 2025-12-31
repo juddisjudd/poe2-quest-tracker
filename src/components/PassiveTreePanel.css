@@ -119,43 +119,6 @@
   color: #888;
 }
 
-/* Theme support */
-[data-theme="amoled-crimson"] .tree-toggle-btn {
-  border-color: rgba(220, 38, 127, 0.3);
-}
-
-[data-theme="amoled-crimson"] .tree-panel-toggle.panel-open .tree-toggle-btn {
-  background: rgba(220, 38, 127, 0.2);
-  border-color: rgba(220, 38, 127, 0.6);
-}
-
-[data-theme="amoled-crimson"] .tree-points-badge {
-  background: rgba(220, 38, 127, 0.4);
-  color: #ff69b4;
-}
-
-[data-theme="amoled-crimson"] .tree-info-tooltip {
-  border-color: rgba(220, 38, 127, 0.5);
-}
-
-[data-theme="amoled-yellow"] .tree-toggle-btn {
-  border-color: rgba(255, 193, 7, 0.3);
-}
-
-[data-theme="amoled-yellow"] .tree-panel-toggle.panel-open .tree-toggle-btn {
-  background: rgba(255, 193, 7, 0.2);
-  border-color: rgba(255, 193, 7, 0.6);
-}
-
-[data-theme="amoled-yellow"] .tree-points-badge {
-  background: rgba(255, 193, 7, 0.4);
-  color: #ffc107;
-}
-
-[data-theme="amoled-yellow"] .tree-info-tooltip {
-  border-color: rgba(255, 193, 7, 0.5);
-}
-
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .tree-toggle-btn {

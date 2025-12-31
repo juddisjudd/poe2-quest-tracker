@@ -23,5 +23,5 @@
     }
   },
   "include": ["src/main/**/*", "src/types/**/*", "src/data/**/*", "src/utils/**/*", "src/data"],
-  "exclude": ["node_modules", "src/data/guideLoader.ts", "src/data/questData.ts"]
+  "exclude": ["node_modules", "src/data/guideLoader.ts", "src/data/questData.ts", "src/utils/gemImageMapper.ts"]
 }

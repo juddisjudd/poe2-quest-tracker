@@ -11,6 +11,7 @@ export interface RewardDetection {
 
 interface PermanentRewardsPanelProps {
   acts: Act[];
+  isVisible: boolean;
   onClose: () => void;
   onQuestToggle: (actId: string, questId: string) => void;
   isMonitoring?: boolean;
@@ -26,6 +27,7 @@ interface RewardQuest {
 
 export const PermanentRewardsPanel: React.FC<PermanentRewardsPanelProps> = ({
   acts,
+  isVisible,
   onClose,
   onQuestToggle,
   isMonitoring = false,
@@ -160,7 +162,7 @@ export const PermanentRewardsPanel: React.FC<PermanentRewardsPanelProps> = ({
   };
 
   return (
-    <div className="permanent-rewards-panel">
+    <div className={`permanent-rewards-panel ${isVisible ? "visible" : "hidden"}`}>
       <div className="rewards-panel-header">
         <h2>Permanent Rewards Tracker</h2>
         <button className="rewards-close-btn" onClick={onClose}>

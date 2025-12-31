@@ -94,23 +94,3 @@ export function parsePOBColorCodes(text: string): string {
 
   return result;
 }
-
-/**
- * Strip color codes from text (get plain text)
- */
-export function stripPOBColorCodes(text: string): string {
-  if (!text) return '';
-
-  return text
-    .replace(/\^x[0-9A-Fa-f]{6}/g, '') // Remove hex color codes
-    .replace(/\^[0-9]/g, ''); // Remove preset color codes
-}
-
-/**
- * Check if text contains POB color codes
- */
-export function hasPOBColorCodes(text: string): boolean {
-  if (!text) return false;
-
-  return /\^x[0-9A-Fa-f]{6}|\^[0-9]/.test(text);
-}

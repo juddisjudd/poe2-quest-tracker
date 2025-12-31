@@ -91,7 +91,6 @@ export const GlobalTimer: React.FC<GlobalTimerProps> = ({
 
   useEffect(() => {
     if (autoStart && currentActNumber === 1 && !timer.isRunning && timer.elapsed === 0) {
-      console.log('Auto-starting global speedrun timer (Act 1 detected)');
       startTimer();
     }
   }, [autoStart, currentActNumber, timer.isRunning, timer.elapsed, startTimer]);

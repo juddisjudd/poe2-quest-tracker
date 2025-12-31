@@ -153,7 +153,6 @@ export interface TrackerData {
     alwaysOnTop: boolean;
     opacity: number;
     fontSize?: number;
-    theme?: "amoled" | "amoled-crimson" | "amoled-yellow";
     hotkey?: string;
     showGemPanel?: boolean;
     showNotesPanel?: boolean;

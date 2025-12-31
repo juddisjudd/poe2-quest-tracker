@@ -16,8 +16,6 @@ import { QuestTag, ActTimer as ActTimerType, GlobalTimer as GlobalTimerType } fr
 import "./QuestTracker.css";
 import "./UpdateNotification.css";
 import "./WebStyles.css";
-import "../themes/amoled-crimson.css";
-import "../themes/amoled-yellow.css";
 
 export const QuestTracker: React.FC = () => {
   const {
@@ -42,12 +40,11 @@ export const QuestTracker: React.FC = () => {
     resetAllData,
   } = useTrackerData();
 
-  console.log('QuestTracker render:', { loading, actsCount: data.acts.length, firstAct: data.acts[0] });
-
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [treePanelVisible, setTreePanelVisible] = useState(false);
   const [filtersCollapsed, setFiltersCollapsed] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [assetsBasePath, setAssetsBasePath] = useState<string>('');
 
   // Auto-hide toast after 3 seconds
   useEffect(() => {
@@ -65,6 +62,26 @@ export const QuestTracker: React.FC = () => {
   const itemCheckVisible = data.settings.showItemCheckPanel === true;
 
   const isElectron = !!window.electronAPI;
+
+  // Get assets base path for loading gem images
+  useEffect(() => {
+    const loadAssetsPath = async () => {
+      if (isElectron && window.electronAPI?.getAssetsPath) {
+        try {
+          const basePath = await window.electronAPI.getAssetsPath();
+          setAssetsBasePath(basePath);
+        } catch (err) {
+          console.error('[GEM_ASSETS] Failed to get assets path:', err);
+          // Fallback to empty string (will use relative paths)
+          setAssetsBasePath('');
+        }
+      } else {
+        // In web mode, use relative paths
+        setAssetsBasePath('');
+      }
+    };
+    loadAssetsPath();
+  }, [isElectron]);
 
   // Auto-completion handler for quest rewards
   const handleQuestAutoComplete = useCallback((questId: string) => {
@@ -90,7 +107,6 @@ export const QuestTracker: React.FC = () => {
     if (!isElectron || !window.electronAPI?.onTreeWindowClosed) return;
 
     const unsubscribe = window.electronAPI.onTreeWindowClosed(() => {
-      console.log('🌳 Tree window closed externally');
       setTreePanelVisible(false);
       updateSettings({ showTreePanel: false });
     });
@@ -105,7 +121,6 @@ export const QuestTracker: React.FC = () => {
     const handleActChange = (event: any) => {
       const actNumber = event.detail?.actNumber;
       if (actNumber && typeof actNumber === 'number') {
-        console.log(`Act changed to Act ${actNumber}`);
         updateCurrentAct(actNumber);
       }
     };
@@ -211,7 +226,6 @@ export const QuestTracker: React.FC = () => {
       } ${itemCheckVisible ? "item-check-panel-open" : ""}`}
       style={{ opacity: isElectron ? data.settings.opacity : 1 }}
       data-font-scale={data.settings.fontSize || 1.0}
-      data-theme={(data.settings as any).theme || "amoled"}
     >
       <Header
         settings={data.settings}
@@ -227,12 +241,6 @@ export const QuestTracker: React.FC = () => {
         onImportGems={importGemProgression}
         onImportGemLoadouts={importGemLoadouts}
         onImportNotes={async (notes) => {
-          console.log('🎯 [QUESTTRACKER] onImportNotes called with:', {
-            hasNotes: !!notes,
-            notesLength: notes?.length || 0,
-            notesPreview: notes ? notes.substring(0, 100) + '...' : 'No notes'
-          });
-          
           await updateNotesData({
             userNotes: data.notesData?.userNotes || "",
             pobNotes: notes
@@ -315,14 +323,7 @@ export const QuestTracker: React.FC = () => {
       </div>
 
       {/* Gem Progression Panel */}
-      {data.gemProgression && (() => {
-        console.log('🎯 [QUESTTRACKER] Rendering GemProgressionPanel with:', {
-          hasGemProgression: !!data.gemProgression,
-          socketGroups: data.gemProgression?.socketGroups?.length || 0,
-          isVisible: gemPanelVisible,
-          firstGroupName: data.gemProgression?.socketGroups?.[0]?.skillName || 'none'
-        });
-        return (
+      {data.gemProgression && (
           <GemProgressionPanel
             gemProgression={data.gemProgression}
             gemLoadouts={data.gemLoadouts}
@@ -334,19 +335,9 @@ export const QuestTracker: React.FC = () => {
             updateSettings({ showGemPanel: !gemPanelVisible });
           }}
           showToggleButton={false}
+          assetsBasePath={assetsBasePath}
         />
-        );
-      })()}
-      
-      {/* Debug: log tracker data */}
-      {(() => {
-        console.log('QuestTracker data debug:', {
-          hasGemProgression: !!data.gemProgression,
-          hasGemLoadouts: !!data.gemLoadouts,
-          loadoutCount: data.gemLoadouts?.loadouts?.length || 0
-        });
-        return null;
-      })()}
+      )}
 
       {/* Notes Panel */}
       {data.notesData && (
@@ -363,18 +354,17 @@ export const QuestTracker: React.FC = () => {
       )}
 
       {/* Permanent Rewards Panel */}
-      {rewardsPanelVisible && (
-        <PermanentRewardsPanel
-          acts={data.acts}
-          onClose={() => {
-            updateSettings({ showRewardsPanel: false });
-          }}
-          onQuestToggle={(actId, questId) => toggleQuest(questId)}
-          isMonitoring={isMonitoring}
-          logFilePath={data.settings.logFilePath}
-          recentRewards={recentRewards}
-        />
-      )}
+      <PermanentRewardsPanel
+        acts={data.acts}
+        isVisible={rewardsPanelVisible}
+        onClose={() => {
+          updateSettings({ showRewardsPanel: false });
+        }}
+        onQuestToggle={(actId, questId) => toggleQuest(questId)}
+        isMonitoring={isMonitoring}
+        logFilePath={data.settings.logFilePath}
+        recentRewards={recentRewards}
+      />
 
       {/* Regex Builder Panel */}
       <RegexBuilderPanel
@@ -402,11 +392,21 @@ export const QuestTracker: React.FC = () => {
       <PanelFooter
         gemPanelVisible={gemPanelVisible}
         onToggleGemPanel={() => {
+          // Check if there's gem data before opening panel
+          if (!gemPanelVisible && !data.gemProgression?.socketGroups?.length) {
+            setToastMessage('No gem data. Import a POB build first.');
+            return;
+          }
           updateSettings({ showGemPanel: !gemPanelVisible });
         }}
         hasGemData={true}
         notesPanelVisible={notesPanelVisible}
         onToggleNotesPanel={() => {
+          // Check if there's notes data before opening panel
+          if (!notesPanelVisible && !data.notesData?.pobNotes && !data.notesData?.userNotes) {
+            setToastMessage('No notes data. Import a POB build or add notes first.');
+            return;
+          }
           updateSettings({ showNotesPanel: !notesPanelVisible });
         }}
         hasNotesData={!!data.notesData}

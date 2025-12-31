@@ -46,10 +46,8 @@ export const ActTimer: React.FC<ActTimerProps> = ({
     }
 
     if (isCurrentAct && !previousIsCurrentAct.current && !timer.isRunning && !timer.completed) {
-      console.log(`Auto-starting timer for Act ${actNumber} (zone change detected)`);
       startTimer();
     } else if (!isCurrentAct && timer.isRunning) {
-      console.log(`Pausing timer for Act ${actNumber} (left act)`);
       pauseTimer();
     }
 

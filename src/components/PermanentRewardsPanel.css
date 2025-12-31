@@ -10,6 +10,17 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.permanent-rewards-panel.hidden {
+  transform: translateY(100%);
+  pointer-events: none;
+}
+
+.permanent-rewards-panel.visible {
+  transform: translateY(0);
+  pointer-events: auto;
 }
 
 .rewards-panel-header {

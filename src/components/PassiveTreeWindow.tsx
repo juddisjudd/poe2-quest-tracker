@@ -96,6 +96,38 @@ const PassiveTreeWindow: React.FC = () => {
   const lastMousePos = useRef({ x: 0, y: 0 });
   const animationFrameRef = useRef<number | null>(null);
 
+  // Lazy image loading - track which images are currently loading
+  const loadingImages = useRef<Set<string>>(new Set());
+
+  // Lazy load images on-demand as they become visible
+  const loadImageIfNeeded = useCallback((relativePath: string, fullPath: string): HTMLImageElement | null => {
+    // Check if already in cache
+    if (imageCache.current.has(relativePath)) {
+      return imageCache.current.get(relativePath) || null;
+    }
+
+    // Check if already loading
+    if (loadingImages.current.has(relativePath)) {
+      return null;
+    }
+
+    // Start loading
+    loadingImages.current.add(relativePath);
+    const img = new Image();
+    img.onload = () => {
+      imageCache.current.set(relativePath, img);
+      loadingImages.current.delete(relativePath);
+      setImagesLoaded(prev => !prev); // Trigger re-render when image loads
+    };
+    img.onerror = () => {
+      imageCache.current.set(relativePath, null); // Mark as failed
+      loadingImages.current.delete(relativePath);
+    };
+    img.src = fullPath;
+
+    return null; // Not ready yet
+  }, []);
+
   // Memoize allocated nodes set for O(1) lookup
   const allocatedNodesSet = useMemo(() => {
     console.log('Recalculating allocatedNodesSet with', passiveTreeData?.allocatedNodes?.length, 'nodes');
@@ -201,93 +233,6 @@ const PassiveTreeWindow: React.FC = () => {
 
     loadData();
   }, []);
-
-  // Preload images: Allocated nodes first (priority), then unallocated nodes (lazy)
-  useEffect(() => {
-    if (!positionedNodes || !assetsBasePath) return;
-
-    const loadImages = async () => {
-      const allocatedIcons: Map<string, string> = new Map();
-      const unallocatedIcons: Map<string, string> = new Map();
-
-      // Separate allocated and unallocated node icons
-      for (const [nodeId, node] of positionedNodes) {
-        if (node?.icon) {
-          const relativePath = iconPathToRelativePath(node.icon);
-          if (relativePath && !imageCache.current.has(relativePath)) {
-            const fullPath = `${assetsBasePath}/${relativePath}`;
-            const isAllocated = allocatedNodesSet.has(nodeId);
-
-            if (isAllocated) {
-              allocatedIcons.set(relativePath, fullPath);
-            } else {
-              unallocatedIcons.set(relativePath, fullPath);
-            }
-          }
-        }
-      }
-
-      console.log(`Loading ${allocatedIcons.size} allocated icons, ${unallocatedIcons.size} unallocated icons...`);
-
-      // Load allocated node icons first (priority)
-      let successCount = 0;
-      let failCount = 0;
-
-      const loadAllocatedPromises = Array.from(allocatedIcons.entries()).map(([relativePath, fullPath]) => {
-        return new Promise<void>((resolve) => {
-          const img = new Image();
-          img.onload = () => {
-            imageCache.current.set(relativePath, img);
-            successCount++;
-            resolve();
-          };
-          img.onerror = (err) => {
-            if (failCount < 3) console.warn(`Failed to load icon: ${fullPath}`, err);
-            imageCache.current.set(relativePath, null);
-            failCount++;
-            resolve();
-          };
-          img.src = fullPath;
-        });
-      });
-
-      await Promise.all(loadAllocatedPromises);
-      console.log(`Allocated icons loaded: ${successCount} success, ${failCount} failed`);
-      setImagesLoaded(true); // Trigger render with allocated nodes
-
-      // Load unallocated icons in background (non-blocking, batched)
-      const batchSize = 50; // Load 50 at a time to avoid overwhelming
-      const unallocatedArray = Array.from(unallocatedIcons.entries());
-
-      for (let i = 0; i < unallocatedArray.length; i += batchSize) {
-        const batch = unallocatedArray.slice(i, i + batchSize);
-        const batchPromises = batch.map(([relativePath, fullPath]) => {
-          return new Promise<void>((resolve) => {
-            const img = new Image();
-            img.onload = () => {
-              imageCache.current.set(relativePath, img);
-              resolve();
-            };
-            img.onerror = () => {
-              imageCache.current.set(relativePath, null);
-              resolve();
-            };
-            img.src = fullPath;
-          });
-        });
-
-        await Promise.all(batchPromises);
-        // Trigger re-render after each batch to progressively show icons
-        if (i % (batchSize * 2) === 0) {
-          setImagesLoaded(prev => !prev); // Toggle to force re-render
-        }
-      }
-
-      console.log(`All icons loaded`);
-    };
-
-    loadImages();
-  }, [positionedNodes, assetsBasePath, allocatedNodesSet]);
 
   // Load class/ascendancy illustrations
   useEffect(() => {
@@ -506,7 +451,7 @@ const PassiveTreeWindow: React.FC = () => {
 
   // Render the tree on canvas
   useEffect(() => {
-    if (!canvasRef.current || !containerRef.current || !positionedNodes) return;
+    if (!canvasRef.current || !containerRef.current || !positionedNodes || !assetsBasePath) return;
 
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
@@ -911,10 +856,11 @@ const PassiveTreeWindow: React.FC = () => {
 
       // Try to draw icon for ALL nodes (allocated and unallocated)
       let drewIcon = false;
-      if (node.icon) {
+      if (node.icon && assetsBasePath) {
         const relativePath = iconPathToRelativePath(node.icon);
         if (relativePath) {
-          const img = imageCache.current.get(relativePath);
+          const fullPath = `${assetsBasePath}/${relativePath}`;
+          const img = loadImageIfNeeded(relativePath, fullPath);
           if (img) {
             // Draw circular clip with icon
             ctx.save();
@@ -970,7 +916,7 @@ const PassiveTreeWindow: React.FC = () => {
 
     ctx.restore();
 
-  }, [positionedNodes, viewState, allocatedNodesSet, hoveredNode, renderKey, imagesLoaded, classImagesLoaded, frameImagesLoaded, treeStructure, passiveTreeData]);
+  }, [positionedNodes, viewState, allocatedNodesSet, hoveredNode, renderKey, imagesLoaded, classImagesLoaded, frameImagesLoaded, treeStructure, passiveTreeData, assetsBasePath, loadImageIfNeeded]);
 
   // Handle window resize
   useEffect(() => {

@@ -33,21 +33,13 @@ export const useAutoComplete = ({
   const [recentRewards, setRecentRewards] = useState<RewardDetection[]>([]);
 
   useEffect(() => {
-    console.log('useAutoComplete effect triggered');
-    console.log('isElectron:', isElectron);
-    console.log('autoCompleteQuests:', trackerData.settings.autoCompleteQuests);
-    console.log('autoCompleteOnZoneEntry:', trackerData.settings.autoCompleteOnZoneEntry);
-
     // Need at least one auto-complete option enabled to start monitoring
     const anyAutoCompleteEnabled = trackerData.settings.autoCompleteQuests || trackerData.settings.autoCompleteOnZoneEntry;
 
     if (!isElectron || !anyAutoCompleteEnabled) {
-      console.log('Auto-completion disabled: electron=' + isElectron + ', anyAutoComplete=' + anyAutoCompleteEnabled);
       setIsMonitoring(false);
       return;
     }
-
-    console.log('Auto-completion enabled (rewards:' + trackerData.settings.autoCompleteQuests + ', zones:' + trackerData.settings.autoCompleteOnZoneEntry + ')');
 
     let logRewardCleanup: (() => void) | undefined;
     let zoneChangedCleanup: (() => void) | undefined;
@@ -60,20 +52,17 @@ export const useAutoComplete = ({
 
       try {
         await window.electronAPI.startLogMonitoring(trackerData.settings.logFilePath);
-        console.log('Started log monitoring for auto-completion');
         setIsMonitoring(true);
 
         zoneChangedCleanup = window.electronAPI.onZoneChanged((zoneData: any) => {
           const zoneName = typeof zoneData === 'string' ? zoneData : zoneData.zoneName;
           const actNumber = typeof zoneData === 'object' ? zoneData.actNumber : null;
 
-          console.log('Zone changed to:', zoneName, actNumber ? `(Act ${actNumber})` : '');
           currentLocation = zoneName;
           handleZoneChange(zoneName, actNumber);
         });
 
         logRewardCleanup = window.electronAPI.onLogReward((rewardText: string) => {
-          console.log('Received log reward:', rewardText);
           handleLogReward(rewardText);
         });
 
@@ -83,30 +72,22 @@ export const useAutoComplete = ({
     };
 
     const handleZoneChange = (zoneName: string, actNumber: number | null) => {
-      console.log('Handling zone change to:', zoneName, actNumber ? `(Act ${actNumber})` : '');
-
       const zoneInfo = getZoneInfo(zoneName);
       if (!zoneInfo) {
-        console.log('Zone not found in registry:', zoneName);
         if (actNumber !== null && window.dispatchEvent) {
           window.dispatchEvent(new CustomEvent('act-change', { detail: { actNumber } }));
-          console.log(`Dispatched act-change event for Act ${actNumber} (from marker)`);
         }
         return;
       }
-
-      console.log('Zone info:', zoneInfo);
 
       // Dispatch act-change event when entering any zone in an act
       // This allows timers to start when entering the first zone of an act
       if (zoneInfo.actNumber && window.dispatchEvent) {
         window.dispatchEvent(new CustomEvent('act-change', { detail: { actNumber: zoneInfo.actNumber } }));
-        console.log(`Dispatched act-change event for Act ${zoneInfo.actNumber} (from zone: ${zoneName})`);
       }
 
       // Only auto-complete previous quests if zone entry auto-completion is enabled
       if (!trackerDataRef.current.settings.autoCompleteOnZoneEntry) {
-        console.log('Zone-based auto-completion disabled, skipping quest completion');
         return;
       }
 
@@ -122,55 +103,36 @@ export const useAutoComplete = ({
       });
 
       if (firstQuestInZoneIndex === -1) {
-        console.log('No quests found for zone:', zoneName);
         return;
       }
 
-      console.log('Found first quest in zone at index:', firstQuestInZoneIndex, allQuests[firstQuestInZoneIndex].name);
-
       // Auto-complete all PREVIOUS uncompleted quests (before this zone)
-      let completedCount = 0;
       for (let i = 0; i < firstQuestInZoneIndex; i++) {
         const quest = allQuests[i];
         if (!quest.completed) {
-          console.log('Auto-completing previous quest:', quest.id, quest.description);
           onQuestComplete(quest.id);
-          completedCount++;
         }
-      }
-
-      if (completedCount > 0) {
-        console.log(`Auto-completed ${completedCount} previous quest(s) before entering ${zoneName}`);
-      } else {
-        console.log('No previous quests to complete - already up to date');
       }
     };
 
     const handleLogReward = (rewardText: string) => {
       // Only auto-complete quests for rewards if reward-based auto-completion is enabled
       if (!trackerDataRef.current.settings.autoCompleteQuests) {
-        console.log('Reward-based auto-completion disabled, skipping quest completion');
         return;
       }
 
       // Parse the log line with location context
       const reward = parseLogLine(rewardText, currentLocation);
       if (!reward) {
-        console.log('Failed to parse reward line:', rewardText);
         return;
       }
-
-      console.log('Parsed reward:', reward);
 
       // Find matching quests using location-aware logic
       const matchingQuestIds = findMatchingQuests(reward);
 
       if (matchingQuestIds.length === 0) {
-        console.log('No matching quests found for reward:', reward.rewardText, 'in location:', reward.location);
         return;
       }
-
-      console.log('Found matching quests:', matchingQuestIds);
 
       // Track which quests were actually completed
       const completedQuestIds: string[] = [];
@@ -180,13 +142,8 @@ export const useAutoComplete = ({
         // Check if quest exists and is not already completed
         const quest = findQuestInData(trackerDataRef.current, questId);
         if (quest && !quest.completed) {
-          console.log('Auto-completing quest:', questId, quest.description);
           onQuestComplete(questId);
           completedQuestIds.push(questId);
-        } else if (quest?.completed) {
-          console.log('Quest already completed:', questId, quest.description);
-        } else {
-          console.log('Quest not found in tracker data:', questId);
         }
       });
 

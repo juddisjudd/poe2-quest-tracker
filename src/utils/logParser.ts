@@ -325,32 +325,6 @@ function doesRewardMatch(rewardText: string, pattern: string): boolean {
 }
 
 /**
- * Parse multiple log lines and return rewards with location context
- */
-export function parseLogLines(lines: string[]): LogReward[] {
-  const rewards: LogReward[] = [];
-  let currentLocation: string | undefined;
-  
-  for (const line of lines) {
-    // Check if this line contains a scene change
-    const sceneChange = parseSceneLine(line);
-    if (sceneChange) {
-      currentLocation = sceneChange.location;
-      console.log(`Scene changed to: ${currentLocation}`);
-      continue;
-    }
-    
-    // Try to parse as a reward line
-    const reward = parseLogLine(line, currentLocation);
-    if (reward) {
-      rewards.push(reward);
-    }
-  }
-  
-  return rewards;
-}
-
-/**
  * Parse multiple log lines and return both scenes and rewards
  */
 export function parseLogLinesWithScenes(lines: string[]): { scenes: LogScene[], rewards: LogReward[] } {
@@ -419,24 +393,3 @@ export function findQuestsForZone(zoneId: string, quests: QuestStep[]): string[]
   return matchingQuestIds;
 }
 
-/**
- * Find boss quests in a zone (for potential auto-completion when boss is killed)
- * @param zoneId - The zone ID from the registry
- * @param quests - All quest steps from the current guide
- * @returns Array of boss quest IDs in this zone
- */
-export function findBossQuestsInZone(zoneId: string, quests: QuestStep[]): string[] {
-  const bossQuestIds: string[] = [];
-
-  for (const quest of quests) {
-    if (quest.completed) {
-      continue;
-    }
-
-    if (quest.zoneId === zoneId && quest.type === 'kill_boss') {
-      bossQuestIds.push(quest.id);
-    }
-  }
-
-  return bossQuestIds;
-}

@@ -109,25 +109,6 @@
   border-color: rgba(255, 255, 255, 0.25);
 }
 
-/* Theme support */
-[data-theme="amoled-crimson"] .panel-toggle-btn {
-  border-color: rgba(220, 38, 127, 0.3);
-}
-
-[data-theme="amoled-crimson"] .panel-toggle.panel-open .panel-toggle-btn {
-  background: rgba(220, 38, 127, 0.1);
-  border-color: rgba(220, 38, 127, 0.4);
-}
-
-[data-theme="amoled-yellow"] .panel-toggle-btn {
-  border-color: rgba(255, 193, 7, 0.3);
-}
-
-[data-theme="amoled-yellow"] .panel-toggle.panel-open .panel-toggle-btn {
-  background: rgba(255, 193, 7, 0.1);
-  border-color: rgba(255, 193, 7, 0.4);
-}
-
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .panel-footer {

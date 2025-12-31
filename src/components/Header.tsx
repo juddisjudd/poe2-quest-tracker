@@ -50,7 +50,6 @@ export const Header: React.FC<HeaderProps> = ({
   const [showResetSuccess, setShowResetSuccess] = useState(false);
   const [pobCode, setPobCode] = useState("");
   const [pobImporting, setPobImporting] = useState(false);
-  const [overlayReinforcing, setOverlayReinforcing] = useState(false);
   const [availableLoadouts, setAvailableLoadouts] = useState<any[]>([]);
   const [selectedLoadout, setSelectedLoadout] = useState<number>(-1);
   const [logFileDetecting, setLogFileDetecting] = useState(false);
@@ -146,17 +145,8 @@ export const Header: React.FC<HeaderProps> = ({
       const result = await parsePathOfBuildingCodeWithNotes(pobCode);
       
       if (result.hasMultipleLoadouts && result.loadouts && result.loadouts.length > 1 && onImportGemLoadouts) {
-        console.log('📤 [HEADER] Multiple loadouts path - importing:', {
-          loadouts: result.loadouts.length,
-          hasNotes: !!result.notes,
-          notesLength: result.notes?.length || 0,
-          hasItems: !!result.items,
-          itemsCount: result.items?.length || 0
-        });
-
         // If we have complete POB import, use it to get all data including items
         if (onImportCompletePoB) {
-          console.log('📤 [HEADER] Using complete POB import for multiple loadouts');
           onImportCompletePoB(result);
         } else {
           // Fallback to separate imports
@@ -164,10 +154,7 @@ export const Header: React.FC<HeaderProps> = ({
 
           // Also import notes if present
           if (result.notes && onImportNotes) {
-            console.log('📤 [HEADER] Also importing notes in multiple loadouts path');
             onImportNotes(result.notes);
-          } else {
-            console.log('⚠️ [HEADER] Not importing notes - notes:', !!result.notes, 'onImportNotes:', !!onImportNotes);
           }
         }
 
@@ -188,42 +175,16 @@ export const Header: React.FC<HeaderProps> = ({
       
       const gemProgression = result.gemProgression;
       const notes = result.notes;
-      
-      console.log('🎯 [HEADER] POB Import result received:', {
-        hasNotes: !!notes,
-        notesLength: notes?.length || 0,
-        notesContent: notes ? notes.substring(0, 100) + '...' : 'No notes',
-        hasItems: !!result.items,
-        itemsCount: result.items?.length || 0,
-        hasOnImportCompletePoB: !!onImportCompletePoB,
-        hasOnImportGemsAndNotes: !!onImportGemsAndNotes,
-        hasOnImportNotes: !!onImportNotes
-      });
 
       // Prioritize complete POB import to include all data (gems, notes, items)
       if (onImportCompletePoB) {
-        console.log('📤 [HEADER] Calling onImportCompletePoB with full result:', {
-          hasGemProgression: !!result.gemProgression,
-          hasNotes: !!result.notes,
-          hasItems: !!result.items,
-          itemsCount: result.items?.length || 0
-        });
         onImportCompletePoB(result);
       } else if (onImportGemsAndNotes) {
-        console.log('📤 [HEADER] Calling onImportGemsAndNotes with:', {
-          hasGemProgression: !!gemProgression,
-          hasNotes: !!notes,
-          notesLength: notes?.length || 0
-        });
         onImportGemsAndNotes(gemProgression, notes);
       } else {
-        console.log('📤 [HEADER] Calling separate import functions');
         onImportGems(gemProgression);
         if (notes && onImportNotes) {
-          console.log('📤 [HEADER] Calling onImportNotes');
           onImportNotes(notes);
-        } else {
-          console.log('⚠️ [HEADER] Not calling onImportNotes - notes:', !!notes, 'onImportNotes:', !!onImportNotes);
         }
       }
 
@@ -281,20 +242,6 @@ export const Header: React.FC<HeaderProps> = ({
     setPobCode("");
     setAvailableLoadouts([]);
     setSelectedLoadout(-1);
-  };
-
-  const handleReinforceOverlay = async () => {
-    if (!isElectron) return;
-    
-    setOverlayReinforcing(true);
-    try {
-      await (window.electronAPI as any).reinforceOverlay();
-      console.log("Overlay settings reinforced successfully");
-    } catch (error) {
-      console.error("Failed to reinforce overlay:", error);
-    } finally {
-      setOverlayReinforcing(false);
-    }
   };
 
   const handleDetectLogFile = async () => {
@@ -475,26 +422,6 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
         <div className="settings-content">
           {/* Only show help section in Electron - moved to top */}
-          {isElectron && (
-            <div className="overlay-help">
-              <div className="help-text">
-                <strong>Important:</strong>
-                <br />
-                • Use Borderless Windowed mode in PoE2 for best experience
-                <br />• Click version number to check for updates
-                <br />• If overlay isn't staying on top, try the fix button →
-              </div>
-              <button
-                className="overlay-fix-btn"
-                onClick={handleReinforceOverlay}
-                disabled={overlayReinforcing}
-                title="Reinforce overlay settings to stay on top"
-              >
-                {overlayReinforcing ? "Fixing..." : "Fix Overlay"}
-              </button>
-            </div>
-          )}
-
           {/* Settings Tabs */}
           <div className="settings-tabs">
             <button
@@ -529,28 +456,6 @@ export const Header: React.FC<HeaderProps> = ({
             {/* Appearance Tab */}
             {activeTab === "appearance" && (
               <>
-            {/* Theme */}
-            <div className="setting-item">
-              <div className="setting-label">THEME</div>
-              <div className="setting-control">
-                <select
-                  value={(settings as any).theme || "amoled"}
-                  onChange={(e) =>
-                    onSettingsChange({
-                      theme: e.target.value as
-                        | "amoled"
-                        | "amoled-crimson"
-                        | "amoled-yellow",
-                    })
-                  }
-                  className="theme-selector"
-                >
-                  <option value="amoled">AMOLED</option>
-                  <option value="amoled-crimson">AMOLED CRIMSON</option>
-                  <option value="amoled-yellow">AMOLED YELLOW</option>
-                </select>
-              </div>
-            </div>
 
             {/* Opacity and Font Size side by side */}
             <div className="setting-row">

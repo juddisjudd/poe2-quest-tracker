@@ -17,7 +17,6 @@ const initialData: TrackerData = {
     alwaysOnTop: true,
     opacity: 0.9,
     fontSize: 1.0,
-    theme: "amoled",
     hotkey: "F9",
     showGemPanel: false,
     showNotesPanel: false,
@@ -145,7 +144,6 @@ export const useTrackerData = () => {
                 alwaysOnTop: savedData.settings.alwaysOnTop !== false,
                 opacity: savedData.settings.opacity || 0.9,
                 fontSize: savedData.settings.fontSize || 1.0,
-                theme: savedData.settings.theme || "amoled",
                 hotkey: savedData.settings.hotkey || "F9",
                 showGemPanel: savedData.settings.showGemPanel || false,
                 showNotesPanel: savedData.settings.showNotesPanel || false,
@@ -400,6 +398,7 @@ export const useTrackerData = () => {
     const selectedLoadout = data.gemLoadouts.loadouts.find(l => l.id === loadoutId);
     if (!selectedLoadout) return;
 
+    // Update state immediately for instant UI feedback
     const newData = {
       ...data,
       gemProgression: selectedLoadout.gemProgression,
@@ -410,12 +409,18 @@ export const useTrackerData = () => {
       // Update passive tree data if the loadout has one
       passiveTreeData: selectedLoadout.passiveTree || data.passiveTreeData,
     };
-    
-    // Save the new passive tree data separately if loadout has one
+
+    // Update state first for instant UI response
+    setData(newData);
+
+    // Save in background asynchronously (don't await to avoid blocking UI)
     if (selectedLoadout.passiveTree) {
-      await updatePassiveTreeData(selectedLoadout.passiveTree);
+      updatePassiveTreeData(selectedLoadout.passiveTree).catch(err =>
+        console.error('Failed to save passive tree data:', err)
+      );
     }
-    
+
+    // Debounced save will handle the rest
     saveData(newData);
   }, [data, saveData, updatePassiveTreeData]);
 
@@ -575,8 +580,6 @@ export const useTrackerData = () => {
       // Clear the tree data file if new import has no tree data
       await clearPassiveTreeData();
     }
-
-    console.log('✅ [HOOK] Complete POB import finished');
   }, [data, saveData, updateNotesData, updateItemCheckData, updatePassiveTreeData, clearPassiveTreeData]);
 
   // Campaign Guide Management

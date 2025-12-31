@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 import { GemProgression, GemSlot, GemProgressionWithLoadouts } from "../types";
 import "./GemProgressionPanel.css";
-
-import UncutSkillGem from "/assets/global/UncutSkillGem.webp";
-import UncutSkillGemBuff from "/assets/global/UncutSkillGemBuff.webp";
-import UncutSupportGem from "/assets/global/UncutSupportGem.webp";
+import { getGemImage } from "../utils/gemImageMapper";
 
 interface LoadoutDropdownProps {
   loadouts: Array<{ id: string; name: string }>;
@@ -56,6 +53,7 @@ interface GemProgressionPanelProps {
   onTogglePanel: () => void;
   onSwitchLoadout?: (loadoutId: string) => void;
   showToggleButton?: boolean;
+  assetsBasePath?: string;
 }
 
 export const GemProgressionPanel: React.FC<GemProgressionPanelProps> = ({
@@ -67,16 +65,12 @@ export const GemProgressionPanel: React.FC<GemProgressionPanelProps> = ({
   onTogglePanel,
   onSwitchLoadout,
   showToggleButton = true,
+  assetsBasePath = '',
 }) => {
 
   const getGemIcon = (gem: GemSlot) => {
-    if (gem.type === 'support') {
-      return UncutSupportGem;
-    } else if (gem.type === 'spirit') {
-      return UncutSkillGemBuff;
-    } else {
-      return UncutSkillGem;
-    }
+    // Use actual gem image if available, with fallback to generic images
+    return getGemImage(gem.name, gem.type, assetsBasePath);
   };
 
   const renderGemSlot = (gem: GemSlot, isMainGem: boolean = false) => {
@@ -86,7 +80,36 @@ export const GemProgressionPanel: React.FC<GemProgressionPanelProps> = ({
       isMainGem ? "main-gem" : "support-gem"
     }
     `;
-    
+
+    const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+      // Get fallback path using base path if available
+      const getFallbackPath = (type: 'skill' | 'spirit' | 'support') => {
+        const fallbackFiles = {
+          skill: 'uncutskillgem.webp',
+          spirit: 'uncutskillgembuff.webp',
+          support: 'uncutsupportgem.webp',
+        };
+        return assetsBasePath
+          ? `${assetsBasePath}/gems/${fallbackFiles[type]}`
+          : `/assets/gems/${fallbackFiles[type]}`;
+      };
+
+      const fallbackPath = getFallbackPath(gem.type);
+
+      // Only set fallback if not already using it (prevent infinite loop)
+      // Compare the filename part only
+      const currentFilename = e.currentTarget.src.split('/').pop();
+      const fallbackFilename = fallbackPath.split('/').pop();
+
+      if (currentFilename !== fallbackFilename) {
+        e.currentTarget.src = fallbackPath;
+
+        // Log missing gems for debugging
+        if (import.meta.env.DEV) {
+          console.debug(`[GEM_PANEL] Missing gem image for: "${gem.name}" (${gem.type}) - using fallback: ${fallbackPath}`);
+        }
+      }
+    };
 
     return (
       <div
@@ -101,10 +124,11 @@ export const GemProgressionPanel: React.FC<GemProgressionPanelProps> = ({
             </div>
           )}
           <div className="gem-icon">
-            <img 
-              src={getGemIcon(gem)} 
-              alt={`${gem.type} gem`}
+            <img
+              src={getGemIcon(gem)}
+              alt={gem.name}
               className="gem-icon-image"
+              onError={handleImageError}
             />
           </div>
         </div>
@@ -133,20 +157,25 @@ export const GemProgressionPanel: React.FC<GemProgressionPanelProps> = ({
           {socketGroup.supportGems.map((supportGem: GemSlot) =>
             renderGemSlot(supportGem)
           )}
-          {Array.from({ length: emptySlots }, (_, index) => (
-            <div key={`empty-support-${groupIndex}-${index}`} className="gem-slot empty support-gem">
-              <div className="gem-slot-inner">
-                <div className="gem-icon">
-                  <img 
-                    src={UncutSupportGem} 
-                    alt="empty support slot"
-                    className="gem-icon-image empty-socket"
-                  />
+          {Array.from({ length: emptySlots }, (_, index) => {
+            const emptySlotSrc = assetsBasePath
+              ? `${assetsBasePath}/gems/uncutsupportgem.webp`
+              : '/assets/gems/uncutsupportgem.webp';
+            return (
+              <div key={`empty-support-${groupIndex}-${index}`} className="gem-slot empty support-gem">
+                <div className="gem-slot-inner">
+                  <div className="gem-icon">
+                    <img
+                      src={emptySlotSrc}
+                      alt="empty support slot"
+                      className="gem-icon-image empty-socket"
+                    />
+                  </div>
                 </div>
+                <div className="gem-name-tooltip">Empty Support Slot</div>
               </div>
-              <div className="gem-name-tooltip">Empty Support Slot</div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     );
@@ -220,14 +249,7 @@ export const GemProgressionPanel: React.FC<GemProgressionPanelProps> = ({
         )}
 
         <div className="gem-panel-content">
-          {(() => {
-            console.log('🎯 [GEM_PANEL] Rendering gem panel with data:', {
-              hasGemProgression: !!gemProgression,
-              socketGroupsLength: gemProgression?.socketGroups?.length || 0,
-              socketGroups: gemProgression?.socketGroups?.slice(0, 2) || 'undefined'
-            });
-            return gemProgression.socketGroups.length === 0;
-          })() ? (
+          {gemProgression.socketGroups.length === 0 ? (
             <div className="gem-panel-empty">
               <div className="empty-icon">💎</div>
               <h4>No gems imported yet</h4>
