@@ -1,0 +1,2799 @@
+{
+  "acts": [
+    {
+      "actNumber": 1,
+      "actName": "第1章：奥格姆森林",
+      "steps": [
+        {
+          "id": "a1_riverbank_1",
+          "type": "kill_boss",
+          "zone": "污流河畔",
+          "description": "击败 **浮肿的伐木工**",
+          "hint": "新手首领 - 击杀后使用武器组天赋点",
+          "tags": [
+            "Boss"
+          ],
+          "zoneId": "a1_riverbank"
+        },
+        {
+          "id": "a1_riverbank_2",
+          "type": "town",
+          "zone": "污流河畔",
+          "description": "进入 **克里费尔营地**",
+          "tags": [
+            "Waypoint"
+          ],
+          "zoneId": "a1_town"
+        },
+        {
+          "id": "a1_town1_1",
+          "type": "npc_quest",
+          "zone": "克里费尔营地",
+          "description": "与 **蓝礼** 对话",
+          "reward": "技能宝石",
+          "tags": [
+            "Gem"
+          ],
+          "zoneId": "a1_town"
+        },
+        {
+          "id": "a1_town1_2",
+          "type": "navigation",
+          "zone": "克里费尔营地",
+          "description": "进入 **克里费尔**",
+          "tags": [],
+          "zoneId": "a1_clearfell"
+        },
+        {
+          "id": "a1_clearfell_1",
+          "type": "optional",
+          "zone": "克里费尔",
+          "description": "在 **泥沼穴道** 完成 **吞噬者竞技场** 获得技能 + 辅助宝石",
+          "hint": "完成竞技场后, 传送出门, 与蓝礼对话, 传送点回克里费尔",
+          "reward": "技能宝石 + 辅助宝石",
+          "tags": [
+            "Optional",
+            "Gem"
+          ],
+          "zoneId": "a1_mud_burrow"
+        },
+        {
+          "id": "a1_clearfell_2",
+          "type": "kill_boss",
+          "zone": "克里费尔",
+          "description": "击败 **腐败兽群的贝拉** · **歹毒鬼婆**",
+          "hint": "获得冰霜 抗性加成",
+          "reward": "+10% 冰霜 抗性",
+          "tags": [
+            "Boss",
+            "Resistance"
+          ],
+          "zoneId": "a1_clearfell"
+        },
+        {
+          "id": "a1_clearfell_3",
+          "type": "navigation",
+          "zone": "克里费尔",
+          "description": "进入 **葛瑞尔林**",
+          "tags": [],
+          "zoneId": "a1_grelwood"
+        },
+        {
+          "id": "a1_grelwood_1",
+          "type": "waypoint",
+          "zone": "葛瑞尔林",
+          "description": "激活 **传送点**",
+          "tags": [
+            "Waypoint"
+          ],
+          "zoneId": "a1_grelwood"
+        },
+        {
+          "id": "a1_grelwood_2",
+          "type": "quest",
+          "zone": "葛瑞尔林",
+          "description": "在 **传送点** 附近召唤 **乌娜**",
+          "hint": "重要非玩家角色用于任务推进",
+          "tags": [],
+          "zoneId": "a1_grelwood"
+        },
+        {
+          "id": "a1_grelwood_3",
+          "type": "navigation",
+          "zone": "葛瑞尔林",
+          "description": "前往 **幽暗密林** 激活 **传送点**",
+          "hint": "菱形区域 - 找到传送点定位方向",
+          "layoutTip": "这是双任务区域：找到传送点并进入幽暗密林",
+          "tags": [],
+          "zoneId": "a1_grim_tangle"
+        },
+        {
+          "id": "a1_grimtangle_1",
+          "type": "waypoint",
+          "zone": "幽暗密林",
+          "description": "激活 **传送点**",
+          "tags": [
+            "Waypoint"
+          ],
+          "zoneId": "a1_grim_tangle"
+        },
+        {
+          "id": "a1_grimtangle_2",
+          "type": "optional",
+          "zone": "幽暗密林",
+          "description": "完成 **荆棘竞技场** 或拜访女巫小屋获得辅助 + 药水",
+          "hint": "荆棘竞技场通常在红谷入口附近",
+          "tags": [
+            "Optional"
+          ],
+          "zoneId": "a1_grim_tangle"
+        },
+        {
+          "id": "a1_grimtangle_3",
+          "type": "navigation",
+          "zone": "幽暗密林",
+          "description": "进入 **红谷**",
+          "hint": "通常位于荆棘竞技场附近",
+          "tags": [],
+          "zoneId": "a1_red_vale"
+        },
+        {
+          "id": "a1_redvale_1",
+          "type": "quest",
+          "zone": "红谷",
+          "description": "激活 **3座锈蚀方尖碑**",
+          "hint": "从方尖碑收集3个任务符文",
+          "tags": [],
+          "zoneId": "a1_red_vale"
+        },
+        {
+          "id": "a1_redvale_2",
+          "type": "kill_boss",
+          "zone": "红谷",
+          "description": "击败 **锈污之王**",
+          "reward": "符文腰带, 符文护胫, 符文头盔",
+          "tags": [
+            "Boss"
+          ],
+          "zoneId": "a1_red_vale"
+        },
+        {
+          "id": "a1_redvale_3",
+          "type": "town",
+          "zone": "红谷",
+          "description": "传送回 **克里费尔营地**",
+          "tags": [],
+          "zoneId": "a1_town"
+        },
+        {
+          "id": "a1_town2_1",
+          "type": "npc_quest",
+          "zone": "克里费尔营地",
+          "description": "与 **蓝礼** 对话",
+          "hint": "提交符文碎片任务",
+          "tags": [],
+          "zoneId": "a1_town"
+        },
+        {
+          "id": "a1_town2_2",
+          "type": "waypoint",
+          "zone": "克里费尔营地",
+          "description": "传送至 **葛瑞尔林**",
+          "tags": [
+            "Waypoint"
+          ],
+          "zoneId": "a1_grelwood"
+        },
+        {
+          "id": "a1_grelwood_4",
+          "type": "quest",
+          "zone": "葛瑞尔林",
+          "description": "激活 **3个符文封印**",
+          "tags": [],
+          "zoneId": "a1_grelwood"
+        },
+        {
+          "id": "a1_grelwood_5",
+          "type": "town",
+          "zone": "葛瑞尔林",
+          "description": "传送回 **克里费尔营地**",
+          "tags": [],
+          "zoneId": "a1_town"
+        },
+        {
+          "id": "a1_town3_1",
+          "type": "npc_quest",
+          "zone": "克里费尔营地",
+          "description": "与 **乌娜** 对话",
+          "tags": [],
+          "zoneId": "a1_town"
+        },
+        {
+          "id": "a1_town3_2",
+          "type": "waypoint",
+          "zone": "克里费尔营地",
+          "description": "传送至 **幽暗密林**",
+          "tags": [
+            "Waypoint"
+          ],
+          "zoneId": "a1_grim_tangle"
+        },
+        {
+          "id": "a1_grimtangle_4",
+          "type": "optional",
+          "zone": "幽暗密林",
+          "description": "完成 **腐烂德鲁伊竞技场** 获得辅助宝石",
+          "reward": "辅助宝石",
+          "tags": [
+            "Optional",
+            "Gem"
+          ],
+          "zoneId": "a1_grim_tangle"
+        },
+        {
+          "id": "a1_grimtangle_5",
+          "type": "navigation",
+          "zone": "幽暗密林",
+          "description": "进入 **永恒园林**",
+          "tags": [],
+          "zoneId": "a1_cemetery"
+        },
+        {
+          "id": "a1_cemetery_1",
+          "type": "npc_quest",
+          "zone": "永恒园林",
+          "description": "与 **迷失的拉赫兰** 对话",
+          "tags": [],
+          "zoneId": "a1_cemetery"
+        },
+        {
+          "id": "a1_cemetery_2",
+          "type": "optional",
+          "zone": "永恒园林",
+          "description": "在 **远古废墟** (区域边缘) 找到 **戒指**",
+          "hint": "远古废墟位于区域边缘",
+          "tags": [
+            "Optional"
+          ],
+          "zoneId": "a1_cemetery"
+        },
+        {
+          "id": "a1_cemetery_3",
+          "type": "navigation",
+          "zone": "永恒园林",
+          "description": "进入 **伴侣寝宫**",
+          "hint": "位于传送点的对面",
+          "tags": [],
+          "zoneId": "a1_tomb_consort"
+        },
+        {
+          "id": "a1_tombconsort_1",
+          "type": "optional",
+          "zone": "伴侣寝宫",
+          "description": "在 **闹鬼宝藏** 找到 **骑士辅助宝石**",
+          "hint": "骑士辅助在闹鬼宝藏检查点",
+          "tags": [
+            "Optional",
+            "Gem"
+          ],
+          "zoneId": "a1_tomb_consort"
+        },
+        {
+          "id": "a1_tombconsort_2",
+          "type": "kill_boss",
+          "zone": "伴侣寝宫",
+          "description": "击败 **阿辛妮亞，执政官之妻**",
+          "reward": "阿辛妮亞的纪念钥匙碎片",
+          "tags": [
+            "Boss"
+          ],
+          "zoneId": "a1_tomb_consort"
+        },
+        {
+          "id": "a1_tombconsort_3",
+          "type": "navigation",
+          "zone": "伴侣寝宫",
+          "description": "返回 **永恒园林**",
+          "tags": [],
+          "zoneId": "a1_cemetery"
+        },
+        {
+          "id": "a1_cemetery_4",
+          "type": "optional",
+          "zone": "永恒园林",
+          "description": "在 **远古废墟** (区域边缘) 找到 **戒指**",
+          "hint": "远古废墟位于区域边缘",
+          "tags": [
+            "Optional"
+          ],
+          "zoneId": "a1_cemetery"
+        },
+        {
+          "id": "a1_cemetery_5",
+          "type": "navigation",
+          "zone": "永恒园林",
+          "description": "进入 **执政官的地宫**",
+          "tags": [],
+          "zoneId": "a1_mausoleum"
+        },
+        {
+          "id": "a1_mausoleum_1",
+          "type": "kill_boss",
+          "zone": "执政官的地宫",
+          "description": "击败 **德莱文，永恒执政官**",
+          "reward": "德莱文的纪念钥匙碎片",
+          "tags": [
+            "Boss"
+          ],
+          "zoneId": "a1_mausoleum"
+        },
+        {
+          "id": "a1_mausoleum_2",
+          "type": "navigation",
+          "zone": "执政官的地宫",
+          "description": "返回 **永恒园林**",
+          "tags": [],
+          "zoneId": "a1_cemetery"
+        },
+        {
+          "id": "a1_cemetery_6",
+          "type": "npc_quest",
+          "zone": "永恒园林",
+          "description": "与 **迷失的拉赫兰** 对话",
+          "tags": [],
+          "zoneId": "a1_cemetery"
+        },
+        {
+          "id": "a1_cemetery_7",
+          "type": "kill_boss",
+          "zone": "永恒园林",
+          "description": "击败 **哀痛欲绝的拉赫兰**",
+          "reward": "拉赫兰伯爵之戒",
+          "hint": "当大门打开后, 通过系统菜单重生",
+          "tags": [
+            "Boss"
+          ],
+          "zoneId": "a1_cemetery"
+        },
+        {
+          "id": "a1_cemetery_8",
+          "type": "navigation",
+          "zone": "永恒园林",
+          "description": "进入 **猎场**",
+          "tags": [],
+          "zoneId": "a1_hunting_grounds"
+        },
+        {
+          "id": "a1_hunting_1",
+          "type": "npc_quest",
+          "zone": "猎场",
+          "description": "与 **迷失的拉赫兰** 对话 (对话选项)",
+          "tags": [],
+          "zoneId": "a1_hunting_grounds"
+        },
+        {
+          "id": "a1_hunting_2",
+          "type": "kill_boss",
+          "zone": "猎场",
+          "description": "击败 **悬铃巨鸦**",
+          "reward": "+2 武器组天赋点",
+          "hint": "沿着区域边缘找到钟鸦",
+          "layoutTip": "双任务：击败悬铃巨鸦并进入欧甘农地激活传送点",
+          "tags": [
+            "Boss",
+            "Passive Skill"
+          ],
+          "zoneId": "a1_hunting_grounds"
+        },
+        {
+          "id": "a1_hunting_3",
+          "type": "optional",
+          "zone": "猎场",
+          "description": "完成 **树灵仪式** 或 **仪式祭坛** 获得辅助/技能宝石",
+          "hint": "树灵仪式或仪式祭坛",
+          "reward": "辅助/技能宝石",
+          "tags": [
+            "Optional",
+            "Gem",
+            "Ritual"
+          ],
+          "zoneId": "a1_hunting_grounds"
+        },
+        {
+          "id": "a1_hunting_4",
+          "type": "navigation",
+          "zone": "猎场",
+          "description": "沿着边缘前往 **茂棘深林**",
+          "tags": [],
+          "zoneId": "a1_freythorn"
+        },
+        {
+          "id": "a1_freythorn_1",
+          "type": "quest",
+          "zone": "茂棘深林",
+          "description": "完成 **3个小** 和 **1个大型仪式**",
+          "hint": "如果提前找到大型仪式, 检查指向缺失仪式的漩涡",
+          "tags": [
+            "Ritual"
+          ],
+          "zoneId": "a1_freythorn"
+        },
+        {
+          "id": "a1_freythorn_2",
+          "type": "kill_boss",
+          "zone": "茂棘深林",
+          "description": "击败 **迷雾之王**",
+          "reward": "+30 灵魂力",
+          "tags": [
+            "Boss",
+            "Spirit"
+          ],
+          "zoneId": "a1_freythorn"
+        },
+        {
+          "id": "a1_freythorn_3",
+          "type": "npc_quest",
+          "zone": "茂棘深林",
+          "description": "与 **芬恩** 对话",
+          "tags": [],
+          "zoneId": "a1_freythorn"
+        },
+        {
+          "id": "a1_freythorn_4",
+          "type": "town",
+          "zone": "茂棘深林",
+          "description": "传送回 **克里费尔营地**",
+          "tags": [],
+          "zoneId": "a1_town"
+        },
+        {
+          "id": "a1_town4_1",
+          "type": "npc_quest",
+          "zone": "克里费尔营地",
+          "description": "与 **芬恩** 对话",
+          "reward": "元素抗性护身符",
+          "hint": "选择红宝石, 蓝宝石或黄玉护身符 (推荐蓝宝石)",
+          "tags": [
+            "Resistance"
+          ],
+          "zoneId": "a1_town"
+        },
+        {
+          "id": "a1_town4_2",
+          "type": "waypoint",
+          "zone": "克里费尔营地",
+          "description": "传送至 **欧甘农地**",
+          "tags": [
+            "Waypoint"
+          ],
+          "zoneId": "a1_farmlands"
+        },
+        {
+          "id": "a1_farmlands_1",
+          "type": "waypoint",
+          "zone": "欧甘农地",
+          "description": "激活 **传送点**",
+          "tags": [
+            "Waypoint"
+          ],
+          "zoneId": "a1_farmlands"
+        },
+        {
+          "id": "a1_farmlands_2",
+          "type": "quest",
+          "zone": "欧甘农地",
+          "description": "找到小屋并收集 **乌娜鲁特琴**",
+          "hint": "道路可能被阻挡 - 需要绕行。小屋就在路边直走。",
+          "tags": [],
+          "zoneId": "a1_farmlands"
+        },
+        {
+          "id": "a1_farmlands_3",
+          "type": "optional",
+          "zone": "欧甘农地",
+          "description": "找到并清理 **作物圈** 获得技能宝石",
+          "hint": "地图上有作物圈检查点",
+          "reward": "技能宝石",
+          "tags": [
+            "Optional",
+            "Gem"
+          ],
+          "zoneId": "a1_farmlands"
+        },
+        {
+          "id": "a1_farmlands_4",
+          "type": "navigation",
+          "zone": "欧甘农地",
+          "description": "沿着道路前往 **欧甘村庄**",
+          "tags": [],
+          "zoneId": "a1_village"
+        },
+        {
+          "id": "a1_village_1",
+          "type": "waypoint",
+          "zone": "欧甘村庄",
+          "description": "激活 **传送点**",
+          "tags": [
+            "Waypoint"
+          ],
+          "zoneId": "a1_village"
+        },
+        {
+          "id": "a1_village_2",
+          "type": "town",
+          "zone": "欧甘村庄",
+          "description": "传送回 **克里费尔营地**",
+          "tags": [],
+          "zoneId": "a1_town"
+        },
+        {
+          "id": "a1_town5_1",
+          "type": "npc_quest",
+          "zone": "克里费尔营地",
+          "description": "与 **乌娜** 对话 - 提交 **蒙面者** 任务",
+          "tags": [],
+          "zoneId": "a1_town"
+        },
+        {
+          "id": "a1_town5_2",
+          "type": "npc_quest",
+          "zone": "克里费尔营地",
+          "description": "与 **乌娜** 对话 - 获得 **专业之书**",
+          "reward": "进阶职业专业之书",
+          "tags": [],
+          "zoneId": "a1_town"
+        },
+        {
+          "id": "a1_town5_3",
+          "type": "waypoint",
+          "zone": "克里费尔营地",
+          "description": "传送至 **欧甘村庄**",
+          "tags": [
+            "Waypoint"
+          ],
+          "zoneId": "a1_village"
+        },
+        {
+          "id": "a1_village_3",
+          "type": "quest",
+          "zone": "欧甘村庄",
+          "description": "找到工坊并收集 **锻造工具**",
+          "reward": "回收台解锁 (仅赛季初期)",
+          "hint": "工坊还有工匠非玩家角色和可选符文",
+          "tags": [],
+          "zoneId": "a1_village"
+        },
+        {
+          "id": "a1_village_4",
+          "type": "kill_boss",
+          "zone": "欧甘村庄",
+          "description": "击败 **惩罚者**",
+          "hint": "位于区域尽头",
+          "tags": [
+            "Boss"
+          ],
+          "zoneId": "a1_village"
+        },
+        {
+          "id": "a1_village_5",
+          "type": "npc_quest",
+          "zone": "欧甘村庄",
+          "description": "使用 **杠杆** 并与 **莱蒂斯** 对话",
+          "tags": [],
+          "zoneId": "a1_village"
+        },
+        {
+          "id": "a1_village_6",
+          "type": "navigation",
+          "zone": "欧甘村庄",
+          "description": "进入 **庄园城壁**",
+          "tags": [],
+          "zoneId": "a1_ramparts"
+        },
+        {
+          "id": "a1_ramparts_1",
+          "type": "waypoint",
+          "zone": "庄园城壁",
+          "description": "激活 **传送点**",
+          "tags": [
+            "Waypoint"
+          ],
+          "zoneId": "a1_ramparts"
+        },
+        {
+          "id": "a1_ramparts_2",
+          "type": "optional",
+          "zone": "庄园城壁",
+          "description": "沿着外围找到 **绞刑吏辅助宝石**",
+          "hint": "辅助宝石沿着外围",
+          "reward": "辅助宝石",
+          "tags": [
+            "Optional",
+            "Gem"
+          ],
+          "zoneId": "a1_ramparts"
+        },
+        {
+          "id": "a1_ramparts_3",
+          "type": "town",
+          "zone": "庄园城壁",
+          "description": "传送回 **克里费尔营地**",
+          "tags": [],
+          "zoneId": "a1_town"
+        },
+        {
+          "id": "a1_town6_1",
+          "type": "npc_quest",
+          "zone": "克里费尔营地",
+          "description": "与 **非玩家角色** 对话",
+          "reward": "+2 武器组天赋点",
+          "tags": [
+            "Passive Skill"
+          ],
+          "zoneId": "a1_town"
+        },
+        {
+          "id": "a1_town6_2",
+          "type": "waypoint",
+          "zone": "克里费尔营地",
+          "description": "传送至 **庄园城壁**",
+          "tags": [
+            "Waypoint"
+          ],
+          "zoneId": "a1_ramparts"
+        },
+        {
+          "id": "a1_ramparts_4",
+          "type": "navigation",
+          "zone": "庄园城壁",
+          "description": "沿着内边缘前往 **欧甘庄园**",
+          "tags": [],
+          "zoneId": "a1_manor"
+        },
+        {
+          "id": "a1_manor_1",
+          "type": "kill_boss",
+          "zone": "欧甘庄园",
+          "description": "第1层: 击败 **烛火雕像，活化者**",
+          "reward": "+20 最大生命",
+          "hint": "找到洞口, 检查周围继续前进",
+          "tags": [
+            "Boss",
+            "Life"
+          ],
+          "zoneId": "a1_manor"
+        },
+        {
+          "id": "a1_manor_2",
+          "type": "kill_boss",
+          "zone": "欧甘庄园",
+          "description": "第3层竞技场: 击败 **吉恩诺伯爵**",
+          "hint": "第1章最终首领",
+          "tags": [
+            "Boss"
+          ],
+          "zoneId": "a1_manor"
+        },
+        {
+          "id": "a1_manor_3",
+          "type": "town",
+          "zone": "欧甘庄园",
+          "description": "传送回 **克里费尔营地**",
+          "tags": [],
+          "zoneId": "a1_town"
+        },
+        {
+          "id": "a1_town7_1",
+          "type": "npc_quest",
+          "zone": "克里费尔营地",
+          "description": "与 **非玩家角色** 对话",
+          "tags": [],
+          "zoneId": "a1_town"
+        },
+        {
+          "id": "a1_town7_2",
+          "type": "npc_quest",
+          "zone": "克里费尔营地",
+          "description": "与 **兜帽密师** 对话",
+          "hint": "完成第1章",
+          "tags": [],
+          "zoneId": "a1_town"
+        },
+        {
+          "id": "a1_complete",
+          "type": "navigation",
+          "zone": "克里费尔营地",
+          "description": "前往 **第2章**",
+          "tags": [],
+          "zoneId": "a2_start"
+        }
+      ]
+    },
+    {
+      "actNumber": 2,
+      "actName": "第2章：瓦斯提里 等级17 (马拉克斯族)",
+      "steps": [
+        {
+          "id": "a2_outskirts_1",
+          "type": "kill_boss",
+          "zone": "瓦斯蒂里近郊",
+          "description": "击败 **摧寨魔**",
+          "hint": "沿着边缘找到通往竞技场的长通道",
+          "tags": [
+            "Boss"
+          ],
+          "zoneId": "a2_outskirts"
+        },
+        {
+          "id": "a2_outskirts_2",
+          "type": "town",
+          "zone": "瓦斯蒂里近郊",
+          "description": "传送回城镇, 进入 **阿尔杜拉商队**",
+          "tags": [],
+          "zoneId": "a2_town"
+        },
+        {
+          "id": "a2_town1_1",
+          "type": "npc_quest",
+          "zone": "阿尔杜拉商队",
+          "description": "与 **兜帽密师** 和 **阿萨拉** 对话",
+          "tags": [],
+          "zoneId": "a2_town"
+        },
+        {
+          "id": "a2_town1_2",
+          "type": "navigation",
+          "zone": "阿尔杜拉商队",
+          "description": "沙漠地图: 进入 **莫丹采石场**",
+          "tags": [],
+          "zoneId": "a2_quarry"
+        },
+        {
+          "id": "a2_quarry_1",
+          "type": "navigation",
+          "zone": "莫丹采石场",
+          "description": "沿着检查点前进, 进入 **莫丹矿场**",
+          "hint": "可选: 法里敦缓存区有工匠 (边区) - 技能宝石商人",
+          "tags": [],
+          "zoneId": "a2_mine"
+        },
+        {
+          "id": "a2_mine_1",
+          "type": "waypoint",
+          "zone": "莫丹矿场",
+          "description": "激活 **传送点**",
+          "tags": [
+            "Waypoint"
+          ],
+          "zoneId": "a2_mine"
+        },
+        {
+          "id": "a2_mine_2",
+          "type": "kill_boss",
+          "zone": "莫丹矿场",
+          "description": "击败 **鲁贾, 恐怖工程师**",
+          "hint": "竞技场通常在北边或东边",
+          "tags": [
+            "Boss"
+          ],
+          "zoneId": "a2_mine"
+        },
+        {
+          "id": "a2_mine_3",
+          "type": "npc_quest",
+          "zone": "莫丹矿场",
+          "description": "打开笼子, 与 **里苏** 对话",
+          "tags": [],
+          "zoneId": "a2_mine"
+        },
+        {
+          "id": "a2_mine_4",
+          "type": "town",
+          "zone": "莫丹矿场",
+          "description": "传送回 **阿尔杜拉商队**",
+          "tags": [],
+          "zoneId": "a2_town"
+        },
+        {
+          "id": "a2_town2_1",
+          "type": "npc_quest",
+          "zone": "阿尔杜拉商队",
+          "description": "与 **里苏** 对话",
+          "tags": [],
+          "zoneId": "a2_town"
+        },
+        {
+          "id": "a2_town2_2",
+          "type": "navigation",
+          "zone": "阿尔杜拉商队",
+          "description": "沙漠地图: 进入 **哈拉尼之门** (被阻挡)",
+          "tags": [],
+          "zoneId": "a2_gates_blocked"
+        },
+        {
+          "id": "a2_gates1_1",
+          "type": "npc_quest",
+          "zone": "哈拉尼之门",
+          "description": "与 **阿萨拉** 对话",
+          "tags": [],
+          "zoneId": "a2_gates_blocked"
+        },
+        {
+          "id": "a2_gates1_2",
+          "type": "town",
+          "zone": "哈拉尼之门",
+          "description": "返回 **阿尔杜拉商队**",
+          "tags": [],
+          "zoneId": "a2_town"
+        },
+        {
+          "id": "a2_town3_1",
+          "type": "npc_quest",
+          "zone": "阿尔杜拉商队",
+          "description": "与 **里苏** 和 **丝克玛艾萨拉** 对话",
+          "tags": [],
+          "zoneId": "a2_town"
+        },
+        {
+          "id": "a2_town3_2",
+          "type": "navigation",
+          "zone": "阿尔杜拉商队",
+          "description": "沙漠地图: 进入 **叛徒小径**",
+          "tags": [],
+          "zoneId": "a2_passage"
+        },
+        {
+          "id": "a2_passage_1",
+          "type": "waypoint",
+          "zone": "叛徒小径",
+          "description": "激活 **传送点**",
+          "tags": [
+            "Waypoint"
+          ],
+          "zoneId": "a2_passage"
+        },
+        {
+          "id": "a2_passage_2",
+          "type": "quest",
+          "zone": "叛徒小径",
+          "description": "激活 **远古封印** (区域中央)",
+          "tags": [],
+          "zoneId": "a2_passage"
+        },
+        {
+          "id": "a2_passage_3",
+          "type": "quest",
+          "zone": "叛徒小径",
+          "description": "激活 **3个符文封印**",
+          "tags": [],
+          "zoneId": "a2_passage"
+        },
+        {
+          "id": "a2_passage_4",
+          "type": "kill_boss",
+          "zone": "叛徒小径",
+          "description": "击败 **叛徒贝尔巴拉**, 拿走 **巨灵巴雅**",
+          "hint": "沿着有纸符文的墙壁走",
+          "tags": [
+            "Boss"
+          ],
+          "zoneId": "a2_passage"
+        },
+        {
+          "id": "a2_passage_5",
+          "type": "navigation",
+          "zone": "叛徒小径",
+          "description": "进入 **哈拉尼之门**",
+          "tags": [],
+          "zoneId": "a2_gates"
+        },
+        {
+          "id": "a2_gates2_1",
+          "type": "waypoint",
+          "zone": "哈拉尼之门",
+          "description": "激活 **传送点**",
+          "tags": [
+            "Waypoint"
+          ],
+          "zoneId": "a2_gates"
+        },
+        {
+          "id": "a2_gates2_2",
+          "type": "npc_quest",
+          "zone": "哈拉尼之门",
+          "description": "召唤 **阿萨拉**",
+          "tags": [],
+          "zoneId": "a2_gates"
+        },
+        {
+          "id": "a2_gates2_3",
+          "type": "kill_boss",
+          "zone": "哈拉尼之门",
+          "description": "击败 **亚曼拉，复生之王**",
+          "hint": "沿着峡谷走, 击败首领后使用楼梯",
+          "tags": [
+            "Boss"
+          ],
+          "zoneId": "a2_gates"
+        },
+        {
+          "id": "a2_gates2_4",
+          "type": "navigation",
+          "zone": "哈拉尼之门",
+          "description": "前往区域深处的沙暴处",
+          "tags": [],
+          "zoneId": "a2_gates"
+        },
+        {
+          "id": "a2_gates2_5",
+          "type": "town",
+          "zone": "哈拉尼之门",
+          "description": "传送回 **阿尔杜拉商队**",
+          "tags": [],
+          "zoneId": "a2_town"
+        },
+        {
+          "id": "a2_town4_1",
+          "type": "npc_quest",
+          "zone": "阿尔杜拉商队",
+          "description": "与 **扎卡** 对话",
+          "tags": [],
+          "zoneId": "a2_town"
+        },
+        {
+          "id": "a2_town4_2",
+          "type": "navigation",
+          "zone": "阿尔杜拉商队",
+          "description": "沙漠地图: 进入 **丝克玛试炼**, 标记传送点, 返回城镇",
+          "hint": "可选: 完成试炼获得进阶 - 可以现在或稍后做",
+          "tags": [
+            "Trial",
+            "Optional"
+          ],
+          "zoneId": "a2_trial"
+        },
+        {
+          "id": "a2_town5_1",
+          "type": "npc_quest",
+          "zone": "阿尔杜拉商队",
+          "description": "与 **阿萨拉** 对话",
+          "tags": [],
+          "zoneId": "a2_town"
+        },
+        {
+          "id": "a2_town5_2",
+          "type": "navigation",
+          "zone": "阿尔杜拉商队",
+          "description": "沙漠地图: 进入 **凯斯**",
+          "tags": [],
+          "zoneId": "a2_keth"
+        },
+        {
+          "id": "a2_keth_1",
+          "type": "quest",
+          "zone": "凯斯",
+          "description": "击杀蛇类获得 **卡芭菈部族遗物**",
+          "tags": [],
+          "zoneId": "a2_keth"
+        },
+        {
+          "id": "a2_keth_2",
+          "type": "kill_boss",
+          "zone": "克斯",
+          "description": "击败 **狂蟒女王卡芭菈**",
+          "reward": "+2 天赋点",
+          "tags": [
+            "Boss",
+            "Passive Skill"
+          ],
+          "zoneId": "a2_keth"
+        },
+        {
+          "id": "a2_keth_3",
+          "type": "navigation",
+          "zone": "克斯",
+          "description": "沿着边缘走, 找到桥梁前往 **失落之城**",
+          "hint": "可选: 霍塔克神殿项链 (检查竞技场楼梯)",
+          "tags": [],
+          "zoneId": "a2_lost_city"
+        },
+        {
+          "id": "a2_lostcity_1",
+          "type": "navigation",
+          "zone": "失落之城",
+          "description": "进入 **被埋藏的神殿**",
+          "hint": "可选: 石棺中的灵魂 或 圣甲虫珠宝",
+          "tags": [],
+          "zoneId": "a2_shrines"
+        },
+        {
+          "id": "a2_shrines_1",
+          "type": "navigation",
+          "zone": "被埋藏的神殿",
+          "description": "前往 **凯斯之心**",
+          "hint": "可选: 元素供奉的抗性戒指",
+          "tags": [],
+          "zoneId": "a2_heart"
+        },
+        {
+          "id": "a2_heart_1",
+          "type": "kill_boss",
+          "zone": "凯斯之心",
+          "description": "击败 **阿扎瑞安，忘却之子**",
+          "tags": [
+            "Boss"
+          ],
+          "zoneId": "a2_heart"
+        },
+        {
+          "id": "a2_heart_2",
+          "type": "npc_quest",
+          "zone": "凯斯之心",
+          "description": "与 **水之女神 (哈拉尼)** 对话",
+          "tags": [],
+          "zoneId": "a2_heart"
+        },
+        {
+          "id": "a2_heart_3",
+          "type": "quest",
+          "zone": "凯斯之心",
+          "description": "拿走 **余烬**, 点燃女神, 拿走 **水之精华**",
+          "tags": [],
+          "zoneId": "a2_heart"
+        },
+        {
+          "id": "a2_heart_4",
+          "type": "town",
+          "zone": "凯斯之心",
+          "description": "传送回 **阿尔杜拉商队**",
+          "tags": [],
+          "zoneId": "a2_town"
+        },
+        {
+          "id": "a2_town6_1",
+          "type": "npc_quest",
+          "zone": "阿尔杜拉商队",
+          "description": "与 **扎卡** 对话",
+          "tags": [],
+          "zoneId": "a2_town"
+        },
+        {
+          "id": "a2_town6_2",
+          "type": "navigation",
+          "zone": "阿尔杜拉商队",
+          "description": "沙漠地图: 进入 **长毛象荒原**",
+          "tags": [],
+          "zoneId": "a2_badlands"
+        },
+        {
+          "id": "a2_badlands_1",
+          "type": "navigation",
+          "zone": "长毛象荒原",
+          "description": "进入 **遗迹深坑**",
+          "hint": "可选: 化石纪念碑有辅助宝石 | 联赛: 虚无通道 > 灵魂之井 (每赛季一次)",
+          "tags": [],
+          "zoneId": "a2_bone_pits"
+        },
+        {
+          "id": "a2_bonepits_1",
+          "type": "waypoint",
+          "zone": "遗迹深坑",
+          "description": "激活 **传送点**",
+          "tags": [
+            "Waypoint"
+          ],
+          "zoneId": "a2_bone_pits"
+        },
+        {
+          "id": "a2_bonepits_2",
+          "type": "quest",
+          "zone": "遗迹深坑",
+          "description": "击杀怪物获得 **烈日部族圣物**",
+          "hint": "途中击杀鬣狗",
+          "tags": [],
+          "zoneId": "a2_bone_pits"
+        },
+        {
+          "id": "a2_bonepits_3",
+          "type": "navigation",
+          "zone": "遗迹深坑",
+          "description": "前往 **暗光走廊**",
+          "tags": [],
+          "zoneId": "a2_blackrib"
+        },
+        {
+          "id": "a2_blackrib_1",
+          "type": "kill_boss",
+          "zone": "暗光走廊",
+          "description": "击败 **伊科巴，先古战驹** 和 **埃克塔布, 远古战马**, 拿走 **长毛象獠牙**",
+          "tags": [
+            "Boss"
+          ],
+          "zoneId": "a2_blackrib"
+        },
+        {
+          "id": "a2_blackrib_2",
+          "type": "town",
+          "zone": "暗光走廊",
+          "description": "传送回 **阿尔杜拉商队**",
+          "tags": [],
+          "zoneId": "a2_town"
+        },
+        {
+          "id": "a2_town7_1",
+          "type": "npc_quest",
+          "zone": "阿尔杜拉商队",
+          "description": "与 **扎卡** 对话",
+          "tags": [],
+          "zoneId": "a2_town"
+        },
+        {
+          "id": "a2_town7_2",
+          "type": "navigation",
+          "zone": "阿尔杜拉商队",
+          "description": "沙漠地图: 进入 **巨人之谷**",
+          "tags": [],
+          "zoneId": "a2_valley"
+        },
+        {
+          "id": "a2_valley_1",
+          "type": "waypoint",
+          "zone": "巨人之谷",
+          "description": "激活 **传送点**",
+          "tags": [
+            "Waypoint"
+          ],
+          "zoneId": "a2_valley"
+        },
+        {
+          "id": "a2_valley_2",
+          "type": "quest",
+          "zone": "巨人之谷",
+          "description": "在 **传送点** 附近插入圣物, 激活 **徽章** (护身符加成)",
+          "tags": [],
+          "zoneId": "a2_valley"
+        },
+        {
+          "id": "a2_valley_3",
+          "type": "quest",
+          "zone": "巨人之谷",
+          "description": "激活 **3个远古封印** (外/内边缘)",
+          "tags": [],
+          "zoneId": "a2_valley"
+        },
+        {
+          "id": "a2_valley_4",
+          "type": "navigation",
+          "zone": "巨人之谷",
+          "description": "进入 **巨人石窟**",
+          "tags": [],
+          "zoneId": "a2_grotto"
+        },
+        {
+          "id": "a2_grotto_1",
+          "type": "kill_boss",
+          "zone": "巨人石窟",
+          "description": "击败 **扎尔马拉斯，神威巨像**, 拿走 **火焰红宝石**",
+          "tags": [
+            "Boss"
+          ],
+          "zoneId": "a2_grotto"
+        },
+        {
+          "id": "a2_grotto_2",
+          "type": "town",
+          "zone": "巨人石窟",
+          "description": "传送回 **阿尔杜拉商队**",
+          "tags": [],
+          "zoneId": "a2_town"
+        },
+        {
+          "id": "a2_town8_1",
+          "type": "npc_quest",
+          "zone": "阿尔杜拉商队",
+          "description": "与 **扎尔卡** 对话 (获得号角)",
+          "tags": [],
+          "zoneId": "a2_town"
+        },
+        {
+          "id": "a2_town8_2",
+          "type": "npc_quest",
+          "zone": "阿尔杜拉商队",
+          "description": "与 **阿萨拉** 对话",
+          "tags": [],
+          "zoneId": "a2_town"
+        },
+        {
+          "id": "a2_town8_3",
+          "type": "navigation",
+          "zone": "阿尔杜拉商队",
+          "description": "沙漠地图: 返回 **叛徒小径**",
+          "tags": [],
+          "zoneId": "a2_passage"
+        },
+        {
+          "id": "a2_passage2_1",
+          "type": "quest",
+          "zone": "叛徒小径",
+          "description": "在 **商队** 前方吹响 **号角**",
+          "tags": [],
+          "zoneId": "a2_passage"
+        },
+        {
+          "id": "a2_passage2_2",
+          "type": "npc_quest",
+          "zone": "叛徒小径",
+          "description": "与 **阿萨拉** 对话",
+          "tags": [],
+          "zoneId": "a2_passage"
+        },
+        {
+          "id": "a2_passage2_3",
+          "type": "navigation",
+          "zone": "叛徒小径",
+          "description": "沙漠地图: 进入 **德莎尔**",
+          "tags": [],
+          "zoneId": "a2_deshar"
+        },
+        {
+          "id": "a2_deshar_1",
+          "type": "quest",
+          "zone": "德莎尔",
+          "description": "找到 **莱卢玛的尸体** (堕落的德卡拉), 拿走 **最后的书信**",
+          "hint": "可选: 骨架边区有工匠",
+          "tags": [],
+          "zoneId": "a2_deshar"
+        },
+        {
+          "id": "a2_deshar_2",
+          "type": "kill_boss",
+          "zone": "德莎尔",
+          "description": "击败 **挫刺清道夫** 和 **穆金, 寒冰使者**, 拿走 **精灵金币**",
+          "tags": [
+            "Boss"
+          ],
+          "zoneId": "a2_deshar"
+        },
+        {
+          "id": "a2_deshar_3",
+          "type": "navigation",
+          "zone": "德莎尔",
+          "description": "进入 **怀念之阶**",
+          "tags": [],
+          "zoneId": "a2_mourning"
+        },
+        {
+          "id": "a2_mourning_1",
+          "type": "navigation",
+          "zone": "怀念之阶",
+          "description": "进入 **德莎尔的高塔**",
+          "tags": [],
+          "zoneId": "a2_spires"
+        },
+        {
+          "id": "a2_spires_1",
+          "type": "waypoint",
+          "zone": "德莎尔的高塔",
+          "description": "激活 **传送点**",
+          "tags": [
+            "Waypoint"
+          ],
+          "zoneId": "a2_spires"
+        },
+        {
+          "id": "a2_spires_2",
+          "type": "quest",
+          "zone": "德莎尔的高塔",
+          "description": "激活 **加鲁坎姐妹神殿** (闪电 抗性)",
+          "reward": "+10% 闪电 抗性",
+          "tags": [
+            "Resistance"
+          ],
+          "zoneId": "a2_spires"
+        },
+        {
+          "id": "a2_spires_3",
+          "type": "kill_boss",
+          "zone": "德莎尔的高塔",
+          "description": "击败 **托古尔, 污染者**",
+          "hint": "找到钩形图案或到达区域尽头",
+          "tags": [
+            "Boss"
+          ],
+          "zoneId": "a2_spires"
+        },
+        {
+          "id": "a2_spires_4",
+          "type": "town",
+          "zone": "德莎尔的高塔",
+          "description": "传送回 **阿尔杜拉商队**",
+          "tags": [],
+          "zoneId": "a2_town"
+        },
+        {
+          "id": "a2_town9_1",
+          "type": "npc_quest",
+          "zone": "阿尔杜拉商队",
+          "description": "将 **最后的书信** 交给 **岑柏琳**",
+          "reward": "+2 武器组天赋点",
+          "tags": [
+            "Passive Skill"
+          ],
+          "zoneId": "a2_town"
+        },
+        {
+          "id": "a2_town9_2",
+          "type": "npc_quest",
+          "zone": "阿尔杜拉商队",
+          "description": "与 **阿萨拉** 对话",
+          "tags": [],
+          "zoneId": "a2_town"
+        },
+        {
+          "id": "a2_town9_3",
+          "type": "navigation",
+          "zone": "阿尔杜拉商队",
+          "description": "沙漠地图: 进入 **无畏战车**",
+          "tags": [],
+          "zoneId": "a2_dreadnought"
+        },
+        {
+          "id": "a2_dreadnought_1",
+          "type": "navigation",
+          "zone": "无畏战车",
+          "description": "进入 **无畏战车先锋**",
+          "tags": [],
+          "zoneId": "a2_vanguard"
+        },
+        {
+          "id": "a2_vanguard_1",
+          "type": "waypoint",
+          "zone": "无畏战车先锋",
+          "description": "激活 **传送点**",
+          "tags": [
+            "Waypoint"
+          ],
+          "zoneId": "a2_vanguard"
+        },
+        {
+          "id": "a2_vanguard_2",
+          "type": "kill_boss",
+          "zone": "无畏战车先锋",
+          "description": "击败 **亚曼拉，厌恶之躯**",
+          "tags": [
+            "Boss"
+          ],
+          "zoneId": "a2_vanguard"
+        },
+        {
+          "id": "a2_vanguard_3",
+          "type": "town",
+          "zone": "无畏战车先锋",
+          "description": "传送回 **阿尔杜拉商队**",
+          "tags": [],
+          "zoneId": "a2_town"
+        },
+        {
+          "id": "a2_town10_1",
+          "type": "npc_quest",
+          "zone": "阿尔杜拉商队",
+          "description": "与 **蒙面者** 对话",
+          "tags": [],
+          "zoneId": "a2_town"
+        },
+        {
+          "id": "a2_town10_2",
+          "type": "npc_quest",
+          "zone": "阿尔杜拉商队",
+          "description": "与 **阿萨拉** 对话 - 前往 **第3章**",
+          "tags": [],
+          "zoneId": "a3_start"
+        }
+      ]
+    },
+    {
+      "actNumber": 3,
+      "actName": "第3章：阿戈拉 等级34 (瓦尔族)",
+      "steps": [
+        {
+          "id": "poe2_a3_marsh_1",
+          "type": "navigation",
+          "zone": "飞沙沼泽",
+          "description": "进入 **金字塔营地**",
+          "hint": "可选: 技能宝石竞技场 (根生污泥) | 项链 (悬挂树) | 珠宝匠 (奥洛克营 出口附近)",
+          "tags": [],
+          "zoneId": "g3_town"
+        },
+        {
+          "id": "poe2_a3_town1_1",
+          "type": "npc_quest",
+          "zone": "金字塔营地",
+          "description": "与 **非玩家角色** 对话",
+          "tags": [],
+          "zoneId": "g3_town"
+        },
+        {
+          "id": "poe2_a3_town1_2",
+          "type": "navigation",
+          "zone": "金字塔营地",
+          "description": "进入 **丛林废墟** (顶部)",
+          "tags": [],
+          "zoneId": "g3_3"
+        },
+        {
+          "id": "poe2_a3_ruins_1",
+          "type": "waypoint",
+          "zone": "丛林废墟",
+          "description": "标记 **传送点**",
+          "tags": [
+            "Waypoint"
+          ],
+          "zoneId": "g3_3"
+        },
+        {
+          "id": "poe2_a3_ruins_2",
+          "type": "kill_boss",
+          "zone": "丛林废墟",
+          "description": "击败 **威猛银拳**",
+          "reward": "2 天赋点",
+          "hint": "可选: 丛林墓地有腰带",
+          "tags": [
+            "Boss",
+            "Passive"
+          ],
+          "zoneId": "g3_3"
+        },
+        {
+          "id": "poe2_a3_ruins_3",
+          "type": "navigation",
+          "zone": "丛林废墟",
+          "description": "进入 **蛇毒地窟** (靠近传送点)",
+          "tags": [],
+          "zoneId": "g3_4"
+        },
+        {
+          "id": "poe2_a3_crypts_1",
+          "type": "quest",
+          "zone": "蛇毒地窟",
+          "description": "从 **尸体** 拿走 **骸蛇毒液** (区域尽头)",
+          "tags": [],
+          "zoneId": "g3_4"
+        },
+        {
+          "id": "poe2_a3_crypts_2",
+          "type": "town",
+          "zone": "蛇毒地窟",
+          "description": "传送回 **金字塔营地**",
+          "tags": [],
+          "zoneId": "g3_town"
+        },
+        {
+          "id": "poe2_a3_town2_1",
+          "type": "npc_quest",
+          "zone": "金字塔营地",
+          "description": "与 **塞尔维** 对话 - 选择 **永久加成** + **工匠解锁**",
+          "hint": "最终选择 - 之后无法更改!",
+          "tags": [
+            "Permanent"
+          ],
+          "zoneId": "g3_town"
+        },
+        {
+          "id": "poe2_a3_town2_2",
+          "type": "navigation",
+          "zone": "金字塔营地",
+          "description": "传送至 **丛林废墟**, 进入 **滋孽荒原** (与传送点相反)",
+          "tags": [],
+          "zoneId": "g3_2_1"
+        },
+        {
+          "id": "poe2_a3_barrens_1",
+          "type": "waypoint",
+          "zone": "滋孽荒原",
+          "description": "标记 **传送点**, 召唤 **阿尔瓦**",
+          "hint": "传送点可能需要沿着边缘进入2个边区",
+          "tags": [
+            "Waypoint"
+          ],
+          "zoneId": "g3_2_1"
+        },
+        {
+          "id": "poe2_a3_barrens_2",
+          "type": "navigation",
+          "zone": "滋孽荒原",
+          "description": "进入 **阿札克泥沼**",
+          "tags": [],
+          "zoneId": "g3_7"
+        },
+        {
+          "id": "poe2_a3_bog_1",
+          "type": "waypoint",
+          "zone": "阿扎克沼泽",
+          "description": "标记 **传送点**, 召唤 **塞尔维**",
+          "hint": "可选: 火焰皮肤仪式 (25% 稀有度/火抗, 靠近中心)",
+          "tags": [
+            "Waypoint"
+          ],
+          "zoneId": "g3_7"
+        },
+        {
+          "id": "poe2_a3_bog_2",
+          "type": "kill_boss",
+          "zone": "阿札克沼泽",
+          "description": "击败 **伊格纳杜克，沼泽老妪**, 拿走 **伊格纳杜克的丧魂矛**",
+          "reward": "30 灵魂力加成",
+          "tags": [
+            "Boss",
+            "Spirit"
+          ],
+          "zoneId": "g3_7"
+        },
+        {
+          "id": "poe2_a3_bog_3",
+          "type": "town",
+          "zone": "阿扎克沼泽",
+          "description": "传送回 **金字塔营地**",
+          "tags": [],
+          "zoneId": "g3_town"
+        },
+        {
+          "id": "poe2_a3_town3_1",
+          "type": "npc_quest",
+          "zone": "金字塔营地",
+          "description": "与 **塞尔维** 对话 (获得 **异常状态护身符**)",
+          "tags": [],
+          "zoneId": "g3_town"
+        },
+        {
+          "id": "poe2_a3_town3_2",
+          "type": "navigation",
+          "zone": "金字塔营地",
+          "description": "传送至 **滋孽荒原**, 进入 **幻缈湿地** (与阿札克泥沼相反)",
+          "tags": [],
+          "zoneId": "g3_5"
+        },
+        {
+          "id": "poe2_a3_wetlands_1",
+          "type": "waypoint",
+          "zone": "幻缈湿地",
+          "description": "标记 **传送点**",
+          "tags": [
+            "Waypoint"
+          ],
+          "zoneId": "g3_5"
+        },
+        {
+          "id": "poe2_a3_wetlands_2",
+          "type": "kill_boss",
+          "zone": "幻缈湿地",
+          "description": "击败 **奇美拉赛克鲁西安**, 拿走 **奇美拉铭文终极**",
+          "hint": "沿着边缘走; 如果先找到混沌神殿, 走相反边缘",
+          "tags": [
+            "Boss"
+          ],
+          "zoneId": "g3_5"
+        },
+        {
+          "id": "poe2_a3_wetlands_3",
+          "type": "navigation",
+          "zone": "幻缈湿地",
+          "description": "进入 **佳华尼的机械迷城** (在首领竞技场内)",
+          "tags": [],
+          "zoneId": "g3_6_1"
+        },
+        {
+          "id": "poe2_a3_machinarium_1",
+          "type": "waypoint",
+          "zone": "佳华尼的机械迷城",
+          "description": "标记 **传送点**",
+          "tags": [
+            "Waypoint"
+          ],
+          "zoneId": "g3_6_1"
+        },
+        {
+          "id": "poe2_a3_machinarium_2",
+          "type": "navigation",
+          "zone": "佳华尼的机械迷城",
+          "description": "传送至 **幻缈湿地**, 进入 **混沌大殿**",
+          "hint": "如果之前找到, 用传送点过去; 否则走相反边缘",
+          "tags": [],
+          "zoneId": "g3_10"
+        },
+        {
+          "id": "poe2_a3_temple_1",
+          "type": "waypoint",
+          "zone": "混沌大殿",
+          "description": "标记 **传送点**, 然后传送至 **佳华尼的机械迷城**",
+          "hint": "可选: 完成试炼获得进阶 - 可以现在或稍后做",
+          "tags": [
+            "Waypoint",
+            "Trial"
+          ],
+          "zoneId": "g3_10"
+        },
+        {
+          "id": "poe2_a3_machinarium_3",
+          "type": "npc_quest",
+          "zone": "佳华尼的机械迷城",
+          "description": "召唤 **阿尔瓦**, 拿走 **小型灵魂核心**, 激活 **石祭坛**",
+          "tags": [],
+          "zoneId": "g3_6_1"
+        },
+        {
+          "id": "poe2_a3_machinarium_4",
+          "type": "quest",
+          "zone": "佳华尼的机械迷城",
+          "description": "找到 **另外2个小型灵魂核心**, 激活 **石祭坛**",
+          "tags": [],
+          "zoneId": "g3_6_1"
+        },
+        {
+          "id": "poe2_a3_machinarium_5",
+          "type": "kill_boss",
+          "zone": "佳华尼的机械迷城",
+          "description": "击败 **遗世的黑颚**",
+          "reward": "火焰 抗性加成",
+          "hint": "搜索侧边找到有楼梯的锁门房间",
+          "tags": [
+            "Boss",
+            "Resistance"
+          ],
+          "zoneId": "g3_6_1"
+        },
+        {
+          "id": "poe2_a3_machinarium_6",
+          "type": "navigation",
+          "zone": "佳华尼的机械迷城",
+          "description": "沿着 **红色痕迹** 前往 **佳华尼的密殿**",
+          "tags": [],
+          "zoneId": "g3_6_2"
+        },
+        {
+          "id": "poe2_a3_sanctum_1",
+          "type": "waypoint",
+          "zone": "佳华尼的密殿",
+          "description": "标记 **传送点**, 召唤 **阿尔瓦**",
+          "tags": [
+            "Waypoint"
+          ],
+          "zoneId": "g3_6_2"
+        },
+        {
+          "id": "poe2_a3_sanctum_2",
+          "type": "quest",
+          "zone": "佳华尼的密殿",
+          "description": "找到 **2个中型灵魂核心**, 启动 **2个发电机** (尖角形角落)",
+          "hint": "分隔区域 - 每边都有找核心, 启动发电机, 返回起点任务",
+          "tags": [],
+          "zoneId": "g3_6_2"
+        },
+        {
+          "id": "poe2_a3_sanctum_3",
+          "type": "quest",
+          "zone": "佳华尼的密殿",
+          "description": "激活 **大型灵魂核心** 靠近 **阿尔瓦**",
+          "tags": [],
+          "zoneId": "g3_6_2"
+        },
+        {
+          "id": "poe2_a3_sanctum_4",
+          "type": "kill_boss",
+          "zone": "佳华尼的密殿",
+          "description": "击败 **护核卫士吉柯塔尔**, 拿走 **大型灵魂核心**",
+          "tags": [
+            "Boss"
+          ],
+          "zoneId": "g3_6_2"
+        },
+        {
+          "id": "poe2_a3_sanctum_5",
+          "type": "navigation",
+          "zone": "佳华尼的密殿",
+          "description": "传送至 **滋孽荒原**",
+          "tags": [],
+          "zoneId": "g3_2_1"
+        },
+        {
+          "id": "poe2_a3_barrens_3",
+          "type": "quest",
+          "zone": "感染荒原",
+          "description": "在 **石祭坛** (靠近传送点) 插入 **大型灵魂核心**",
+          "tags": [],
+          "zoneId": "g3_2_1"
+        },
+        {
+          "id": "poe2_a3_barrens_4",
+          "type": "navigation",
+          "zone": "感染荒原",
+          "description": "进入 **马特兰水道** (附近)",
+          "tags": [],
+          "zoneId": "g3_2_2"
+        },
+        {
+          "id": "poe2_a3_waterways_1",
+          "type": "quest",
+          "zone": "马特兰水道",
+          "description": "拉动所有 **渠道杠杆**, 拉动 **大渠道杠杆** (区域尽头)",
+          "tags": [],
+          "zoneId": "g3_2_2"
+        },
+        {
+          "id": "poe2_a3_waterways_2",
+          "type": "town",
+          "zone": "马特兰水道",
+          "description": "传送回 **金字塔营地**",
+          "tags": [],
+          "zoneId": "g3_town"
+        },
+        {
+          "id": "poe2_a3_town4_1",
+          "type": "npc_quest",
+          "zone": "金字塔营地",
+          "description": "走下楼梯, 与 **阿尔瓦** 对话",
+          "tags": [],
+          "zoneId": "g3_town"
+        },
+        {
+          "id": "poe2_a3_town4_2",
+          "type": "navigation",
+          "zone": "金字塔营地",
+          "description": "进入 **淹没之城**",
+          "tags": [],
+          "zoneId": "g3_8"
+        },
+        {
+          "id": "poe2_a3_drowned_1",
+          "type": "waypoint",
+          "zone": "淹没之城",
+          "description": "标记 **传送点**, 召唤 **奥斯瓦尔德**",
+          "tags": [
+            "Waypoint"
+          ],
+          "zoneId": "g3_8"
+        },
+        {
+          "id": "poe2_a3_drowned_2",
+          "type": "navigation",
+          "zone": "淹没之城",
+          "description": "进入 **熔火宝库**",
+          "tags": [],
+          "zoneId": "g3_9"
+        },
+        {
+          "id": "poe2_a3_vault_1",
+          "type": "waypoint",
+          "zone": "熔火宝库",
+          "description": "标记 **传送点**",
+          "tags": [
+            "Waypoint"
+          ],
+          "zoneId": "g3_9"
+        },
+        {
+          "id": "poe2_a3_vault_2",
+          "type": "kill_boss",
+          "zone": "熔火宝库",
+          "description": "使用 **杠杆**, 拉动 **泄洪门杠杆**, 击杀 **梅克图尔，锻造大师**, 拿走 **卡玛萨之锤**",
+          "hint": "可选: 现在或稍后做 - 之后与奥斯瓦尔德对话获得重铸台",
+          "tags": [
+            "Boss"
+          ],
+          "zoneId": "g3_9"
+        },
+        {
+          "id": "poe2_a3_vault_3",
+          "type": "navigation",
+          "zone": "熔火宝库",
+          "description": "传送至 **淹没之城**, 进入 **污秽巅峰**",
+          "tags": [],
+          "zoneId": "g3_11"
+        },
+        {
+          "id": "poe2_a3_apex_1",
+          "type": "waypoint",
+          "zone": "污秽巅峰",
+          "description": "标记 **传送点**",
+          "tags": [
+            "Waypoint"
+          ],
+          "zoneId": "g3_11"
+        },
+        {
+          "id": "poe2_a3_apex_2",
+          "type": "kill_boss",
+          "zone": "污秽巅峰",
+          "description": "击败 **污秽女王** (区域尽头), 拿走 **神殿门偶像**",
+          "hint": "可选: 大锅获得优质药水 - 在区域中找到/掉落3个蘑菇",
+          "tags": [
+            "Boss"
+          ],
+          "zoneId": "g3_11"
+        },
+        {
+          "id": "poe2_a3_apex_3",
+          "type": "town",
+          "zone": "污秽巅峰",
+          "description": "传送回 **金字塔营地**",
+          "tags": [],
+          "zoneId": "g3_town"
+        },
+        {
+          "id": "poe2_a3_town5_1",
+          "type": "npc_quest",
+          "zone": "金字塔营地",
+          "description": "与 **阿尔瓦** 对话 (楼下), 打开 **门**",
+          "tags": [],
+          "zoneId": "g3_town"
+        },
+        {
+          "id": "poe2_a3_town5_2",
+          "type": "navigation",
+          "zone": "金字塔营地",
+          "description": "进入 **科佩克之殿**",
+          "tags": [],
+          "zoneId": "g3_12"
+        },
+        {
+          "id": "poe2_a3_kopec_1",
+          "type": "kill_boss",
+          "zone": "科佩克之殿",
+          "description": "爬楼梯两次 (金字塔角落), 击杀 **卡阿祖尔，烈阳先师**",
+          "tags": [
+            "Boss"
+          ],
+          "zoneId": "g3_12"
+        },
+        {
+          "id": "poe2_a3_kopec_2",
+          "type": "npc_quest",
+          "zone": "科佩克之殿",
+          "description": "召唤 **阿尔瓦**, 调查 **平台**, 进入 ** 传送门**",
+          "tags": [],
+          "zoneId": "g3_12"
+        },
+        {
+          "id": "poe2_a3_kopec_3",
+          "type": "waypoint",
+          "zone": "科佩克之殿",
+          "description": "标记 **传送点** (传送门 后方), 走下楼梯",
+          "tags": [
+            "Waypoint"
+          ],
+          "zoneId": "g3_12"
+        },
+        {
+          "id": "poe2_a3_kopec_4",
+          "type": "navigation",
+          "zone": "科佩克之殿",
+          "description": "进入 **乌札尔**",
+          "tags": [],
+          "zoneId": "g3_14"
+        },
+        {
+          "id": "poe2_a3_utzaal_1",
+          "type": "waypoint",
+          "zone": "乌扎尔",
+          "description": "标记 **传送点**",
+          "tags": [
+            "Waypoint"
+          ],
+          "zoneId": "g3_14"
+        },
+        {
+          "id": "poe2_a3_utzaal_2",
+          "type": "kill_boss",
+          "zone": "乌扎尔",
+          "description": "沿着 **战争呐喊声** 前进, 击杀 **蝰蛇娜帕齐**",
+          "hint": "途中击杀戈利亚斯获得祭献之心 (也在下一个区域掉落)",
+          "tags": [
+            "Boss"
+          ],
+          "zoneId": "g3_14"
+        },
+        {
+          "id": "poe2_a3_utzaal_3",
+          "type": "navigation",
+          "zone": "乌扎尔",
+          "description": "进入 **阿戈拉特**",
+          "tags": [],
+          "zoneId": "g3_16"
+        },
+        {
+          "id": "poe2_a3_aggorat_1",
+          "type": "waypoint",
+          "zone": "阿戈拉特",
+          "description": "标记 **传送点**",
+          "tags": [
+            "Waypoint"
+          ],
+          "zoneId": "g3_16"
+        },
+        {
+          "id": "poe2_a3_aggorat_2",
+          "type": "quest",
+          "zone": "阿戈拉特",
+          "description": "击败 **瓦尔巨人** 获得 **祭献之心** (如需要), 找到 **广场祭坛**",
+          "tags": [],
+          "zoneId": "g3_16"
+        },
+        {
+          "id": "poe2_a3_aggorat_3",
+          "type": "quest",
+          "zone": "阿戈拉特",
+          "description": "拿走 **祭献匕首**, 将 **祭献之心** 放置并刺入 **血祭祭坛**",
+          "reward": "2 武器组天赋点",
+          "hint": "祭坛在广场北边 - 直接路径通常被阻挡",
+          "tags": [
+            "Passive"
+          ],
+          "zoneId": "g3_16"
+        },
+        {
+          "id": "poe2_a3_aggorat_4",
+          "type": "navigation",
+          "zone": "阿戈拉特",
+          "description": "进入 **暗胧殿堂** (东边或血祭西南边)",
+          "tags": [],
+          "zoneId": "g3_17"
+        },
+        {
+          "id": "poe2_a3_chambers_1",
+          "type": "waypoint",
+          "zone": "暗胧殿堂",
+          "description": "标记 **传送点**",
+          "tags": [
+            "Waypoint"
+          ],
+          "zoneId": "g3_17"
+        },
+        {
+          "id": "poe2_a3_chambers_2",
+          "type": "kill_boss",
+          "zone": "暗胧殿堂",
+          "description": "击败 **多里亚尼，皇家奇术师** 和 **多里亚尼的杰作**",
+          "hint": "区域: 由桥梁连接的迷宫",
+          "tags": [
+            "Boss"
+          ],
+          "zoneId": "g3_17"
+        },
+        {
+          "id": "poe2_a3_chambers_3",
+          "type": "npc_quest",
+          "zone": "暗胧殿堂",
+          "description": "与 **多里亚尼** 对话",
+          "tags": [],
+          "zoneId": "g3_17"
+        },
+        {
+          "id": "poe2_a3_chambers_4",
+          "type": "town",
+          "zone": "暗胧殿堂",
+          "description": "传送回 **金字塔营地**",
+          "tags": [],
+          "zoneId": "g3_town"
+        },
+        {
+          "id": "poe2_a3_town6_1",
+          "type": "npc_quest",
+          "zone": "金字塔营地",
+          "description": "与 **多里亚尼** 对话 (天启过场动画), 与 **阿尔瓦** 对话 - 前往 **第4章**",
+          "tags": [],
+          "zoneId": "g4_town"
+        }
+      ]
+    },
+    {
+      "actNumber": 4,
+      "actName": "第4章：尼加马卡努伊 等级45 (卡鲁族)",
+      "steps": [
+        {
+          "id": "poe2_a4_town1_1",
+          "type": "npc_quest",
+          "zone": "国王港",
+          "description": "与 **多里亚尼** 对话, 与 **阿尔瓦** 对话 (获得特许状), 与 **马克鲁** 对话 - 航行至 **亲眷岛**",
+          "tags": [],
+          "zoneId": "g4_town"
+        },
+        {
+          "id": "poe2_a4_kin_1",
+          "type": "kill_boss",
+          "zone": "亲眷岛",
+          "description": "击败 **盲兽**",
+          "reward": "2 技能点",
+          "hint": "可选: 深渊矿区珠宝匠 (边缘) | 野兽栏技能/辅助宝石",
+          "tags": [
+            "Boss",
+            "Passive"
+          ],
+          "zoneId": "g4_1_1"
+        },
+        {
+          "id": "poe2_a4_kin_2",
+          "type": "navigation",
+          "zone": "亲眷岛",
+          "description": "进入 **熔火院落**",
+          "tags": [],
+          "zoneId": "g4_1_2"
+        },
+        {
+          "id": "poe2_a4_warrens_1",
+          "type": "kill_boss",
+          "zone": "熔火院落",
+          "description": "击败 **族裔之王克鲁托格** (区域尽头), 与 **兜帽人** 对话",
+          "hint": "可选: 火焰/闪电戒指 (10% 品质) 在熔火院落 - 基于最后击杀的首领",
+          "tags": [
+            "Boss"
+          ],
+          "zoneId": "g4_1_2"
+        },
+        {
+          "id": "poe2_a4_warrens_2",
+          "type": "town",
+          "zone": "熔火院落",
+          "description": "返回 **船**, 与 **马克鲁** 对话 - 航行至 **废弃监牢**",
+          "tags": [],
+          "zoneId": "g4_5_1"
+        },
+        {
+          "id": "poe2_a4_prison_1",
+          "type": "quest",
+          "zone": "废弃监牢",
+          "description": "击杀怪物获得 **礼拜堂钥匙**, 打开 **礼拜堂门**, 标记 **传送点**",
+          "tags": [],
+          "zoneId": "g4_5_1"
+        },
+        {
+          "id": "poe2_a4_prison_2",
+          "type": "quest",
+          "zone": "废弃监牢",
+          "description": "激活 **正义女神** (药水恢复, 之后可更改), 使用 **杠杆**",
+          "tags": [],
+          "zoneId": "g4_5_1"
+        },
+        {
+          "id": "poe2_a4_prison_3",
+          "type": "navigation",
+          "zone": "废弃监牢",
+          "description": "进入 **遗世监禁**",
+          "tags": [],
+          "zoneId": "g4_5_2"
+        },
+        {
+          "id": "poe2_a4_solitary_1",
+          "type": "kill_boss",
+          "zone": "遗世监禁",
+          "description": "使用 **杠杆**, 击杀 **囚徒**, 与 **兜帽人** 对话",
+          "tags": [
+            "Boss"
+          ],
+          "zoneId": "g4_5_2"
+        },
+        {
+          "id": "poe2_a4_solitary_2",
+          "type": "town",
+          "zone": "遗世监禁",
+          "description": "返回 **船**, 与 **马科鲁** 对话 - 航行至 **瓦卡帕努岛**",
+          "tags": [],
+          "zoneId": "g4_3_1"
+        },
+        {
+          "id": "poe2_a4_whakapanu_1",
+          "type": "navigation",
+          "zone": "瓦卡帕努岛",
+          "description": "进入 **冥曲洞窟**",
+          "hint": "可选: 辅助宝石在蟹壳洞穴 | 技能/灵体/辅助 - 击杀大白鲨获得鳍 (交给恩加努的凯马纳)",
+          "tags": [],
+          "zoneId": "g4_3_2"
+        },
+        {
+          "id": "poe2_a4_caverns_1",
+          "type": "kill_boss",
+          "zone": "冥曲洞窟",
+          "description": "击败 **葬歌之声戴娅摩菈**, 与 **兜帽人** 对话",
+          "hint": "可选: 全抗项链 - 在贝壳中寻找珍珠",
+          "tags": [
+            "Boss"
+          ],
+          "zoneId": "g4_3_2"
+        },
+        {
+          "id": "poe2_a4_caverns_2",
+          "type": "town",
+          "zone": "冥曲洞窟",
+          "description": "返回 **船**, 与 **马克鲁** 对话 - 航行至 **百舌岛**",
+          "tags": [],
+          "zoneId": "g4_7"
+        },
+        {
+          "id": "poe2_a4_shrike_1",
+          "type": "kill_boss",
+          "zone": "百舌岛",
+          "description": "击败 **天空灾星**, 与 **兜帽人** 对话",
+          "hint": "可选: 地图碎片在腐尸巢",
+          "tags": [
+            "Boss"
+          ],
+          "zoneId": "g4_7"
+        },
+        {
+          "id": "poe2_a4_shrike_2",
+          "type": "town",
+          "zone": "百舌岛",
+          "description": "返回 **船**, 与 **马克鲁** 对话 - 航行至 **辛格拉之眼**",
+          "hint": "注意: 前四个岛屿中会有一个随机出现需要营救的马蒂基 (每赛季随机)",
+          "tags": [],
+          "zoneId": "g4_4_1"
+        },
+        {
+          "id": "poe2_a4_hinekora_1",
+          "type": "npc_quest",
+          "zone": "辛格拉之眼",
+          "description": "与 **马蒂基** 和 **非玩家角色** 对话, 激活 **海涅科拉之井**",
+          "tags": [],
+          "zoneId": "g4_4_1"
+        },
+        {
+          "id": "poe2_a4_hinekora_2",
+          "type": "quest",
+          "zone": "辛格拉之眼",
+          "description": "完成 **3个测试**, 点击 **致敬**",
+          "reward": "魔力加成",
+          "hint": "灵体加成在第2和第3测试之间的瀑布 | 致敬在寂静大厅 (边区)",
+          "tags": [
+            "Life"
+          ],
+          "zoneId": "g4_4_1"
+        },
+        {
+          "id": "poe2_a4_hinekora_3",
+          "type": "navigation",
+          "zone": "辛格拉之眼",
+          "description": "进入 **亡者之境** (更深处)",
+          "tags": [],
+          "zoneId": "g4_4_2"
+        },
+        {
+          "id": "poe2_a4_halls_1",
+          "type": "waypoint",
+          "zone": "亡者之境",
+          "description": "标记 **传送点**",
+          "tags": [
+            "Waypoint"
+          ],
+          "zoneId": "g4_4_2"
+        },
+        {
+          "id": "poe2_a4_halls_2",
+          "type": "quest",
+          "zone": "亡者之境",
+          "description": "完成 **3个测试** 获得 **纹身**: **塔瓦霍亚** (敏捷/闪电), **塔萨利奥** (智慧/冰霜), **恩加马胡** (力量/火焰)",
+          "hint": "与图腾对话提交纹身",
+          "tags": [],
+          "zoneId": "g4_4_2"
+        },
+        {
+          "id": "poe2_a4_halls_3",
+          "type": "kill_boss",
+          "zone": "亡者之境",
+          "description": "击败 **白之雅玛**, 拿走 **银币**",
+          "tags": [
+            "Boss"
+          ],
+          "zoneId": "g4_4_2"
+        },
+        {
+          "id": "poe2_a4_halls_4",
+          "type": "navigation",
+          "zone": "亡者之境",
+          "description": "进入 **命运试炼**",
+          "tags": [],
+          "zoneId": "g4_4_3"
+        },
+        {
+          "id": "poe2_a4_trial_1",
+          "type": "npc_quest",
+          "zone": "命运试炼",
+          "description": "标记 **传送点**, 与 **纳瓦利** 对话, 拿走 **海涅科拉纹身**",
+          "reward": "2 技能点",
+          "tags": [
+            "Waypoint",
+            "Passive"
+          ],
+          "zoneId": "g4_4_3"
+        },
+        {
+          "id": "poe2_a4_trial_2",
+          "type": "town",
+          "zone": "命运试炼",
+          "description": "返回 **船**, 与 **马科鲁** 对话 - 航行至 **阿拉斯塔斯斯**",
+          "tags": [],
+          "zoneId": "g4_8b"
+        },
+        {
+          "id": "poe2_a4_arastas_1",
+          "type": "waypoint",
+          "zone": "阿拉斯塔 (敌对)",
+          "description": "标记 **传送点**, 与 **传道士洛兰迪斯** 对话, 跟随他到外面",
+          "hint": "可选: 3个崇高石和富豪石在钟里",
+          "tags": [
+            "Waypoint"
+          ],
+          "zoneId": "g4_8b"
+        },
+        {
+          "id": "poe2_a4_arastas_2",
+          "type": "kill_boss",
+          "zone": "阿拉斯塔 (敌对)",
+          "description": "摧毁 **力场**, 击杀 **托维安，救世主之手**",
+          "tags": [
+            "Boss"
+          ],
+          "zoneId": "g4_8b"
+        },
+        {
+          "id": "poe2_a4_arastas_3",
+          "type": "navigation",
+          "zone": "阿拉斯塔 (敌对)",
+          "description": "进入 **挖掘场**",
+          "tags": [],
+          "zoneId": "g4_10"
+        },
+        {
+          "id": "poe2_a4_excavation_1",
+          "type": "kill_boss",
+          "zone": "挖掘场",
+          "description": "击败 **本尼迪克图斯，乌托邦首席使徒**, 进入 **熔炉**",
+          "tags": [
+            "Boss"
+          ],
+          "zoneId": "g4_10"
+        },
+        {
+          "id": "poe2_a4_excavation_2",
+          "type": "npc_quest",
+          "zone": "挖掘场",
+          "description": "与 **兜帽人** 对话, 传送至 **城镇**",
+          "tags": [],
+          "zoneId": "g4_town"
+        },
+        {
+          "id": "poe2_a4_town2_1",
+          "type": "npc_quest",
+          "zone": "君锋镇",
+          "description": "与 **非玩家角色** 对话, 与 **罗德里** 对话 (在船边) - 航行至 **纳卡努**",
+          "hint": "可选: 与 **罗格** 对话 (用全抗项链换取珍珠) | 凯奇湾边区内容 (液态情感, 地图碎片, 技能宝石) | 马克鲁航行至掠夺之点",
+          "tags": [],
+          "zoneId": "g4_11_1b"
+        },
+        {
+          "id": "poe2_a4_ngakanu_1",
+          "type": "navigation",
+          "zone": "纳卡努 (敌对)",
+          "description": "进入 **部族之心**",
+          "hint": "高级 珠宝匠: 深渊遭遇",
+          "tags": [],
+          "zoneId": "g4_11_2"
+        },
+        {
+          "id": "poe2_a4_heart_1",
+          "type": "waypoint",
+          "zone": "部族之心",
+          "description": "标记 **传送点**",
+          "tags": [
+            "Waypoint"
+          ],
+          "zoneId": "g4_11_2"
+        },
+        {
+          "id": "poe2_a4_heart_2",
+          "type": "kill_boss",
+          "zone": "部族之心",
+          "description": "击败 **塔瓦凯，酋长** (酋长, 堕落者, 被吞噬者), 传送至 **城镇**",
+          "tags": [
+            "Boss"
+          ],
+          "zoneId": "g4_11_2"
+        },
+        {
+          "id": "poe2_a4_town3_1",
+          "type": "npc_quest",
+          "zone": "君锋镇",
+          "description": "与 **非玩家角色** 对话, 与 **兜帽人** 对话 - 前往 **第5章** (奥格姆, 瓦斯蒂里, 或克里尔山)",
+          "tags": [],
+          "zoneId": "g4_town"
+        }
+      ]
+    },
+    {
+      "actNumber": 5,
+      "actName": "间章1：霍尔登的诅咒",
+      "steps": [
+        {
+          "id": "poe2_a5_town1_1",
+          "type": "npc_quest",
+          "zone": "避难所",
+          "description": "与 **蓝礼** 对话, 进入 **焦土农田**",
+          "tags": [],
+          "zoneId": "p1_1"
+        },
+        {
+          "id": "poe2_a5_farmlands_1",
+          "type": "kill_boss",
+          "zone": "焦土农田",
+          "description": "在 **暗黑之墙** 附近击败 **黑镰之海尔德拉** 和 **苍白幽影之伊索德**",
+          "hint": "可选: 路边尸体获得技能宝石",
+          "tags": [
+            "Boss"
+          ],
+          "zoneId": "p1_1"
+        },
+        {
+          "id": "poe2_a5_farmlands_2",
+          "type": "navigation",
+          "zone": "焦土农田",
+          "description": "进入 **瑟尔之石**",
+          "tags": [],
+          "zoneId": "p1_2"
+        },
+        {
+          "id": "poe2_a5_serle_1",
+          "type": "quest",
+          "zone": "瑟尔之石",
+          "description": "激活所有 **符文巨石阵**, 前往 **中心符文**",
+          "tags": [],
+          "zoneId": "p1_2"
+        },
+        {
+          "id": "poe2_a5_serle_2",
+          "type": "kill_boss",
+          "zone": "瑟尔之石",
+          "description": "击败 **西奥拉，迷雾之刃**, 与 **乌娜** 对话",
+          "tags": [
+            "Boss"
+          ],
+          "zoneId": "p1_2"
+        },
+        {
+          "id": "poe2_a5_serle_3",
+          "type": "navigation",
+          "zone": "焦土农田",
+          "description": "返回 **焦土农田**, 前往 **暗黑之墙**, 进入 **黑木林**",
+          "tags": [],
+          "zoneId": "p1_3"
+        },
+        {
+          "id": "poe2_a5_blackwood_1",
+          "type": "navigation",
+          "zone": "黑木林",
+          "description": "进入 **霍尔顿**",
+          "hint": "可选: 预兆在预兆祭坛",
+          "tags": [],
+          "zoneId": "p1_4"
+        },
+        {
+          "id": "poe2_a5_holten_1",
+          "type": "navigation",
+          "zone": "霍尔顿",
+          "description": "在 **霍尔顿庄园** 标记 **传送点** (进-出), 进入 **狼堡**",
+          "hint": "可选: 符文商人 水边附近",
+          "tags": [],
+          "zoneId": "p1_5"
+        },
+        {
+          "id": "poe2_a5_wolvenhold_1",
+          "type": "kill_boss",
+          "zone": "狼堡",
+          "description": "击败 **奥斯温，恐惧典狱长**",
+          "reward": "2 技能点",
+          "tags": [
+            "Boss",
+            "Passive"
+          ],
+          "zoneId": "p1_5"
+        },
+        {
+          "id": "poe2_a5_wolvenhold_2",
+          "type": "navigation",
+          "zone": "狼堡",
+          "description": "传送至 **霍尔顿庄园**",
+          "tags": [],
+          "zoneId": "p1_6"
+        },
+        {
+          "id": "poe2_a5_estate_1",
+          "type": "kill_boss",
+          "zone": "霍尔顿庄园",
+          "description": "击败 **领主乌弗瑞克** 和 **艾尔斯威丝女士** (一楼), 传送至 **城镇**",
+          "tags": [
+            "Boss"
+          ],
+          "zoneId": "p1_town"
+        },
+        {
+          "id": "poe2_a5_town2_1",
+          "type": "npc_quest",
+          "zone": "避难所",
+          "description": "与 **蓝礼** 对话, 与 **兜帽密师** 对话 - 前往 **瓦斯蒂里 (第6章)**",
+          "tags": [],
+          "zoneId": "p2_town"
+        }
+      ]
+    },
+    {
+      "actNumber": 6,
+      "actName": "间章2：被偷的巨灵之币",
+      "steps": [
+        {
+          "id": "poe2_a6_town1_1",
+          "type": "npc_quest",
+          "zone": "卡莉集市",
+          "description": "与 **丝克玛艾萨拉** 对话, 与 **扎卡** 对话, 进入 **卡莉渡口**",
+          "tags": [],
+          "zoneId": "p2_1"
+        },
+        {
+          "id": "poe2_a6_crossing_1",
+          "type": "kill_boss",
+          "zone": "卡莉渡口",
+          "description": "激活 **寻路者之印**, 击杀 **阿克西，终命毒刺** 和 **阿农德，沙虫**, 传送至 **城镇**",
+          "hint": "印记通常在竞技场入口的3点或2点方向",
+          "tags": [
+            "Boss"
+          ],
+          "zoneId": "p2_town"
+        },
+        {
+          "id": "poe2_a6_town2_1",
+          "type": "npc_quest",
+          "zone": "卡莉渡口",
+          "description": "与 **里苏** 对话 (专业之书), 返回 **卡莉渡口**",
+          "reward": "2 技能点",
+          "tags": [
+            "Passive"
+          ],
+          "zoneId": "p2_1"
+        },
+        {
+          "id": "poe2_a6_crossing_2",
+          "type": "quest",
+          "zone": "卡莉渡口",
+          "description": "激活 **寻路者之印**, 找到 **骨颚阶梯**, 拿走 **熔岩之礼**",
+          "reward": "生命加成",
+          "hint": "跟随你身下的箭头",
+          "tags": [
+            "Life"
+          ],
+          "zoneId": "p2_1"
+        },
+        {
+          "id": "poe2_a6_crossing_3",
+          "type": "navigation",
+          "zone": "卡莉渡口",
+          "description": "找到 **商人托尔比克**, 进入 **加莱之门** (通常在托尔比克的7点或6点方向)",
+          "tags": [],
+          "zoneId": "p2_5"
+        },
+        {
+          "id": "poe2_a6_crossing_4",
+          "type": "navigation",
+          "zone": "卡莉渡口",
+          "description": "传送至 **卡哈塔之池** (通过渡口印记), 进入 **塞卡莉圣所**",
+          "tags": [],
+          "zoneId": "p2_3"
+        },
+        {
+          "id": "poe2_a6_sanctuary_1",
+          "type": "waypoint",
+          "zone": "塞卡莉圣所",
+          "description": "标记 **传送点**",
+          "tags": [
+            "Waypoint"
+          ],
+          "zoneId": "p2_3"
+        },
+        {
+          "id": "poe2_a6_sanctuary_2",
+          "type": "kill_boss",
+          "zone": "塞卡莉圣所",
+          "description": "击败 **埃尔扎拉，眼镜蛇领主**, 与 **丝克玛艾萨拉** 对话, 传送至 **城镇**",
+          "hint": "可选: 戒指/项链/珠宝 - 掉落2个巴里亚, 插入底座 (侧边)",
+          "tags": [
+            "Boss"
+          ],
+          "zoneId": "p2_town"
+        },
+        {
+          "id": "poe2_a6_town3_1",
+          "type": "npc_quest",
+          "zone": "卡莉集市",
+          "description": "与 **非玩家角色** 对话, 传送至 **加莱之门**",
+          "tags": [],
+          "zoneId": "p2_5"
+        },
+        {
+          "id": "poe2_a6_galai_1",
+          "type": "waypoint",
+          "zone": "加莱之门",
+          "description": "标记 **传送点**",
+          "tags": [
+            "Waypoint"
+          ],
+          "zoneId": "p2_5"
+        },
+        {
+          "id": "poe2_a6_galai_2",
+          "type": "kill_boss",
+          "zone": "加莱之门",
+          "description": "击败 **沃纳斯，堕落烈焰**, 进入 **奇玛尔**",
+          "tags": [
+            "Boss"
+          ],
+          "zoneId": "p2_6"
+        },
+        {
+          "id": "poe2_a6_qimah_1",
+          "type": "waypoint",
+          "zone": "奇玛尔",
+          "description": "标记 **传送点**, 激活 **七柱** (加成可随时更改)",
+          "hint": "七柱是边区",
+          "tags": [
+            "Waypoint"
+          ],
+          "zoneId": "p2_6"
+        },
+        {
+          "id": "poe2_a6_qimah_2",
+          "type": "npc_quest",
+          "zone": "奇玛尔",
+          "description": "召唤 **贾多** (区域尽头), 进入 **奇玛尔水库**",
+          "tags": [],
+          "zoneId": "p2_7"
+        },
+        {
+          "id": "poe2_a6_reservoir_1",
+          "type": "waypoint",
+          "zone": "奇玛尔水库",
+          "description": "标记 **传送点**",
+          "tags": [
+            "Waypoint"
+          ],
+          "zoneId": "p2_7"
+        },
+        {
+          "id": "poe2_a6_reservoir_2",
+          "type": "kill_boss",
+          "zone": "奇玛尔水库",
+          "description": "击败 **阿兹马迪，法里顿王子**, 激活 **大巴里亚**",
+          "hint": "可选:通货 - 掉落2个小瓶获得2口井",
+          "tags": [
+            "Boss"
+          ],
+          "zoneId": "p2_7"
+        },
+        {
+          "id": "poe2_a6_reservoir_3",
+          "type": "npc_quest",
+          "zone": "奇玛尔水库",
+          "description": "与 **贾多** 对话, 传送至 **城镇**",
+          "tags": [],
+          "zoneId": "p2_town"
+        },
+        {
+          "id": "poe2_a6_town4_1",
+          "type": "npc_quest",
+          "zone": "卡莉集市",
+          "description": "与 **非玩家角色** 对话, 与 **兜帽密师** 对话 - 前往 **克里尔山 (第7章)**",
+          "tags": [],
+          "zoneId": "p3_town"
+        }
+      ]
+    },
+    {
+      "actNumber": 7,
+      "actName": "间章3: 多里亚尼的意外事件",
+      "steps": [
+        {
+          "id": "poe2_a7_town1_1",
+          "type": "npc_quest",
+          "zone": "林间空地",
+          "description": "与 **多里亚尼** 对话, 进入 **灰烬森林**",
+          "tags": [],
+          "zoneId": "p3_1"
+        },
+        {
+          "id": "poe2_a7_forest_1",
+          "type": "navigation",
+          "zone": "灰烬森林",
+          "description": "进入 **克里亚村**",
+          "hint": "可选: 古代纪念碑有技能宝石",
+          "tags": [],
+          "zoneId": "p3_2"
+        },
+        {
+          "id": "poe2_a7_village_1",
+          "type": "waypoint",
+          "zone": "克里亚村",
+          "description": "标记 **传送点**",
+          "tags": [
+            "Waypoint"
+          ],
+          "zoneId": "p3_2"
+        },
+        {
+          "id": "poe2_a7_village_2",
+          "type": "kill_boss",
+          "zone": "克里亚村",
+          "description": "击败 **利萨拉，歧途长矛**",
+          "reward": "40 灵体加成",
+          "tags": [
+            "Boss",
+            "Spirit"
+          ],
+          "zoneId": "p3_2"
+        },
+        {
+          "id": "poe2_a7_village_3",
+          "type": "navigation",
+          "zone": "克里亚村",
+          "description": "进入 **冰川池塘**",
+          "tags": [],
+          "zoneId": "p3_3"
+        },
+        {
+          "id": "poe2_a7_tarn_1",
+          "type": "waypoint",
+          "zone": "冰川池塘",
+          "description": "标记 **传送点**",
+          "tags": [
+            "Waypoint"
+          ],
+          "zoneId": "p3_3"
+        },
+        {
+          "id": "poe2_a7_tarn_2",
+          "type": "kill_boss",
+          "zone": "冰川池塘",
+          "description": "击败 **拉卡，冰冻利爪**, 在 **克里亚峰** 标记 **传送点** (进-出)",
+          "tags": [
+            "Boss"
+          ],
+          "zoneId": "p3_3"
+        },
+        {
+          "id": "poe2_a7_tarn_3",
+          "type": "navigation",
+          "zone": "冰川池塘",
+          "description": "进入 **嚎叫洞穴**",
+          "tags": [],
+          "zoneId": "p3_4"
+        },
+        {
+          "id": "poe2_a7_caves_1",
+          "type": "waypoint",
+          "zone": "嚎叫洞穴",
+          "description": "标记 **传送点**",
+          "tags": [
+            "Waypoint"
+          ],
+          "zoneId": "p3_4"
+        },
+        {
+          "id": "poe2_a7_caves_2",
+          "type": "kill_boss",
+          "zone": "嚎叫洞穴",
+          "description": "击败 **可憎的雪人**, 拿走 **冰霜獠牙**, 传送至 **城镇**",
+          "tags": [
+            "Boss"
+          ],
+          "zoneId": "p3_town"
+        },
+        {
+          "id": "poe2_a7_town2_1",
+          "type": "npc_quest",
+          "zone": "林间空地",
+          "description": "与 **希尔达** 对话 (专业之书), 传送至 **克里亚峰**",
+          "reward": "2 技能点",
+          "tags": [
+            "Passive"
+          ],
+          "zoneId": "p3_5"
+        },
+        {
+          "id": "poe2_a7_peaks_1",
+          "type": "npc_quest",
+          "zone": "克里亚峰",
+          "description": "从 **长者马多克斯** 获得礼物 (自选物品), 进入 **刻蚀峡谷**",
+          "hint": "长者马多克斯 - 沿着边缘的长窄通道",
+          "tags": [],
+          "zoneId": "p3_6"
+        },
+        {
+          "id": "poe2_a7_ravine_1",
+          "type": "waypoint",
+          "zone": "刻蚀峡谷",
+          "description": "标记 **传送点**",
+          "tags": [
+            "Waypoint"
+          ],
+          "zoneId": "p3_6"
+        },
+        {
+          "id": "poe2_a7_ravine_2",
+          "type": "kill_boss",
+          "zone": "刻蚀峡谷",
+          "description": "击败 **风暴血魔，守护者**, 进入 **库阿奇克宝库**",
+          "tags": [
+            "Boss"
+          ],
+          "zoneId": "p3_7"
+        },
+        {
+          "id": "poe2_a7_vault_1",
+          "type": "waypoint",
+          "zone": "库阿奇克宝库",
+          "description": "标记 **传送点**",
+          "tags": [
+            "Waypoint"
+          ],
+          "zoneId": "p3_7"
+        },
+        {
+          "id": "poe2_a7_vault_2",
+          "type": "kill_boss",
+          "zone": "库阿奇克宝库",
+          "description": "击败 **泽琳娜和佐林** (鲜血女祭和鲜血祭司), 召唤 **多里亚尼**, 传送至 **城镇**",
+          "tags": [
+            "Boss"
+          ],
+          "zoneId": "p3_town"
+        },
+        {
+          "id": "poe2_a7_town3_1",
+          "type": "town",
+          "zone": "林间空地",
+          "description": "传送至 **君锋镇** (第4章城镇)",
+          "tags": [],
+          "zoneId": "g4_town"
+        },
+        {
+          "id": "poe2_a7_kingsmarch_1",
+          "type": "npc_quest",
+          "zone": "君锋镇",
+          "description": "与 **非玩家角色** 对话, 与 **兜帽密师** 对话 (专业之书) - 前往 **奥瑞亚**",
+          "reward": "2 技能点",
+          "tags": [
+            "Passive"
+          ],
+          "zoneId": "g_endgame_town"
+        },
+        {
+          "id": "poe2_a7_checklist",
+          "type": "town",
+          "zone": "君锋镇",
+          "description": "检查 **角色 → 任务被动** 验证所有被动加成已收集!",
+          "hint": "确保在后期内容前收集所有技能点, 灵体加成和其他被动",
+          "tags": [],
+          "zoneId": "g_endgame_town"
+        },
+        {
+          "id": "poe2_a7_endgame_1",
+          "type": "npc_quest",
+          "zone": "金字塔避难所",
+          "description": "与 **阿尔瓦** 对话, 与 **多里亚尼** 对话, 使用 **地图装置** - 运行一张地图解锁地图制作",
+          "tags": [],
+          "zoneId": "g_endgame_town"
+        },
+        {
+          "id": "poe2_a7_endgame_2",
+          "type": "town",
+          "zone": "金字塔避难所",
+          "description": "在藏身处开始地图制作 - **升级指南完成!**",
+          "tags": [],
+          "zoneId": "g_endgame_town"
+        }
+      ]
+    }
+  ]
+}
