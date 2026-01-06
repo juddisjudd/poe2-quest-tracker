@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
+﻿import React, { useState, useEffect } from "react";
 import { TrackerData, QuestTag } from "../types";
 import { parsePathOfBuildingCodeWithNotes } from "../utils/pobParser";
 import { FilterChips } from "./FilterChips";
 import type { ElectronAPI } from "../main/preload";
 import { FaDiscord } from "react-icons/fa";
 import { SiKofi } from "react-icons/si";
+import { useI18n } from "../utils/i18n";
+import { QUEST_TAG_KEYS } from "../utils/tagLabels";
 
 interface HeaderProps {
   settings: TrackerData["settings"];
@@ -54,10 +56,40 @@ export const Header: React.FC<HeaderProps> = ({
   const [selectedLoadout, setSelectedLoadout] = useState<number>(-1);
   const [logFileDetecting, setLogFileDetecting] = useState(false);
   const [logFileMessage, setLogFileMessage] = useState("");
+  const [logMessageType, setLogMessageType] = useState<"success" | "error" | "">("");
   const [importButtonState, setImportButtonState] = useState<"normal" | "success" | "error">("normal");
   const [importSummary, setImportSummary] = useState<string>("");
+  const { t, language } = useI18n();
 
   const isElectron = !!window.electronAPI;
+  const listSeparator = t("common.listSeparator");
+
+  const getTagLabel = (tag: QuestTag) => t(QUEST_TAG_KEYS[tag]);
+
+  const formatCount = (key: string, count: number) =>
+    t(key, { count, plural: count === 1 ? "" : "s" });
+
+  const formatImportSummary = (options: {
+    loadouts?: number;
+    gemGroups?: number;
+    items?: number;
+    hasTree?: boolean;
+  }) => {
+    const parts: string[] = [];
+    if (typeof options.loadouts === "number") {
+      parts.push(formatCount("settings.pob.summary.loadout", options.loadouts));
+    }
+    if (typeof options.gemGroups === "number") {
+      parts.push(formatCount("settings.pob.summary.gemGroup", options.gemGroups));
+    }
+    if (typeof options.items === "number" && options.items > 0) {
+      parts.push(formatCount("settings.pob.summary.item", options.items));
+    }
+    if (options.hasTree) {
+      parts.push(t("settings.pob.summary.tree"));
+    }
+    return parts.join(listSeparator);
+  };
 
   useEffect(() => {
     const loadVersion = async () => {
@@ -161,7 +193,12 @@ export const Header: React.FC<HeaderProps> = ({
         // Generate import summary
         const gemCount = result.loadouts.reduce((acc: number, loadout: any) =>
           acc + (loadout.gemProgression?.socketGroups?.length || 0), 0);
-        const summary = `${result.loadouts.length} loadout${result.loadouts.length > 1 ? 's' : ''}, ${gemCount} gem group${gemCount !== 1 ? 's' : ''}${result.items ? `, ${result.items.length} item${result.items.length !== 1 ? 's' : ''}` : ''}`;
+        const summary = formatImportSummary({
+          loadouts: result.loadouts.length,
+          gemGroups: gemCount,
+          items: result.items?.length,
+          hasTree: !!result.passiveTree
+        });
         setImportSummary(summary);
         setTimeout(() => setImportSummary(""), 5000);
 
@@ -191,7 +228,11 @@ export const Header: React.FC<HeaderProps> = ({
       // Generate import summary
       const gemCount = result.gemProgression?.socketGroups?.length || 0;
       const hasTree = !!result.passiveTree;
-      const summary = `${gemCount} gem group${gemCount !== 1 ? 's' : ''}${result.items ? `, ${result.items.length} item${result.items.length !== 1 ? 's' : ''}` : ''}${hasTree ? ', tree' : ''}`;
+      const summary = formatImportSummary({
+        gemGroups: gemCount,
+        items: result.items?.length,
+        hasTree
+      });
       setImportSummary(summary);
       setTimeout(() => setImportSummary(""), 5000);
 
@@ -249,6 +290,7 @@ export const Header: React.FC<HeaderProps> = ({
     
     setLogFileDetecting(true);
     setLogFileMessage("");
+    setLogMessageType("");
     
     try {
       const logFilePath = await window.electronAPI.detectPoeLogFile();
@@ -258,18 +300,21 @@ export const Header: React.FC<HeaderProps> = ({
           logFilePath: logFilePath,
           logFileDetected: true 
         });
-        setLogFileMessage(`✓ Log file found: ${logFilePath}`);
+        setLogFileMessage(t("settings.log.message.found", { path: logFilePath }));
+        setLogMessageType("success");
       } else {
         onSettingsChange({ 
           logFileDetected: false 
         });
-        setLogFileMessage("❌ Path of Exile 2 not running or log file not found. Start the game and try again.");
+        setLogFileMessage(t("settings.log.message.notFound"));
+        setLogMessageType("error");
       }
       
       setTimeout(() => setLogFileMessage(""), 5000);
     } catch (error) {
       console.error("Failed to detect log file:", error);
-      setLogFileMessage("❌ Failed to detect log file");
+      setLogFileMessage(t("settings.log.message.detectFail"));
+      setLogMessageType("error");
       setTimeout(() => setLogFileMessage(""), 5000);
     } finally {
       setLogFileDetecting(false);
@@ -281,6 +326,7 @@ export const Header: React.FC<HeaderProps> = ({
     
     setLogFileDetecting(true);
     setLogFileMessage("");
+    setLogMessageType("");
     
     try {
       const logFilePath = await (window.electronAPI as ElectronAPI).selectLogFile();
@@ -290,15 +336,18 @@ export const Header: React.FC<HeaderProps> = ({
           logFilePath: logFilePath,
           logFileDetected: true 
         });
-        setLogFileMessage(`✓ Log file selected: ${logFilePath}`);
+        setLogFileMessage(t("settings.log.message.selected", { path: logFilePath }));
+        setLogMessageType("success");
       } else {
-        setLogFileMessage("❌ No file selected");
+        setLogFileMessage(t("settings.log.message.none"));
+        setLogMessageType("error");
       }
       
       setTimeout(() => setLogFileMessage(""), 5000);
     } catch (error) {
       console.error("Failed to select log file:", error);
-      setLogFileMessage("❌ Failed to select log file");
+      setLogFileMessage(t("settings.log.message.detectFail"));
+      setLogMessageType("error");
       setTimeout(() => setLogFileMessage(""), 5000);
     } finally {
       setLogFileDetecting(false);
@@ -341,7 +390,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <circle cx="12" cy="12" r="10"/>
               </svg>
             </div>
-            <span className="title-text">Exile Compass</span>
+            <span className="title-text">{t("app.title")}</span>
             {/* Show version next to title in Electron */}
             {isElectron && appVersion && (
               <span
@@ -353,12 +402,12 @@ export const Header: React.FC<HeaderProps> = ({
                 }}
                 title={
                   updateChecking
-                    ? "Checking for updates..."
-                    : "Click to check for updates"
+                    ? t("app.version.checking")
+                    : t("app.version.checkHint")
                 }
               >
                 v{appVersion}
-                {updateChecking && "🔄"}
+                {updateChecking && ` ${t("app.version.checkingShort")}`}
               </span>
             )}
           </div>
@@ -367,23 +416,30 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               className="control-btn discord-btn"
               onClick={handleDiscordClick}
-              title="Join Discord Community"
+              title={t("app.controls.discord")}
             >
               <FaDiscord />
             </button>
             <button
               className="control-btn support-btn"
               onClick={handleSupportClick}
-              title="Support This Project"
+              title={t("support.button")}
             >
               <SiKofi />
             </button>
             <button
+              className="control-btn language-btn"
+              onClick={() => onSettingsChange({ language: language === "zh" ? "en" : "zh" })}
+              title={t("app.language.switch")}
+            >
+              {language === "zh" ? "中文" : "EN"}
+            </button>
+            <button
               className="control-btn settings-btn"
               onClick={() => setShowSettings(!showSettings)}
-              title="Settings"
+              title={t("settings.title")}
             >
-              ⚙
+              S
             </button>
             {/* Electron-only window controls */}
             {isElectron && (
@@ -391,16 +447,16 @@ export const Header: React.FC<HeaderProps> = ({
                 <button
                   className="control-btn minimize-btn"
                   onClick={handleMinimize}
-                  title="Minimize"
+                  title={t("app.controls.minimize")}
                 >
-                  −
+                  _
                 </button>
                 <button
                   className="control-btn close-btn"
                   onClick={handleClose}
-                  title="Close"
+                  title={t("app.controls.close")}
                 >
-                  ×
+                  X
                 </button>
               </>
             )}
@@ -411,13 +467,13 @@ export const Header: React.FC<HeaderProps> = ({
       {/* Settings Panel - Works for both web and desktop */}
       <div className={`settings-panel ${showSettings ? "open" : ""}`}>
         <div className="settings-header">
-          <h3>Settings</h3>
+          <h3>{t("settings.title")}</h3>
           <button
             className="control-btn close-btn"
             onClick={() => setShowSettings(false)}
-            title="Close Settings"
+            title={t("settings.close")}
           >
-            ×
+            X
           </button>
         </div>
         <div className="settings-content">
@@ -428,27 +484,27 @@ export const Header: React.FC<HeaderProps> = ({
               className={`settings-tab ${activeTab === "appearance" ? "active" : ""}`}
               onClick={() => setActiveTab("appearance")}
             >
-              Appearance
+              {t("settings.tabs.appearance")}
             </button>
             <button
               className={`settings-tab ${activeTab === "import" ? "active" : ""}`}
               onClick={() => setActiveTab("import")}
             >
-              Import/Export
+              {t("settings.tabs.import")}
             </button>
             {isElectron && (
               <button
                 className={`settings-tab ${activeTab === "detection" ? "active" : ""}`}
                 onClick={() => setActiveTab("detection")}
               >
-                Auto-Detection
+                {t("settings.tabs.detection")}
               </button>
             )}
             <button
               className={`settings-tab ${activeTab === "filters" ? "active" : ""}`}
               onClick={() => setActiveTab("filters")}
             >
-              Filters & Timers
+              {t("settings.tabs.filters")}
             </button>
           </div>
 
@@ -456,319 +512,324 @@ export const Header: React.FC<HeaderProps> = ({
             {/* Appearance Tab */}
             {activeTab === "appearance" && (
               <>
+                {/* Opacity and Font Size side by side */}
+                <div className="setting-row">
+                  {/* Only show opacity in Electron */}
+                  {isElectron && (
+                    <div className="setting-item setting-half">
+                      <div className="setting-label">{t("settings.opacity")}</div>
+                      <div className="setting-control">
+                        <input
+                          type="range"
+                          min="0.3"
+                          max="1"
+                          step="0.1"
+                          value={settings.opacity}
+                          onChange={(e) =>
+                            onSettingsChange({ opacity: parseFloat(e.target.value) })
+                          }
+                        />
+                        <span className="setting-value">
+                          {Math.round(settings.opacity * 100)}%
+                        </span>
+                      </div>
+                    </div>
+                  )}
 
-            {/* Opacity and Font Size side by side */}
-            <div className="setting-row">
-              {/* Only show opacity in Electron */}
-              {isElectron && (
-                <div className="setting-item setting-half">
-                  <div className="setting-label">OPACITY</div>
-                  <div className="setting-control">
-                    <input
-                      type="range"
-                      min="0.3"
-                      max="1"
-                      step="0.1"
-                      value={settings.opacity}
-                      onChange={(e) =>
-                        onSettingsChange({ opacity: parseFloat(e.target.value) })
-                      }
-                    />
-                    <span className="setting-value">
-                      {Math.round(settings.opacity * 100)}%
-                    </span>
+                  <div className={`setting-item ${isElectron ? "setting-half" : ""}`}>
+                    <div className="setting-label">{t("settings.fontSize")}</div>
+                    <div className="setting-control">
+                      <input
+                        type="range"
+                        min="0.8"
+                        max="1.2"
+                        step="0.1"
+                        value={settings.fontSize || 1.0}
+                        onChange={(e) =>
+                          onSettingsChange({ fontSize: parseFloat(e.target.value) })
+                        }
+                      />
+                      <span className="setting-value">
+                        {Math.round((settings.fontSize || 1.0) * 100)}%
+                      </span>
+                    </div>
                   </div>
                 </div>
-              )}
 
-              <div className={`setting-item ${isElectron ? 'setting-half' : ''}`}>
-                <div className="setting-label">FONT SIZE</div>
-                <div className="setting-control">
-                  <input
-                    type="range"
-                    min="0.8"
-                    max="1.2"
-                    step="0.1"
-                    value={settings.fontSize || 1.0}
-                    onChange={(e) =>
-                      onSettingsChange({ fontSize: parseFloat(e.target.value) })
-                    }
-                  />
-                  <span className="setting-value">
-                    {Math.round((settings.fontSize || 1.0) * 100)}%
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Hotkey - only in Electron */}
-            {isElectron && (
-              <div className="setting-item">
-                <div className="setting-label">SHOW/HIDE HOTKEY</div>
-                <div className="setting-control">
-                  <select
-                    value={(settings as any).hotkey || "F9"}
-                    onChange={(e) => handleHotkeyChange(e.target.value)}
-                    className="hotkey-selector"
-                  >
-                    {availableHotkeys.map((hotkey) => (
-                      <option key={hotkey} value={hotkey}>
-                        {hotkey}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-            )}
+                {/* Hotkey - only in Electron */}
+                {isElectron && (
+                  <div className="setting-item">
+                    <div className="setting-label">{t("settings.hotkey")}</div>
+                    <div className="setting-control">
+                      <select
+                        value={(settings as any).hotkey || "F9"}
+                        onChange={(e) => handleHotkeyChange(e.target.value)}
+                        className="hotkey-selector"
+                      >
+                        {availableHotkeys.map((hotkey) => (
+                          <option key={hotkey} value={hotkey}>
+                            {hotkey}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                )}
               </>
             )}
 
             {/* Import/Export Tab */}
             {activeTab === "import" && (
               <>
-            {/* Path of Building Import */}
-            <div className="setting-item">
-              <div className="setting-control">
-                <div className="pob-import-section">
-                  <textarea
-                    className="pob-input"
-                    placeholder="Paste your Path of Building code or pobb.in link here..."
-                    value={pobCode}
-                    onChange={(e) => setPobCode(e.target.value)}
-                    rows={3}
-                  />
-                  <div className="pob-buttons">
-                    <button
-                      className={`pob-import-btn ${importButtonState === "success" ? "success" : ""} ${importButtonState === "error" ? "error" : ""}`}
-                      onClick={handleImportPoBCode}
-                      disabled={pobImporting}
-                    >
-                      {pobImporting ? "Importing..." :
-                       importButtonState === "success" ? "✓ Success" :
-                       importButtonState === "error" ? "✗ Error" : "Import PoB"}
-                    </button>
-                  </div>
-
-                  {/* Success messages */}
-                  {importSummary && (
-                    <div className="pob-import-summary">
-                      ✓ Imported: {importSummary}
-                    </div>
-                  )}
-                  
-                  {/* Loadout Selection - shown when multiple loadouts are detected */}
-                  {availableLoadouts.length > 0 && (
-                    <div className="loadout-selection">
-                      <div className="loadout-label">Select Loadout:</div>
-                      <div className="loadout-controls">
-                        <select
-                          className="loadout-selector"
-                          value={selectedLoadout}
-                          onChange={(e) => setSelectedLoadout(parseInt(e.target.value))}
-                        >
-                          <option value={-1}>-- Choose a loadout --</option>
-                          {availableLoadouts.map((loadout, index) => (
-                            <option key={index} value={index}>
-                              {loadout.name}
-                            </option>
-                          ))}
-                        </select>
+                {/* Path of Building Import */}
+                <div className="setting-item">
+                  <div className="setting-control">
+                    <div className="pob-import-section">
+                      <textarea
+                        className="pob-input"
+                        placeholder={t("settings.pob.placeholder")}
+                        value={pobCode}
+                        onChange={(e) => setPobCode(e.target.value)}
+                        rows={3}
+                      />
+                      <div className="pob-buttons">
                         <button
-                          className="loadout-import-btn"
-                          onClick={handleImportSelectedLoadout}
-                          disabled={selectedLoadout < 0}
+                          className={`pob-import-btn ${importButtonState === "success" ? "success" : ""} ${importButtonState === "error" ? "error" : ""}`}
+                          onClick={handleImportPoBCode}
+                          disabled={pobImporting}
                         >
-                          Import Selected
+                          {pobImporting
+                            ? t("settings.pob.importing")
+                            : importButtonState === "success"
+                              ? t("settings.pob.success")
+                              : importButtonState === "error"
+                                ? t("settings.pob.error")
+                                : t("settings.pob.import")}
                         </button>
                       </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
 
-            {/* Master Reset */}
-            <div className="setting-item">
-              <div className="setting-label">RESET ALL DATA</div>
-              <div className="setting-control">
-                <div className="reset-control-row">
-                  <button
-                    className="reset-button compact"
-                    onClick={handleMasterReset}
-                  >
-                    Reset All
-                  </button>
-                  {showResetSuccess && (
-                    <span className="reset-success-message">
-                      ✓ All Data Reset
-                    </span>
-                  )}
+                      {/* Success messages */}
+                      {importSummary && (
+                        <div className="pob-import-summary">
+                          {t("settings.pob.imported", { summary: importSummary })}
+                        </div>
+                      )}
+
+                      {/* Loadout Selection - shown when multiple loadouts are detected */}
+                      {availableLoadouts.length > 0 && (
+                        <div className="loadout-selection">
+                          <div className="loadout-label">{t("settings.pob.loadout.select")}</div>
+                          <div className="loadout-controls">
+                            <select
+                              className="loadout-selector"
+                              value={selectedLoadout}
+                              onChange={(e) => setSelectedLoadout(parseInt(e.target.value))}
+                            >
+                              <option value={-1}>{t("settings.pob.loadout.choose")}</option>
+                              {availableLoadouts.map((loadout, index) => (
+                                <option key={index} value={index}>
+                                  {loadout.name}
+                                </option>
+                              ))}
+                            </select>
+                            <button
+                              className="loadout-import-btn"
+                              onClick={handleImportSelectedLoadout}
+                              disabled={selectedLoadout < 0}
+                            >
+                              {t("settings.pob.loadout.import")}
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 </div>
-                <div className="log-help-text">
-                  Clears quest progress, gems, notes, items, and passive tree data.
+
+                {/* Master Reset */}
+                <div className="setting-item">
+                  <div className="setting-label">{t("settings.reset.title")}</div>
+                  <div className="setting-control">
+                    <div className="reset-control-row">
+                      <button
+                        className="reset-button compact"
+                        onClick={handleMasterReset}
+                      >
+                        {t("settings.reset.button")}
+                      </button>
+                      {showResetSuccess && (
+                        <span className="reset-success-message">
+                          {t("settings.reset.success")}
+                        </span>
+                      )}
+                    </div>
+                    <div className="log-help-text">
+                      {t("settings.reset.help")}
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
               </>
             )}
 
             {/* Auto-Detection Tab */}
             {isElectron && activeTab === "detection" && (
               <>
-            {/* Log File Detection */}
-              <div className="setting-item">
-                <div className="setting-label">LOG FILE DETECTION</div>
-                <div className="setting-control">
-                  <div className="log-detection-section">
-                    <div className="log-status-row">
-                      <div className="log-status">
-                        {settings.logFileDetected ? (
-                          <span className="log-status-detected">
-                            ✓ Log file detected
-                          </span>
-                        ) : (
-                          <span className="log-status-not-detected">
-                            ❌ Log file not detected yet
-                          </span>
-                        )}
-                      </div>
-                      <div className="log-buttons">
-                        <button
-                          className="log-detect-btn"
-                          onClick={handleDetectLogFile}
-                          disabled={logFileDetecting}
-                          title="Auto-detect Path of Exile 2 log file location"
-                        >
-                          {logFileDetecting ? "Detecting..." : "Auto Detect"}
-                        </button>
-                        <button
-                          className="log-select-btn"
-                          onClick={handleSelectLogFile}
-                          disabled={logFileDetecting}
-                          title="Manually select Path of Exile 2 log file (Client.txt)"
-                        >
-                          Browse...
-                        </button>
-                      </div>
-                    </div>
-                    {settings.logFilePath && (
-                      <div className="log-path">
-                        <strong>Path:</strong> {settings.logFilePath}
-                      </div>
-                    )}
-                    {logFileMessage && (
-                      <div className={`log-message ${logFileMessage.includes('✓') ? 'success' : 'error'}`}>
-                        {logFileMessage}
-                      </div>
-                    )}
-                    <div className="log-help-text">
-                      Start Path of Exile 2 and click "Auto Detect" to find the Client.txt log file automatically, or use "Browse..." to select it manually.
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-            {/* Auto-Complete Options */}
-            {settings.logFilePath && (
-              <>
+                {/* Log File Detection */}
                 <div className="setting-item">
+                  <div className="setting-label">{t("settings.log.title")}</div>
                   <div className="setting-control">
-                    <label className="setting-checkbox">
-                      <input
-                        type="checkbox"
-                        checked={settings.autoCompleteQuests || false}
-                        onChange={(e) => onSettingsChange({ autoCompleteQuests: e.target.checked })}
-                      />
-                      <span style={{ fontSize: '0.85em' }}>AUTO-COMPLETE ON REWARDS</span>
-                    </label>
-                    <div className="log-help-text" style={{ marginTop: '4px', marginLeft: '22px', fontSize: '0.75em' }}>
-                      Marks quests as complete when you receive rewards (Spirit, Resistance, Life, Passive Points, etc.).
+                    <div className="log-detection-section">
+                      <div className="log-status-row">
+                        <div className="log-status">
+                          {settings.logFileDetected ? (
+                            <span className="log-status-detected">
+                              {t("settings.log.detected")}
+                            </span>
+                          ) : (
+                            <span className="log-status-not-detected">
+                              {t("settings.log.notDetected")}
+                            </span>
+                          )}
+                        </div>
+                        <div className="log-buttons">
+                          <button
+                            className="log-detect-btn"
+                            onClick={handleDetectLogFile}
+                            disabled={logFileDetecting}
+                            title={t("settings.log.autoDetectTitle")}
+                          >
+                            {logFileDetecting
+                              ? t("settings.log.detecting")
+                              : t("settings.log.autoDetect")}
+                          </button>
+                          <button
+                            className="log-select-btn"
+                            onClick={handleSelectLogFile}
+                            disabled={logFileDetecting}
+                            title={t("settings.log.browseTitle")}
+                          >
+                            {t("settings.log.browse")}
+                          </button>
+                        </div>
+                      </div>
+                      {settings.logFilePath && (
+                        <div className="log-path">
+                          <strong>{t("settings.log.path")}</strong> {settings.logFilePath}
+                        </div>
+                      )}
+                      {logFileMessage && (
+                        <div className={`log-message ${logMessageType === "success" ? "success" : "error"}`}>
+                          {logFileMessage}
+                        </div>
+                      )}
+                      <div className="log-help-text">
+                        {t("settings.log.help")}
+                      </div>
                     </div>
                   </div>
                 </div>
 
-                <div className="setting-item">
-                  <div className="setting-control">
-                    <label className="setting-checkbox">
-                      <input
-                        type="checkbox"
-                        checked={settings.autoCompleteOnZoneEntry || false}
-                        onChange={(e) => onSettingsChange({ autoCompleteOnZoneEntry: e.target.checked })}
-                      />
-                      <span style={{ fontSize: '0.85em' }}>AUTO-COMPLETE ON ZONE ENTRY</span>
-                    </label>
-                    <div className="log-help-text" style={{ marginTop: '4px', marginLeft: '22px', fontSize: '0.75em' }}>
-                      ⚠️ Marks ALL previous uncompleted quests as complete when entering a new zone. Use with caution.
+                {/* Auto-Complete Options */}
+                {settings.logFilePath && (
+                  <>
+                    <div className="setting-item">
+                      <div className="setting-control">
+                        <label className="setting-checkbox">
+                          <input
+                            type="checkbox"
+                            checked={settings.autoCompleteQuests || false}
+                            onChange={(e) => onSettingsChange({ autoCompleteQuests: e.target.checked })}
+                          />
+                          <span style={{ fontSize: "0.85em" }}>{t("settings.autoComplete.rewards")}</span>
+                        </label>
+                        <div className="log-help-text" style={{ marginTop: "4px", marginLeft: "22px", fontSize: "0.75em" }}>
+                          {t("settings.autoComplete.rewardsHelp")}
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
 
-                {/* Shared best-effort disclaimer */}
-                <div className="beta-warning" style={{ marginTop: '8px' }}>
-                  <span className="warning-icon">ℹ️</span>
-                  <span className="warning-text">
-                    These are "best-effort" settings and may not always be accurate as they rely on logic parsing the game's log file.
-                  </span>
-                </div>
-              </>
-            )}
+                    <div className="setting-item">
+                      <div className="setting-control">
+                        <label className="setting-checkbox">
+                          <input
+                            type="checkbox"
+                            checked={settings.autoCompleteOnZoneEntry || false}
+                            onChange={(e) => onSettingsChange({ autoCompleteOnZoneEntry: e.target.checked })}
+                          />
+                          <span style={{ fontSize: "0.85em" }}>{t("settings.autoComplete.zone")}</span>
+                        </label>
+                        <div className="log-help-text" style={{ marginTop: "4px", marginLeft: "22px", fontSize: "0.75em" }}>
+                          {t("settings.autoComplete.zoneHelp")}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Shared best-effort disclaimer */}
+                    <div className="beta-warning" style={{ marginTop: "8px" }}>
+                      <span className="warning-icon">!</span>
+                      <span className="warning-text">
+                        {t("settings.autoComplete.disclaimer")}
+                      </span>
+                    </div>
+                  </>
+                )}
               </>
             )}
 
             {/* Filters & Timers Tab */}
             {activeTab === "filters" && (
               <>
-            {/* Quest Filters */}
-            <div className="setting-item">
-              <div className="setting-label">QUEST FILTERS</div>
-              <div className="setting-control" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '0' }}>
-                {onFilterToggle && (
-                  <FilterChips
-                    activeFilters={activeFilters}
-                    onFilterToggle={onFilterToggle}
-                    questCounts={questCounts}
-                  />
-                )}
-                <div className="log-help-text" style={{ marginTop: '12px' }}>
-                  {activeFilters.length > 0 
-                    ? `Showing only: ${activeFilters.join(', ')}` 
-                    : 'Click tags to show only those quest types. No selection shows all quests.'}
+                {/* Quest Filters */}
+                <div className="setting-item">
+                  <div className="setting-label">{t("settings.filters.title")}</div>
+                  <div className="setting-control" style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "0" }}>
+                    {onFilterToggle && (
+                      <FilterChips
+                        activeFilters={activeFilters}
+                        onFilterToggle={onFilterToggle}
+                        questCounts={questCounts}
+                      />
+                    )}
+                    <div className="log-help-text" style={{ marginTop: "12px" }}>
+                      {activeFilters.length > 0
+                        ? t("settings.filters.helpActive", { tags: activeFilters.map(getTagLabel).join(listSeparator) })
+                        : t("settings.filters.helpDefault")}
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
 
-            {/* Timer Settings */}
-            <div className="setting-item">
-              <div className="setting-label">TIMER SETTINGS</div>
-              <div className="setting-control" style={{ display: 'flex', flexDirection: 'column', gap: '12px', alignItems: 'flex-start' }}>
-                <div style={{ width: '100%' }}>
-                  <label className="setting-checkbox" style={{ justifyContent: 'flex-start' }}>
-                    <input
-                      type="checkbox"
-                      checked={settings.autoActTimers !== false}
-                      onChange={(e) => onSettingsChange({ autoActTimers: e.target.checked })}
-                    />
-                    <span>Auto-start act timers</span>
-                  </label>
-                  <div className="log-help-text" style={{ marginTop: '4px' }}>
-                    Automatically start/pause act timers when you enter or leave an act zone.
+                {/* Timer Settings */}
+                <div className="setting-item">
+                  <div className="setting-label">{t("settings.timers.title")}</div>
+                  <div className="setting-control" style={{ display: "flex", flexDirection: "column", gap: "12px", alignItems: "flex-start" }}>
+                    <div style={{ width: "100%" }}>
+                      <label className="setting-checkbox" style={{ justifyContent: "flex-start" }}>
+                        <input
+                          type="checkbox"
+                          checked={settings.autoActTimers !== false}
+                          onChange={(e) => onSettingsChange({ autoActTimers: e.target.checked })}
+                        />
+                        <span>{t("settings.timers.actAuto")}</span>
+                      </label>
+                      <div className="log-help-text" style={{ marginTop: "4px" }}>
+                        {t("settings.timers.actAutoHelp")}
+                      </div>
+                    </div>
+                    <div style={{ width: "100%" }}>
+                      <label className="setting-checkbox" style={{ justifyContent: "flex-start" }}>
+                        <input
+                          type="checkbox"
+                          checked={settings.autoGlobalTimer !== false}
+                          onChange={(e) => onSettingsChange({ autoGlobalTimer: e.target.checked })}
+                        />
+                        <span>{t("settings.timers.globalAuto")}</span>
+                      </label>
+                      <div className="log-help-text" style={{ marginTop: "4px" }}>
+                        {t("settings.timers.globalAutoHelp")}
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <div style={{ width: '100%' }}>
-                  <label className="setting-checkbox" style={{ justifyContent: 'flex-start' }}>
-                    <input
-                      type="checkbox"
-                      checked={settings.autoGlobalTimer !== false}
-                      onChange={(e) => onSettingsChange({ autoGlobalTimer: e.target.checked })}
-                    />
-                    <span>Auto-start total timer</span>
-                  </label>
-                  <div className="log-help-text" style={{ marginTop: '4px' }}>
-                    Automatically start the total speedrun timer when entering Act 1.
-                  </div>
-                </div>
-              </div>
-            </div>
               </>
             )}
           </div>
@@ -776,10 +837,10 @@ export const Header: React.FC<HeaderProps> = ({
           <div className="support-section">
             <button className="support-button" onClick={handleSupportClick}>
               <SiKofi style={{ marginRight: '8px' }} />
-              Support This Project
+              {t("support.button")}
             </button>
             <p className="support-text">
-              Help keep this project alive and updated!
+              {t("support.text")}
             </p>
           </div>
         </div>
@@ -787,3 +848,4 @@ export const Header: React.FC<HeaderProps> = ({
     </>
   );
 };
+

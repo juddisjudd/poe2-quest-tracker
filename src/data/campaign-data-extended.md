@@ -1,390 +1,310 @@
-# Act 1
-**[The Riverbank]**
-- Follow the Tutorial and kill the **Bloated Miller**.
-
-**[The Clearfell Encampment (Town)]**
-- Claim your Quest Reward Skill Gem from **Renly**.
-*(Tip) Check Renly's Shop for any items you can afford.
-
-**[Clearfell]**
-
-- **(Optional)** Loot the Abandoned Stash in the Mysterious Campsite: Uncut Skill Gem.
-- **(Permanent Buff: +10% to Cold Resistance)** Defeat **Beira of the Rotten Pack** in the Middle North of the zone.
-- Activate the Waypoint and enter the ***Mud Burrow***.
-
-
-**[The Mud Burrow]**
-
-- **(Optional)** Kill **The Devourer**: Level 2 Uncut Skill Gem Drop.
-- Portal to Town and Speak to **Renly** for Uncut Support Gem Quest Reward.
-
-**[The Grelwood]**
-- Return to **Clearfell** via the Waypoint and head North East to enter **The Grelwood**.
-- **(Optional)** Areagne's Hut (Witch Hut): Flask Upgrades from Cauldron + Kill **Areagne** for an Uncut Support Gem.
-- **(Optional)** Kill **Brambleghast**: Level 1 Uncut Skill Gem drop.
-- Activate Tree of Souls Waypoint.
-- Enter the **[Grim Tangle]** Entrance.
-  - Activate the Waypoint inside and return to **[The Grelwood]**.
-- Enter the **[Red Vale]**.
-***(Tip) The entrance is usually near Brambleghast.***
-
-**[The Red Vale]** and **[The Grelwood]**
-- Activate three Rust Altars and kill **The Rust King**.
-  - ***(Tip) Each Altar is located in a broad loop around the zone.***
-- Portal to Town.
-- Return all three **Runed Quest Items** to **Renly**.
-- Go to **[The Grelwood]** via the Waypoint.
-  - Summon Una (if you haven't already) and **Runed Spike** the Tree of Souls.
-  - Waypoint to Town speak to **Una** again.
-- Return to **[The Grelwood]** and enter the **[Grim Tangle]**.
-
-**[The Grim Tangle]**
-- **(Optional)** Kill **The Rotten Druid**: Uncut Support Gem.
-- Enter **The Cemetery**.
-
-**[The Cemetery of the Eternals]**
-- **(Optional)** Loot the Ancient Ruins Grave Site: **Random Ring**.
-- Locate and complete both (in any order):
-  - **Mausoleum of the Praetor**.
-  - **Tomb of the Consort**.
-
-**[Mausoleum of the Praetor]**
-- **(Optional)** Loot the Forgotten Riches: Gold and Random Loot.
-- Defeat **Draven, Eternal Praetor**.
-- Return to **[The Cemetery]**.
-
-**[Tomb of the Consort]**
-- **(Optional)** **Activate the Embattled Trove** ambush and defeat the **Rare Eternal Knight**: Uncut Support Gem.
-- Kill **Asinia, Praetor Consort**.
-- Return to **[The Cemetery]**.
-
-**[The Cemetery of the Eternals]**
-- Return to **Lachlann** and open the Memorial Gate.
-- Defeat **Lachlann of Endless Lament**.
-- Enter the **Hunting Grounds**, Waypoint to Town and speak to **Una**.
-
-**[The Hunting Grounds]**
-- **(Permanent Buff)** Kill **The Crowbell**: +2 Passive Skill Points.
-- **(Optional)** Kill the **Dryads** at the Dryadic Ritual: Uncut Support Gem.
-- **(Optional)** Complete the Ritual Site: Level 4 Uncut Skill Gem.
-- Enter **Freythorn**, and activate the Waypoint.
-- Enter **Ogham Village**, and activate the Waypoint.
-
-**[Freythorn (Permanent Buff Side Quest)]**
-- Locate and complete three Rituals.
-- Activate the final Ritual and kill **[The King in the Mists]**.
-***(Tip) You can purchase Items from the Ritual Altar afterwards.***
-- Activate **Gembloom Skull**: +30 Spirit and Uncut Spirit Gem.
-- Portal to Town and speak to **Finn** for a Quest Reward choice of Ruby Charm, Sapphire Charm or Topaz Charms.
-***(Tip) A Sapphire Charm is recommended for the upcoming final Act 1 boss!***
-
-**[Ogham Farmlands]**
-- **(Permanent Buff)** Find **Una's Lute** in a ruined hut (behind broken carts).
-  - Return Lute to **Una** in town for +2 Passive Skill Points.
-- **(Optional)**: Kill the **Rare Feral Mutt** in the Crop Circle: Level 4 Uncut Skill Gem.
-***(Tip) The Crop Circle where the Rare Feral Mutt ambushes you.***
-- Enter Ogham Village.
-
-**[Ogham Village]**
-- Locate **Renley's** Workshop Smithing Tools (Anvil Sign, Large Building).
-  - Return them to **Renley** during your next Town visit to ***Unlock the Salvage Bench**.
-  - ***NOTE: This is only needed on the first character per league.***
-- Kill **The Executioner**.
-- Free **Leitis**.
-- Proceed to **[Manor Ramparts]**.
-
-**[The Manor Ramparts]**
-- Waypoint to town to talk to Leitis: Level 5 Uncut Skill Gem.
-  - ***(Tip) This is a good time to turn in Una's Lute, Renley's Tools and do some gear management.***
-- Waypoint back to The Manor Ramparts.
-- **(Optional)** Cut down the Hanged Man at the Gallows: Uncut Support Gem.
-- Enter **[Ogham Manor]**.
-
-**[Ogham Manor]**
-- **(Permanent Buff)** Defeat **Candlemass**: +20 Maximum Life.
-- Defeat **Count Ogham**.
-- Portal to Town and speak to **The Hooded One** to proceed to **Act 2**.
-
-# Act 2
-**[Vastiri Outskirts]**
-- Kill **Rathbreaker**.
-- Portal to Town (or respawn at checkpoint).
-- Enter the Caravan.
-
-**[Ardura Caravan (Town)]**
-- Speak to **Risu** and **Asala**.
-  - This is a good time to shop and gear up!
-- Use the Desert Map to take the caravan to **[Mawdun Quarry]**.
-
-**[Mawdun Quarry]**
-- Proceed through the zone and take the exit to **[Mawdun Mine]**.
-
-**[Mawdun Mine (and Town)]**
-- Kill **Rudja, the Dread Engineer**.
-- Free **Risu** from the cage and speak to them.
-- Portal to Town and speak to **Risu** and **Asala**.
-- Use the Desert Map to travel to the **[Halani Gates]**.
-- Enter the **[Halani Gates]** zone and speak to **Asala**.
-- Travel to the **[Traitor's Passage]** via the Desert Map.
-
-**[Traitor's Passage]**
-- **(Ascendancy)** Locate and open the Ancient Seal.
-  - Defeat **Balbala, the Traitor**: **Balbala's Barya** for **Trial of Sekhemas**.
-- Exit to the **[Halani Gates]**.
-
-**[The Halani Gates]**
-- Summon **Asala** and proceed through the zone.
-- **(Optional)** Kill **L'im the Impaler**: Level 6 Uncut Skill Gem
-- Defeat **Jamanra**.
-- Run to the sandstorm until prompted to leave, then return to town.
-- Speak to **Zarka** for a Level 7 Uncut Skill Gem.
-
-**[Trial of the Sekhemas (Ascendancy Unlock)]**
-- Travel to the **[Trial of the Sekhemas]** via the Desert Map.
-- Speak to **Balbala**.
-- Place **Balbala's Barya** in the altar.
-- Place the Urn Relic in the Altar.
-  - Use and Orb of Augmentation to enhance the Relic if you have one.
-- Enter the **[Trial of the Sekhemas]**.
-- Complete the first floor and defeat **Rattlecage, the Earthbreaker**.
-- Enter the Treasure Room.
-  - Touch the Altar of Ascendancy.
-  - Loot any chests, if able.
-  - Purchase Relics from **Balbala**, if able.
-- Leave the Trial and return to Town.
-
-**[Keth]**
-- Travel to **[Keth]** via the Desert Map.
-- Kill snake monsters until you find the **Kabala Clan Relic** (Quest Item for later).
-- **(Permanent Buff)** Kill **Kabala, Constrictor Queen**: +2 Passives.
-  - Located in the middle of the zone, hiding underground in a pit with a checkpoint.
-- **(Optional)** Enter and loot the Abandoned Shrine: Chest with a guaranteed **Magic Amulet**.
-- Exit to the **[Lost City]**.
-
-**[The Lost City]**
-- **(Optional)** The Golden Chest: Uncut Spirit Gem.
-- **(Optional)** The Gilded Beetle: Random Ruby, Sapphire, or Emerald Jewel.
-- Locate and use the exit to **Buried Shrines**.
-
-**[Buried Shrines]**
-- **(Optional)** The Elemental Offering: Choose an Offering to obtain a Resistance Ring of the matching element.
-  - ***(Tip) Choose Fire if Fire Resistance is low for the upcoming boss fight.***
-- **(Optional)** Open the Guarded Sarcophagus: Uncut Support Gem.
-- Defeat **Azarian the Forsaken Son**.
-- Speak to the **Water Goddess** and use the Everburning Cinders to ignite her and claim the **The Essence of Water**.
-- Portal to Town and speak to **Zarka** for an Uncut Support Gem.
-- Travel to the **Mastodon Badlands** via the Desert Map.
-
-**[Mastodon Badlands]**
-- **(Optional)** Loot the Shrine of Bones: Uncut Support Gem.
-- The **Sun Clan Relic** can sometimes drop here (depending on monster spawns) but it's more reliably found in **[The Bone Pits]**.
-- Enter The Bone Pits.
-
-**[The Bone Pits]**
-- Kill Monsters until you obtain the **Sun Clan Relic**.
-- Locate and defeat **Iktab and Ekbab**.
-- Portal to Town.
-- Travel to **The Valley of Titans** via the Desert Map.
-
-**[The Valley of the Titans]**
-- Find and click the three ancient seals located by Titans to open the **[Titan Grotto]**.
-- **(Permanent Buff)** Locate the Relic Altar near the Waypoint and place the **Sun and Kabala Clan Relics** inside.
-  - Choose a buff *(can be changed later)*.
-- Enter the **[Titan Grotto]**.
-
-**[The Titan Grotto]** and **[Halani Gates]**
-- Defeat **Zalmarath, the Colossus**.
-- Portal to Town and speak to **Zarka**: Uncut Support Gem.
-- Travel to the **[Halani Gates]**.
-- Use the **The Horn of the Vastiri** at the front of the Caravan.
-- Speak to **Asala**.
-- Travel to **[Deshar]** via Desert Map.
-
-**[Deshar]**
-- **(Permanent Buff)** Locate the Fallen Dekhara and take the Final Letter
-  - ***(Tip) Check the base of each round building for the Dekhara.**
-- Exit to the **Path of Mourning**.
-
-**[The Path of Mourning]**
-- Waypoint to Town.
-  - Deliver **Final Letter** to Shambrin: +2 Passive Points
-  - Return to the **Path of Mourning**.
-- **(Optional)** Shifting Vases event: Uncut Support Gem.
-- Exit to **[The Spires of Deshar]**.
-
-**[The Spires of Deshar]*
-- **(Permanent Buff)** Activate the Sisters of Garukhan shrine: +10% Lightning Resistance.
-- Defeat **Tor Gul, the Defiler**.
-- Portal to Town.
-  - Speak to **Asala**.
-  - ***(Tip) Vendors can sell level 30 key items around here: 20% Movespeed Boots, Colossal Flasks, and Solar (Spirit) Amulets.***
-    - Purchase or craft Colossal Flasks with Flask Charge gain Suffixes for an easier end of Act 2.
-- Travel to **[The Dreadnought]** via Desert Map.
-
-**[The Dreadnought]**
-- Fight your way to the **[Dreadnought Vanguard]** exit.
-***(Tip) The final checkpoint in this zone has multiple blue monsters you can farm by killing them and using reset to the checkpoint. Good for a quick level or two (which lets you vendor shop more too).***
-
-**[The Dreadnought Vanguard]**
-- Locate and defeat the end of Act 2 boss **Jamanra, the Abomination**.
-- Speak to **Asala**.
-- Return to Town.
-- Speak to **The Hooded One**.
-- Speak to **Asala** and Travel to the **[Sandswept Marsh]** in Act 3.
-
-# Act 3
-**[Sandswept Marsh]**
-- **(Optional)** Kill **Rootdredge**: Level 9 Uncut Skill Gem
-- **(Optional)** Loot Corpse at Hanging Tree: Random Magic Ring.
-- **(Optional)** Kill **Rare Oroks** and Loot Basket in Orok Campsite: Lesser Jeweller's Orb.
-- Exit to **[Ziggurat Encampment (Town)]**.
-
-**[Ziggurat Encampment]**
-- Speak to **Alva** and **Oswald**.
-  - This is a good opportunity to hunt for Flask upgrades and 20% Movespeed Boots.
-- Exit to the **[Jungle Ruins]**, located near the top of town.
-
-**[Jungle Ruins]**
-- Defeat **Silverfist**: +2 Passives
-  - Located within stone ruins.
-- **(Optional)** Summon the NPC to the Jungle Grave: Rare Belt.
-  - Likely only worth doing if you accidentally find it or if your belt is very bad.
-- **(Optional)** Loot the white chest in **Gwendolyn Albright's** Troubled Campsite.
-  - Gwendolyn sells high quality armour, check for upgrades.
-- Activate the Waypoint and Enter the **Venom Crypts**.
-
-**[The Venom Crypts (Permanent Buff)]**
-- Locate the Den of the Serpent Priestess and Loot the **Corpse-snake Venom**.
-- Portal to Town.
-- Give the **Corpse-snake Venom** to **Servi**.
-  - Choose a permanent buff reward. **WARNING: This cannot be changed later!**
-
-**[Infested Barrens]**
-- Waypoint to **[Jungle Ruins]**.
-- Take the exit to **[Infested Barrens]**.
-  - Located on one of the outer zone edges (typically opposite the exit to town).
-- Activate the Waypoint and summon **Alva**.
-  - Look for a stone platform near the water with the waypoint and a checkpoint nearby.
-- **(Optional)** Loot the white chest in **Sebastian Carroway's** Troubled Campsite: Rare Boots.
-  - This vendor also sells higher-quality weapons, check them for upgrades on attack builds.
-- Hug the outside wall to locate the exit to the **Azak Bog**.
-
-**[The Azak Bog (Permanent Buff)]**
-- Summon and speak to **Servi**, if needed.
-- **(Optional)** Complete the Flameskin Ritual for a temporary boost to Fire Resistance and Rarity.
-  - Only needed to make the boss easier if your Fire Resistance is currently very low (below 30 to 40%).
-- **(Permanent Buff)** Defeat **Ignagduk, the Bog Witch**: +30 Spirit and an Uncut Spirit Gem.
-- Portal to town.
-  - Speak to **Servi** to obtain the quest reward for your choice of Charm. Thawing is recommended if you don't have one already, otherwise Antidote.
-
-**[Chimeral Wetlands]**
-- Take the Waypoint to **[Infested Barrens]**, hug the wall until you locate the exit to the **[Chimeral Wetlands]**.
-- Enter The **[Temple of Chaos]** and activate the waypoint, then return to the **[Chimeral Wetlands]**.
-- Defeat **Xyclucian, the Chimera**: Obtain Chimeral Inscribed Ultimatum for Ascendancy.
-- Exit to **[Jiquani's Machinarium]**.
-
-**[Jiquani's Machinarium]**
-- Locate a Small Soul Core located in one of the two entrance offshoot rooms.
-- Use Soul Core to open the door.
-- Locate an additional Small Soul Core.
-- **(Permanent Buff)** Open the door and kill **Blackjaw, the Remnant**: +10% Fire Resistance.
-- **(Optional)** use a third Soul Core to unlock and loot the Treasure Vault.
-- Obtain another Small Soul Core.
-- Use Soul Core to open the exit to **[Jiquani's Sanctum]**.
-
-**[Jiquani's Sanctum]**
-- Head to the left or right generator and look for a Medium Soul Core.
-- Place Medium Soul Core inside generator.
-- Cut through the middle of the zone to the second generator, looking for another Medium Soul Core on the way (or around the second Generator).
-Using reset at checkpoint repositions the Soul Cores if you have trouble finding them!
-- Place Medium Soul Core in second generator.
-- **(Optional)** use the Corruption Altar to corrupt an item (gamble).
-- Return to **Alva** (can portal to town and return via waypoint).
-- Defeat **Zicoatl, Warden of the Core**.
-- Obtain **Large Soul Core**.
-- Portal to Town and Waypoint to **[Infested Barrens]**.
-- Place **Large Soul Core** in the device to reveal the exit to **[Matlan Waterways]**.
-
-**[The Matlan Waterways]**
-- Activate Levers to drain water as you proceed through the zone.
-- Activate the large Lever at the end to reveal the **[Drowned City]** on the World Map.
-- Portal to Town.
-
-**[The Trial of Chaos (Ascendancy Passives 3 and 4)]**
-- You can technically do this anytime after getting the **Chimeral Inscribed Ultimatum**, but this is likely a good time for most people to do it.
-- Waypoint to the **[Temple of Chaos]**.
-- Use the Inscribed Ultimatum to open the **Trial of Chaos**.
-- Defeat several encounters and the first randomized boss.
-- Activate the Altar of Ascendancy.
-- Portal to town.
-
-**[The Drowned City]**
-- Descend the stairs in town to enter the **[Drowned City]**.
-- Follow a wall and proceed through the zone until you get to either exit.
-  - Enter **The Molten Vault** and activate the Waypoint.
-    - Complete the Molten Vault now if your DPS is feeling high as the boss is a DPS check. Otherwise, return via the waypoint after you beat Act 3. This can be a difficult fight to beat, consider over-leveling if you struggle!
-  - Enter **The Apex of Filth** and activate the Waypoint.
-
-**[The Molten Vault (Reforging Bench Unlock)]**
-***NOTE: Like the Salvage Bench Quest, this only needs to be completed once per "League" or Game Mode.***
-- Activate the lever to release liquid hot molten metal.
-- Use the elevator to enter the boss arena.
-- Defeat **Mektul, the Forgemaster**: Level 10 Uncut Skill Gem + Reforging Bench.
-  - This boss is a DPS check with a time limit, if you have low DPS you can return after you beat Act 3.
-- Take the **The Hammer of Kamasa** to town via Portal and give it to **Oswald**.
-
-**[The Apex of Filth]**
-- Waypoint to **[Apex of Filth]**.
-- **(Optional)** Collect the Red Mushroom, Green Mushroom and Blue Mushrooms and activate the Cauldron Keeper's Cauldron for: Quality Flasks.
-  - The Cauldron Keeper is an NPC vendor that sells Jewelry and spellcaster gear. Check for upgrades.
-- Defeat the **Queen of Filth**.
-- Obtain the **Temple Door Idol** and Portal to Town.
-- Descend the stairs and speak to Alva to open the door to the **[Temple of Kopec]**.
-
-**[The Temple of Kopec]**
-- Check the corners of triangular temple for the first exit.
-- Check corners for the second zone exit.
-  - You can Leap Slam over the large gap for a shortcut.
-- Defeat **Ketzuil, High Priest of the Sun**.
-- Speak to **Alva**.
-  - You can portal to town after Alva says "Wait!" to skip the rest of the Lore sequence.
-- Follow **Alva** through the time portal, and take the steps to **Utzaal**.
-
-**[Utzaal (Past)]**
-- Follow the main road through the zone until you get to a cutscene.
-- Defeat **Viper Napuatzi**.
-- Exit to **[Aggorat]**.
-
-**[Aggorat (Past)]**
-- **(Permanent Buff)** Kill Vaal enemies until the Sacrificial Heart drops (this can also drop in Utzaal).
-- Cross through the worship altar gateway.
-- **(Permanent Buff)** Use the Sacrificial Altar and Dagger to sacrifice the Heart: +2 Passive Points.
-- Exit to **[The Black Chambers]**.
-
-**[The Black Chambers (Past)]**
-- Defeat **Doryani, Royal Thaumaturge**.
-- Portal to Town.
-
-# Act 4 and Onwards
-Act 4 and the three new Interlude Acts are brand new content in update 0.3.0. These need to be explored and documented in detail in order to provide the same level of guidance as Act 1 to 3. This guide will be updated as soon as possible!
-
-## Act 4: The Sandbox Act
-Act 4 gives you a lot of freedom as to what order you complete it's content — most of the islands can be completed in any order. The exceptions are Ngakanu and Arastas, which should be left until last. The level of each island also increases by a small amount as you complete content, keeping it relevant to you.
-
-**[Whakapanu Island]** - How to Access Trading
-
-If you would like to access the Currency Exchange and Asynchronous Trading as soon as possible, complete Whakapanu Island first.
-
-Complete Whakapanu Island and the Singing Caverns by defeating the boss within.
-Speak to Ange in town to get a quest to clear a hideout.
-After clearing the hideout you can speak to Ange to select a hideout and from there you can access both forms of trading.
-
-**[Abandoned Prison]** - Permanent Flask Buffs
-
-Within the Abandoned Prison zone there is the Goddess of Justice statue where you can choose a permanent buff for either Increased Life Flask or Mana Flask recovery rate. This buff can be changed by returning to this statue.
-
-**[Kedge Bay]** - Instilling Your Amulet
-
-Completing the quest in Kedge Bay and Journey's End gives you a handful of Delirium Distilled Emotions.
-Don't forget to return to the trapped NPC in order to obtain them after completing the boss in Journey's End!
-The Show Notables button shows what Notables can be instilled with the combined Emotions in your inventory.
+# 第1章：奥格姆森林
+- 污流河畔: 击败 **浮肿的伐木工** (提示: 新手boss - 击杀后使用武器组天赋点)
+- 污流河畔: 进入 **克里费尔营地**
+- 克里费尔营地: 与 **蓝礼** 对话 (奖励: 技能宝石)
+- 克里费尔营地: 进入 **克里费尔**
+- 克里费尔: 在 **泥沼穴道** 完成 **吞噬者竞技场** 获得技能 + 辅助宝石 (奖励: 技能宝石 + 辅助宝石) (提示: 完成竞技场后, 传送出门, 与蓝礼对话, 传送点回克里费尔)
+- 克里费尔: 击败 **腐败兽群的贝拉** · **歹毒鬼婆** (奖励: +10% 冰霜 抗性) (提示: 获得冰霜 抗性加成)
+- 克里费尔: 进入 **葛瑞尔林**
+- 葛瑞尔林: 激活 **传送点**
+- 葛瑞尔林: 在 **传送点** 附近召唤 **乌娜** (提示: 重要NPC用于任务推进)
+- 葛瑞尔林: 前往 **幽暗密林** 激活 **传送点** (提示: 菱形区域 - 找到传送点定位方向)
+- 幽暗密林: 激活 **传送点**
+- 幽暗密林: 完成 **荆棘竞技场** 或拜访女巫小屋获得辅助 + 药水 (提示: 荆棘竞技场通常在红谷入口附近)
+- 幽暗密林: 进入 **红谷** (提示: 通常位于荆棘竞技场附近)
+- 红谷: 激活 **3座锈蚀方尖碑** (提示: 从方尖碑收集3个任务符文)
+- 红谷: 击败 **锈污之王** (奖励: 符文腰带, 符文护胫, 符文头盔)
+- 红谷: 传送回 **克里费尔营地**
+- 克里费尔营地: 与 **蓝礼** 对话 (提示: 提交符文碎片任务)
+- 克里费尔营地: 传送至 **葛瑞尔林**
+- 葛瑞尔林: 激活 **3个符文封印**
+- 葛瑞尔林: 传送回 **克里费尔营地**
+- 克里费尔营地: 与 **乌娜** 对话
+- 克里费尔营地: 传送至 **幽暗密林**
+- 幽暗密林: 完成 **腐烂德鲁伊竞技场** 获得辅助宝石 (奖励: 辅助宝石)
+- 幽暗密林: 进入 **永恒园林**
+- 永恒园林: 与 **迷失的拉赫兰** 对话
+- 永恒园林: 在 **远古废墟** (区域边缘) 找到 **戒指** (提示: 远古废墟位于区域边缘)
+- 永恒园林: 进入 **伴侣寝宫** (提示: 位于传送点的对面)
+- 伴侣寝宫: 在 **闹鬼宝藏** 找到 **骑士辅助宝石** (提示: 骑士辅助在闹鬼宝藏检查点)
+- 伴侣寝宫: 击败 **阿辛妮亞，执政官之妻** (奖励: 阿辛妮亞的纪念钥匙碎片)
+- 伴侣寝宫: 返回 **永恒园林**
+- 永恒园林: 在 **远古废墟** (区域边缘) 找到 **戒指** (提示: 远古废墟位于区域边缘)
+- 永恒园林: 进入 **执政官的地宫**
+- 执政官的地宫: 击败 **德莱文，永恒执政官** (奖励: 德莱文的纪念钥匙碎片)
+- 执政官的地宫: 返回 **永恒园林**
+- 永恒园林: 与 **迷失的拉赫兰** 对话
+- 永恒园林: 击败 **哀痛欲绝的拉赫兰** (奖励: 拉赫兰伯爵之戒) (提示: 当大门打开后, 通过ESC菜单重生)
+- 永恒园林: 进入 **猎场**
+- 猎场: 与 **迷失的拉赫兰** 对话 (对话选项)
+- 猎场: 击败 **悬铃巨鸦** (奖励: +2 武器组天赋点) (提示: 沿着区域边缘找到钟鸦)
+- 猎场: 完成 **树灵仪式** 或 **仪式祭坛** 获得辅助/技能宝石 (奖励: 辅助/技能宝石) (提示: 树灵仪式或仪式祭坛奖励)
+- 猎场: 沿着边缘前往 **茂棘深林**
+- 茂棘深林: 完成 **3个小** 和 **1个大型仪式** (提示: 如果提前找到大型仪式, 检查指向缺失仪式的漩涡)
+- 茂棘深林: 击败 **迷雾之王** (奖励: +30 灵魂力)
+- 茂棘深林: 与 **芬恩** 对话
+- 茂棘深林: 传送回 **克里费尔营地**
+- 克里费尔营地: 与 **芬恩** 对话 (奖励: 元素抗性护身符) (提示: 选择红宝石, 蓝宝石或黄玉护身符 (推荐蓝宝石))
+- 克里费尔营地: 传送至 **欧甘农地**
+- 欧甘农地: 激活 **传送点**
+- 欧甘农地: 找到小屋并收集 **乌娜鲁特琴** (提示: 道路可能被阻挡 - 需要绕行。小屋就在路边直走。)
+- 欧甘农地: 找到并清理 **作物圈** 获得技能宝石 (奖励: 技能宝石) (提示: 地图上有作物圈检查点)
+- 欧甘农地: 沿着道路前往 **欧甘村庄**
+- 欧甘村庄: 激活 **传送点**
+- 欧甘村庄: 传送回 **克里费尔营地**
+- 克里费尔营地: 与 **乌娜** 对话 - 提交 **蒙面者** 任务
+- 克里费尔营地: 与 **乌娜** 对话 - 获得 **专业之书** (奖励: 进阶职业专业之书)
+- 克里费尔营地: 传送至 **欧甘村庄**
+- 欧甘村庄: 找到工坊并收集 **锻造工具** (奖励: 回收台解锁 (仅赛季初期)) (提示: 工坊还有工匠NPC和可选符文)
+- 欧甘村庄: 击败 **惩罚者** (提示: 位于区域尽头)
+- 欧甘村庄: 使用 **杠杆** 并与 **莱蒂斯** 对话
+- 欧甘村庄: 进入 **庄园城壁**
+- 庄园城壁: 激活 **传送点**
+- 庄园城壁: 沿着外围找到 **绞刑吏辅助宝石** (奖励: 辅助宝石) (提示: 辅助宝石沿着外围)
+- 庄园城壁: 传送回 **克里费尔营地**
+- 克里费尔营地: 与 **NPC** 对话 (奖励: +2 武器组天赋点)
+- 克里费尔营地: 传送至 **庄园城壁**
+- 庄园城壁: 沿着内边缘前往 **欧甘庄园**
+- 欧甘庄园: 第1层: 击败 **烛火雕像，活化者** (奖励: +20 最大生命) (提示: 找到洞口, 检查周围继续前进)
+- 欧甘庄园: 第3层竞技场: 击败 **吉恩诺伯爵** (提示: 第1章最终boss)
+- 欧甘庄园: 传送回 **克里费尔营地**
+- 克里费尔营地: 与 **NPC** 对话
+- 克里费尔营地: 与 **兜帽密师** 对话 (提示: 完成第1章)
+- 克里费尔营地: 前往 **第2章**
+
+# 第2章：瓦斯提里 等级17 (马拉克斯族)
+- 瓦斯蒂里近郊: 击败 **摧寨魔** (提示: 沿着边缘找到通往竞技场的长通道)
+- 瓦斯蒂里近郊: 传送回城镇, 进入 **阿尔杜拉商队**
+- 阿尔杜拉商队: 与 **兜帽密师** 和 **阿萨拉** 对话
+- 阿尔杜拉商队: 沙漠地图: 进入 **莫丹采石场**
+- 莫丹采石场: 沿着检查点前进, 进入 **莫丹矿场** (提示: 可选: 法里敦缓存区有工匠 (边区) - 技能宝石商人)
+- 莫丹矿场: 激活 **传送点**
+- 莫丹矿场: 击败 **鲁贾, 恐怖工程师** (提示: 竞技场通常在北边或东边)
+- 莫丹矿场: 打开笼子, 与 **里苏** 对话
+- 莫丹矿场: 传送回 **阿尔杜拉商队**
+- 阿尔杜拉商队: 与 **里苏** 对话
+- 阿尔杜拉商队: 沙漠地图: 进入 **哈拉尼之门** (被阻挡)
+- 哈拉尼之门: 与 **阿萨拉** 对话
+- 哈拉尼之门: 返回 **阿尔杜拉商队**
+- 阿尔杜拉商队: 与 **里苏** 和 **丝克玛艾萨拉** 对话
+- 阿尔杜拉商队: 沙漠地图: 进入 **叛徒小径**
+- 叛徒小径: 激活 **传送点**
+- 叛徒小径: 激活 **远古封印** (区域中央)
+- 叛徒小径: 激活 **3个符文封印**
+- 叛徒小径: 击败 **叛徒贝尔巴拉**, 拿走 **巨灵巴雅** (提示: 沿着有纸符文的墙壁走)
+- 叛徒小径: 进入 **哈拉尼之门**
+- 哈拉尼之门: 激活 **传送点**
+- 哈拉尼之门: 召唤 **阿萨拉**
+- 哈拉尼之门: 击败 **亚曼拉，复生之王** (提示: 沿着峡谷走, 击败boss后使用楼梯)
+- 哈拉尼之门: 前往区域深处的沙暴处
+- 哈拉尼之门: 传送回 **阿尔杜拉商队**
+- 阿尔杜拉商队: 与 **扎卡** 对话
+- 阿尔杜拉商队: 沙漠地图: 进入 **丝克玛试炼**, 标记传送点, 返回城镇 (提示: 可选: 完成试炼获得进阶 - 可以现在或稍后做)
+- 阿尔杜拉商队: 与 **阿萨拉** 对话
+- 阿尔杜拉商队: 沙漠地图: 进入 **凯斯**
+- 凯斯: 击杀蛇类获得 **卡芭菈部族遗物**
+- 克斯: 击败 **狂蟒女王卡芭菈** (奖励: +2 天赋点)
+- 克斯: 沿着边缘走, 找到桥梁前往 **失落之城** (提示: 可选: 霍塔克神殿项链 (检查竞技场楼梯))
+- 失落之城: 进入 **被埋藏的神殿** (提示: 可选: 石棺中的灵魂 OR 圣甲虫珠宝)
+- 被埋藏的神殿: 前往 **凯斯之心** (提示: 可选: 元素供奉的抗性戒指)
+- 凯斯之心: 击败 **阿扎瑞安，忘却之子**
+- 凯斯之心: 与 **水之女神 (哈拉尼)** 对话
+- 凯斯之心: 拿走 **余烬**, 点燃女神, 拿走 **水之精华**
+- 凯斯之心: 传送回 **阿尔杜拉商队**
+- 阿尔杜拉商队: 与 **扎卡** 对话
+- 阿尔杜拉商队: 沙漠地图: 进入 **长毛象荒原**
+- 长毛象荒原: 进入 **遗迹深坑** (提示: 可选: 化石纪念碑有辅助宝石 | 联赛: 虚无通道 > 灵魂之井 (每赛季一次))
+- 遗迹深坑: 激活 **传送点**
+- 遗迹深坑: 击杀怪物获得 **烈日部族圣物** (提示: 途中击杀鬣狗)
+- 遗迹深坑: 前往 **暗光走廊**
+- 暗光走廊: 击败 **伊科巴，先古战驹** 和 **埃克塔布, 远古战马**, 拿走 **长毛象獠牙**
+- 暗光走廊: 传送回 **阿尔杜拉商队**
+- 阿尔杜拉商队: 与 **扎卡** 对话
+- 阿尔杜拉商队: 沙漠地图: 进入 **巨人之谷**
+- 巨人之谷: 激活 **传送点**
+- 巨人之谷: 在 **传送点** 附近插入圣物, 激活 **徽章** (护身符加成)
+- 巨人之谷: 激活 **3个远古封印** (外/内边缘)
+- 巨人之谷: 进入 **巨人石窟**
+- 巨人石窟: 击败 **扎尔马拉斯，神威巨像**, 拿走 **火焰红宝石**
+- 巨人石窟: 传送回 **阿尔杜拉商队**
+- 阿尔杜拉商队: 与 **扎尔卡** 对话 (获得号角)
+- 阿尔杜拉商队: 与 **阿萨拉** 对话
+- 阿尔杜拉商队: 沙漠地图: 返回 **叛徒小径**
+- 叛徒小径: 在 **商队** 前方吹响 **号角**
+- 叛徒小径: 与 **阿萨拉** 对话
+- 叛徒小径: 沙漠地图: 进入 **德莎尔**
+- 德莎尔: 找到 **莱卢玛的尸体** (堕落的德卡拉), 拿走 **最后的书信** (提示: 可选: 骨架边区有工匠)
+- 德莎尔: 击败 **挫刺清道夫** 和 **穆金, 寒冰使者**, 拿走 **精灵金币**
+- 德莎尔: 进入 **怀念之阶**
+- 怀念之阶: 进入 **德莎尔的高塔**
+- 德莎尔的高塔: 激活 **传送点**
+- 德莎尔的高塔: 激活 **加鲁坎姐妹神殿** (闪电 抗性) (奖励: +10% 闪电 抗性)
+- 德莎尔的高塔: 击败 **托古尔, 污染者** (提示: 找到G形图案或到达区域尽头)
+- 德莎尔的高塔: 传送回 **阿尔杜拉商队**
+- 阿尔杜拉商队: 将 **最后的书信** 交给 **岑柏琳** (奖励: +2 武器组天赋点)
+- 阿尔杜拉商队: 与 **阿萨拉** 对话
+- 阿尔杜拉商队: 沙漠地图: 进入 **无畏战车**
+- 无畏战车: 进入 **无畏战车先锋**
+- 无畏战车先锋: 激活 **传送点**
+- 无畏战车先锋: 击败 **亚曼拉，厌恶之躯**
+- 无畏战车先锋: 传送回 **阿尔杜拉商队**
+- 阿尔杜拉商队: 与 **蒙面者** 对话
+- 阿尔杜拉商队: 与 **阿萨拉** 对话 - 前往 **第3章**
+
+# 第3章：阿戈拉 等级34 (瓦尔族)
+- 飞沙沼泽: 进入 **金字塔营地** (提示: 可选: 技能宝石竞技场 (根生污泥) | 项链 (悬挂树) | 珠宝匠 (奥洛克营 near exit))
+- 金字塔营地: 与 **NPC** 对话
+- 金字塔营地: 进入 **丛林废墟** (顶部)
+- 丛林废墟: 标记 **传送点**
+- 丛林废墟: 击败 **威猛银拳** (奖励: 2 天赋点) (提示: 可选: 丛林墓地有腰带)
+- 丛林废墟: 进入 **蛇毒地窟** (靠近WP)
+- 蛇毒地窟: 从 **尸体** 拿走 **骸蛇毒液** (区域尽头)
+- 蛇毒地窟: 传送回 **金字塔营地**
+- 金字塔营地: 与 **塞尔维** 对话 - 选择 **永久加成** + **工匠解锁** (提示: 最终选择 - 之后无法更改!)
+- 金字塔营地: 传送至 **丛林废墟**, 进入 **滋孽荒原** (与WP相反)
+- 滋孽荒原: 标记 **传送点**, 召唤 **阿尔瓦** (提示: WP可能需要沿着边缘进入2个边区)
+- 滋孽荒原: 进入 **阿札克泥沼**
+- 阿扎克沼泽: 标记 **传送点**, 召唤 **塞尔维** (提示: 可选: 火焰皮肤仪式 (25% 稀有度/火抗, 靠近中心))
+- 阿札克沼泽: 击败 **伊格纳杜克，沼泽老妪**, 拿走 **伊格纳杜克的丧魂矛** (奖励: 30 灵魂力加成)
+- 阿扎克沼泽: 传送回 **金字塔营地**
+- 金字塔营地: 与 **塞尔维** 对话 (获得 **异常状态护身符**)
+- 金字塔营地: 传送至 **滋孽荒原**, 进入 **幻缈湿地** (与阿札克泥沼相反)
+- 幻缈湿地: 标记 **传送点**
+- 幻缈湿地: 击败 **奇美拉赛克鲁西安**, 拿走 **奇美拉铭文终极** (提示: 沿着边缘走; 如果先找到混沌神殿, 走相反边缘)
+- 幻缈湿地: 进入 **佳华尼的机械迷城** (在boss竞技场内)
+- 佳华尼的机械迷城: 标记 **传送点**
+- 佳华尼的机械迷城: 传送至 **幻缈湿地**, 进入 **混沌大殿** (提示: 如果之前找到, 用传送点过去; 否则走相反边缘)
+- 混沌大殿: 标记 **传送点**, 然后传送至 **佳华尼的机械迷城** (提示: 可选: 完成试炼获得进阶 - 可以现在或稍后做)
+- 佳华尼的机械迷城: 召唤 **阿尔瓦**, 拿走 **小型灵魂核心**, 激活 **石祭坛**
+- 佳华尼的机械迷城: 找到 **另外2个小型灵魂核心**, 激活 **石祭坛**
+- 佳华尼的机械迷城: 击败 **遗世的黑颚** (奖励: 火焰 抗性加成) (提示: 搜索侧边找到有楼梯的锁门房间)
+- 佳华尼的机械迷城: 沿着 **红色痕迹** 前往 **佳华尼的密殿**
+- 佳华尼的密殿: 标记 **传送点**, 召唤 **阿尔瓦**
+- 佳华尼的密殿: 找到 **2个中型灵魂核心**, 启动 **2个发电机** (V形角落) (提示: 分隔区域 - 每边都有找核心, 启动发电机, 返回起点任务)
+- 佳华尼的密殿: 激活 **大型灵魂核心** 靠近 **阿尔瓦**
+- 佳华尼的密殿: 击败 **护核卫士吉柯塔尔**, 拿走 **大型灵魂核心**
+- 佳华尼的密殿: 传送至 **滋孽荒原**
+- 感染荒原: 在 **石祭坛** (靠近WP) 插入 **大型灵魂核心**
+- 感染荒原: 进入 **马特兰水道** (附近)
+- 马特兰水道: 拉动所有 **渠道杠杆**, 拉动 **大渠道杠杆** (区域尽头)
+- 马特兰水道: 传送回 **金字塔营地**
+- 金字塔营地: 走下楼梯, 与 **阿尔瓦** 对话
+- 金字塔营地: 进入 **淹没之城**
+- 淹没之城: 标记 **传送点**, 召唤 **奥斯瓦尔德**
+- 淹没之城: 进入 **熔火宝库**
+- 熔火宝库: 标记 **传送点**
+- 熔火宝库: 使用 **杠杆**, 拉动 **泄洪门杠杆**, 击杀 **梅克图尔，锻造大师**, 拿走 **卡玛萨之锤** (提示: 可选: 现在或稍后做 - 之后与奥斯瓦尔德对话获得重铸台)
+- 熔火宝库: 传送至 **淹没之城**, 进入 **污秽巅峰**
+- 污秽巅峰: 标记 **传送点**
+- 污秽巅峰: 击败 **污秽女王** (区域尽头), 拿走 **神殿门偶像** (提示: 可选: 大锅获得优质药水 - 在区域中找到/掉落3个蘑菇)
+- 污秽巅峰: 传送回 **金字塔营地**
+- 金字塔营地: 与 **阿尔瓦** 对话 (楼下), 打开 **门**
+- 金字塔营地: 进入 **科佩克之殿**
+- 科佩克之殿: 爬楼梯两次 (金字塔角落), 击杀 **卡阿祖尔，烈阳先师**
+- 科佩克之殿: 召唤 **阿尔瓦**, 调查 **平台**, 进入 ** gateway**
+- 科佩克之殿: 标记 **传送点** (gateway 后方), 走下楼梯
+- 科佩克之殿: 进入 **乌札尔**
+- 乌扎尔: 标记 **传送点**
+- 乌扎尔: 沿着 **战争呐喊声** 前进, 击杀 **蝰蛇娜帕齐** (提示: 途中击杀戈利亚斯获得祭献之心 (也在下一个区域掉落))
+- 乌扎尔: 进入 **阿戈拉特**
+- 阿戈拉特: 标记 **传送点**
+- 阿戈拉特: 击败 **瓦尔巨人** 获得 **祭献之心** (如需要), 找到 **广场祭坛**
+- 阿戈拉特: 拿走 **祭献匕首**, 将 **祭献之心** 放置并刺入 **血祭祭坛** (奖励: 2 武器组天赋点) (提示: 祭坛在广场北边 - 直接路径通常被阻挡)
+- 阿戈拉特: 进入 **暗胧殿堂** (东边或血祭西南边)
+- 暗胧殿堂: 标记 **传送点**
+- 暗胧殿堂: 击败 **多里亚尼，皇家奇术师** 和 **多里亚尼的杰作** (提示: 区域: 由桥梁连接的迷宫)
+- 暗胧殿堂: 与 **多里亚尼** 对话
+- 暗胧殿堂: 传送回 **金字塔营地**
+- 金字塔营地: 与 **多里亚尼** 对话 (天启过场动画), 与 **阿尔瓦** 对话 - 前往 **第4章**
+
+# 第4章：尼加马卡努伊 等级45 (卡鲁族)
+- 国王港: 与 **多里亚尼** 对话, 与 **阿尔瓦** 对话 (获得特许状), 与 **马克鲁** 对话 - 航行至 **亲眷岛**
+- 亲眷岛: 击败 **盲兽** (奖励: 2 技能点) (提示: 可选: 深渊矿区珠宝匠 (边缘) | 野兽栏技能/辅助宝石)
+- 亲眷岛: 进入 **熔火院落**
+- 熔火院落: 击败 **族裔之王克鲁托格** (区域尽头), 与 **兜帽人** 对话 (提示: 可选: 火焰/闪电戒指 (10% 品质) 在熔火院落 - 基于最后击杀的boss)
+- 熔火院落: 返回 **船**, 与 **马克鲁** 对话 - 航行至 **废弃监牢**
+- 废弃监牢: 击杀怪物获得 **礼拜堂钥匙**, 打开 **礼拜堂门**, 标记 **传送点**
+- 废弃监牢: 激活 **正义女神** (药水恢复, 之后可更改), 使用 **杠杆**
+- 废弃监牢: 进入 **遗世监禁**
+- 遗世监禁: 使用 **杠杆**, 击杀 **囚徒**, 与 **兜帽人** 对话
+- 遗世监禁: 返回 **船**, 与 **马科鲁** 对话 - 航行至 **瓦卡帕努岛**
+- 瓦卡帕努岛: 进入 **冥曲洞窟** (提示: 可选: 辅助宝石在蟹壳洞穴 | 技能/灵体/辅助 - 击杀大白鲨获得鳍 (交给恩加努的凯马纳))
+- 冥曲洞窟: 击败 **葬歌之声戴娅摩菈**, 与 **兜帽人** 对话 (提示: 可选: 全抗项链 - 在贝壳中寻找珍珠)
+- 冥曲洞窟: 返回 **船**, 与 **马克鲁** 对话 - 航行至 **百舌岛**
+- 百舌岛: 击败 **天空灾星**, 与 **兜帽人** 对话 (提示: 可选: 地图碎片在腐尸巢)
+- 百舌岛: 返回 **船**, 与 **马克鲁** 对话 - 航行至 **辛格拉之眼** (提示: 注意: 前四个岛屿中会有一个随机出现需要营救的马蒂基 (每赛季随机))
+- 辛格拉之眼: 与 **马蒂基** 和 **NPC** 对话, 激活 **海涅科拉之井**
+- 辛格拉之眼: 完成 **3个测试**, 点击 **致敬** (奖励: 魔力加成) (提示: 灵体加成在第2和第3测试之间的瀑布 | 致敬在寂静大厅 (边区))
+- 辛格拉之眼: 进入 **亡者之境** (更深处)
+- 亡者之境: 标记 **传送点**
+- 亡者之境: 完成 **3个测试** 获得 **纹身**: **塔瓦霍亚** (敏捷/闪电), **塔萨利奥** (智慧/冰霜), **恩加马胡** (力量/火焰) (提示: 与图腾对话提交纹身)
+- 亡者之境: 击败 **白之雅玛**, 拿走 **银币**
+- 亡者之境: 进入 **命运试炼**
+- 命运试炼: 标记 **传送点**, 与 **纳瓦利** 对话, 拿走 **海涅科拉纹身** (奖励: 2 技能点)
+- 命运试炼: 返回 **船**, 与 **马科鲁** 对话 - 航行至 **阿拉斯塔斯斯**
+- 阿拉斯塔 (敌对): 标记 **传送点**, 与 **传道士洛兰迪斯** 对话, 跟随他到外面 (提示: 可选: 3个崇高石和富豪石在钟里)
+- 阿拉斯塔 (敌对): 摧毁 **力场**, 击杀 **托维安，救世主之手**
+- 阿拉斯塔 (敌对): 进入 **挖掘场**
+- 挖掘场: 击败 **本尼迪克图斯，乌托邦首席使徒**, 进入 **熔炉**
+- 挖掘场: 与 **兜帽人** 对话, 传送至 **城镇**
+- 君锋镇: 与 **NPC** 对话, 与 **罗德里** 对话 (在船边) - 航行至 **纳卡努** (提示: 可选: 与 **罗格** 对话 (用全抗项链换取珍珠) | 凯奇湾边区内容 (液态情感, 地图碎片, 技能宝石) | 马克鲁航行至掠夺之点)
+- 纳卡努 (敌对): 进入 **部族之心** (提示:  superior 珠宝匠: 深渊遭遇)
+- 部族之心: 标记 **传送点**
+- 部族之心: 击败 **塔瓦凯，酋长** (酋长, 堕落者, 被吞噬者), 传送至 **城镇**
+- 君锋镇: 与 **NPC** 对话, 与 **兜帽人** 对话 - 前往 **第5章** (奥格姆, 瓦斯蒂里, 或克里尔山)
+
+# 间章1：霍尔登的诅咒
+- 避难所: 与 **蓝礼** 对话, 进入 **焦土农田**
+- 焦土农田: 在 **暗黑之墙** 附近击败 **黑镰之海尔德拉** 和 **苍白幽影之伊索德** (提示: 可选: 路边尸体获得技能宝石)
+- 焦土农田: 进入 **瑟尔之石**
+- 瑟尔之石: 激活所有 **符文巨石阵**, 前往 **中心符文**
+- 瑟尔之石: 击败 **西奥拉，迷雾之刃**, 与 **乌娜** 对话
+- 焦土农田: 返回 **焦土农田**, 前往 **暗黑之墙**, 进入 **黑木林**
+- 黑木林: 进入 **霍尔顿** (提示: 可选: 预兆在预兆祭坛)
+- 霍尔顿: 在 **霍尔顿庄园** 标记 **传送点** (进-出), 进入 **狼堡** (提示: 可选: 符文商人 near 水边)
+- 狼堡: 击败 **奥斯温，恐惧典狱长** (奖励: 2 技能点)
+- 狼堡: 传送至 **霍尔顿庄园**
+- 霍尔顿庄园: 击败 **领主乌弗瑞克** 和 **艾尔斯威丝女士** (一楼), 传送至 **城镇**
+- 避难所: 与 **蓝礼** 对话, 与 **兜帽密师** 对话 - 前往 **瓦斯蒂里 (第6章)**
+
+# 间章2：被偷的巨灵之币
+- 卡莉集市: 与 **丝克玛艾萨拉** 对话, 与 **扎卡** 对话, 进入 **卡莉渡口**
+- 卡莉渡口: 激活 **寻路者之印**, 击杀 **阿克西，终命毒刺** 和 **阿农德，沙虫**, 传送至 **城镇** (提示: 印记通常在竞技场入口的3点或2点方向)
+- 卡莉渡口: 与 **里苏** 对话 (专业之书), 返回 **卡莉渡口** (奖励: 2 技能点)
+- 卡莉渡口: 激活 **寻路者之印**, 找到 **骨颚阶梯**, 拿走 **熔岩之礼** (奖励: 生命加成) (提示: 跟随你身下的箭头)
+- 卡莉渡口: 找到 **商人托尔比克**, 进入 **加莱之门** (通常在托尔比克的7点或6点方向)
+- 卡莉渡口: 传送至 **卡哈塔之池** (通过渡口印记), 进入 **塞卡莉圣所**
+- 塞卡莉圣所: 标记 **传送点**
+- 塞卡莉圣所: 击败 **埃尔扎拉，眼镜蛇领主**, 与 **丝克玛艾萨拉** 对话, 传送至 **城镇** (提示: 可选: 戒指/项链/珠宝 - 掉落2个巴里亚, 插入底座 (侧边))
+- 卡莉集市: 与 **NPC** 对话, 传送至 **加莱之门**
+- 加莱之门: 标记 **传送点**
+- 加莱之门: 击败 **沃纳斯，堕落烈焰**, 进入 **奇玛尔**
+- 奇玛尔: 标记 **传送点**, 激活 **七柱** (加成可随时更改) (提示: 七柱是边区)
+- 奇玛尔: 召唤 **贾多** (区域尽头), 进入 **奇玛尔水库**
+- 奇玛尔水库: 标记 **传送点**
+- 奇玛尔水库: 击败 **阿兹马迪，法里顿王子**, 激活 **大巴里亚** (提示: 可选:通货 - 掉落2个小瓶获得2口井)
+- 奇玛尔水库: 与 **贾多** 对话, 传送至 **城镇**
+- 卡莉集市: 与 **NPC** 对话, 与 **兜帽密师** 对话 - 前往 **克里尔山 (第7章)**
+
+# 间章3: 多里亚尼的意外事件
+- 林间空地: 与 **多里亚尼** 对话, 进入 **灰烬森林**
+- 灰烬森林: 进入 **克里亚村** (提示: 可选: 古代纪念碑有技能宝石)
+- 克里亚村: 标记 **传送点**
+- 克里亚村: 击败 **利萨拉，歧途长矛** (奖励: 40 灵体加成)
+- 克里亚村: 进入 **冰川池塘**
+- 冰川池塘: 标记 **传送点**
+- 冰川池塘: 击败 **拉卡，冰冻利爪**, 在 **克里亚峰** 标记 **传送点** (进-出)
+- 冰川池塘: 进入 **嚎叫洞穴**
+- 嚎叫洞穴: 标记 **传送点**
+- 嚎叫洞穴: 击败 **可憎的雪人**, 拿走 **冰霜獠牙**, 传送至 **城镇**
+- 林间空地: 与 **希尔达** 对话 (专业之书), 传送至 **克里亚峰** (奖励: 2 技能点)
+- 克里亚峰: 从 **长者马多克斯** 获得礼物 (自选物品), 进入 **刻蚀峡谷** (提示: 长者马多克斯 - 沿着边缘的长窄通道)
+- 刻蚀峡谷: 标记 **传送点**
+- 刻蚀峡谷: 击败 **风暴血魔，守护者**, 进入 **库阿奇克宝库**
+- 库阿奇克宝库: 标记 **传送点**
+- 库阿奇克宝库: 击败 **泽琳娜和佐林** (鲜血女祭和鲜血祭司), 召唤 **多里亚尼**, 传送至 **城镇**
+- 林间空地: 传送至 **君锋镇** (第4章城镇)
+- 君锋镇: 与 **NPC** 对话, 与 **兜帽密师** 对话 (专业之书) - 前往 **奥瑞亚** (奖励: 2 技能点)
+- 君锋镇: 检查 **角色 → 任务被动** 验证所有被动加成已收集! (提示: 确保在后期内容前收集所有技能点, 灵体加成和其他被动奖励)
+- 金字塔避难所: 与 **阿尔瓦** 对话, 与 **多里亚尼** 对话, 使用 **地图装置** - 运行一张地图解锁地图制作
+- 金字塔避难所: 在藏身处开始地图制作 - **升级指南完成!**
